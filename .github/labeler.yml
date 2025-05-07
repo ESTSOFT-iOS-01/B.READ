@@ -6,18 +6,23 @@ labels:
   '✨ feature':
     include:
       - '\bfeature\b'
+
   '🐞 bug':
     include:
       - '\bbug\b'
+
   '🔨 refactor':
     include:
       - '\brefactor\b'
+
   '📃 docs':
     include:
       - '\bdocs\b'
+
   '⚙️ chore':
     include:
       - '\bchore\b'
+
   '✅ test':
     include:
       - '\btest\b'

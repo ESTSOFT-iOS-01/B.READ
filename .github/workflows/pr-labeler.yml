@@ -1,0 +1,16 @@
+name: PR Title Labeler
+
+on:
+  pull_request_target:  # 외부 PR까지 포함
+    types: [opened, edited, reopened]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Label PR by title
+        uses: jimschubert/labeler-action@v2
+        with:
+          configuration-path: .github/labeler.yml
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
