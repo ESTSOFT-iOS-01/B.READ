@@ -1,32 +1,23 @@
-name: Configure PR When PR Opened
+enable:
+  issues: false
+  prs: true
 
-on:
-  pull_request:
-    types: [opened, ready_for_review]
-    
-permissions:
-  contents: read
-  
-job:
-set-label:
-  name: Set Labels to PR
-  runs-on: ubuntu-latest
-  permissions:
-    contents: read
-    pull-requests: write
-  steps:
-    - uses: actions/labeler@v4
-      with:
-        repo-token: "${{ secrets.PAT_TOKEN }}"
-        configuration-path: .github/workflows/pr/labeler.yml
-        
-assign:
-  name: Review Assign
-  runs-on: ubuntu-latest
-  steps:
-     - uses: hkusu/review-assign-action@v1
-       with:
-         assignees: ${{ github.actor }} # assign pull request author
-         reviewers: aado97, doyeonk429, GeunwoongSim, Monfi98 # if draft, assigned when draft is released
-        
- 
+labels:
+  'feature':
+    include:
+      - '\bfeature\b'
+  'bug':
+    include:
+      - '\bbug\b'
+  'refactor':
+    include:
+      - '\brefactor\b'
+  'docs':
+    include:
+      - '\bdocs\b'
+  'chore':
+    include:
+      - '\bchore\b'
+  'test':
+    include:
+      - '\btest\b'
