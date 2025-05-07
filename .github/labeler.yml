@@ -3,21 +3,21 @@ enable:
   prs: true
 
 labels:
-  'feature':
+  '✨ feature':
     include:
       - '\bfeature\b'
-  'bug':
+  '🐞 bug':
     include:
       - '\bbug\b'
-  'refactor':
+  '🔨 refactor':
     include:
       - '\brefactor\b'
-  'docs':
+  '📃 docs':
     include:
       - '\bdocs\b'
-  'chore':
+  '⚙️ chore':
     include:
       - '\bchore\b'
-  'test':
+  '✅ test':
     include:
       - '\btest\b'
