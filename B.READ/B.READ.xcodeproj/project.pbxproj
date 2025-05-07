@@ -10,9 +10,27 @@
 		35C171E02DCB34320049724A /* B.READ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = B.READ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Sources/Data/.gitkeep,
+				Sources/DesignSystem/.gitkeep,
+				Sources/Domain/.gitkeep,
+				Sources/Network/.gitkeep,
+				Sources/Util/Constants/.gitkeep,
+				Sources/Util/Extensions/.gitkeep,
+			);
+			target = 35C171DF2DCB34320049724A /* B.READ */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		35C171E22DCB34320049724A /* B.READ */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */,
+			);
 			path = B.READ;
 			sourceTree = "<group>";
 		};
@@ -251,7 +269,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = C3P52YR8KJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -286,7 +304,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
 				DEVELOPMENT_TEAM = C3P52YR8KJ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
