@@ -69,8 +69,7 @@ private struct HeaderView: View {
         }
         
         Text(tabs[index].title)
-          // TODO: Gray스케일 들어오면 색 처리
-          .foregroundStyle(isSelected ? .brown7 : .gray)
+          .foregroundStyle(isSelected ? .brown7 : .gray2)
           .frame(maxWidth: .infinity, alignment: hasImage ? .leading : .center)
           .brStyleFont(
             .pretendard(isSelected ? .semiBold : .medium, size: 16),
