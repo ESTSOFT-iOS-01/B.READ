@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-extension Font {
+extension UIFont {
   enum Pretendard: String {
     case black = "Pretendard-Black"
     case extraBold = "Pretendard-ExtraBold"
@@ -21,11 +21,19 @@ extension Font {
     case thin = "Pretendard-Thin"
   }
   
-  static func pretendard(size: CGFloat, weight: Pretendard) -> Font {
-    return .custom(weight.rawValue, size: size)
+  /// Pretendard 커스텀 폰트를 반환합니다.
+  /// - Parameters:
+  ///   - weight: Pretendard enum
+  ///   - size: 폰트 크기
+  /// - Returns: UIFont 인스턴스
+  static func pretendard(_ weight: Pretendard, size: CGFloat) -> UIFont {
+    return UIFont(name: weight.rawValue, size: size)!
   }
   
-  static func peaceSans(size: CGFloat) -> Font {
-    return .custom("PeaceSans", size: size)
+  /// PeaceSans 커스텀 폰트를 반환합니다.
+  /// - Parameter size: 폰트 크기
+  /// - Returns: UIFont 인스턴스
+  static func peaceSans(size: CGFloat) -> UIFont {
+    return UIFont(name: "PeaceSans", size: size)!
   }
 }
