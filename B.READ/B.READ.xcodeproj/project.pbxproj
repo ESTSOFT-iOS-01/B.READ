@@ -14,7 +14,7 @@
 		35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Resources/B.READ/Resources/B-READ-Info.plist",
+				"Resources/B-READ-Info.plist",
 				Sources/Data/.gitkeep,
 				Sources/Domain/.gitkeep,
 				Sources/Network/.gitkeep,
