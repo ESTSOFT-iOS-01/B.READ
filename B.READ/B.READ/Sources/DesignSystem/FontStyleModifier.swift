@@ -21,9 +21,6 @@ struct FontStyleModifier: ViewModifier {
       .padding(.vertical, fontSpacing)
       .lineSpacing(fontSpacing * 2)
       .tracking(font.pointSize * letterSpacing)
-      .onAppear {
-        print(fontSpacing*2)
-      }
   }
 }
 
