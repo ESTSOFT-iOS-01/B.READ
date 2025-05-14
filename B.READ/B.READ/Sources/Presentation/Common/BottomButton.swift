@@ -1,5 +1,5 @@
 //
-//  UnderButton.swift
+//  BottomButton.swift
 //  B.READ
 //
 //  Created by 도민준 on 5/13/25.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct UnderButton: View {
+struct BottomButton: View {
   var buttonTitle: String
-  var textColor: Color
-  var buttonColor: Color
+  var textColor: Color = .backgroundDefault
+  var buttonColor: Color = .brown3
   var action: () -> Void = {}
   
   var body: some View {
@@ -20,6 +20,7 @@ struct UnderButton: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
     }
+    .frame(maxWidth: .infinity)
     .background(buttonColor)
     .foregroundColor(textColor)
     .cornerRadius(10)
@@ -27,7 +28,7 @@ struct UnderButton: View {
 }
 
 #Preview {
-  UnderButton(buttonTitle: "버튼", textColor: .brown7, buttonColor: .brown1) {
+  BottomButton(buttonTitle: "버튼") {
     // 액션
   }
 }
