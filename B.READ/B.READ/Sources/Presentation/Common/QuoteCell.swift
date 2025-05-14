@@ -29,7 +29,14 @@ struct QuoteCell: View {
   let content: String
   let page: Int
   let colorTone: ColorTone
-  let action: () -> Void
+  let action: (() -> Void)?
+  
+  init(content: String, page: Int, colorTone: ColorTone, action: (() -> Void)? = nil) {
+    self.content = content
+    self.page = page
+    self.colorTone = colorTone
+    self.action = action
+  }
   
   var body: some View {
     VStack(spacing: 8) {
@@ -42,7 +49,7 @@ struct QuoteCell: View {
       HStack(spacing: 4) {
         Text("\(page)쪽")
           
-        menuButton()
+        if action != nil { menuButton() }
       }
       // TODO: Gray Scale로 바꾸기
       .foregroundStyle(colorTone == .strong ? .green1 : .black)
@@ -61,7 +68,7 @@ struct QuoteCell: View {
   @ViewBuilder
   private func menuButton() -> some View {
     Button {
-      action()
+      action?()
     } label: {
       Image(systemName: "ellipsis")
         .resizable()

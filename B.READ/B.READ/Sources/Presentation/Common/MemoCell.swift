@@ -13,7 +13,21 @@ struct MemoCell: View {
   let date: Date
   let startPage: Int
   let endPage: Int
-  let action: () -> Void
+  let action: (() -> Void)?
+  
+  init(
+    content: String,
+    date: Date,
+    startPage: Int,
+    endPage: Int,
+    action: (() -> Void)? = nil
+  ) {
+    self.content = content
+    self.date = date
+    self.startPage = startPage
+    self.endPage = endPage
+    self.action = action
+  }
   
   var body: some View {
     VStack(spacing: 8) {
@@ -29,7 +43,7 @@ struct MemoCell: View {
         
         Text("\(startPage)쪽 ~ \(endPage)쪽")
         
-        menuButton()
+        if action != nil { menuButton() }
       }
       .foregroundStyle(.black) // TODO: Gray Scale로 바꾸기
       .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1, letterSpacing: 0.02)
@@ -46,7 +60,7 @@ struct MemoCell: View {
   @ViewBuilder
   private func menuButton() -> some View {
     Button {
-      action()
+      action?()
     } label: {
       Image(systemName: "ellipsis")
         .resizable()
@@ -62,6 +76,6 @@ struct MemoCell: View {
 Lorem ipsum dolor sit amet con sect etur. Aug ue po tenti au ctor faci lisi ult ric es sit in. T urpis q uis at pu lvinar ri sus ips um. T urpis q uis at pu lvinar. T urpis q uis at pu lvinar ri sus ips um. T urpis q uis at pu lvinar.
 """
   MemoCell(content: content, date: Date(), startPage: 2, endPage: 4) {
-    print("action")
+    print("hello")
   }
 }
