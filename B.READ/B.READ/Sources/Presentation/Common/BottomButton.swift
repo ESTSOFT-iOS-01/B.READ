@@ -11,7 +11,7 @@ struct BottomButton: View {
   var buttonTitle: String
   var textColor: Color = .backgroundDefault
   var buttonColor: Color = .brown3
-  var action: () -> Void = {}
+  var action: () -> Void
   
   var body: some View {
     Button(action: action) {
