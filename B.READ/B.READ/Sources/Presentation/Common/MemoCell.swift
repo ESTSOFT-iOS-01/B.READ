@@ -1,5 +1,5 @@
 //
-//  ListCell.swift
+//  MemoCell.swift
 //  B.READ
 //
 //  Created by 신승재 on 5/14/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListCell: View {
+struct MemoCell: View {
   
   let content: String
   let date: Date
@@ -61,7 +61,7 @@ struct ListCell: View {
   let content = """
 Lorem ipsum dolor sit amet con sect etur. Aug ue po tenti au ctor faci lisi ult ric es sit in. T urpis q uis at pu lvinar ri sus ips um. T urpis q uis at pu lvinar. T urpis q uis at pu lvinar ri sus ips um. T urpis q uis at pu lvinar.
 """
-  ListCell(content: content, date: Date(), startPage: 2, endPage: 4) {
+  MemoCell(content: content, date: Date(), startPage: 2, endPage: 4) {
     print("action")
   }
 }
