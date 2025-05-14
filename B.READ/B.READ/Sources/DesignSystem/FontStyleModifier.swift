@@ -14,12 +14,12 @@ struct FontStyleModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     
-    let fontSpacing = font.lineHeight / 78 * 50 / 4
+    let lineSpacing = font.lineHeight * (lineHeight - 1)
 
     return content
       .font(Font(font))
-      .padding(.vertical, fontSpacing)
-      .lineSpacing(fontSpacing * 2)
+      .padding(.vertical, lineSpacing / 2)
+      .lineSpacing(lineSpacing)
       .tracking(font.pointSize * letterSpacing)
   }
 }
