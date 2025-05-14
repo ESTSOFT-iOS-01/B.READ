@@ -40,13 +40,18 @@ struct TopTabBar: View {
     
     let width = totalWidth / CGFloat(tabs.count)
     let offset = width * CGFloat(selectedIndex)
-    
-    Rectangle()
-      .fill(.orange7)
-      .frame(width: width, height: 2)
-      .frame(maxWidth: .infinity, alignment: .leading)
-      .offset(x: offset)
-      .animation(.easeInOut(duration: 0.25), value: offset)
+    ZStack {
+      Rectangle()
+        .fill(.gray1)
+        .frame(height: 2)
+      
+      Rectangle()
+        .fill(.orange7)
+        .frame(width: width, height: 2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .offset(x: offset)
+        .animation(.easeInOut(duration: 0.25), value: offset)
+    }
   }
 }
 
