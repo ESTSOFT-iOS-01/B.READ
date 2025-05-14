@@ -40,6 +40,7 @@ struct BookSearchCell: View {
       
     }
     .frame(maxWidth: .infinity)
+    .padding(.horizontal, 8)
     .padding(.vertical, 16)
   }
 }
