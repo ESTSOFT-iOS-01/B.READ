@@ -9,7 +9,7 @@ import Foundation
 
 extension Date {
   enum DateFormatType: String {
-    case dotSeparated = "yyyy. mm. dd"
+    case dotSeparated = "yyyy. MM. dd"
   }
   
   static private let dateFormatter: DateFormatter = {

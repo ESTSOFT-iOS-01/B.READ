@@ -32,7 +32,7 @@ struct ListCell: View {
         menuButton()
       }
       .foregroundStyle(.black) // TODO: Gray Scale로 바꾸기
-      .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1)
+      .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1, letterSpacing: 0.02)
       .frame(maxWidth: .infinity)
     }
     .padding(16)
