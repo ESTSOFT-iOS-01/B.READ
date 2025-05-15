@@ -53,13 +53,13 @@ struct SearchView: View {
       SearchBar(text: $viewModel.state.searchText,
                 isFocused: $isSearchFocused)
       
-      if !isSearchFocused {
+      if viewModel.state.searchText.isEmpty {
         SearchButton {
           viewModel.send(.onTapBarcode)
         }
       } else {
         SearchButton(style: .close) {
-          isSearchFocused = false
+          viewModel.state.searchText = ""
         }
       }
     } // : Hstack - 검색창 영역
