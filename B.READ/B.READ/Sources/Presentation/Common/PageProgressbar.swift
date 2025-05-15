@@ -36,12 +36,27 @@ enum ProgressState {
     }
   }
   
+  var image: String {
+    switch self {
+    case .raw:
+      return "Bread0"
+    case .rare:
+      return "Bread1"
+    case .medium:
+      return "Bread2"
+    case .wellDone:
+      return "Bread3"
+    }
+  }
+  
 }
 
 // MARK: - (S)PageProgressbar
 struct PageProgressbar: View {
 
   let barHeight: CGFloat = 10 // 프로그래스바 높이
+  // TODO: 식빵 이미지로 변경하기
+  let breadImage: String = "Bread"
   
   let currentPage: Int = 100 // 현재 페이지
   let totalPage: Int = 500 // 전체 페이지
@@ -65,9 +80,14 @@ struct PageProgressbar: View {
   
   var body: some View {
     GeometryReader { proxy in
-      VStack(spacing: 2) {
+      VStack(alignment: .leading, spacing: 2) {
         HStack {
-          Image("Donut")
+          Image(breadImage)
+            .resizable()
+            .renderingMode(.template)
+            .foregroundStyle(progressState.color)
+            .frame(width: 21, height: 20)
+            .border(.black, width: 4)
           
           Text(progressState.content)
             .brStyleFont(
@@ -76,15 +96,13 @@ struct PageProgressbar: View {
             )
           
           Text("\(currentPage) / \(totalPage) 페이지")
-            .frame(alignment: .trailing) //동작 안함
             .brStyleFont(
               .pretendard(.regular, size: 12),
               lineHeight: 1
             )
+            .frame(maxWidth: .infinity, alignment: .trailing)
             .foregroundStyle(.gray3)
-          
         } // : HStack
-        
         
         progressbar(totalWidth: proxy.size.width)
           
