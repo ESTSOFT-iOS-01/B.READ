@@ -11,7 +11,7 @@ import SwiftUI
 struct B_READApp: App {
   var body: some Scene {
     WindowGroup {
-      MainTabView()
+      NicknameView()
     }
   }
 }
