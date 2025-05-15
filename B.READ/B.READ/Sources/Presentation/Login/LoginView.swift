@@ -31,25 +31,32 @@ struct LoginView: View {
           .foregroundStyle(.gray2)
           .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
         
-        Button {
-          print("tab")
-        } label: {
-          Text("시작하기")
-            .foregroundStyle(.gray9)
-            .brStyleFont(.pretendard(.bold, size: 18), lineHeight: 1.0)
-            .frame(height: 56)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 8)
-                  .stroke(Color.gray9, lineWidth: 2)
-              )
-        }
-        .padding(.bottom, 280)
-        .padding(.top, 16)
+        startButton()
+          .padding(.bottom, 280)
+          .padding(.top, 16)
 
       }
       .padding(.horizontal, 56)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+  }
+  
+  
+  // MARK: (F)startButton
+  @ViewBuilder
+  private func startButton() -> some View {
+    Button {
+      print("tab")
+    } label: {
+      Text("시작하기")
+        .foregroundStyle(.gray9)
+        .brStyleFont(.pretendard(.bold, size: 18), lineHeight: 1.0)
+        .frame(height: 56)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 8)
+              .stroke(Color.gray9, lineWidth: 2)
+          )
     }
   }
 }
