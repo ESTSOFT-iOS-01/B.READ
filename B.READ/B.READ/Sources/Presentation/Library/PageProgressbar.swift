@@ -11,29 +11,22 @@ import SwiftUI
 struct PageProgressbar: View {
 
   private let barHeight: CGFloat = 4 // 프로그래스바 높이(실제로 적용했을때 높이가 낮은거 같으면 늘리기)
-  private let currentPage: Int // 현재 페이지
-  private let totalPage: Int // 전체 페이지
-  private let percent: Double // 독서 진행률
-  private let progressState: ProgressState
-  
-  init(currentPage: Int, totalPage: Int) {
-    self.currentPage = currentPage
-    self.totalPage = totalPage
-    
-    let percent = Double(currentPage) / Double(totalPage)
-    self.percent = percent
-    
-    // 읽은량에 따라서 상태 변화
-    if percent == 0 {
-      progressState = .raw
-    } else if percent > 0 && percent < 0.33 {
-      progressState = .rare
-    } else if percent >= 0.33 && percent < 0.66 {
-      progressState = .medium
-    } else {
-      progressState = .wellDone
+  let currentPage: Int // 현재 페이지
+  let totalPage: Int // 전체 페이지
+  private var percent: Double { // 독서 진행률
+    Double(currentPage) / Double(totalPage)
+  }
+  private var progressState: ProgressState {
+    switch percent {
+    case 0:
+        .raw
+    case ..<0.33:
+        .rare
+    case 0.33..<0.66:
+        .medium
+    default:
+        .wellDone
     }
-    
   }
   
   var body: some View {
