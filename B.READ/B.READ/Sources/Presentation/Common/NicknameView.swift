@@ -11,6 +11,7 @@ struct NicknameView: View {
   
   @FocusState private var isFocused: Bool
   @State private var nicknameText = ""
+  @State private var isValid = true
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -27,7 +28,7 @@ struct NicknameView: View {
         type: .nickname,
         placeholder: "닉네임을 입력해 주세요",
         text: $nicknameText,
-        isValid: true
+        isValid: isValid
       )
       .padding(.top, 40)
       .focused($isFocused)
@@ -35,11 +36,22 @@ struct NicknameView: View {
       BottomButton(buttonTitle: "확인", textColor: .gray3, buttonColor: .gray0) {
         print("next")
       }
+      .disabled(nicknameText.isEmpty || !isValid)
       .padding(.horizontal, 4)
       .padding(.bottom, 20)
       .frame(maxHeight: .infinity, alignment: .bottom)
     }
     .padding(.horizontal, 26)
+    .onChange(of: nicknameText) { oldValue, newValue in
+      if newValue.count > 13 {
+        nicknameText = oldValue
+        return
+      }
+      
+      // 유효성 검사
+      let regex = /^[a-zA-Z0-9가-힣]*$/
+      isValid = (newValue.wholeMatch(of: regex) != nil)
+    }
     .onAppear {
       isFocused = true
     }
