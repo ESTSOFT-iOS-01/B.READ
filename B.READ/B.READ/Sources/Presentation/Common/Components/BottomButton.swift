@@ -17,13 +17,12 @@ struct BottomButton: View {
     Button(action: action) {
       Text(buttonTitle)
         .brStyleFont(.pretendard(.bold, size: 18), lineHeight: 1.4)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .frame(height: 56)
+        .frame(maxWidth: .infinity)
+        .background(buttonColor)
+        .foregroundColor(textColor)
     }
-    .frame(maxWidth: .infinity)
-    .background(buttonColor)
-    .foregroundColor(textColor)
-    .cornerRadius(10)
+    .clipShape(RoundedRectangle(cornerRadius: 10))
   }
 }
 
