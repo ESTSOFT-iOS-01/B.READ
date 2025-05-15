@@ -29,7 +29,7 @@ struct RoundedTextField: View {
       if text.isEmpty {
         Text(placeholder)
           .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.55, letterSpacing: -0.025)
-          .foregroundColor(.gray) // Todo Gray200
+          .foregroundColor(.gray2)
           .padding(.horizontal, 16)
           .padding(.vertical, 13)
           .opacity(text.isEmpty ? 1 : 0)
@@ -38,7 +38,7 @@ struct RoundedTextField: View {
       // 실제 입력
       TextField("", text: $text)
         .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.55, letterSpacing: -0.025)
-        .foregroundColor(.black) // Todo Gray300
+        .foregroundColor(.gray3)
         .keyboardType(kind == .pages ? .numberPad : .default)
         .onChange(of: text) {
           if kind == .pages { filterDigits() }
@@ -47,7 +47,7 @@ struct RoundedTextField: View {
         .padding(.vertical, 13)
     }
     .frame(height: 48)
-    .background(.white) // Todo Gray000
+    .background(.gray0)
     .cornerRadius(8)
     .overlay(
       RoundedRectangle(cornerRadius: 8)
