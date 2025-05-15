@@ -49,8 +49,8 @@ private extension SearchViewModel {
       "하이데거의 사건 존재론",
       "이것이 취업을 위한 코딩테스트다 with Python",
       "풀스택 서버리스",
-      "2025 제 16회 젊은작가상 수상작품집",
-      "2025 제 16회 젊은작가상 수상작품집",
+      "2022 제 16회 젊은작가상 수상작품집",
+      "2023 제 16회 젊은작가상 수상작품집",
       "2025 제 16회 젊은작가상 수상작품집",
       "Essentail Grammar in Use with answers and eBook"
     ]
