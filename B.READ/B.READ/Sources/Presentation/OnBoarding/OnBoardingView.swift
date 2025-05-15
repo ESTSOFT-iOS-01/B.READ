@@ -32,6 +32,7 @@ struct OnBoardingView: View {
         }
       }
       .padding(.horizontal, 30)
+      .animation(.easeInOut(duration: 0.2), value: currentStep)
       
     }.background(.backgroundDefault)
   }
