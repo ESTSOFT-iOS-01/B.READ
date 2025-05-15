@@ -28,23 +28,22 @@ struct RoundedTextField: View {
       // 플레이스홀더
       if text.isEmpty {
         Text(placeholder)
-          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.55, letterSpacing: -0.025)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1, letterSpacing: -0.025)
           .foregroundColor(.gray2)
           .padding(.horizontal, 16)
-          .padding(.vertical, 13)
           .opacity(text.isEmpty ? 1 : 0)
       }
       
       // 실제 입력
       TextField("", text: $text)
-        .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.55, letterSpacing: -0.025)
-        .foregroundColor(.gray3)
+        .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.025)
+        .foregroundColor(.gray9)
         .keyboardType(type == .pages ? .numberPad : .default)
         .onChange(of: text) {
           if type == .pages { filterDigits() }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 13)
+        .tint(.gray9)
     }
     .frame(height: 48)
     .background(.gray0)
