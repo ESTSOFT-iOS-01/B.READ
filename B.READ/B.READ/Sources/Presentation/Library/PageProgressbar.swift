@@ -39,7 +39,7 @@ struct PageProgressbar: View {
   var body: some View {
     GeometryReader { proxy in
       VStack(alignment: .leading, spacing: 2) {
-        content()
+        progressHeader()
         
         progressbar(totalWidth: proxy.size.width)
       } // : VStack
@@ -49,13 +49,13 @@ struct PageProgressbar: View {
   
   // MARK: - (F)content
   @ViewBuilder
-  private func content() -> some View {
+  private func progressHeader() -> some View {
     HStack {
-      Image(progressState.image)
+      progressState.image
         .resizable()
         .frame(width: 21, height: 20)
       
-      Text(progressState.content)
+      Text(progressState.label)
         .brStyleFont(
           .pretendard(.semiBold, size: 14),
           lineHeight: 1
@@ -80,12 +80,12 @@ struct PageProgressbar: View {
         .fill(.backgroundDefault)
         .border(.gray2, width: 1)
         .frame(width: totalWidth, height: barHeight)
-        .clipShape(RoundedCorner(radius: barHeight/2))
+        .clipShape(.capsule)
         
       Rectangle()
         .fill(progressState.color)
         .frame(width: totalWidth * percent, height: barHeight)
-        .clipShape(RoundedCorner(radius: barHeight/2))
+        .clipShape(.capsule)
     } // : ZStack
   }
   
