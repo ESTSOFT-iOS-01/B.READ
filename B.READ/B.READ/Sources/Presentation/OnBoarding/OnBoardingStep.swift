@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 enum OnboardingStep: Int {
   case guide = 0
@@ -56,6 +57,19 @@ enum OnboardingStep: Int {
       따뜻하게 담아낸 기록,
       하루를 마무리하며 꺼내보세요.
       """
+    }
+  }
+  
+  var image: Image {
+    switch self {
+    case .guide:
+      Image(.guideBread)
+    case .read:
+      Image(.readBread)
+    case .connect:
+      Image(.connectBread)
+    case .assistant:
+      Image(.assistantBread)
     }
   }
 }
