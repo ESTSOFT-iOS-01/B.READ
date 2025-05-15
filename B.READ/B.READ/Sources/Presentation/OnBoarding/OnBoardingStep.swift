@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum OnboardingStep: Int {
+enum OnboardingStep: Int, CaseIterable {
   case guide = 0
   case read
   case connect
