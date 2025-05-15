@@ -20,18 +20,36 @@ struct LoginView: View {
       VStack(alignment: .leading, spacing: 0) {
         Text(subtitle)
           .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.1)
+          .padding(.top, 44)
+        
         Text("B. READ")
           .brStyleFont(.peaceSans(size: 48), lineHeight: 1.1)
           .padding(.top, 16)
         
+        Text("누르면 초기 설정을 시작해요!")
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+          .foregroundStyle(.gray2)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
+        
         Button {
           print("tab")
         } label: {
-          Text("초기 설정 시작하기")
+          Text("시작하기")
+            .foregroundStyle(.gray9)
             .brStyleFont(.pretendard(.bold, size: 18), lineHeight: 1.0)
+            .frame(height: 56)
+            .frame(maxWidth: .infinity)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                  .stroke(Color.gray9, lineWidth: 2)
+              )
         }
+        .padding(.bottom, 280)
+        .padding(.top, 16)
 
-      }.frame(maxWidth: .infinity, maxHeight: .infinity)
+      }
+      .padding(.horizontal, 56)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
   }
 }
