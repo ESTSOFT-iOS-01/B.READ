@@ -14,7 +14,7 @@ struct NicknameView: View {
   @State private var isValid = true
   
   private var isButtonEnabled: Bool {
-    nicknameText.isEmpty || !isValid
+    !nicknameText.isEmpty && isValid
   }
   
   var body: some View {
@@ -41,12 +41,12 @@ struct NicknameView: View {
       
       BottomButton(
         buttonTitle: "확인",
-        textColor: isButtonEnabled ? .gray3 : .backgroundDefault,
-        buttonColor: isButtonEnabled ? .gray0 : .brown3
+        textColor: isButtonEnabled ? .backgroundDefault : .gray3,
+        buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         print("next")
       }
-      .disabled(isButtonEnabled)
+      .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)
       .padding(.bottom, 20)
       .frame(maxHeight: .infinity, alignment: .bottom)
