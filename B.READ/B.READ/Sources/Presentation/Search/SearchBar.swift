@@ -40,7 +40,7 @@ struct SearchBar: View {
   
   var body: some View {
     HStack(spacing: 10) {
-      Image(systemName: SearchConstants.searchIcon)
+      Image(systemName: SearchConstants.Icon.search)
         .font(.system(size: style.iconSize, weight: style.iconWeight))
         .foregroundStyle(.gray2)
         .padding(.leading, 16)

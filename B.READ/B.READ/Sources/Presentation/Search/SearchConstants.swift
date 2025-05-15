@@ -8,5 +8,9 @@
 import Foundation
 
 struct SearchConstants {
-  public static let searchIcon = "magnifyingglass"
+  struct Icon {
+    public static let search = "magnifyingglass"
+    public static let barcord = "barcode.viewfinder"
+    public static let close = "xmark"
+  }
 }
