@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
+  @State private var isSearchFocused: Bool = false
   
   var body: some View {
     VStack(alignment: .center, spacing: 16) {
@@ -16,7 +17,8 @@ struct SearchView: View {
         .frame(width: 200 ,height: 44)
       
       HStack(spacing: 16) {
-        SearchBar(text: $viewModel.state.searchText)
+        SearchBar(text: $viewModel.state.searchText,
+                  isFocused: $isSearchFocused)
         SearchButton(icon: SearchConstants.Icon.barcord) {
           viewModel.send(.onTapBarcode)
         }

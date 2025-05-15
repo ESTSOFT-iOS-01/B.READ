@@ -10,6 +10,9 @@ import SwiftUI
 struct StyledPlaceholderTextField: View {
   @Binding var text: String
   var placeholder: String
+  var isFocused: Binding<Bool>
+  
+  @FocusState private var internalFocus: Bool
   
   var body: some View {
     ZStack(alignment: .leading) {
@@ -21,10 +24,20 @@ struct StyledPlaceholderTextField: View {
       }
       
       TextField("", text: $text)
+        .focused($internalFocus)
         .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.45, letterSpacing: -0.025)
         .foregroundColor(.gray9)
         .background(.clear)
         .frame(maxWidth: .infinity)
+        .onChange(of: internalFocus) { _, new in
+          isFocused.wrappedValue = new
+        }
+        .onChange(of: isFocused.wrappedValue) { _, new in
+          internalFocus = new
+        }
+        .onSubmit {
+          isFocused.wrappedValue = false
+        }
     }
   }
 }

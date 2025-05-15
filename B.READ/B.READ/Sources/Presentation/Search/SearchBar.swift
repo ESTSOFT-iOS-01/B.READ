@@ -35,6 +35,7 @@ enum SearchBarStyle {
 
 struct SearchBar: View {
   @Binding var text: String
+  @Binding var isFocused: Bool
   var placeholder: String = "검색어를 입력해 주세요"
   var style: SearchBarStyle = .default
   
@@ -45,7 +46,7 @@ struct SearchBar: View {
         .foregroundStyle(.gray2)
         .padding(.leading, 16)
       
-      StyledPlaceholderTextField(text: $text, placeholder: placeholder)
+      StyledPlaceholderTextField(text: $text, placeholder: placeholder, isFocused: $isFocused)
         .padding(.trailing, 16)
     }
     .frame(width: style.frameSize.width, height: style.frameSize.height)
