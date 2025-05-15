@@ -16,7 +16,7 @@ struct MainTabView: View {
           Text("홈")
         }
       
-      SearchView()
+      SearchView(viewModel: SearchViewModel())
         .tabItem {
           Image(systemName: "magnifyingglass")
           Text("검색")
