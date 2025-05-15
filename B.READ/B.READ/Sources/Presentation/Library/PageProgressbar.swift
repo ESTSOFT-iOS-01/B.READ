@@ -10,11 +10,11 @@ import SwiftUI
 // MARK: - (S)PageProgressbar
 struct PageProgressbar: View {
 
-  let barHeight: CGFloat = 4 // 프로그래스바 높이(실제로 적용했을때 높이가 낮은거 같으면 늘리기)
-  let currentPage: Int // 현재 페이지
-  let totalPage: Int // 전체 페이지
-  let percent: Double // 독서 진행률
-  let progressState: ProgressState
+  private let barHeight: CGFloat = 4 // 프로그래스바 높이(실제로 적용했을때 높이가 낮은거 같으면 늘리기)
+  private let currentPage: Int // 현재 페이지
+  private let totalPage: Int // 전체 페이지
+  private let percent: Double // 독서 진행률
+  private let progressState: ProgressState
   
   init(currentPage: Int, totalPage: Int) {
     self.currentPage = currentPage
@@ -66,10 +66,7 @@ struct PageProgressbar: View {
           .pretendard(.regular, size: 12),
           lineHeight: 1
         )
-        .frame(
-          maxWidth: .infinity,
-          alignment: .trailing
-        )
+        .frame(maxWidth: .infinity, alignment: .trailing)
         .foregroundStyle(.gray3)
     } // : HStack
   }
