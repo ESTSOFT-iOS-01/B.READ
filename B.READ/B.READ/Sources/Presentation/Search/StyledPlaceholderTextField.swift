@@ -10,7 +10,7 @@ import SwiftUI
 struct StyledPlaceholderTextField: View {
   @Binding var text: String
   var placeholder: String
-  var isFocused: Binding<Bool>
+  var isFocused: Binding<Bool>? = nil
   
   @FocusState private var internalFocus: Bool
   
@@ -30,13 +30,15 @@ struct StyledPlaceholderTextField: View {
         .background(.clear)
         .frame(maxWidth: .infinity)
         .onChange(of: internalFocus) { _, new in
-          isFocused.wrappedValue = new
+          isFocused?.wrappedValue = new
         }
-        .onChange(of: isFocused.wrappedValue) { _, new in
-          internalFocus = new
+        .onChange(of: isFocused?.wrappedValue) { _, new in
+          if let new = new {
+            internalFocus = new
+          }
         }
         .onSubmit {
-          isFocused.wrappedValue = false
+          isFocused?.wrappedValue = false
         }
     }
   }
