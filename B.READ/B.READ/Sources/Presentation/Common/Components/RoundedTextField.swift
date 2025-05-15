@@ -14,7 +14,7 @@ enum ContentType { case nickname, pages }
 // 2) 공통 텍스트필드
 struct RoundedTextField: View {
   // 필수값
-  var kind: ContentType
+  var type: ContentType
   var placeholder: String
   @Binding var text: String
   
@@ -39,9 +39,9 @@ struct RoundedTextField: View {
       TextField("", text: $text)
         .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.55, letterSpacing: -0.025)
         .foregroundColor(.gray3)
-        .keyboardType(kind == .pages ? .numberPad : .default)
+        .keyboardType(type == .pages ? .numberPad : .default)
         .onChange(of: text) {
-          if kind == .pages { filterDigits() }
+          if type == .pages { filterDigits() }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 13)
@@ -68,33 +68,32 @@ struct RoundedTextField: View {
   }
 }
 
-// MARK: - Demo View (닉네임 + 페이지)
-struct RoundedTextFieldDemo: View {
-    @State private var nickname = ""
-    @State private var pages    = ""
-    var body: some View {
-        VStack(spacing: 24) {
-            // 닉네임
-            RoundedTextField(
-                kind: .nickname,
-                placeholder: "닉네임을 입력해주세요",
-                text: $nickname,
-                isValid: nickname.count >= 2 ? true : (nickname.isEmpty ? nil : false)
-            )
-            // 페이지
-            RoundedTextField(
-                kind: .pages,
-                placeholder: "0",
-                text: $pages,
-                isValid: Int(pages).map { (1...999).contains($0) } ?? (pages.isEmpty ? nil : false)
-            )
-        }
-        .padding()
-    }
+
+
+
+
+#Preview {
+  @Previewable @State var nickname = ""
+  @Previewable @State var pages = ""
+  
+  
+  VStack(spacing: 24) {
+    // 닉네임
+    RoundedTextField(
+      type: .nickname,
+      placeholder: "닉네임을 입력해주세요",
+      text: $nickname,
+      isValid: nickname.count >= 2 ? true : (nickname.isEmpty ? nil : false)
+    )
+    // 페이지
+    RoundedTextField(
+      type: .pages,
+      placeholder: "0",
+      text: $pages,
+      isValid: Int(pages).map { (1...999).contains($0) } ?? (pages.isEmpty ? nil : false)
+    )
+  }
+  .padding()
 }
 
-// MARK: - #Preview
-#Preview("RoundedTextField 두 필드 Live") {
-    RoundedTextFieldDemo()
-        .frame(maxWidth: 400)
-}
+
