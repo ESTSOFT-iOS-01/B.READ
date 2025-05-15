@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct SearchView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+  @State var searchText : String = ""
+  @State var searchText1 : String = "zzzz"
+  
+  var body: some View {
+    VStack(alignment: .leading) {
+      SearchBar(text: $searchText)
+      SearchBar(text: $searchText, style: .compact)
+      
+      SearchBar(text: $searchText1)
+      SearchBar(text: $searchText1, style: .compact)
     }
+  }
 }
 
 #Preview {
-    SearchView()
+  SearchView()
 }

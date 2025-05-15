@@ -14,6 +14,7 @@
 		35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				"Resources/B-READ-Info.plist",
 				Sources/Data/.gitkeep,
 				Sources/Domain/.gitkeep,
 				Sources/Network/.gitkeep,
@@ -52,7 +53,9 @@
 				35C171E22DCB34320049724A /* B.READ */,
 				35C171E12DCB34320049724A /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		35C171E12DCB34320049724A /* Products */ = {
 			isa = PBXGroup;
