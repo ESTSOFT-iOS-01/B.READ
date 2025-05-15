@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)SearchButton
 struct SearchButton: View {
   let buttonSize : CGFloat = 48
   var icon: String

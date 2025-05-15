@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)StyledPlaceholderTextField
 struct StyledPlaceholderTextField: View {
   @Binding var text: String
   var placeholder: String

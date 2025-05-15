@@ -33,6 +33,7 @@ enum SearchBarStyle {
   }
 }
 
+// MARK: - (S)SearchBar
 struct SearchBar: View {
   @Binding var text: String
   var isFocused: Binding<Bool>? = nil

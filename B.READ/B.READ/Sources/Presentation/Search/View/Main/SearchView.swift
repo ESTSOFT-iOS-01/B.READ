@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)SearchView
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
   @State private var isSearchFocused: Bool = false
@@ -22,7 +23,7 @@ struct SearchView: View {
         SearchButton(icon: SearchConstants.Icon.barcord) {
           viewModel.send(.onTapBarcode)
         }
-      } // : Hstack
+      } // : Hstack - 검색창 영역
       
       VStack(alignment: .leading, spacing: 16) {
         Text("인기 도서")
@@ -31,8 +32,8 @@ struct SearchView: View {
         BestSellerView(bookList: viewModel.state.bookList) { rank, name in
           viewModel.send(.onTapBestSeller(rank: rank, name: name))
         }
-      }
-    }
+      } // : vstack - best seller
+    } // : vStack
     .padding(.horizontal, 24)
     .onAppear {
       viewModel.send(.onAppear)

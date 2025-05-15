@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)BestSellerView
 struct BestSellerView: View {
   var bookList: [String]
   var onTap: (Int, String) -> Void
@@ -25,6 +26,7 @@ struct BestSellerView: View {
   }
 }
 
+// MARK: - (S)BestSellerButton
 struct BestSellerButton: View {
   let rank: Int
   let name: String
