@@ -10,7 +10,7 @@ import SwiftUI
 struct NicknameView: View {
   
   @FocusState private var isFocused: Bool
-  @State private var nickname = ""
+  @State private var nicknameText = ""
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -23,9 +23,14 @@ struct NicknameView: View {
         .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.35)
         .padding(.leading, 6)
       
-      TextField("닉네임을 입력해주세요.", text: $nickname)
-        .padding(.top, 40)
-        .focused($isFocused)
+      RoundedTextField(
+        type: .nickname,
+        placeholder: "닉네임을 입력해 주세요",
+        text: $nicknameText,
+        isValid: true
+      )
+      .padding(.top, 40)
+      .focused($isFocused)
       
       BottomButton(buttonTitle: "확인", textColor: .gray3, buttonColor: .gray0) {
         print("next")
