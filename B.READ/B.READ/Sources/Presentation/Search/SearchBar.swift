@@ -47,7 +47,9 @@ struct SearchBar: View {
         .foregroundStyle(.gray2)
         .padding(.leading, 16)
       
-      StyledPlaceholderTextField(text: $text, placeholder: placeholder, isFocused: isFocused)
+      CustomTextField(text: $text,
+                                 placeholder: placeholder,
+                                 isFocused: isFocused)
         .padding(.trailing, 16)
     }
     .frame(width: style.frameSize.width, height: style.frameSize.height)

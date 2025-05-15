@@ -40,7 +40,9 @@ struct BestSellerButton: View {
           .foregroundStyle(.brown7)
         
         Text(name)
-          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.2, letterSpacing: 0.02)
+          .brStyleFont(.pretendard(.regular, size: 14),
+                       lineHeight: 1.2,
+                       letterSpacing: 0.02)
           .foregroundStyle(.brown9)
           .lineLimit(1)
           .truncationMode(.tail)

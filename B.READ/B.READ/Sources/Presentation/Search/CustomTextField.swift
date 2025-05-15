@@ -1,5 +1,5 @@
 //
-//  StyledPlaceholderTextField.swift
+//  CustomTextField.swift
 //  B.READ
 //
 //  Created by 김도연 on 5/15/25.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-// MARK: - (S)StyledPlaceholderTextField
-struct StyledPlaceholderTextField: View {
+// MARK: - (S)CustomTextField
+struct CustomTextField: View {
   @Binding var text: String
   var placeholder: String
   var isFocused: Binding<Bool>? = nil
@@ -19,14 +19,18 @@ struct StyledPlaceholderTextField: View {
     ZStack(alignment: .leading) {
       if text.isEmpty {
         Text(placeholder)
-          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.45, letterSpacing: -0.025)
+          .brStyleFont(.pretendard(.regular, size: 14),
+                       lineHeight: 1.45,
+                       letterSpacing: -0.025)
           .foregroundColor(.gray2)
           .background(.clear)
       }
       
       TextField("", text: $text)
         .focused($internalFocus)
-        .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.45, letterSpacing: -0.025)
+        .brStyleFont(.pretendard(.regular, size: 14),
+                     lineHeight: 1.45,
+                     letterSpacing: -0.025)
         .foregroundColor(.gray9)
         .background(.clear)
         .frame(maxWidth: .infinity)
