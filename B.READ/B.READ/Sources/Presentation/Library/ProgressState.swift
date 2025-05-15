@@ -14,12 +14,12 @@ enum ProgressState {
   case medium
   case wellDone
   
-  var content: String {
+  var label: String {
     switch self {
     case .raw:
-      return "오븐 예열 중"
+      "오븐 예열 중"
     case .rare, .medium, .wellDone:
-      return "빵 굽는 중"
+      "빵 굽는 중"
     }
   }
   
@@ -36,16 +36,16 @@ enum ProgressState {
     }
   }
   
-  var image: String {
+  var image: Image {
     switch self {
     case .raw:
-      return "Bread0"
+      Image(.bread0)
     case .rare:
-      return "Bread1"
+      Image(.bread1)
     case .medium:
-      return "Bread2"
+      Image(.bread2)
     case .wellDone:
-      return "Bread3"
+      Image(.bread3)
     }
   }
   
