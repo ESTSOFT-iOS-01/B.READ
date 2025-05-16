@@ -28,7 +28,7 @@ struct SearchView: View {
         // TODO : DummyData, 추후 뷰모델 연결 필요
         RecentSearchView(keywords: ["Test", "Test", "Test", "Test1", "Test3"])
           .transition(.opacity)
-        Spacer()
+          .frame(maxHeight: .infinity, alignment: .top)
       } else {
         bestSellerSection
           .transition(.opacity)
@@ -50,8 +50,7 @@ struct SearchView: View {
   // MARK: - (F)searchBarSection
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
-      SearchBar(text: $viewModel.state.searchText,
-                isFocused: $isSearchFocused)
+      SearchBar(text: $viewModel.state.searchText, isFocused: $isSearchFocused)
       
       if viewModel.state.searchText.isEmpty {
         SearchButton {
