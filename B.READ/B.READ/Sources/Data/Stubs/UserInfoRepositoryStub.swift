@@ -12,6 +12,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
   private var storedUserInfo: UserInfo?
   
   func createUserInfo(_ userInfo: UserInfo) async throws {
+    print("Stub: ", #function)
     guard storedUserInfo == nil else {
       throw RepositoryError.dataAlreadyExist
     }
@@ -19,6 +20,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
   }
   
   func fetchUserInfo() async throws -> UserInfo {
+    print("Stub: ", #function)
     guard let userInfo = storedUserInfo else {
       throw RepositoryError.dataNotFound
     }
@@ -26,6 +28,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
   }
   
   func updateUserInfo(_ userInfo: UserInfo) async throws {
+    print("Stub: ", #function)
     guard storedUserInfo != nil else {
       throw RepositoryError.dataNotFound
     }
@@ -33,6 +36,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
   }
   
   func deleteUserInfo() async throws {
+    print("Stub: ", #function)
     guard storedUserInfo != nil else {
       throw RepositoryError.dataNotFound
     }
