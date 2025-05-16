@@ -18,8 +18,8 @@ import Foundation
 /// - currentPage : 현재까지 읽은 페이지
 /// - review : 한줄평(150자 이내)
 /// - summaryID : AI 요약노트 id (빵식이의 요약노트)
-/// - memoIDs : 메모 id
-/// - quoteIDs : 문장수집 id
+/// - memoIDs : 메모 id - [String]
+/// - quoteIDs : 문장수집 id - [String]
 struct Record {
   let id: String
   let isbn: String
@@ -38,7 +38,7 @@ struct Record {
 /// 독서 상태 정보입니다.
 /// - toRead : 읽을 책
 /// - reading : 읽는 중
-/// - complete : 읽은 책
+/// - completed : 읽은 책
 enum ReadState: Int {
   case toRead = 0
   case reading

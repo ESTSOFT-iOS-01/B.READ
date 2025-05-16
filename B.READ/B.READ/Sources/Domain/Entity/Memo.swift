@@ -13,12 +13,12 @@ import Foundation
 /// - createdAt : 생성 날짜
 /// - content : 내용
 /// - pages : (메모 첫 페이지, 메모 끝 페이지)
-/// - guide : AI 제안 내용
+/// - guides : AI 제안 내용 - [String]
 struct Memo {
   let id: String
   let isbn: String
   var createdAt: Date
   var content: String
   var pages: (Int, Int)
-  var guide: [String]
+  var guides: [String]
 }

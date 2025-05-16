@@ -9,13 +9,13 @@ import Foundation
 
 /// 기본 유저 정보입니다.
 /// - nickname : 유저 닉네임(영어, 한글, 숫자, 12자 이내)
-/// - category : 선호장르
-/// - recentKeywords : 최근 검색어
+/// - categories : 선호장르 - [Category]
+/// - recentKeywords : 최근 검색어 - [String]
 /// - generateCount : ai 요약 생성횟수
-/// - streak : 일주일간의 독서 유무
+/// - streak : 일주일간의 독서 유무 - [Bool]
 struct UserInfo {
   var nickname: String
-  var category: [Category]
+  var categories: [Category]
   var recentKeywords: [String]
   var generateCount: Int
   var streak: [Bool]
