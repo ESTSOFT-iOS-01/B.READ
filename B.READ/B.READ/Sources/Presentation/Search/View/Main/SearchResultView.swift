@@ -51,16 +51,15 @@ struct SearchResultView: View {
   ]
   
   var body: some View {
-    VStack() {
+    VStack(spacing: 2) {
       TopTabBar(tabs: tabs, selectedIndex: $selectedIndex)
-        .frame(height: 30)
+        .frame(height: 33)
         .padding(.horizontal, 24)
       
       tabContentView()
         .animation(.easeInOut(duration: 0.3), value: selectedIndex)
     }.background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
-  
   
   @ViewBuilder
   func tabContentView() -> some View {

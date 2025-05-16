@@ -41,18 +41,45 @@ struct SearchBar: View {
   var placeholder: String = "검색어를 입력해 주세요"
   var style: SearchBarStyle = .default
   
+  let layoutPadding: CGFloat = 16
+  
+  @FocusState private var internalFocus: Bool
+  
   var body: some View {
     HStack(spacing: 10) {
       Image(systemName: SearchConstants.Icon.search)
         .font(.system(size: style.iconSize, weight: style.iconWeight))
         .foregroundStyle(.gray2)
-        .padding(.leading, 16)
+        .padding(.leading, layoutPadding)
       
-      CustomTextField(text: $text, placeholder: placeholder, isFocused: isFocused)
-        .onSubmit {
-          onSubmit()
+      ZStack(alignment: .leading) {
+        if text.isEmpty {
+          Text(placeholder)
+            .foregroundColor(.gray2)
         }
-        .padding(.trailing, 16)
+        
+        TextField("", text: $text)
+          .focused($internalFocus)
+          .foregroundColor(.gray9)
+          .frame(maxWidth: .infinity)
+          .onChange(of: internalFocus) { _, new in
+            isFocused?.wrappedValue = new
+          }
+          .onChange(of: isFocused?.wrappedValue) { _, new in
+            if let new = new {
+              internalFocus = new
+            }
+          }
+          .onSubmit {
+            isFocused?.wrappedValue = false
+            onSubmit()
+          }
+      }
+      .brStyleFont(.pretendard(.regular, size: 14),
+                   lineHeight: 1.45,
+                   letterSpacing: -0.025)
+      .background(.clear)
+      .padding(.trailing, layoutPadding)
     }
     .frame(width: style.frameSize.width, height: style.frameSize.height)
     .roundedBackground()
