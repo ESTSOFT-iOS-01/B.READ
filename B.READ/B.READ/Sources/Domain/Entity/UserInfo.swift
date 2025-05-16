@@ -21,7 +21,7 @@ struct UserInfo {
   var streak: [Bool]
 }
 
-/// 책 장르 입니다.
+/// 책 장르입니다.
 /// 선호 도서 추천에서 사용됩니다.
 /// - id : 알라딘 API의 장르 CID
 /// - name : 장르명
