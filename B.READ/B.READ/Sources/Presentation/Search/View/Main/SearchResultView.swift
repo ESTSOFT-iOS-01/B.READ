@@ -18,6 +18,9 @@ struct BookVO {
 
 struct SearchResultView: View {
   @State var selectedIndex = 0
+  @GestureState private var dragOffset: CGSize = .zero
+  @State private var swipeDirection: Edge = .trailing
+  
   let tabs = [
     TabItem(title: "도서"),
     TabItem(title: "내 기록")
@@ -52,41 +55,66 @@ struct SearchResultView: View {
       TopTabBar(tabs: tabs, selectedIndex: $selectedIndex)
         .frame(height: 30)
         .padding(.horizontal, 24)
-
-      if selectedIndex == 0 {
-        ScrollView {
-          LazyVStack(spacing: 0) {
-            ForEach(resultBook.indices, id: \.self) { index in
-              let book = resultBook[index]
-
-              BookSearchCell(
-                coverImage: book.coverImage,
-                title: book.title,
-                author: book.author,
-                publisher: book.publisher,
-                publishedDate: book.publishedDate
-              )
-              .padding(.horizontal, 24)
-              .padding(.top, index == 0 ? 16 : 0)
-              // 그림자 안 잘리게 첫번째 항목에만 padding 추가
-              
-              if index < resultBook.count - 1 {
-                Divider()
-                  .frame(width: .infinity, height: 0.8)
-                  .background(.gray1)
-                  .padding(.horizontal, 24)
-              }
-            }
-          }
-          .frame(alignment: .top)
-        }
-      } else {
-        // 내 기록 목록
-        Text("내 기록은 아직 구현되지 않았어요.")
-          .frame(maxHeight: .infinity, alignment: .top)
-          .padding(.all, 16)
-      }
+      
+      tabContentView()
+        .animation(.easeInOut(duration: 0.3), value: selectedIndex)
     }.background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+  }
+  
+  
+  @ViewBuilder
+  func tabContentView() -> some View {
+    if selectedIndex == 0 {
+      bookTabView()
+        .transition(.asymmetric(insertion: .move(edge: .leading),
+                                removal: .opacity))
+    } else {
+      myRecordTabView()
+        .transition(.asymmetric(insertion: .move(edge: .trailing),
+                                removal: .opacity))
+    }
+  }
+  
+  @ViewBuilder
+  func bookTabView() -> some View {
+    ScrollView {
+      LazyVStack(spacing: 0) {
+        ForEach(resultBook.indices, id: \.self) { index in
+          let book = resultBook[index]
+          
+          BookSearchCell(
+            coverImage: book.coverImage,
+            title: book.title,
+            author: book.author,
+            publisher: book.publisher,
+            publishedDate: book.publishedDate
+          )
+          .padding(.horizontal, 24)
+          .padding(.top, index == 0 ? 16 : 0)
+          .onTapGesture {
+            handleBookTap(isbn: book.isbn)
+          }
+          
+          Divider()
+            .frame(height: 0.8)
+            .background(Color.gray1)
+            .padding(.horizontal, 24)
+        }
+      }
+      .padding(.bottom, 16)
+    }
+  }
+  
+  @ViewBuilder
+  func myRecordTabView() -> some View {
+    Text("내 기록은 아직 구현되지 않았어요.")
+      .frame(maxHeight: .infinity, alignment: .top)
+      .padding(.all, 16)
+  }
+  
+  private func handleBookTap(isbn: String) {
+    print("선택된 도서 ISBN: \(isbn)")
+    // TODO : 화면 이동 처리 여기서
   }
 }
 

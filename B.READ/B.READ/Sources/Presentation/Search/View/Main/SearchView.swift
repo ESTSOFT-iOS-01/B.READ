@@ -11,6 +11,7 @@ import SwiftUI
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
   @State private var isSearchFocused: Bool = false
+  @State private var isSearchSubmitted: Bool = false
   private let layoutSize: CGFloat = 16
   
   var body: some View {
