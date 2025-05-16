@@ -26,14 +26,21 @@ struct BookSearchCell: View {
       
       VStack(alignment: .leading, spacing: 8) {
         Text(title)
-          .foregroundStyle(.black) // TODO: GrayScale로 변경해야함
+          .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+          .lineLimit(1)
+          .truncationMode(.tail)
+        
         Text(author)
           .foregroundStyle(.brown8)
           .brStyleFont(.pretendard(.medium, size: 14), lineHeight: 1.0)
+          .lineLimit(1)
+          .truncationMode(.tail)
         Text("\(publisher) | \(publishedDate.string(format: .dotSeparated))")
           .foregroundStyle(.brown5)
           .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1.0)
+          .lineLimit(1)
+          .truncationMode(.tail)
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding(.top, 4)

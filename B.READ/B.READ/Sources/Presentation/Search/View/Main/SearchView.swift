@@ -35,6 +35,7 @@ struct SearchView: View {
       }
     }
     .padding(.horizontal, 24)
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .animation(.easeInOut(duration: 0.25), value: isSearchFocused)
     .onAppear {
       viewModel.send(.onAppear)
