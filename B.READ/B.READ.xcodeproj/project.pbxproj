@@ -15,7 +15,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Resources/B-READ-Info.plist",
-				Sources/Data/.gitkeep,
 				Sources/Network/.gitkeep,
 				Sources/Util/Constants/.gitkeep,
 				Sources/Util/Extensions/.gitkeep,
