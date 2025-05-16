@@ -11,10 +11,9 @@ protocol UserInfoRepository {
   
   func createUserInfo(_ userInfo: UserInfo) async throws
   
-  func fetchUserInfo() async throws
+  func fetchUserInfo() async throws -> UserInfo
   
   func updateUserInfo(_ userInfo: UserInfo) async throws
   
   func deleteUserInfo() async throws
-  
 }
