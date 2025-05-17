@@ -7,11 +7,11 @@
 
 import Foundation
 
-final class UserInfoRepositoryStub: UserInfoRepository {
+actor UserInfoRepositoryStub: UserInfoRepository {
   
   private var storedUserInfo: UserInfo?
   
-  func createUserInfo(_ userInfo: UserInfo) async throws {
+  func createUserInfo(_ userInfo: UserInfo) throws {
     print("Stub: ", #function)
     guard storedUserInfo == nil else {
       throw RepositoryError.dataAlreadyExist
@@ -19,7 +19,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
     storedUserInfo = userInfo
   }
   
-  func fetchUserInfo() async throws -> UserInfo {
+  func fetchUserInfo() throws -> UserInfo {
     print("Stub: ", #function)
     guard let userInfo = storedUserInfo else {
       throw RepositoryError.dataNotFound
@@ -27,7 +27,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
     return userInfo
   }
   
-  func updateUserInfo(_ userInfo: UserInfo) async throws {
+  func updateUserInfo(_ userInfo: UserInfo) throws {
     print("Stub: ", #function)
     guard storedUserInfo != nil else {
       throw RepositoryError.dataNotFound
@@ -35,7 +35,7 @@ final class UserInfoRepositoryStub: UserInfoRepository {
     storedUserInfo = userInfo
   }
   
-  func deleteUserInfo() async throws {
+  func deleteUserInfo() throws {
     print("Stub: ", #function)
     guard storedUserInfo != nil else {
       throw RepositoryError.dataNotFound
