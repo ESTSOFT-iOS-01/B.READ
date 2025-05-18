@@ -13,7 +13,9 @@ struct UserInfoRepositoryTests {
   private let userInfoRepository: UserInfoRepository
   
   init() {
-    userInfoRepository = UserInfoRepositoryStub()
+    //userInfoRepository = UserInfoRepositoryStub()
+    let storage = SwiftDataTestStorage()
+    userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
   }
   
 
