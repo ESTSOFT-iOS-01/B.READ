@@ -13,19 +13,21 @@ struct LibraryListView: View {
   
   var body: some View {
     List {
-      ForEach(records, id: \.id) { record in
-        LibraryListCell()
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-//          .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
-          .listRowSeparator(.hidden) // separator 제거 (iOS 15+)
-          .background(.orange.opacity(0.3))
-//          .background(Color.clear) // 셀 배경 제거
-      } // : ForEach
+      if records.isEmpty {
+        // TODO: - 독서기록이 없을 때의 뷰 or 테스트 추가해야함.
+        Text("독서기록이 없습니다.")
+      } else {
+        ForEach(records, id: \.id) { record in
+          LibraryListCell()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
+            .listRowSeparator(.hidden) // separator 제거 (iOS 15+)
+            .background(.orange2.opacity(0.3))
+        } // : ForEach
+      }
     } // : List
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .listStyle(.plain)
-//    .background(.clear)
-    .background(.blue.opacity(0.3))
     .scrollIndicators(.hidden)
     
     
