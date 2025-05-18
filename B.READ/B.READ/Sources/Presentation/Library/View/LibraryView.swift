@@ -29,9 +29,10 @@ struct LibraryView: View {
   
   
   var body: some View {
-    VStack(spacing: 0) {
+    VStack(alignment: .trailing, spacing: 0) {
       // 상단 탭바
       ScrollView(.horizontal, showsIndicators: false) {
+        // MARK: - view를 바꾸는게 아닌 viewModel의 records의 값만 필터를 거치는 방법이라 액션 클로저를 추가했습니다.
         TopTabBar(tabs: viewModel.tabs, selectedIndex: $selectedIndex) {
           viewModel.send(.fetchRecordByTab(index: selectedIndex))
         }
@@ -49,22 +50,13 @@ struct LibraryView: View {
         }
         .frame(width: 24, height: 24)
       } // : HStack
-      .frame(maxWidth: .infinity, alignment: .trailing)
       .foregroundStyle(.gray2)
       .padding(.top, 16)
       
-      // FIXME: - 상태에 따라 뷰를 달리 구성하는 경우, 컨테이너로 묶어서 frame과 같은 설정을 해줘야 하나요?
-      // => VStack으로 안감싸는 방법이 있는지 궁금합니다.
-      VStack {
-        if viewState == .list {
-          LibraryListView(records: viewModel.displayRecords)
-        }
-        else { LibraryGridView() }
-      }
-      .frame(maxWidth: .infinity)
-//      .background(.clear)
-      .padding(.top, 8)
+      // 독서기록 목록 뷰
+      recordView()
     } // : VStack
+    .padding(.top, 16)
     .padding(.horizontal, 24)
     .onAppear {
       viewModel.send(.onAppear)
@@ -72,7 +64,7 @@ struct LibraryView: View {
   }
   
   // MARK: - (F)sortButton
-  // TODO: - 정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
+  // TODO: - (2)정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
   // 예시) sortButton(type: .record)
   @ViewBuilder
   private func sortButton() -> some View {
@@ -84,6 +76,18 @@ struct LibraryView: View {
           .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
         Image(systemName: "chevron.compact.down")
       } // : HStack
+    }
+  }
+  
+  // MARK: - (F)recordView
+  // TODO: - (2)그리드 뷰 추가
+  @ViewBuilder
+  private func recordView() -> some View {
+    if viewState == .list {
+      LibraryListView(records: viewModel.displayRecords)
+    }
+    else {
+      LibraryGridView()
     }
   }
 }

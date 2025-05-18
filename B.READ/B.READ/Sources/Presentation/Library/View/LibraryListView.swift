@@ -8,26 +8,30 @@
 import SwiftUI
 
 struct LibraryListView: View {
-  
   var records: [Record]
   
   var body: some View {
     List {
       if records.isEmpty {
-        // TODO: - 독서기록이 없을 때의 뷰 or 테스트 추가해야함.
+        // TODO: - (2)독서기록이 없을 때의 뷰 or 텍스트 추가해야함.
         Text("독서기록이 없습니다.")
       } else {
         ForEach(records, id: \.id) { record in
           LibraryListCell(record: record)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(height: 114)
+            .background(.green1.opacity(0.6))
+            .cornerRadius(16)
             .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
             .listRowSeparator(.hidden) // separator 제거
-            .background(.orange2.opacity(0.3))
+            .padding(.top, 8)
         } // : ForEach
       }
     } // : List
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
     .listStyle(.plain)
     .scrollIndicators(.hidden)
   }
+}
+
+#Preview{
+  LibraryListView(records: dummyRecords)
 }
