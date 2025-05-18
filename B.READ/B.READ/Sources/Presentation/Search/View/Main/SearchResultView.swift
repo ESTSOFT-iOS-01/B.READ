@@ -154,10 +154,12 @@ struct SearchResultView: View {
       TopTabBar(tabs: tabs, selectedIndex: $selectedIndex)
         .frame(height: 33)
         .padding(.horizontal, 24)
+        .padding(.bottom, 16)
       
       tabContentView()
         .animation(.easeInOut(duration: 0.3), value: selectedIndex)
-    }.background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    }
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
   
   // MARK: - (F)tabContentView
@@ -224,7 +226,6 @@ struct SearchResultView: View {
           ForEach(Array(items.enumerated()), id: \.1.id) { index, item in
             content(item)
               .padding(.horizontal, layoutPadding)
-              .padding(.top, index == 0 ? listPadding : 0)
               .onTapGesture {
                 onTap(item)
               }

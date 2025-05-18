@@ -44,6 +44,7 @@ struct SearchView: View {
       }
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    .toolbar(isSearchFocused ? .hidden : .visible, for: .tabBar)
     .animation(.easeInOut(duration: 0.25), value: isSearchFocused)
     .onAppear {
       viewModel.send(.onAppear)
@@ -59,9 +60,14 @@ struct SearchView: View {
   // MARK: - (S)searchBarSection
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
-      SearchBar(text: $viewModel.state.searchText,
-                isFocused: $isSearchFocused,
-                onSubmit: { isSearchSubmitted = true })
+      SearchBar(
+        text: $viewModel.state.searchText,
+        isFocused: $isSearchFocused,
+        onSubmit: {
+          if !viewModel.state.searchText.isEmpty {
+            isSearchSubmitted = true
+          }
+        })
       
       if viewModel.state.searchText.isEmpty {
         SearchButton {
@@ -71,6 +77,7 @@ struct SearchView: View {
         SearchButton(style: .close) {
           viewModel.state.searchText = ""
           isSearchFocused = true
+          isSearchSubmitted = false
         }
       }
     } // : Hstack - 검색창 영역
