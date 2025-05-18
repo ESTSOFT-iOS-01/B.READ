@@ -15,8 +15,8 @@ enum DummyData {
       Category(id: 203, name: "에세이")
     ],
     recentKeywords: [
-      Keyword(date: Date().addingTimeInterval(-86400 * 1), value: "미움받을 용기"),
-      Keyword(date: Date().addingTimeInterval(-86400 * 2), value: "히가시노 게이고")
+      Keyword(date: Date().addingTimeInterval(-86400 * 2), value: "히가시노 게이고"),
+      Keyword(date: Date().addingTimeInterval(-86400 * 1), value: "미움받을 용기")
     ],
     generateCount: 3,
     lastStreakUpdatedAt: Date(),
