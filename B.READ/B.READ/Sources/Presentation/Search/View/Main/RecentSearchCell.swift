@@ -39,7 +39,7 @@ struct RecentSearchView: View {
     .animation(.easeInOut(duration: 0.25), value: keywords)
   }
   
-  // MARK: - (F)headerView
+  // MARK: - (S)headerView
   private var headerView: some View {
     HStack {
       Text("최근 검색어")

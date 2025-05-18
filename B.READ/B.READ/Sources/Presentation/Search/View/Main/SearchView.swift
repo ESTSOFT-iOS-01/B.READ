@@ -43,13 +43,13 @@ struct SearchView: View {
     }
   }
   
-  // MARK: - (F)logoView
+  // MARK: - (S)logoView
   private var logoView: some View {
     Text("로고")
       .frame(width: 200, height: 44)
   }
   
-  // MARK: - (F)searchBarSection
+  // MARK: - (S)searchBarSection
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
       SearchBar(text: $viewModel.state.searchText, isFocused: $isSearchFocused)
@@ -66,7 +66,7 @@ struct SearchView: View {
     } // : Hstack - 검색창 영역
   }
   
-  // MARK: - (F)bestSellerSection
+  // MARK: - (S)bestSellerSection
   private var bestSellerSection: some View {
     VStack(alignment: .leading, spacing: layoutSize) {
       Text("인기 도서")

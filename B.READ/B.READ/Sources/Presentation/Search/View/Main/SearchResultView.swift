@@ -7,15 +7,7 @@
 
 import SwiftUI
 
-struct BookVO {
-  let isbn: String
-  let coverImage: Image
-  let title: String
-  let author: String
-  let publisher: String
-  let publishedDate: Date
-}
-
+// MARK: - (S)SearchResultView
 struct SearchResultView: View {
   @State var selectedIndex = 0
   @GestureState private var dragOffset: CGSize = .zero
@@ -27,6 +19,55 @@ struct SearchResultView: View {
   ]
   
   var resultBook : [BookVO] = [
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
+    BookVO(isbn: "1231231",
+           coverImage: Image(.exampleBook),
+           title: "데미안1",
+           author: "헤르만 헤세",
+           publisher: "민음사",
+           publishedDate: Date()
+          ),
     BookVO(isbn: "1231231",
            coverImage: Image(.exampleBook),
            title: "데미안1",
@@ -61,6 +102,7 @@ struct SearchResultView: View {
     }.background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
   
+  // MARK: - (F)tabContentView
   @ViewBuilder
   func tabContentView() -> some View {
     if selectedIndex == 0 {
@@ -74,10 +116,13 @@ struct SearchResultView: View {
     }
   }
   
+  // TODO : 탭 전환 시 스크롤 위치 기억하게 만들기 ScrollReader?
+  
+  // MARK: - (F)bookTabView
   @ViewBuilder
   func bookTabView() -> some View {
     ScrollView {
-      LazyVStack(spacing: 0) {
+      VStack(spacing: 0) {
         ForEach(resultBook.indices, id: \.self) { index in
           let book = resultBook[index]
           
@@ -104,6 +149,7 @@ struct SearchResultView: View {
     }
   }
   
+  // MARK: - (F)myRecordTabView
   @ViewBuilder
   func myRecordTabView() -> some View {
     Text("내 기록은 아직 구현되지 않았어요.")
