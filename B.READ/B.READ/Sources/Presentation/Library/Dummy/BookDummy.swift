@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Book Entity
+// TODO: - Entity 머지 되면 해당 Entity 삭제
 /// 도서 정보입니다.
 /// - isbn : ISBN
 /// - coverImg : 표지
