@@ -12,7 +12,13 @@ final class LibraryViewModel: ObservableObject {
   
   // MARK: - State
   @Published var records: [Record] = []
-  @Published var tabs: [TabItem] = []
+  @Published var tabs: [TabItem] = [
+    TabItem(title: "전체(0)"),
+    TabItem(title: "읽은 책(0)"),
+    TabItem(title: "읽는 중(0)"),
+    TabItem(title: "읽을 책(0)"),
+    TabItem(title: "즐겨찾기(0)")
+  ]
 
   
   // MARK: - Internal Variable
@@ -30,7 +36,7 @@ final class LibraryViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      fetchRecords()
+      fetchAllRecords()
       fetchTabs()
     case .fetchTabs:
       fetchTabs()
@@ -40,7 +46,7 @@ final class LibraryViewModel: ObservableObject {
 
 extension LibraryViewModel {
   
-  // 상단 탭의 독서기록 개수 패치
+  /// 상단 탭의 독서기록 개수 패치
   private func fetchTabs() {
     // 필터 조건에 맞는 독서 기록의 개수
     var count: [Int] = [records.count, 0, 0, 0, 0]
@@ -59,10 +65,20 @@ extension LibraryViewModel {
     ]
   }
   
-  // 독서기록 패치
-  private func fetchRecords() {
+  /// 전체 독서기록 패치
+  private func fetchAllRecords() {
     self.records = dummyRecords.sorted {
       $0.createdAt > $1.createdAt
     }
+  }
+  
+  /// 독서 상태에 따른 독서기록 패치
+  private func fetchRecords(state: ReadState) {
+    
+  }
+  
+  /// 즐겨찾기에 등록된 독서기록 패치
+  private func fetchFavoriteRecords() {
+    
   }
 }
