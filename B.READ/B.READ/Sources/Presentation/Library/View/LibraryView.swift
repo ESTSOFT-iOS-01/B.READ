@@ -33,7 +33,6 @@ struct LibraryView: View {
       // 상단 탭바
       ScrollView(.horizontal, showsIndicators: false) {
         TopTabBar(tabs: viewModel.tabs, selectedIndex: $selectedIndex) {
-          print("\(viewModel.tabs[selectedIndex].title) 탭 선택")
           viewModel.send(.fetchRecordByTab(index: selectedIndex))
         }
         .frame(width: 450, height: 34)

@@ -18,10 +18,10 @@ struct LibraryListView: View {
         Text("독서기록이 없습니다.")
       } else {
         ForEach(records, id: \.id) { record in
-          LibraryListCell()
+          LibraryListCell(record: record)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
-            .listRowSeparator(.hidden) // separator 제거 (iOS 15+)
+            .listRowSeparator(.hidden) // separator 제거
             .background(.orange2.opacity(0.3))
         } // : ForEach
       }
@@ -29,9 +29,5 @@ struct LibraryListView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .listStyle(.plain)
     .scrollIndicators(.hidden)
-    
-    
-    
-    
   }
 }
