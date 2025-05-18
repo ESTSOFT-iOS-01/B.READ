@@ -12,5 +12,10 @@ struct SearchConstants {
     public static let search = "magnifyingglass"
     public static let barcord = "barcode.viewfinder"
     public static let close = "xmark"
+    public static let heart = "heart.fill"
+    public static let star = "star.fill"
+    public static let progress = "timer"
+    public static let memo = "note.text"
+    public static let quote = "ellipsis.bubble"
   }
 }

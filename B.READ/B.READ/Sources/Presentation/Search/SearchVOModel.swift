@@ -21,5 +21,16 @@ struct RecordVO {
   let coverImage: Image
   let id: String
   let title: String
-  
+  var state: ReadingState = .notStart
+  var memoCount: Int = 0
+  var quoteCount: Int = 0
+  var rate: Double = 1.0
+  var expectation : Double = 2.0
+  var progress: Int = 1
+}
+
+enum ReadingState {
+  case notStart
+  case reading
+  case finished
 }
