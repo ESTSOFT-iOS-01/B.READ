@@ -15,3 +15,11 @@ struct BookVO {
   let publisher: String
   let publishedDate: Date
 }
+
+struct RecordVO {
+  let isbn: String
+  let coverImage: Image
+  let id: String
+  let title: String
+  
+}

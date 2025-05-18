@@ -52,12 +52,12 @@ struct BookSearchCell: View {
   }
 }
 
-#Preview {
-  BookSearchCell(
-    coverImage: Image(.exampleBook),
-    title: "데미안",
-    author: "헤르만 헤세",
-    publisher: "민음사",
-    publishedDate: Date()
-  )
-}
+//#Preview {
+//  BookSearchCell(
+//    coverImage: Image(.exampleBook),
+//    title: "데미안",
+//    author: "헤르만 헤세",
+//    publisher: "민음사",
+//    publishedDate: Date()
+//  )
+//}
