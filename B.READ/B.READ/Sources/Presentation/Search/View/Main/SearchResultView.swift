@@ -10,15 +10,15 @@ import SwiftUI
 // MARK: - (S)SearchResultView
 struct SearchResultView: View {
   @State var selectedIndex = 0
-  @GestureState private var dragOffset: CGSize = .zero
-  @State private var swipeDirection: Edge = .trailing
+  // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정
   
   let tabs = [
     TabItem(title: "도서"),
     TabItem(title: "내 기록")
   ]
   
-  var resultBook : [BookVO] = [
+  // TODO : VM으로 데이터 이동
+  var resultBooks : [BookVO] = [
     BookVO(isbn: "1231231",
            coverImage: Image(.exampleBook),
            title: "데미안1",
@@ -90,6 +90,64 @@ struct SearchResultView: View {
            publishedDate: Date()
           ),
   ]
+  var resultRecords : [RecordVO] = [
+    RecordVO(
+      isbn: "1231231",
+      coverImage: Image(.exampleBook),
+      id: "1",
+      title: "데미안",
+      state: .notStart
+    ),
+    RecordVO(
+      isbn: "1231232",
+      coverImage: Image(.exampleBook),
+      id: "2",
+      title: "데미안",
+      state: .reading,
+      startDate: Date()
+    ),
+    RecordVO(
+      isbn: "1231233",
+      coverImage: Image(.exampleBook),
+      id: "3",
+      title: "데미안",
+      state: .finished,
+      startDate: Date(),
+      endDate: Date()
+    ),
+    RecordVO(
+      isbn: "1231234",
+      coverImage: Image(.exampleBook),
+      id: "4",
+      title: "데미안",
+      state: .reading,
+      startDate: Date()
+    ),
+    RecordVO(
+      isbn: "1231235",
+      coverImage: Image(.exampleBook),
+      id: "5",
+      title: "데미안",
+      state: .finished,
+      startDate: Date(),
+      endDate: Date()
+    ),
+    RecordVO(
+      isbn: "1231231",
+      coverImage: Image(.exampleBook),
+      id: "6",
+      title: "데미안",
+      state: .notStart
+    ),
+    RecordVO(
+      isbn: "1231232",
+      coverImage: Image(.exampleBook),
+      id: "7",
+      title: "데미안",
+      state: .reading,
+      startDate: Date()
+    ),
+  ]
   
   var body: some View {
     VStack(spacing: 2) {
@@ -121,44 +179,74 @@ struct SearchResultView: View {
   // MARK: - (F)bookTabView
   @ViewBuilder
   func bookTabView() -> some View {
-    ScrollView {
-      VStack(spacing: 0) {
-        ForEach(resultBook.indices, id: \.self) { index in
-          let book = resultBook[index]
-          
-          BookSearchCell(
-            coverImage: book.coverImage,
-            title: book.title,
-            author: book.author,
-            publisher: book.publisher,
-            publishedDate: book.publishedDate
-          )
-          .padding(.horizontal, 24)
-          .padding(.top, index == 0 ? 16 : 0)
-          .onTapGesture {
-            handleBookTap(isbn: book.isbn)
-          }
-          
-          Divider()
-            .frame(height: 0.8)
-            .background(Color.gray1)
-            .padding(.horizontal, 24)
-        }
+    SearchListView(
+      items: resultBooks,
+      layoutPadding: 24,
+      listPadding: 16,
+      onTap: { handleBookTap(isbn: $0.isbn) },
+      content: { book in
+        BookSearchCell(
+          coverImage: book.coverImage,
+          title: book.title,
+          author: book.author,
+          publisher: book.publisher,
+          publishedDate: book.publishedDate
+        )
       }
-      .padding(.bottom, 16)
-    }
+    )
   }
   
   // MARK: - (F)myRecordTabView
   @ViewBuilder
   func myRecordTabView() -> some View {
-    Text("내 기록은 아직 구현되지 않았어요.")
-      .frame(maxHeight: .infinity, alignment: .top)
-      .padding(.all, 16)
+    SearchListView(
+      items: resultRecords,
+      layoutPadding: 24,
+      listPadding: 16,
+      onTap: { handleRecordTap(id: $0.id) },
+      content: { record in
+        RecordSearchCell(data: record)
+      }
+    )
+  }
+  
+  // MARK: - (S)SearchListView
+  struct SearchListView<Data: Identifiable, Content: View>: View {
+    let items: [Data]
+    let layoutPadding: CGFloat
+    let listPadding: CGFloat
+    let onTap: (Data) -> Void
+    let content: (Data) -> Content
+
+    var body: some View {
+      ScrollView {
+        VStack(spacing: 0) {
+          ForEach(Array(items.enumerated()), id: \.1.id) { index, item in
+            content(item)
+              .padding(.horizontal, layoutPadding)
+              .padding(.top, index == 0 ? listPadding : 0)
+              .onTapGesture {
+                onTap(item)
+              }
+
+            Divider()
+              .frame(height: 0.8)
+              .background(Color.gray1)
+              .padding(.horizontal, layoutPadding)
+          }
+        }
+        .padding(.bottom, listPadding)
+      }
+    }
   }
   
   private func handleBookTap(isbn: String) {
     print("선택된 도서 ISBN: \(isbn)")
+    // TODO : 화면 이동 처리 여기서
+  }
+  
+  private func handleRecordTap(id: String) {
+    print("선택된 기록 id: \(id)")
     // TODO : 화면 이동 처리 여기서
   }
 }

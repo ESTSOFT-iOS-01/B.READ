@@ -10,6 +10,8 @@ import SwiftUI
 // MARK: - (S)RecordSearchCell
 struct RecordSearchCell: View {
   let data: RecordVO
+  
+  let layoutPadding: CGFloat = 8
 
   var body: some View {
     HStack(alignment: .top, spacing: 24) {
@@ -18,9 +20,9 @@ struct RecordSearchCell: View {
         .aspectRatio(contentMode: .fill)
         .frame(width: 58 ,height: 88)
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .shadow(color: .black.opacity(0.25), radius: 25, x: 0, y: 2)
+        .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 2)
 
-      VStack(alignment: .leading, spacing: 8) {
+      VStack(alignment: .leading, spacing: layoutPadding) {
         Text(data.title)
           .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
@@ -31,7 +33,7 @@ struct RecordSearchCell: View {
           RecordPropertyRow(data: data)
           Text(dateRangeText(for: data))
             .foregroundStyle(.brown5)
-            .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1.0, letterSpacing: -0.025)
+            .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1.15, letterSpacing: -0.025)
             .lineLimit(1)
             .truncationMode(.tail)
         }
@@ -40,8 +42,9 @@ struct RecordSearchCell: View {
       .padding(.top, 4)
     }
     .frame(maxWidth: .infinity)
-    .padding(.horizontal, 8)
+    .padding(.horizontal, layoutPadding)
     .padding(.vertical, 16)
+    .background(.backgroundDefault)
   }
   
   private func dateRangeText(for data: RecordVO) -> String {

@@ -16,6 +16,10 @@ struct BookVO {
   let publishedDate: Date
 }
 
+extension BookVO: Identifiable {
+  var id: String { isbn }
+}
+
 struct RecordVO {
   let isbn: String
   let coverImage: Image
@@ -32,6 +36,8 @@ struct RecordVO {
   var startDate: Date?
   var endDate: Date?
 }
+
+extension RecordVO: Identifiable {}
 
 enum ReadingState {
   case notStart

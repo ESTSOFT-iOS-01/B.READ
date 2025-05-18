@@ -37,7 +37,7 @@ enum SearchBarStyle {
 struct SearchBar: View {
   @Binding var text: String
   var isFocused: Binding<Bool>? = nil
-  var onSubmit: () -> Void = {}
+  var onSubmit: () -> Void = { }
   var placeholder: String = "검색어를 입력해 주세요"
   var style: SearchBarStyle = .default
   

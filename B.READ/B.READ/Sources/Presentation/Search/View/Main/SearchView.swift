@@ -16,26 +16,33 @@ struct SearchView: View {
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      if !isSearchFocused {
+      if !isSearchFocused && !isSearchSubmitted {
         logoView
           .transition(.opacity)
       }
       
       // 검색창은 한 개만 존재해야함
       searchBarSection
-        .padding(.top, !isSearchFocused ? 0 : layoutSize)
+        .padding(.top, isSearchFocused||isSearchSubmitted ? layoutSize : 0)
       
       if isSearchFocused {
         // TODO : DummyData, 추후 뷰모델 연결 필요
         RecentSearchView(keywords: ["Test", "Test", "Test", "Test1", "Test3"])
           .transition(.opacity)
           .frame(maxHeight: .infinity, alignment: .top)
+          .padding(.horizontal, 24)
       } else {
-        bestSellerSection
-          .transition(.opacity)
+        if isSearchSubmitted {
+          SearchResultView()
+            .transition(.opacity)
+            .frame(maxHeight: .infinity, alignment: .top)
+        } else {
+          bestSellerSection
+            .transition(.opacity)
+            .padding(.horizontal, 24)
+        }
       }
     }
-    .padding(.horizontal, 24)
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .animation(.easeInOut(duration: 0.25), value: isSearchFocused)
     .onAppear {
@@ -52,7 +59,9 @@ struct SearchView: View {
   // MARK: - (S)searchBarSection
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
-      SearchBar(text: $viewModel.state.searchText, isFocused: $isSearchFocused)
+      SearchBar(text: $viewModel.state.searchText,
+                isFocused: $isSearchFocused,
+                onSubmit: { isSearchSubmitted = true })
       
       if viewModel.state.searchText.isEmpty {
         SearchButton {
@@ -61,6 +70,7 @@ struct SearchView: View {
       } else {
         SearchButton(style: .close) {
           viewModel.state.searchText = ""
+          isSearchFocused = true
         }
       }
     } // : Hstack - 검색창 영역

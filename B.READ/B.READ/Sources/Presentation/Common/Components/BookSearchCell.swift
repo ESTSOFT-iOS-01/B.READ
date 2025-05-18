@@ -22,7 +22,7 @@ struct BookSearchCell: View {
         .aspectRatio(contentMode: .fill)
         .frame(width: 58 ,height: 88)
         .clipShape(RoundedRectangle(cornerRadius: 6))
-        .shadow(color: .black.opacity(0.25), radius: 25, x: 0, y: 2)
+        .shadow(color: .black.opacity(0.25), radius: 5, x: 0, y: 2)
       
       VStack(alignment: .leading, spacing: 8) {
         Text(title)
@@ -33,31 +33,45 @@ struct BookSearchCell: View {
         
         Text(author)
           .foregroundStyle(.brown8)
-          .brStyleFont(.pretendard(.medium, size: 14), lineHeight: 1.0)
+          .brStyleFont(.pretendard(.medium, size: 14), lineHeight: 1.15)
           .lineLimit(1)
           .truncationMode(.tail)
         Text("\(publisher) | \(publishedDate.string(format: .dotSeparated))")
           .foregroundStyle(.brown5)
-          .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1.0)
+          .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1.15, letterSpacing: -0.025)
           .lineLimit(1)
           .truncationMode(.tail)
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       .padding(.top, 4)
-      
     }
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 8)
     .padding(.vertical, 16)
+    .background(.backgroundDefault)
   }
 }
 
-//#Preview {
-//  BookSearchCell(
-//    coverImage: Image(.exampleBook),
-//    title: "데미안",
-//    author: "헤르만 헤세",
-//    publisher: "민음사",
-//    publishedDate: Date()
-//  )
-//}
+#Preview {
+  BookSearchCell(
+    coverImage: Image(.exampleBook),
+    title: "데미안",
+    author: "헤르만 헤세",
+    publisher: "민음사",
+    publishedDate: Date()
+  )
+  BookSearchCell(
+    coverImage: Image(.exampleBook),
+    title: "데미안",
+    author: "헤르만 헤세",
+    publisher: "민음사",
+    publishedDate: Date()
+  )
+  BookSearchCell(
+    coverImage: Image(.exampleBook),
+    title: "데미안",
+    author: "헤르만 헤세",
+    publisher: "민음사",
+    publishedDate: Date()
+  )
+}
