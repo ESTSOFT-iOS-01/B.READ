@@ -12,10 +12,6 @@ import SwiftUI
 final class LibraryViewModel: ObservableObject {
   
   // MARK: - State
-  // TODO: - 전체 데이터를 불러오고 그중 조건에 맞는 값을 필터 배열에 넣고 보여줄지, 뷰를 그려줄때 필터를 걸어줄지 정해야함
-  // 만약에 뷰에서 조건을 달면 List를 그려줄때 선택된 필터값을 넘겨줘야하고,
-  // 뷰모델에서 조건을 처리하면 records에 전체 내용을 담고, displayRecords에 필터에 맞는 내용을 담아서 해당 배열로 뷰를 그림
-  // => 우선적으로 viewModel에서 필터를 걸고 View는 단순히 출력
   @Published var displayRecords: [Record] = []
   @Published var tabs: [TabItem] = [
     TabItem(title: "전체(0)"),
@@ -95,4 +91,9 @@ extension LibraryViewModel {
       displayRecords = records
     }
   }
+  
+  // TODO: - (2)displayRecords를 정렬
+//  private func sortDisplayRecords() {
+//    // 정렬 기준에 따라서 displayRecords를 정렬
+//  }
 }
