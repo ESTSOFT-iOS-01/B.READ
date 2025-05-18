@@ -8,6 +8,7 @@
 import Foundation
 
 extension Int {
+  /// 정수를 문자열로 변환합니다.
   var toString: String {
     String(self)
   }
