@@ -29,7 +29,7 @@ jobs:
           value: ${{ github.event.issue.created_at }}  # 생성된 날짜를 Start date로 설정
           github_token: ${{ secrets.PAT_TOKEN }}
 
-      - name: 상태 필드 초기값을 Todo로 설정
+      - name: 상태 필드 초기값을 In Progress로 설정
         if: github.event.action == 'opened'
         uses: github/update-project-action@v3
         with:
