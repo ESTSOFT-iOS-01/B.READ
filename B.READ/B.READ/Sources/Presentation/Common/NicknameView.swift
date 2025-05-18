@@ -19,16 +19,8 @@ struct NicknameView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
-      Text("사용할 닉네임을 입력해주세요.")
-        .foregroundStyle(.black)
-        .brStyleFont(.pretendard(.semiBold, size: 24), lineHeight: 1.4)
+      InputGuideHeader(type: .nickname)
         .padding(.top, 24)
-        .padding(.leading, 6)
-      
-      Text("영어, 한글, 숫자로 최대 12자까지 설정할 수 있습니다.")
-        .foregroundStyle(.gray5)
-        .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.35)
-        .padding(.leading, 6)
       
       RoundedTextField(
         type: .nickname,
@@ -55,7 +47,7 @@ struct NicknameView: View {
     .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
     .onChange(of: nicknameText) { oldValue, newValue in
       // 글자수 제한
-      if newValue.count > 13 {
+      if newValue.count >= 13 {
         nicknameText = oldValue
         return
       }
