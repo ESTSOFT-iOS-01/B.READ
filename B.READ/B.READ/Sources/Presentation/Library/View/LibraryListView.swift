@@ -33,5 +33,5 @@ struct LibraryListView: View {
 }
 
 #Preview{
-  LibraryListView(records: dummyRecords)
+  LibraryListView(records: DummyData.dummyRecords)
 }

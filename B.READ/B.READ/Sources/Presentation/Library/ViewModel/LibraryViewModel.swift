@@ -51,7 +51,7 @@ extension LibraryViewModel {
   
   /// 전체 독서기록 패치 - 로컬DB에서 독서기록을 가져옴
   private func fetchAllRecords() {
-    self.records = dummyRecords.sorted {
+    self.records = DummyData.dummyRecords.sorted {
       $0.createdAt > $1.createdAt
     }
   }

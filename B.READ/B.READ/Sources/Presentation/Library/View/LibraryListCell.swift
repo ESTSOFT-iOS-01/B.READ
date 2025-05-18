@@ -31,7 +31,7 @@ struct LibraryListCell: View {
         
       VStack(alignment: .leading, spacing: 6) {
         // 도서 제목
-        Text(dummyBooks[record.isbn]!.name)
+        Text(DummyData.dummyBooks[record.isbn]!.name)
           .lineLimit(2)
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
         
@@ -85,7 +85,7 @@ struct LibraryListCell: View {
         propertyView("heart.fill", "\(record.heartCount)")
         
       case .reading: // 독서진행률
-        let totalPage = Double(dummyBooks[record.isbn]!.totalPages)
+        let totalPage = Double(DummyData.dummyBooks[record.isbn]!.totalPages)
         let currentPage = Double(record.currentPage)
         let percent = Int(currentPage / totalPage * 100)
         propertyView("timer", "\(percent)%")
