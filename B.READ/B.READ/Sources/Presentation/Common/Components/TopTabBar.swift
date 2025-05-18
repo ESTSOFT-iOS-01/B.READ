@@ -24,11 +24,14 @@ struct TopTabBar: View {
   
   let tabs: [TabItem]
   @Binding var selectedIndex: Int
+  let action: (() -> Void)?
   
   var body: some View {
     GeometryReader { proxy in
       VStack(spacing: 8) {
-        HeaderView(tabs: tabs, selectedIndex: $selectedIndex)
+        HeaderView(tabs: tabs, selectedIndex: $selectedIndex) {
+          action?()
+        }
         barIndicator(totalWidth: proxy.size.width)
       }
     }
@@ -60,6 +63,7 @@ private struct HeaderView: View {
   
   let tabs: [TabItem]
   @Binding var selectedIndex: Int
+  let action: (() -> Void)?
   
   var body: some View {
     HStack(spacing: 0) {
@@ -82,6 +86,7 @@ private struct HeaderView: View {
           )
           .onTapGesture {
             self.selectedIndex = index
+            action?()
           }
       }
     }
@@ -105,7 +110,7 @@ private struct HeaderView: View {
     TabItem(title: "커뮤니티")
   ]
   VStack {
-    TopTabBar(tabs: tabs, selectedIndex: $selectedIndex)
+    TopTabBar(tabs: tabs, selectedIndex: $selectedIndex) { }
   }.padding(.horizontal, 24)
 }
 
@@ -115,5 +120,5 @@ private struct HeaderView: View {
     TabItem(title: "메모", selectedImage: Image(.donut), unselectedImage: Image(.donut)),
     TabItem(title: "문장", selectedImage: Image(.donut), unselectedImage: Image(.donut))
   ]
-  TopTabBar(tabs: tabs, selectedIndex: $selectedIndex)
+  TopTabBar(tabs: tabs, selectedIndex: $selectedIndex) { }
 }
