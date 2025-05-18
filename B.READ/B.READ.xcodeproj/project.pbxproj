@@ -41,9 +41,9 @@
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Error/RepositoryError.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
-				Sources/Data/Stubs/UserInfoRepositoryStub.swift,
 				Sources/Domain/Entity/UserInfo.swift,
-				Sources/Domain/Repository/UserInfoRepository.swift,
+				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
+				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
 			);
 			target = 35D13CEE2DD81C870059A894 /* B.READTests */;
 		};
