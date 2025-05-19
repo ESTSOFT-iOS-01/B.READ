@@ -44,8 +44,8 @@ struct UserInfoRepositoryTests {
     })
   }
   
-  @Test("UserInfo Update Test")
-  func updateUserInfo() async throws {
+  @Test("UserInfo All Update Test")
+  func updateAllUserInfo() async throws {
     
     try await userInfoRepository.createUserInfo(DummyData.userInfo)
     
@@ -57,6 +57,22 @@ struct UserInfoRepositoryTests {
       lastStreakUpdatedAt: Date(),
       streak: []
     )
+
+    try await userInfoRepository.updateUserInfo(updatedUserInfo)
+
+    let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
+    #expect(fetchedUserInfo == updatedUserInfo)
+  }
+  
+  @Test("UserInfo Partial Update Test")
+  func updatePartialUserInfo() async throws {
+    
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+    
+    var updatedUserInfo = DummyData.userInfo
+    updatedUserInfo.streak = updatedUserInfo.streak.map {
+        DailyStatus(weekday: $0.weekday, isCompleted: false)
+    }
 
     try await userInfoRepository.updateUserInfo(updatedUserInfo)
 
