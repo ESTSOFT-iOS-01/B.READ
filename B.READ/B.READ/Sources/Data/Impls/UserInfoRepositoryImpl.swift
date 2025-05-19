@@ -37,17 +37,61 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     guard let data = try findUserInfo() else {
       throw RepositoryError.dataNotFound
     }
-    
-    data.categories.forEach { modelContext.delete($0) }
-    data.recentKeywords.forEach { modelContext.delete($0) }
-    data.streak.forEach { modelContext.delete($0) }
-    
+
     data.nickname = userInfo.nickname
-    data.categories = userInfo.categories.map { CategoryDTO($0) }
-    data.recentKeywords = userInfo.recentKeywords.map { KeywordDTO($0) }
     data.generateCount = userInfo.generateCount
     data.lastStreakUpdatedAt = userInfo.lastStreakUpdatedAt
-    data.streak = userInfo.streak.map { DailyStatusDTO($0) }
+
+    // Cateogry
+    let oldCategories = data.categories
+    let newCategories = userInfo.categories
+    
+    for item in oldCategories {
+      if !newCategories.contains(where: { $0.id == item.id }) {
+        modelContext.delete(item)
+      }
+    }
+
+    for item in newCategories {
+      if !oldCategories.contains(where: { $0.id == item.id }) {
+        let newItem = CategoryDTO(item)
+        data.categories.append(newItem)
+      }
+    }
+
+    // Keyword
+    let oldKeywords = data.recentKeywords
+    let newKeywords = userInfo.recentKeywords
+
+    for item in oldKeywords {
+      if !newKeywords.contains(where: { $0 == item.toEntity() }) {
+        modelContext.delete(item)
+      }
+    }
+
+    for item in newKeywords {
+      if !oldKeywords.contains(where: { $0.toEntity() == item }) {
+        let newItem = KeywordDTO(item)
+        data.recentKeywords.append(newItem)
+      }
+    }
+
+    // Streak
+    let oldStreak = data.streak
+    let newStreak = userInfo.streak
+
+    for item in oldStreak {
+      if !newStreak.contains(where: { $0 == item.toEntity() }) {
+        modelContext.delete(item)
+      }
+    }
+
+    for item in newStreak {
+      if !oldStreak.contains(where: { $0.toEntity() == item }) {
+        let newItem = DailyStatusDTO(item)
+        data.streak.append(newItem)
+      }
+    }
   }
   
   func deleteUserInfo() async throws {
