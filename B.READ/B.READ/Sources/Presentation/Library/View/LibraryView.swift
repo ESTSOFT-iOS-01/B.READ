@@ -26,6 +26,7 @@ struct LibraryView: View {
   @ObservedObject var viewModel: LibraryViewModel
   @State var viewState: ViewState = .list
   
+  private let layoutPadding: CGFloat = 16
   
   var body: some View {
     VStack(alignment: .trailing, spacing: 0) {
@@ -50,13 +51,13 @@ struct LibraryView: View {
         .frame(width: 24, height: 24)
       } // : HStack
       .foregroundStyle(.gray2)
-      .padding(.top, 16)
+      .padding(.top, layoutPadding)
       
       // 독서기록 목록 뷰
       recordView
       
     } // : VStack
-    .padding(.top, 16)
+    .padding(.top, layoutPadding)
     .padding(.horizontal, 24)
     .onAppear {
       viewModel.send(.onAppear)

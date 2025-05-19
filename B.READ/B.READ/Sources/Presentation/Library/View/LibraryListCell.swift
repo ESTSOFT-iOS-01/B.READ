@@ -12,22 +12,23 @@ struct LibraryListCell: View {
   
   let record: Record
   @State var image: Image?
+  private let layoutPadding: CGFloat = 24
   
   var body: some View {
     HStack(spacing: 0) {
       // TODO: - (DB연결 후)Book 표지가 들어갈 자리
-      if image != nil {
-        image?
-          .resizable()
-          .frame(width: 57, height: 88)
-          .cornerRadius(6)
-      } else {
-        // TODO: - 사진이 없을때, 들어갈 이미지 or 도형 추가
-        Rectangle()
-          .fill(.red.opacity(0.2))
-          .frame(width: 57, height: 88)
-          .cornerRadius(6)
-      }
+      VStack {
+        if image != nil {
+          image?
+            .resizable()
+        } else {
+          // TODO: - 사진이 없을때, 들어갈 이미지 or 도형 추가
+          Rectangle()
+            .fill(.red.opacity(0.2))
+        }
+      } // : VStack
+      .frame(width: 57, height: 88)
+      .cornerRadius(6)
         
       VStack(alignment: .leading, spacing: 6) {
         // 도서 제목
@@ -47,7 +48,7 @@ struct LibraryListCell: View {
       } // : VStack
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
       .padding(.top, 16)
-      .padding(.leading, 24)
+      .padding(.leading, layoutPadding)
       .padding(.trailing, record.isFavorite ? 2 : 40)
       
       if record.isFavorite {
@@ -60,7 +61,7 @@ struct LibraryListCell: View {
       
     } // : HStack
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .padding(.horizontal, 24)
+    .padding(.horizontal, layoutPadding)
     .onAppear { // 여기부분은 임시로 사용하는 내용입니다!
       // TODO: - (DB연결 후)이미지는 임시로 그냥 사용, 추후 정상적으로 저장된 표지 이미지 불러오는 코드 작성필요
       DispatchQueue.global().async {
