@@ -27,6 +27,7 @@ final class RecordDetailViewModel: ObservableObject {
   enum Action {
     case onAppear
     case onTapFavorite
+    case onTapDelete
   }
   
   func send(_ action: Action) {
@@ -37,6 +38,9 @@ final class RecordDetailViewModel: ObservableObject {
     case .onTapFavorite:
       record.isFavorite.toggle()
       updateFavorite()
+      
+    case .onTapDelete:
+      deleteRecord()
     }
   }
 }
@@ -54,7 +58,13 @@ private extension RecordDetailViewModel {
     DummyData.dummyRecords[index].isFavorite = record.isFavorite
   }
   
-  
+  func deleteRecord() {
+    guard let index = DummyData.dummyRecords.firstIndex(where: { $0.id == record.id }) else {
+      print("Error: Data not found")
+      return
+    }
+    DummyData.dummyRecords.remove(at: index)
+  }
   
 //  func initialize() {
 //    Task {

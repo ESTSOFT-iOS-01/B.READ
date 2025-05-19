@@ -39,7 +39,6 @@ struct RecordDetailView: View {
             Image(systemName: viewModel.record.isFavorite ? "bookmark.fill" : "bookmark")
           }
           Button {
-            print("삭제 버큰 클릭")
             showDeleteAlert = true
           } label: {
             Text("삭제")
@@ -52,8 +51,8 @@ struct RecordDetailView: View {
     .alert("기록삭제", isPresented: $showDeleteAlert) {
       // TODO: - 삭제 alert뷰 구성
       Button("삭제", role: .destructive) {
-        print("삭제 진행")
         // TODO: - (2)삭제 로직 구현
+        viewModel.send(.onTapDelete)
         dismiss()
       }
       Button("취소", role: .cancel) { }
