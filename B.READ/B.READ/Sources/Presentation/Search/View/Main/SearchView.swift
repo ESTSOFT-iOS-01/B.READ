@@ -11,6 +11,7 @@ import SwiftUI
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
   private let layoutSize: CGFloat = 16
+  private let horizontalPadding: CGFloat = 24
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
@@ -24,27 +25,30 @@ struct SearchView: View {
         .padding(
           .top,
           viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
-       
-      if viewModel.state.isSearchFocused {
-        RecentSearchView(viewModel: viewModel)
-          .transition(.opacity)
-          .frame(maxHeight: .infinity, alignment: .top)
-          .padding(.horizontal, 24)
-      } else {
-        if viewModel.state.isSearchSubmitted {
+      
+      Group {
+        if viewModel.state.isSearchFocused {
+          RecentSearchView(viewModel: viewModel)
+            .transition(.opacity)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.horizontal, horizontalPadding)
+          
+        } else if viewModel.state.isSearchSubmitted {
           SearchResultView(viewModel: viewModel)
             .transition(.opacity)
             .frame(maxHeight: .infinity, alignment: .top)
+          
         } else {
           bestSellerSection
             .transition(.opacity)
-            .padding(.horizontal, 24)
+            .padding(.horizontal, horizontalPadding)
         }
       }
+      
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
-    .animation(.easeInOut(duration: 0.25), value: viewModel.state.isSearchFocused)
+    .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
     .onAppear {
       viewModel.send(.onAppear)
     }
