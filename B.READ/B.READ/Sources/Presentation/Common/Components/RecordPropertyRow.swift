@@ -16,17 +16,13 @@ struct RecordPropertyRow: View {
       switch data.state {
       case .notStart:
         PropertyView(SearchConstants.Icon.heart, data.expectation.toStringForOneDecimal)
-        PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-        PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
       case .reading:
         PropertyView(SearchConstants.Icon.progress, data.progress.toString, .percent)
-        PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-        PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
       case .finished:
         PropertyView(SearchConstants.Icon.star, data.rate.toStringForOneDecimal)
-        PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-        PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
       }
+      PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
+      PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
     }
   }
 }
