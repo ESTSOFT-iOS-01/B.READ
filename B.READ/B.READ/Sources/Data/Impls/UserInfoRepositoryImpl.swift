@@ -37,55 +37,58 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     guard let data = try findUserInfo() else {
       throw RepositoryError.dataNotFound
     }
-
+    
     data.nickname = userInfo.nickname
     data.generateCount = userInfo.generateCount
     data.lastStreakUpdatedAt = userInfo.lastStreakUpdatedAt
-
-    // Cateogry
+    
+    // Category 업데이트
     let oldCategories = data.categories
     let newCategories = userInfo.categories
     
     for item in oldCategories {
       if !newCategories.contains(where: { $0.id == item.id }) {
         modelContext.delete(item)
+        data.categories.removeAll(where: { $0.id == item.id })
       }
     }
-
+    
     for item in newCategories {
       if !oldCategories.contains(where: { $0.id == item.id }) {
         let newItem = CategoryDTO(item)
         data.categories.append(newItem)
       }
     }
-
-    // Keyword
+    
+    // Keyword 업데이트
     let oldKeywords = data.recentKeywords
     let newKeywords = userInfo.recentKeywords
-
+    
     for item in oldKeywords {
       if !newKeywords.contains(where: { $0 == item.toEntity() }) {
         modelContext.delete(item)
+        data.recentKeywords.removeAll(where: { $0 == item })
       }
     }
-
+    
     for item in newKeywords {
       if !oldKeywords.contains(where: { $0.toEntity() == item }) {
         let newItem = KeywordDTO(item)
         data.recentKeywords.append(newItem)
       }
     }
-
-    // Streak
+    
+    // Streak 업데이트
     let oldStreak = data.streak
     let newStreak = userInfo.streak
-
+    
     for item in oldStreak {
       if !newStreak.contains(where: { $0 == item.toEntity() }) {
         modelContext.delete(item)
+        data.streak.removeAll(where: { $0 == item })
       }
     }
-
+    
     for item in newStreak {
       if !oldStreak.contains(where: { $0.toEntity() == item }) {
         let newItem = DailyStatusDTO(item)
