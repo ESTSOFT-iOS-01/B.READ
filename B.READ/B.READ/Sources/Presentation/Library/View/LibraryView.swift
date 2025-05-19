@@ -35,7 +35,7 @@ struct LibraryView: View {
       ScrollView(.horizontal, showsIndicators: false) {
         // MARK: - view를 바꾸는게 아닌 viewModel의 records의 값만 필터를 거치는 방법이라 액션 클로저를 추가했습니다.
         TopTabBar(tabs: viewModel.tabs, selectedIndex: $selectedIndex) {
-          viewModel.send(.fetchRecordByTab(index: selectedIndex))
+          viewModel.send(.selectTab(index: selectedIndex))
         }
         .frame(width: 450, height: 34)
       }

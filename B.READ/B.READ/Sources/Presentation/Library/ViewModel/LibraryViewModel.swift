@@ -31,7 +31,7 @@ final class LibraryViewModel: ObservableObject {
   // MARK: - Action
   enum Action {
     case onAppear // 뷰 등장 시
-    case fetchRecordByTab(index: Int) // 탭에 따른 독서기록 패치
+    case selectTab(index: Int) // 탭을 선택
   }
   
   func send(_ action: Action) {
@@ -39,9 +39,9 @@ final class LibraryViewModel: ObservableObject {
     case .onAppear:
       fetchAllRecords() // 전체 데이터를 패치
       fetchTabs() // 패치된 데이터에서 개수를 확인
-      filterRecords(index: 0) // 처음 등장 시 전체로 데이터 필터
-    case .fetchRecordByTab(let index):
-      filterRecords(index: index)
+      filterRecords(index: 0) // 전체로 데이터 필터
+    case .selectTab(let index):
+      filterRecords(index: index) // 선택된 탭에 맞게 필터
     }
   }
 }
