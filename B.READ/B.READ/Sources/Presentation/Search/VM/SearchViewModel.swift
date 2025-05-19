@@ -11,6 +11,17 @@ import SwiftUI
 final class SearchViewModel: ObservableObject {
   
   // MARK: - State
+  struct SearchViewState {
+    var searchText: String = ""
+    var bestBookList: [String] = []
+    var keywordList: [String] = []
+    var bookResults: [BookVO] = []
+    var recordResults: [RecordVO] = []
+    var selectedTabIndex: Int = 0
+    var isSearchSubmitted: Bool = false
+    var isSearchFocused: Bool = false
+  }
+  
   @Published var state: SearchViewState = .init(
     searchText: "",
     bestBookList: [],
@@ -45,7 +56,6 @@ final class SearchViewModel: ObservableObject {
       print("바코드 인식 화면으로 전환")
       
     case let .onTapBestSeller(rank, name):
-      print("\(rank)위 '\(name)' 클릭됨!")
       state.searchText = name
       state.isSearchSubmitted = true
       appendKeyword(name)
@@ -53,13 +63,15 @@ final class SearchViewModel: ObservableObject {
     case .onTapClear:
       state.searchText = ""
       state.isSearchSubmitted = false
+      state.isSearchFocused = true
       
     case .onSubmitSearch:
       if !state.searchText.isEmpty {
         state.isSearchSubmitted = true
+        state.isSearchFocused = false
+        
         appendKeyword(state.searchText)
         // TODO: 검색 결과 API 호출 후 bookResults / recordResults 채우기
-        print("🔍 검색어 제출됨: \(state.searchText)")
       }
     case .onTapTab(let index):
       state.selectedTabIndex = index
@@ -99,7 +111,25 @@ private extension SearchViewModel {
       "2025 제 16회 젊은작가상 수상작품집",
       "Essentail Grammar in Use with answers and eBook"
     ]
+    
     state.keywordList = ["데미안", "코딩테스트", "미씽"]
+    
+    state.bookResults = (1...10).map {
+      BookVO(
+        isbn: "1234567890\($0)",
+        coverImage: Image(.exampleBook),
+        title: "데미안 \($0)",
+        author: "헤르만 헤세",
+        publisher: "민음사",
+        publishedDate: Date()
+      )
+    }
+    
+    state.recordResults = [
+      RecordVO(isbn: "123", coverImage: Image(.exampleBook), id: "1", title: "데미안", state: .notStart),
+      RecordVO(isbn: "124", coverImage: Image(.exampleBook), id: "2", title: "데미안", state: .reading, startDate: Date()),
+      RecordVO(isbn: "125", coverImage: Image(.exampleBook), id: "3", title: "데미안", state: .finished, startDate: Date(), endDate: Date())
+    ]
   }
   
   func appendKeyword(_ keyword: String) {
@@ -114,14 +144,4 @@ private extension SearchViewModel {
       state.keywordList = Array(state.keywordList.prefix(5))
     }
   }
-}
-
-struct SearchViewState {
-  var searchText: String = ""
-  var bestBookList: [String] = []
-  var keywordList: [String] = []
-  var bookResults: [BookVO] = []
-  var recordResults: [RecordVO] = []
-  var selectedTabIndex: Int = 0
-  var isSearchSubmitted: Bool = false
 }
