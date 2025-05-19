@@ -24,8 +24,6 @@ struct LibraryView: View {
   }
   
   @ObservedObject var viewModel: LibraryViewModel
-  
-  @State var selectedIndex: Int = 0
   @State var viewState: ViewState = .list
   
   
@@ -33,10 +31,10 @@ struct LibraryView: View {
     VStack(alignment: .trailing, spacing: 0) {
       // 상단 탭바
       ScrollView(.horizontal, showsIndicators: false) {
-        TopTabBar(tabs: viewModel.tabs, selectedIndex: $selectedIndex)
+        TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
           .frame(width: 450, height: 34)
-          .onChange(of: selectedIndex) {
-            viewModel.send(.selectTab(index: selectedIndex))
+          .onChange(of: viewModel.state.selectedTab) {
+            viewModel.send(.selectTab)
           }
       }
       
@@ -71,7 +69,7 @@ struct LibraryView: View {
     VStack {
       switch viewState {
       case .list:
-        LibraryListView(records: viewModel.displayRecords)
+        LibraryListView(records: viewModel.state.displayRecords)
       case .grid:
         LibraryGridView()
       }
@@ -93,7 +91,6 @@ struct LibraryView: View {
     }
   }
 }
-
 
 #Preview {
   LibraryView(viewModel: LibraryViewModel())
