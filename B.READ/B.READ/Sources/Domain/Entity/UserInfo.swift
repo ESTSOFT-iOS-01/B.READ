@@ -70,7 +70,7 @@ enum CategoryType: Int, CaseIterable {
   case religionPhilosophy
   case computerMobile
 
-  var displayName: String {
+  var name: String {
     switch self {
     case .homeCookingBeauty: "가정/요리/뷰티"
     case .healthHobbyLeisure: "건강/취미/레저"
@@ -92,5 +92,9 @@ enum CategoryType: Int, CaseIterable {
     case .religionPhilosophy: "종교/역학"
     case .computerMobile: "컴퓨터/모바일"
     }
+  }
+  
+  var cid: Int {
+    1 // example 입니다.
   }
 }
