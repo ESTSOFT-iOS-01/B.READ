@@ -66,6 +66,7 @@ struct LibraryView: View {
         viewModel.send(.onAppear)
       }
     } // : NavigationStack
+    .background(.backgroundDefault)
   }
   
   // MARK: - (S)recordView

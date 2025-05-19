@@ -15,20 +15,20 @@ struct RecordDetailView: View {
   @State var showDeleteAlert: Bool = false
   @Environment(\.dismiss) var dismiss
   
-
+  
   var body: some View {
     ScrollView(.vertical) {
-      DetailView()
+      DetailView
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.top, 24)
         .padding(.horizontal, 24)
-    } // : VStack
-    .navigationBarTitleDisplayMode(.inline)
+    } // : ScrollView
+    .background(.backgroundDefault)
     .navigationBarBackButtonHidden(true) // 기본 뒤로가기 버튼 숨김
     .toolbar {
       // 뒤로가기 버튼
       ToolbarItem(placement: .topBarLeading) {
-        BackButton()
+        BackButton
       }
       
       ToolbarItem(placement: .topBarTrailing) {
@@ -57,40 +57,36 @@ struct RecordDetailView: View {
       }
       Button("취소", role: .cancel) { }
     }
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
   }
-}
-
-// MARK: - (S)BackButton
-struct BackButton: View {
-  @Environment(\.dismiss) var dismiss
   
-  var body: some View {
+  // MARK: - (S)BackButton
+  private var BackButton: some View {
     Button(action: {
       dismiss()
     }) {
-      Image(systemName: "chevron.left")
+      Image(systemName: LibraryConstants.Icon.back)
         .foregroundColor(.green6) // ← 원하는 색상 지정
         .imageScale(.large)
     }
   }
-}
-
-// MARK: - (S)DetailView
-struct DetailView: View {
-  var body: some View {
+  
+  // MARK: - (S)DetailView
+  private var DetailView: some View {
     VStack {
       Rectangle()
         .fill(.blue.opacity(0.3))
         .frame(width: 176, height: 284)
         .cornerRadius(6)
-      
+      Text("텍스트")
       // TODO: - 여기서 부터 책제목 들어감
     } // : VStack
   }
 }
-//
-//#Preview {
-//  @Previewable @State var isFavorite = true
-////  RecordDetailView(isFavorite: $isFavorite)
-//  LibraryView(isFavorite: isFavorite)
-//}
+
+#Preview {
+  let record = DummyData.dummyRecords[0]
+  RecordDetailView(viewModel: RecordDetailViewModel(record: record))
+}
