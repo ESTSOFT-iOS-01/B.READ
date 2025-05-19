@@ -64,8 +64,8 @@ struct UserInfoRepositoryTests {
     #expect(fetchedUserInfo == updatedUserInfo)
   }
   
-  @Test("UserInfo Partial Update Test")
-  func updatePartialUserInfo() async throws {
+  @Test("UserInfo Partial Update Test - streak")
+  func updatePartialUserInfoStreak() async throws {
     
     try await userInfoRepository.createUserInfo(DummyData.userInfo)
     
@@ -73,6 +73,23 @@ struct UserInfoRepositoryTests {
     updatedUserInfo.streak = updatedUserInfo.streak.map {
         DailyStatus(weekday: $0.weekday, isCompleted: false)
     }
+
+    try await userInfoRepository.updateUserInfo(updatedUserInfo)
+
+    let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
+    #expect(fetchedUserInfo == updatedUserInfo)
+  }
+  
+  @Test("UserInfo Partial Update Test - Keywords")
+  func updatePartialUserInfoKeyword() async throws {
+    
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+    
+    var updatedUserInfo = DummyData.userInfo
+    updatedUserInfo.recentKeywords = [
+      Keyword(date: Date().addingTimeInterval(-86400 * 4), value: "싯다르타"),
+      Keyword(date: Date().addingTimeInterval(-86400 * 3), value: "데미안")
+    ]
 
     try await userInfoRepository.updateUserInfo(updatedUserInfo)
 
