@@ -44,17 +44,3 @@ enum ReadingState {
   case reading
   case finished
 }
-
-public enum UnitType {
-  case `default`
-  case count
-  case percent
-  
-  var expression: String {
-    switch self {
-    case .count: return "개"
-    case .percent: return "%"
-    default: return ""
-    }
-  }
-}
