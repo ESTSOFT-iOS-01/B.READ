@@ -36,11 +36,11 @@ struct LibraryListCell: View {
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
         
         // 독서 현황
-        recordStatsView()
+        recordStatsView
           .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
         
         // 독서 기간
-        recordPeriod()
+        recordPeriod
           .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1, letterSpacing: -0.025)
           .foregroundStyle(.brown5)
         
@@ -75,10 +75,8 @@ struct LibraryListCell: View {
     }
   }
  
-  
-  // MARK: - (F)recordStatsView
-  @ViewBuilder
-  private func recordStatsView() -> some View {
+  // MARK: - (S)recordStatsView
+  private var recordStatsView: some View {
     HStack(spacing: 12) {
       switch record.state {
       case .toRead: // 기대지수
@@ -99,7 +97,20 @@ struct LibraryListCell: View {
       propertyView("ellipsis.bubble", "\(record.starCount)개") // 문장
     } // : HStack
   }
-
+  
+  // MARK: - (S)recordPeriod
+  private var recordPeriod: some View {
+    VStack {
+      if record.state == .reading {
+        Text("\(record.period.0!.string(format: .dotSeparated)) ~")
+        
+      } else if record.state == .completed {
+        let startDay: String = record.period.0!.string(format: .dotSeparated)
+        let endDay: String = record.period.1!.string(format: .dotSeparated)
+        Text("\(startDay) ~ \(endDay)")
+      }
+    } // : VStack
+  }
   
   // MARK: - (F)propertyView
   // TODO: - (1)공통컴포넌트로 분리
@@ -117,18 +128,5 @@ struct LibraryListCell: View {
         .truncationMode(.tail)
     }
     .foregroundStyle(.orange9)
-  }
-  
-  // MARK: - (F)recordPeriod
-  @ViewBuilder
-  private func recordPeriod() -> some View {
-    if record.state == .reading {
-      Text("\(record.period.0!.string(format: .dotSeparated)) ~")
-      
-    } else if record.state == .completed {
-      let startDay: String = record.period.0!.string(format: .dotSeparated)
-      let endDay: String = record.period.1!.string(format: .dotSeparated)
-      Text("\(startDay) ~ \(endDay)")
-    }
   }
 }

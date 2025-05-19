@@ -9,6 +9,7 @@ import SwiftUI
 
 // MARK: - (S)LibraryView
 struct LibraryView: View {
+  
   // 뷰 상태(리스트, 그리드)
   enum ViewState {
     case list
@@ -41,7 +42,7 @@ struct LibraryView: View {
       
       HStack(spacing: 8) {
         // 정렬 버튼
-        sortButton()
+        sortButton
         // 리스트 / 그리드 선택 버튼
         Button {
           viewState = (viewState == .list ? .grid : .list)
@@ -54,7 +55,8 @@ struct LibraryView: View {
       .padding(.top, 16)
       
       // 독서기록 목록 뷰
-      recordView()
+      recordView
+      
     } // : VStack
     .padding(.top, 16)
     .padding(.horizontal, 24)
@@ -63,11 +65,23 @@ struct LibraryView: View {
     }
   }
   
-  // MARK: - (F)sortButton
+  // MARK: - (S)recordView
+  // TODO: - (2)그리드 뷰 추가
+  private var recordView: some View {
+    VStack {
+      switch viewState {
+      case .list:
+        LibraryListView(records: viewModel.displayRecords)
+      case .grid:
+        LibraryGridView()
+      }
+    }
+  }
+  
+  // MARK: - (S)sortButton
   // TODO: - (2)정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
   // 예시) sortButton(type: .record)
-  @ViewBuilder
-  private func sortButton() -> some View {
+  private var sortButton: some View {
     Button {
       print("정렬 버튼 클릭")
     } label: {
@@ -78,19 +92,8 @@ struct LibraryView: View {
       } // : HStack
     }
   }
-  
-  // MARK: - (F)recordView
-  // TODO: - (2)그리드 뷰 추가
-  @ViewBuilder
-  private func recordView() -> some View {
-    if viewState == .list {
-      LibraryListView(records: viewModel.displayRecords)
-    }
-    else {
-      LibraryGridView()
-    }
-  }
 }
+
 
 #Preview {
   LibraryView(viewModel: LibraryViewModel())
