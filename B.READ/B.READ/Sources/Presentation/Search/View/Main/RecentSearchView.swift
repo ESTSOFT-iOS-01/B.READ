@@ -9,37 +9,26 @@ import SwiftUI
 
 // MARK: - (S)RecentSearchView
 struct RecentSearchView: View {
-  var keywords: [String] // TODO : 서치뷰에서 state변수와 연결
-  
-  // 선택된 string 검색창에 입력 처리
-  let onSelect: (String) -> Void = { print("\($0)이 선택되었습니다.") }
-  
-  // 선택된 항목 삭제
-  let onDelete: (Int) -> Void = { print("\($0)이 삭제됩니다.") }
-  let deleteAllKeywords: () -> Void = { print("모든 검색어 삭제") }
+  @ObservedObject var viewModel: SearchViewModel
   
   var body: some View {
     VStack(spacing: 8) {
       headerView
-      VStack {
-        ForEach(Array(keywords.enumerated()), id: \.offset) { index, keyword in
-          RecentSearchCell(
-            keyword: keyword,
-            onSelect: { _ in onSelect(keyword) },
-            onDelete: {
-              withAnimation(.easeInOut(duration: 0.25)) {
-                onDelete(index)
-              }
-            }
-          )
-          .transition(.move(edge: .trailing).combined(with: .opacity))
-        }
+      if viewModel.state.keywordList.isEmpty {
+        Text("최근 검색어가 없습니다.")
+          .foregroundStyle(.gray7)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.0, letterSpacing: -0.025)
+          .transition(.opacity)
+          .padding(.vertical, 16)
+      } else {
+        listView
+          .transition(.opacity)
       }
     }
-    .animation(.easeInOut(duration: 0.25), value: keywords)
+    .animation(.easeInOut(duration: 0.25), value: viewModel.state.keywordList)
   }
   
-  // MARK: - (F)headerView
+  // MARK: - (S)headerView
   private var headerView: some View {
     HStack {
       Text("최근 검색어")
@@ -49,13 +38,37 @@ struct RecentSearchView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .foregroundStyle(.gray3)
       
-      Button(action: deleteAllKeywords) {
+      Button {
+        withAnimation(.easeInOut(duration: 0.25)) {
+          viewModel.send(.deleteAllKeywords)
+        }
+      } label: {
         Text("전체 삭제")
           .brStyleFont(.pretendard(.medium, size: 12),
                        lineHeight: 1,
                        letterSpacing: -0.025)
           .frame(alignment: .trailing)
           .foregroundColor(.gray1)
+      }
+    }
+  }
+  
+  // MARK: - (S)listView
+  private var listView: some View {
+    VStack {
+      ForEach(Array(viewModel.state.keywordList.enumerated()), id: \.offset) { index, keyword in
+        RecentSearchCell(
+          keyword: keyword,
+          onSelect: { _ in
+            viewModel.send(.selectKeyword(keyword))
+          },
+          onDelete: {
+            withAnimation(.easeInOut(duration: 0.25)) {
+              viewModel.send(.deleteKeyword(at: index))
+            }
+          }
+        )
+        .transition(.opacity)
       }
     }
   }
@@ -97,6 +110,7 @@ struct RecentSearchCell: View {
 }
 
 #Preview {
-  RecentSearchView(keywords: ["Test", "Test1", "Test3"])
-    .padding(.horizontal, 24)
+//  RecentSearchView(viewModel: SearchViewModel())
+//    .padding(.horizontal, 24)
+  // onAppear에서만 더미데이터 들어감
 }

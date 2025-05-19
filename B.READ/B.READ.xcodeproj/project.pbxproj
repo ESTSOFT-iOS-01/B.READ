@@ -28,7 +28,6 @@
 				"Resources/B-READ-Info.plist",
 				Sources/Network/.gitkeep,
 				Sources/Util/Constants/.gitkeep,
-				Sources/Util/Extensions/.gitkeep,
 			);
 			target = 35C171DF2DCB34320049724A /* B.READ */;
 		};

@@ -2,7 +2,7 @@
 //  SearchView.swift
 //  B.READ
 //
-//  Created by 신승재 on 5/11/25.
+//  Created by 김도연 on 5/11/25.
 //
 
 import SwiftUI
@@ -10,47 +10,67 @@ import SwiftUI
 // MARK: - (S)SearchView
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
-  @State private var isSearchFocused: Bool = false
   private let layoutSize: CGFloat = 16
+  private let horizontalPadding: CGFloat = 24
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      if !isSearchFocused {
+      if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
         logoView
           .transition(.opacity)
       }
       
       // 검색창은 한 개만 존재해야함
       searchBarSection
-        .padding(.top, !isSearchFocused ? 0 : layoutSize)
+        .padding(
+          .top,
+          viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
       
-      if isSearchFocused {
-        // TODO : DummyData, 추후 뷰모델 연결 필요
-        RecentSearchView(keywords: ["Test", "Test", "Test", "Test1", "Test3"])
-          .transition(.opacity)
-          .frame(maxHeight: .infinity, alignment: .top)
-      } else {
-        bestSellerSection
-          .transition(.opacity)
+      Group {
+        if viewModel.state.isSearchFocused {
+          RecentSearchView(viewModel: viewModel)
+            .transition(.opacity)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.horizontal, horizontalPadding)
+          
+        } else if viewModel.state.isSearchSubmitted {
+          SearchResultView(viewModel: viewModel)
+            .transition(.opacity)
+            .frame(maxHeight: .infinity, alignment: .top)
+          
+        } else {
+          bestSellerSection
+            .transition(.opacity)
+            .padding(.horizontal, horizontalPadding)
+        }
       }
+      
     }
-    .padding(.horizontal, 24)
-    .animation(.easeInOut(duration: 0.25), value: isSearchFocused)
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
+    .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
     .onAppear {
       viewModel.send(.onAppear)
     }
   }
   
-  // MARK: - (F)logoView
+  // MARK: - (S)logoView
   private var logoView: some View {
     Text("로고")
       .frame(width: 200, height: 44)
   }
   
-  // MARK: - (F)searchBarSection
+  // MARK: - (S)searchBarSection
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
-      SearchBar(text: $viewModel.state.searchText, isFocused: $isSearchFocused)
+      SearchBar(
+        text: $viewModel.state.searchText,
+        isFocused: $viewModel.state.isSearchFocused,
+        onSubmit: {
+          if !viewModel.state.searchText.isEmpty {
+            viewModel.send(.onSubmitSearch)
+          }
+        })
       
       if viewModel.state.searchText.isEmpty {
         SearchButton {
@@ -58,13 +78,13 @@ struct SearchView: View {
         }
       } else {
         SearchButton(style: .close) {
-          viewModel.state.searchText = ""
+          viewModel.send(.onTapClear)
         }
       }
     } // : Hstack - 검색창 영역
   }
   
-  // MARK: - (F)bestSellerSection
+  // MARK: - (S)bestSellerSection
   private var bestSellerSection: some View {
     VStack(alignment: .leading, spacing: layoutSize) {
       Text("인기 도서")
@@ -73,7 +93,7 @@ struct SearchView: View {
                      letterSpacing: -0.025)
         .foregroundStyle(.black)
       
-      BestSellerView(bookList: viewModel.state.bookList) { rank, name in
+      BestSellerView(bookList: viewModel.state.bestBookList) { rank, name in
         viewModel.send(.onTapBestSeller(rank: rank, name: name))
       }
     } // : vstack - best seller

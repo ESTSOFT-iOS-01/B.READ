@@ -11,9 +11,21 @@ import SwiftUI
 final class SearchViewModel: ObservableObject {
   
   // MARK: - State
+  struct SearchViewState {
+    var searchText: String = ""
+    var bestBookList: [String] = []
+    var keywordList: [String] = []
+    var bookResults: [BookVO] = []
+    var recordResults: [RecordVO] = []
+    var selectedTabIndex: Int = 0
+    var isSearchSubmitted: Bool = false
+    var isSearchFocused: Bool = false
+  }
+  
   @Published var state: SearchViewState = .init(
     searchText: "",
-    bookList: []
+    bestBookList: [],
+    keywordList: []
   )
   
   // MARK: - Dependency
@@ -24,25 +36,70 @@ final class SearchViewModel: ObservableObject {
   enum Action {
     case onAppear
     case onTapBarcode
+    case onTapClear
     case onTapBestSeller(rank: Int, name: String)
+    case onSubmitSearch
+    case onTapTab(Int)
+    case onTapBook(String)
+    case onTapRecord(String)
+    case deleteKeyword(at: Int)
+    case deleteAllKeywords
+    case selectKeyword(String)
   }
   
   func send(_ action: Action) {
     switch action {
     case .onAppear:
       loadDummyData()
+      
     case .onTapBarcode:
       print("바코드 인식 화면으로 전환")
+      
     case let .onTapBestSeller(rank, name):
-      print("\(rank)위 '\(name)' 클릭됨!")
+      state.searchText = name
+      state.isSearchSubmitted = true
+      appendKeyword(name)
+      
+    case .onTapClear:
+      state.searchText = ""
+      state.isSearchSubmitted = false
+      state.isSearchFocused = true
+      
+    case .onSubmitSearch:
+      if !state.searchText.isEmpty {
+        state.isSearchSubmitted = true
+        state.isSearchFocused = false
+        
+        appendKeyword(state.searchText)
+        // TODO: 검색 결과 API 호출 후 bookResults / recordResults 채우기
+      }
+    case .onTapTab(let index):
+      state.selectedTabIndex = index
+      
+    case .onTapBook(let isbn):
+      print("도서 \(isbn) 선택됨")
+      
+    case .onTapRecord(let id):
+      print("기록 \(id) 선택됨")
+      
+    case let .deleteKeyword(index):
+      guard state.keywordList.indices.contains(index) else { return }
+      state.keywordList.remove(at: index)
+      
+    case .deleteAllKeywords:
+      state.keywordList.removeAll()
+      
+    case let .selectKeyword(keyword):
+      state.searchText = keyword
+      send(.onSubmitSearch)
     }
   }
 }
 
-// MARK: - Internal Function
+// MARK: - Internal Function : DUMMY DATA SETTING
 private extension SearchViewModel {
   func loadDummyData() {
-    state.bookList = [
+    state.bestBookList = [
       "데미안",
       "미씽",
       "싯다르타",
@@ -54,10 +111,37 @@ private extension SearchViewModel {
       "2025 제 16회 젊은작가상 수상작품집",
       "Essentail Grammar in Use with answers and eBook"
     ]
+    
+    state.keywordList = ["데미안", "코딩테스트", "미씽"]
+    
+    state.bookResults = (1...10).map {
+      BookVO(
+        isbn: "1234567890\($0)",
+        coverImage: Image(.exampleBook),
+        title: "데미안 \($0)",
+        author: "헤르만 헤세",
+        publisher: "민음사",
+        publishedDate: Date()
+      )
+    }
+    
+    state.recordResults = [
+      RecordVO(isbn: "123", coverImage: Image(.exampleBook), id: "1", title: "데미안", state: .notStart),
+      RecordVO(isbn: "124", coverImage: Image(.exampleBook), id: "2", title: "데미안", state: .reading, startDate: Date()),
+      RecordVO(isbn: "125", coverImage: Image(.exampleBook), id: "3", title: "데미안", state: .finished, startDate: Date(), endDate: Date())
+    ]
   }
-}
-
-struct SearchViewState {
-  var searchText: String
-  var bookList: [String]
+  
+  func appendKeyword(_ keyword: String) {
+    guard !keyword.isEmpty else { return }
+    if state.keywordList.contains(keyword) {
+      state.keywordList.removeAll { $0 == keyword }
+    }
+    state.keywordList.insert(keyword, at: 0)
+    
+    // 최대 5개까지만 유지
+    if state.keywordList.count > 5 {
+      state.keywordList = Array(state.keywordList.prefix(5))
+    }
+  }
 }

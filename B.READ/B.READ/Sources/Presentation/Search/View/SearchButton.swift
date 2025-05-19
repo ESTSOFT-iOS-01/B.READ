@@ -8,19 +8,19 @@
 import SwiftUI
 
 enum SearchButtonStyle {
-  case barcord
+  case barcode
   case close
   
   var iconName: String {
     switch self {
-    case .barcord: return SearchConstants.Icon.barcord
+    case .barcode: return SearchConstants.Icon.barcode
     case .close: return SearchConstants.Icon.close
     }
   }
   
   var iconSize: CGFloat {
     switch self {
-    case .barcord: return 22
+    case .barcode: return 22
     case .close: return 16
     }
   }
@@ -29,7 +29,7 @@ enum SearchButtonStyle {
 // MARK: - (S)SearchButton
 struct SearchButton: View {
   let buttonSize : CGFloat = 48
-  var style: SearchButtonStyle = .barcord
+  var style: SearchButtonStyle = .barcode
   var action: () -> Void
   
   var body: some View {
