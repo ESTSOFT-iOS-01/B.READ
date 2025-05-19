@@ -26,6 +26,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Resources/B-READ-Info.plist",
+				Sources/Network/.gitkeep,
 				Sources/Util/Constants/.gitkeep,
 			);
 			target = 35C171DF2DCB34320049724A /* B.READ */;
@@ -67,6 +68,10 @@
 				Sources/Network/NetworkClient/NetworkClient.swift,
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				"Sources/Util/Extensions/Bundle+.swift",
+				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
+				Sources/Domain/Entity/UserInfo.swift,
+				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
+				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
 			);
 			target = 35D13CEE2DD81C870059A894 /* B.READTests */;
 		};
