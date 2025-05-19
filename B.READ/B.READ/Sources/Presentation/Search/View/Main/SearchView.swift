@@ -2,7 +2,7 @@
 //  SearchView.swift
 //  B.READ
 //
-//  Created by 신승재 on 5/11/25.
+//  Created by 김도연 on 5/11/25.
 //
 
 import SwiftUI
@@ -11,28 +11,27 @@ import SwiftUI
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
   @State private var isSearchFocused: Bool = false
-  @State private var isSearchSubmitted: Bool = false
   private let layoutSize: CGFloat = 16
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      if !isSearchFocused && !isSearchSubmitted {
+      if !isSearchFocused && !viewModel.state.isSearchSubmitted {
         logoView
           .transition(.opacity)
       }
       
       // 검색창은 한 개만 존재해야함
       searchBarSection
-        .padding(.top, isSearchFocused||isSearchSubmitted ? layoutSize : 0)
-      
+        .padding(.top,
+                 isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+       
       if isSearchFocused {
-        // TODO : DummyData, 추후 뷰모델 연결 필요
-        RecentSearchView(keywords: ["Test", "Test", "Test", "Test1", "Test3"])
+        RecentSearchView(viewModel: viewModel)
           .transition(.opacity)
           .frame(maxHeight: .infinity, alignment: .top)
           .padding(.horizontal, 24)
       } else {
-        if isSearchSubmitted {
+        if viewModel.state.isSearchSubmitted {
           SearchResultView()
             .transition(.opacity)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -65,7 +64,8 @@ struct SearchView: View {
         isFocused: $isSearchFocused,
         onSubmit: {
           if !viewModel.state.searchText.isEmpty {
-            isSearchSubmitted = true
+            viewModel.send(.onSubmitSearch)
+            viewModel.state.isSearchSubmitted = true
           }
         })
       
@@ -75,9 +75,10 @@ struct SearchView: View {
         }
       } else {
         SearchButton(style: .close) {
-          viewModel.state.searchText = ""
+          viewModel.send(.onTapClear)
           isSearchFocused = true
-          isSearchSubmitted = false
+          viewModel.state.searchText = ""
+          viewModel.state.isSearchSubmitted = false
         }
       }
     } // : Hstack - 검색창 영역
@@ -92,7 +93,7 @@ struct SearchView: View {
                      letterSpacing: -0.025)
         .foregroundStyle(.black)
       
-      BestSellerView(bookList: viewModel.state.bookList) { rank, name in
+      BestSellerView(bookList: viewModel.state.bestBookList) { rank, name in
         viewModel.send(.onTapBestSeller(rank: rank, name: name))
       }
     } // : vstack - best seller

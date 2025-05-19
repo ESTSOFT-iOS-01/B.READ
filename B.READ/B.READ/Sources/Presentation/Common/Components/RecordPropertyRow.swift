@@ -15,17 +15,17 @@ struct RecordPropertyRow: View {
     HStack(spacing: 12) {
       switch data.state {
       case .notStart:
-        propertyView(SearchConstants.Icon.heart, data.expectation.toStringForOneDecimal)
-        propertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-        propertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
+        PropertyView(SearchConstants.Icon.heart, data.expectation.toStringForOneDecimal)
+        PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
+        PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
       case .reading:
-        propertyView(SearchConstants.Icon.progress, data.progress.toString, .percent)
-        propertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-        propertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
+        PropertyView(SearchConstants.Icon.progress, data.progress.toString, .percent)
+        PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
+        PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
       case .finished:
-        propertyView(SearchConstants.Icon.star, data.rate.toStringForOneDecimal)
-        propertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-        propertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
+        PropertyView(SearchConstants.Icon.star, data.rate.toStringForOneDecimal)
+        PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
+        PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
       }
     }
   }
