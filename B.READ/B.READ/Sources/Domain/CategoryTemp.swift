@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Category: Int, CaseIterable {
+enum CategoryTemp: Int, CaseIterable {
   case homeCookingBeauty = 0
   case healthHobbyLeisure
   case economics

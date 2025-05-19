@@ -16,7 +16,6 @@
 			membershipExceptions = (
 				"Resources/B-READ-Info.plist",
 				Sources/Data/.gitkeep,
-				Sources/Domain/.gitkeep,
 				Sources/Network/.gitkeep,
 				Sources/Util/Constants/.gitkeep,
 				Sources/Util/Extensions/.gitkeep,
