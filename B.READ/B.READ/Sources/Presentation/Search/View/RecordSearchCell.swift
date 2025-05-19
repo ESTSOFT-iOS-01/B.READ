@@ -66,33 +66,33 @@ struct RecordSearchCell: View {
 }
 
 // MARK: - Preview
-#Preview {
-  let notStartdata = RecordVO(
-    isbn: "123123",
-    coverImage: Image(.exampleBook),
-    id: "12",
-    title: "데미안",
-    state: .notStart
-  )
-  let readingdata = RecordVO(
-    isbn: "123123",
-    coverImage: Image(.exampleBook),
-    id: "12",
-    title: "데미안",
-    state: .reading,
-    startDate: Date()
-  )
-  let finisheddata = RecordVO(
-    isbn: "123123",
-    coverImage: Image(.exampleBook),
-    id: "12",
-    title: "데미안",
-    state: .finished,
-    startDate: Date(),
-    endDate: Date()
-  )
-
-  RecordSearchCell(data: notStartdata)
-  RecordSearchCell(data: readingdata)
-  RecordSearchCell(data: finisheddata)
-}
+//#Preview {
+//  let notStartdata = RecordVO(
+//    isbn: "123123",
+//    coverImage: Image(.exampleBook),
+//    id: "12",
+//    title: "데미안",
+//    state: .notStart
+//  )
+//  let readingdata = RecordVO(
+//    isbn: "123123",
+//    coverImage: Image(.exampleBook),
+//    id: "12",
+//    title: "데미안",
+//    state: .reading,
+//    startDate: Date()
+//  )
+//  let finisheddata = RecordVO(
+//    isbn: "123123",
+//    coverImage: Image(.exampleBook),
+//    id: "12",
+//    title: "데미안",
+//    state: .finished,
+//    startDate: Date(),
+//    endDate: Date()
+//  )
+//
+//  RecordSearchCell(data: notStartdata)
+//  RecordSearchCell(data: readingdata)
+//  RecordSearchCell(data: finisheddata)
+//}
