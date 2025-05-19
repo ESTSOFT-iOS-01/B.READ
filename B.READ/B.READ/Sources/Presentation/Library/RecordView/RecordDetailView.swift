@@ -10,10 +10,11 @@ import SwiftUI
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
   
+  @ObservedObject var viewModel: RecordDetailViewModel
+  
+  @State var showDeleteAlert: Bool = false
   @Environment(\.dismiss) var dismiss
   
-  @Binding var record: Record
-  @State var showDeleteAlert: Bool = false
 
   var body: some View {
     ScrollView(.vertical) {
@@ -33,11 +34,9 @@ struct RecordDetailView: View {
       ToolbarItem(placement: .topBarTrailing) {
         HStack(spacing: 0) {
           Button {
-            print("즐겨찾기 버튼 클릭")
-//            self.isFavorite.toggle()
+            viewModel.send(.onTapFavorite)
           } label: {
-//            Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
-            Image(systemName: "bookmark")
+            Image(systemName: viewModel.record.isFavorite ? "bookmark.fill" : "bookmark")
           }
           Button {
             print("삭제 버큰 클릭")
