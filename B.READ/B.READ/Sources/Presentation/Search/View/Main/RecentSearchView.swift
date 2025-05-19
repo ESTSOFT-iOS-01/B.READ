@@ -109,7 +109,8 @@ struct RecentSearchCell: View {
   }
 }
 
-//#Preview {
-//  RecentSearchView(keywords: ["Test", "Test1", "Test3"])
+#Preview {
+//  RecentSearchView(viewModel: SearchViewModel())
 //    .padding(.horizontal, 24)
-//}
+  // onAppear에서만 더미데이터 들어감
+}

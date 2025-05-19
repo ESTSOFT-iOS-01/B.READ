@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)SearchResultView
 struct SearchResultView: View {
   @ObservedObject var viewModel: SearchViewModel
-  // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정
+  // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정?
   
   let tabs = [
     TabItem(title: "도서"),
@@ -20,14 +20,14 @@ struct SearchResultView: View {
   var body: some View {
     VStack(spacing: 2) {
       TopTabBar(tabs: tabs, selectedIndex: $viewModel.state.selectedTabIndex)
-        .frame(height: 33)
+        .frame(height: 33) // TODO : toptabbar 바뀌면 frame 안잡아줘도 되나?
         .padding(.horizontal, 24)
-        .padding(.bottom, 16)
       
       SearchTabContentView(
         state: viewModel.state,
         send: viewModel.send
       )
+      .padding(.top, 16)
       .animation(.easeInOut(duration: 0.3), value: viewModel.state.selectedTabIndex)
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
@@ -36,9 +36,10 @@ struct SearchResultView: View {
   // TODO : 탭 전환 시 스크롤 위치 기억하게 만들기 ScrollReader?
 }
 
-//#Preview {
-//  SearchResultView()
-//}
+#Preview {
+//  SearchResultView(viewModel: SearchViewModel())
+  // onAppear에서만 더미데이터 들어감
+}
 
 // MARK: - (S)SearchTabContentView
 struct SearchTabContentView: View {
