@@ -12,8 +12,9 @@ struct LibraryListView: View {
   
   var body: some View {
     if records.isEmpty {
-      // TODO: - (2)독서기록이 없을 때의 뷰 or 텍스트 추가해야함.
+      // TODO: - (2)독서기록이 없을 때의 뷰
       Text("독서기록이 없습니다.")
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
       List {
         ForEach(records, id: \.id) { record in
@@ -44,6 +45,6 @@ struct LibraryListView: View {
 }
 
 #Preview{
-//  @Previewable @State var records = DummyData.dummyRecords
+  //  @Previewable @State var records = DummyData.dummyRecords
   LibraryListView(records: DummyData.dummyRecords)
 }
