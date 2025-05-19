@@ -62,7 +62,7 @@ final class ProfileUseCaseImpl: ProfileUseCase {
     guard !keyword.isEmpty else {
       throw ProfileUseCaseError.emptyInput
     }
-
+    
     var userInfo = try await userInfoRepository.fetchUserInfo()
     
     // 1. 중복 값 제거
@@ -70,14 +70,34 @@ final class ProfileUseCaseImpl: ProfileUseCase {
     
     // 2. 새로운 키워드 추가
     let newKeyword = Keyword(date: Date(), value: keyword)
-    userInfo.recentKeywords.insert(newKeyword, at: 0)
+    userInfo.recentKeywords.append(newKeyword)
+    
     
     // 3. 최대 5개로 제한
     if userInfo.recentKeywords.count > 5 {
-      userInfo.recentKeywords = Array(userInfo.recentKeywords.prefix(5))
+      userInfo.recentKeywords = Array(
+        userInfo.recentKeywords
+          .sorted(by: { $0.date > $1.date })
+          .prefix(5)
+      )
     }
     
-    // 4. 업데이트
+    try await userInfoRepository.updateUserInfo(userInfo)
+  }
+  
+  func deleteRecentKeyword(_ value: String) async throws {
+    var userInfo = try await userInfoRepository.fetchUserInfo()
+    
+    userInfo.recentKeywords.removeAll { $0.value == value }
+    
+    try await userInfoRepository.updateUserInfo(userInfo)
+  }
+  
+  func clearRecentKeywords() async throws {
+    var userInfo = try await userInfoRepository.fetchUserInfo()
+    
+    userInfo.recentKeywords.removeAll()
+    
     try await userInfoRepository.updateUserInfo(userInfo)
   }
 }
@@ -97,4 +117,5 @@ extension ProfileUseCaseImpl {
     
     return userInfo
   }
+  
 }

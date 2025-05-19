@@ -24,15 +24,28 @@ protocol ProfileUseCase {
   /// - Throws: `RepositoryError.dataNotFound` 등 조회 중 오류
   func fetchUserInfo() async throws -> UserInfo
   
+  /// 저장된 최근 검색어를 불러옵니다.
+  /// - Returns: 최근 검색어 문자열 배열 (최신순)
+  /// - Throws: `RepositoryError.dataNotFound` 등 조회 중 오류
   func fetchRecentKeywords() async throws -> [String]
   
+  /// 새로운 최근 검색어를 추가합니다. 중복된 키워드는 제거 후 최상단에 삽입되며, 최대 5개까지만 유지됩니다.
+  /// - Parameter keyword: 추가할 검색어
+  /// - Throws: `ProfileUseCaseError.emptyInput` 검색어가 비어 있는 경우
+  ///           `RepositoryError.dataNotFound` 등 조회 중 오류
   func addRecentKeyword(_ keyword: String) async throws
   
-  func deleteRecentKeyword(at index: Int) async throws
+  /// 특정 검색어를 최근 검색어 목록에서 삭제합니다.
+  /// - Parameter value: 삭제할 검색어 문자열
+  /// - Throws: `RepositoryError.dataNotFound` 등 조회 중 오류
+  func deleteRecentKeyword(_ value: String) async throws
   
+  /// 저장된 모든 최근 검색어를 삭제합니다.
+  /// - Throws: `RepositoryError.dataNotFound` 등 조회 중 오류
   func clearRecentKeywords() async throws
 }
 
+// MARK: - ProfileUseCaseError
 enum ProfileUseCaseError {
   case emptyInput
 }

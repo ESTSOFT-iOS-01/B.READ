@@ -52,4 +52,74 @@ struct ProfileUseCaseTest {
     let userInfo = try await profileUseCase.fetchUserInfo()
     #expect(userInfo.categories == categories)
   }
+  
+  @Test("현재 최근 검색어 목록 불러오기")
+  func 현재_최근_검색어_목록_불러오기() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+    
+    // when
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    
+    // then
+    let expected = ["미움받을 용기", "히가시노 게이고"]
+    #expect(keywords == expected)
+  }
+  
+  @Test("최근 검색어 추가")
+  func 최근_검색어_추가() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+
+    // when
+    try await profileUseCase.addRecentKeyword("새로운 것")
+    let debugUserInfo = try await userInfoRepository.fetchUserInfo()
+    print("현재 keywords:", debugUserInfo.recentKeywords.map(\.value))
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    let expected = ["새로운 것", "미움받을 용기", "히가시노 게이고"]
+    #expect(keywords == expected)
+  }
+  
+  @Test("최근 검색어 추가 - 중복 제거 및 정렬")
+  func 최근_검색어_추가_중복_제거_및_정렬() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+    // 기존: ["히가시노 게이고", "미움받을 용기"]
+
+    // when
+    try await profileUseCase.addRecentKeyword("미움받을 용기")
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    let expected = ["미움받을 용기", "히가시노 게이고"] // 중복 제거되고 가장 최근으로 이동
+    #expect(keywords == expected)
+  }
+
+  @Test("최근 검색어 추가 - 최대 5개 유지")
+  func 최근_검색어_추가_최대_5개_유지() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+
+    // when
+    try await profileUseCase.addRecentKeyword("데미안")
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    
+    try await profileUseCase.addRecentKeyword("싯다르타")
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    
+    try await profileUseCase.addRecentKeyword("어린왕자")
+    
+    try await Task.sleep(nanoseconds: 1_000_000_000)
+    try await profileUseCase.addRecentKeyword("미셸푸코")
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    let expected = ["미셸푸코", "어린왕자", "싯다르타", "데미안", "미움받을 용기"]
+    #expect(keywords == expected)
+  }
+
+  
+  
 }
