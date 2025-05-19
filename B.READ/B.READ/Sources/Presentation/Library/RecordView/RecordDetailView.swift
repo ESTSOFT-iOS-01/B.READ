@@ -12,18 +12,13 @@ struct RecordDetailView: View {
   
   @Environment(\.dismiss) var dismiss
   
-//  @Binding var isFavorite: Bool
+  @Binding var record: Record
   @State var showDeleteAlert: Bool = false
-  
-//  init(isFavorite: Binding<Bool>) {
-//    self._isFavorite = isFavorite
-//  }
-  
+
   var body: some View {
     ScrollView(.vertical) {
       DetailView()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-//        .background(.orange3.opacity(0.3))
         .padding(.top, 24)
         .padding(.horizontal, 24)
     } // : VStack

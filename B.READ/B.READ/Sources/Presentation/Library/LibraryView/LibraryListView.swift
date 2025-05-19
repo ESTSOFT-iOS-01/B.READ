@@ -8,41 +8,40 @@
 import SwiftUI
 
 struct LibraryListView: View {
-  var records: [Record]
+  @Binding var records: [Record]
   
   var body: some View {
-    Group {
-      if records.isEmpty {
-        // TODO: - (2)독서기록이 없을 때의 뷰 or 텍스트 추가해야함.
-        Text("독서기록이 없습니다.")
-      } else {
-        List {
-          ForEach(records, id: \.id) { record in
-            ZStack {
-              NavigationLink(destination: RecordDetailView()) {
-                EmptyView()
-              } // : NavigationLink
-              .opacity(0)
-              
-              LibraryListCell(record: record)
-                .frame(height: 114)
-                .background(.green1.opacity(0.6))
-                
-            } // : ZStack
-            .cornerRadius(16)
-            .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
-            .listRowSeparator(.hidden) // separator 제거
-            .padding(.vertical, 4)
-          } // : ForEach
-          
-        } // : List
-        .listStyle(.plain)
-        .scrollIndicators(.hidden)
-      }
-    } // : Group
+    if records.isEmpty {
+      // TODO: - (2)독서기록이 없을 때의 뷰 or 텍스트 추가해야함.
+      Text("독서기록이 없습니다.")
+    } else {
+      List {
+        ForEach($records, id: \.id) { record in
+          ZStack {
+            NavigationLink(destination: RecordDetailView(record: record)) {
+              EmptyView()
+            } // : NavigationLink
+            .opacity(0)
+            
+            LibraryListCell(record: record)
+              .frame(height: 114)
+              .background(.green1.opacity(0.6))
+            
+          } // : ZStack
+          .cornerRadius(16)
+          .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
+          .listRowSeparator(.hidden) // separator 제거
+          .padding(.vertical, 4)
+        } // : ForEach
+        
+      } // : List
+      .listStyle(.plain)
+      .scrollIndicators(.hidden)
+    }
   }
 }
 
 #Preview{
-  LibraryListView(records: DummyData.dummyRecords)
+  @Previewable @State var records = DummyData.dummyRecords
+  LibraryListView(records: $records)
 }

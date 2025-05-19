@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)LibraryListCell
 struct LibraryListCell: View {
   
-  let record: Record
+  @Binding var record: Record
   @State var image: Image?
   private let layoutPadding: CGFloat = 24
   

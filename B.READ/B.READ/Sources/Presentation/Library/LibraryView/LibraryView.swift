@@ -73,7 +73,7 @@ struct LibraryView: View {
     VStack {
       switch viewState {
       case .list:
-        LibraryListView(records: viewModel.state.displayRecords)
+        LibraryListView(records: $viewModel.state.displayRecords)
       case .grid:
         LibraryGridView()
       }
