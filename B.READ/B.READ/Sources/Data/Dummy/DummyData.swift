@@ -70,7 +70,7 @@ enum DummyData {
   ]
   
   // MARK: - Record Dummy Datas
-  static let dummyRecords: [Record] = [
+  static var dummyRecords: [Record] = [
     Record( // 워런 버핏 웨이
       id: UUID().uuidString,
       isbn: "9791194368137",
