@@ -21,5 +21,6 @@ struct LibraryConstants {
     public static let list = "list.bullet"
     public static let grid = "square.grid.2x2.fill"
     public static let menuOn = "chevron.compact.down"
+    public static let back = "chevron.left"
   }
 }
