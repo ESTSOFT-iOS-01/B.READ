@@ -6,11 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
+// TODO: - (db연결 후) Book 테이블에서 isbn에 맞는 책 이미지를 가져와서 보여줘야함
+// MARK: - (C)RecordDetailVieModel
 final class RecordDetailViewModel: ObservableObject {
   
   // MARK: - State
   @Published var record: Record
+  @Published var book: Book?
+  @Published var selectedTab: Int = 0
   
   init(record: Record, example: String? = nil) {
     self.record = record
@@ -33,7 +38,7 @@ final class RecordDetailViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      return
+      fetchBook()
       
     case .onTapFavorite:
       record.isFavorite.toggle()
@@ -45,8 +50,17 @@ final class RecordDetailViewModel: ObservableObject {
   }
 }
 
-// MARK: - Internal Function
+// MARK: - (F)LibraryViewModel
 private extension RecordDetailViewModel {
+  /// record에 맞는 책 정보를 가져옴
+  func fetchBook() {
+    guard let bookInfo = DummyData.dummyBooks[record.isbn] else {
+      print("Error: Data not found")
+      return
+    }
+    book = bookInfo
+    print(bookInfo)
+  }
   
   /// record의 즐겨찾기 정보를 업데이트
   func updateFavorite() {
@@ -58,6 +72,7 @@ private extension RecordDetailViewModel {
     DummyData.dummyRecords[index].isFavorite = record.isFavorite
   }
   
+  /// record 삭제
   func deleteRecord() {
     guard let index = DummyData.dummyRecords.firstIndex(where: { $0.id == record.id }) else {
       print("Error: Data not found")
@@ -65,17 +80,4 @@ private extension RecordDetailViewModel {
     }
     DummyData.dummyRecords.remove(at: index)
   }
-  
-//  func initialize() {
-//    Task {
-//      do {
-//        let datas = try await exampleUseCase.fetchDatas()
-//        // UI 상태를 변경할 시에는 명시적으로 작성해줍니다.
-//        // 또한 변수에 할당 시 self 명시해줍니다.(함수는 X)
-//        await MainActor.run { self.datas = datas }
-//      } catch {
-//        print(error)
-//      }
-//    }
-//  }
 }
