@@ -94,9 +94,9 @@ struct DetailView: View {
     } // : VStack
   }
 }
-
-#Preview {
-  @Previewable @State var isFavorite = true
-//  RecordDetailView(isFavorite: $isFavorite)
-  LibraryView(isFavorite: isFavorite)
-}
+//
+//#Preview {
+//  @Previewable @State var isFavorite = true
+////  RecordDetailView(isFavorite: $isFavorite)
+//  LibraryView(isFavorite: isFavorite)
+//}
