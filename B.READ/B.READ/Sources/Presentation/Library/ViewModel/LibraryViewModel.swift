@@ -53,17 +53,17 @@ final class LibraryViewModel: ObservableObject {
 }
 
 // MARK: - (F)LibraryViewModel
-extension LibraryViewModel {
+private extension LibraryViewModel {
   
   /// 전체 독서기록 패치 - 로컬DB에서 독서기록을 가져옴
-  private func fetchAllRecords() {
+  func fetchAllRecords() {
     self.records = DummyData.dummyRecords.sorted {
       $0.createdAt > $1.createdAt
     }
   }
   
   /// 전체 독서기록에서 독서 기록의 개수 패치
-  private func fetchTabs() {
+  func fetchTabs() {
     // 필터 조건에 맞는 독서 기록의 개수
     var count: [Int] = [records.count, 0, 0, 0, 0]
     
@@ -83,7 +83,7 @@ extension LibraryViewModel {
   }
   
   /// 선택된 탭에 따른 리스트에 보여줄 독서기록 필터
-  private func filterRecords() {
+  func filterRecords() {
     switch state.selectedTab {
     case 1: // 읽은 책
       state.displayRecords = records.filter { $0.state == .completed }
