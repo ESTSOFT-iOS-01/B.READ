@@ -24,20 +24,11 @@ struct TopTabBar: View {
   
   let tabs: [TabItem]
   @Binding var selectedIndex: Int
-  let action: (() -> Void)?
-  
-  init(tabs: [TabItem], selectedIndex: Binding<Int>, action: (() -> Void)? = nil) {
-    self.tabs = tabs
-    self._selectedIndex = selectedIndex
-    self.action = action
-  }
   
   var body: some View {
     GeometryReader { proxy in
       VStack(spacing: 8) {
-        HeaderView(tabs: tabs, selectedIndex: $selectedIndex) {
-          action?()
-        }
+        HeaderView(tabs: tabs, selectedIndex: $selectedIndex)
         barIndicator(totalWidth: proxy.size.width)
       }
     }
@@ -69,7 +60,6 @@ private struct HeaderView: View {
   
   let tabs: [TabItem]
   @Binding var selectedIndex: Int
-  let action: (() -> Void)?
   
   var body: some View {
     HStack(spacing: 0) {
@@ -92,7 +82,6 @@ private struct HeaderView: View {
           )
           .onTapGesture {
             self.selectedIndex = index
-            action?()
           }
       }
     }
