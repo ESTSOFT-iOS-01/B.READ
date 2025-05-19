@@ -62,6 +62,7 @@ struct LibraryView: View {
       .padding(.top, layoutPadding)
       .padding(.horizontal, 24)
       .onAppear {
+        print("onAppear 작동")
         viewModel.send(.onAppear)
       }
     } // : NavigationStack
@@ -73,7 +74,7 @@ struct LibraryView: View {
     VStack {
       switch viewState {
       case .list:
-        LibraryListView(records: $viewModel.state.displayRecords)
+        LibraryListView(records: viewModel.state.displayRecords)
       case .grid:
         LibraryGridView()
       }

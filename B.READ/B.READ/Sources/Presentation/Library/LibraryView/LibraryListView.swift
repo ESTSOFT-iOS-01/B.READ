@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LibraryListView: View {
-  @Binding var records: [Record]
+  let records: [Record]
   
   var body: some View {
     if records.isEmpty {
@@ -16,9 +16,11 @@ struct LibraryListView: View {
       Text("독서기록이 없습니다.")
     } else {
       List {
-        ForEach($records, id: \.id) { record in
+        ForEach(records, id: \.id) { record in
           ZStack {
-            NavigationLink(destination: RecordDetailView(record: record)) {
+            NavigationLink(
+              destination: RecordDetailView(viewModel: RecordDetailViewModel(record: record))
+            ) {
               EmptyView()
             } // : NavigationLink
             .opacity(0)
@@ -42,6 +44,6 @@ struct LibraryListView: View {
 }
 
 #Preview{
-  @Previewable @State var records = DummyData.dummyRecords
-  LibraryListView(records: $records)
+//  @Previewable @State var records = DummyData.dummyRecords
+  LibraryListView(records: DummyData.dummyRecords)
 }
