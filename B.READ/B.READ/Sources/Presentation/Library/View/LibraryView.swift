@@ -17,8 +17,8 @@ struct LibraryView: View {
     
     var image: Image {
       switch self {
-      case .list: Image(systemName: "square.grid.2x2.fill")
-      case .grid: Image(systemName: "list.bullet")
+      case .list: Image(systemName: LibraryConstants.Icon.grid)
+      case .grid: Image(systemName: LibraryConstants.Icon.list)
       }
     }
   }
@@ -88,7 +88,7 @@ struct LibraryView: View {
       HStack(spacing: 4) {
         Text("최신 순")
           .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
-        Image(systemName: "chevron.compact.down")
+        Image(systemName: LibraryConstants.Icon.menuOn)
       } // : HStack
     }
   }

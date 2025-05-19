@@ -51,7 +51,7 @@ struct LibraryListCell: View {
       .padding(.trailing, record.isFavorite ? 2 : 40)
       
       if record.isFavorite {
-        Image(systemName: "bookmark.fill")
+        Image(systemName: LibraryConstants.Icon.favoriteON)
           .resizable()
           .foregroundStyle(.green4)
           .frame(width: 14, height: 28)
@@ -80,21 +80,21 @@ struct LibraryListCell: View {
     HStack(spacing: 12) {
       switch record.state {
       case .toRead: // 기대지수
-        propertyView("heart.fill", "\(record.heartCount)")
+        propertyView(LibraryConstants.Icon.heart, "\(record.heartCount)")
         
       case .reading: // 독서진행률
         let totalPage = Double(DummyData.dummyBooks[record.isbn]!.totalPages)
         let currentPage = Double(record.currentPage)
         let percent = Int(currentPage / totalPage * 100)
-        propertyView("timer", "\(percent)%")
+        propertyView(LibraryConstants.Icon.progress, "\(percent)%")
         
       case .completed: // 평점
-        propertyView("star.fill", "\(record.starCount)")
+        propertyView(LibraryConstants.Icon.star, "\(record.starCount)")
       }
       
-      propertyView("note.text", "\(record.starCount)개") // 메모
+      propertyView(LibraryConstants.Icon.memo, "\(record.starCount)개") // 메모
       
-      propertyView("ellipsis.bubble", "\(record.starCount)개") // 문장
+      propertyView(LibraryConstants.Icon.quote, "\(record.starCount)개") // 문장
     } // : HStack
   }
   
