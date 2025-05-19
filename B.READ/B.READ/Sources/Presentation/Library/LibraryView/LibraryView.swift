@@ -29,39 +29,42 @@ struct LibraryView: View {
   private let layoutPadding: CGFloat = 16
   
   var body: some View {
-    VStack(alignment: .trailing, spacing: 0) {
-      // 상단 탭바
-      ScrollView(.horizontal, showsIndicators: false) {
-        TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
-          .frame(width: 450, height: 34)
-          .onChange(of: viewModel.state.selectedTab) {
-            viewModel.send(.selectTab)
-          }
-      }
-      
-      HStack(spacing: 8) {
-        // 정렬 버튼
-        sortButton
-        // 리스트 / 그리드 선택 버튼
-        Button {
-          viewState = (viewState == .list ? .grid : .list)
-        } label: {
-          viewState.image
+    NavigationStack {
+      VStack(alignment: .trailing, spacing: 0) {
+        // 상단 탭바
+        ScrollView(.horizontal, showsIndicators: false) {
+          TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
+            .frame(width: 450, height: 34)
+            .onChange(of: viewModel.state.selectedTab) {
+              viewModel.send(.selectTab)
+            }
         }
-        .frame(width: 24, height: 24)
-      } // : HStack
-      .foregroundStyle(.gray2)
+        
+        HStack(spacing: 8) {
+          // 정렬 버튼
+          sortButton
+          // 리스트 / 그리드 선택 버튼
+          Button {
+            viewState = (viewState == .list ? .grid : .list)
+          } label: {
+            viewState.image
+          }
+          .frame(width: 24, height: 24)
+        } // : HStack
+        .foregroundStyle(.gray2)
+        .padding(.top, layoutPadding)
+        
+        // 독서기록 목록 뷰
+        recordView
+          .padding(.top, 4)
+        
+      } // : VStack
       .padding(.top, layoutPadding)
-      
-      // 독서기록 목록 뷰
-      recordView
-      
-    } // : VStack
-    .padding(.top, layoutPadding)
-    .padding(.horizontal, 24)
-    .onAppear {
-      viewModel.send(.onAppear)
-    }
+      .padding(.horizontal, 24)
+      .onAppear {
+        viewModel.send(.onAppear)
+      }
+    } // : NavigationStack
   }
   
   // MARK: - (S)recordView

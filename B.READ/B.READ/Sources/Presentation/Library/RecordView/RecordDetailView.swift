@@ -12,12 +12,12 @@ struct RecordDetailView: View {
   
   @Environment(\.dismiss) var dismiss
   
-  @Binding var isFavorite: Bool
+//  @Binding var isFavorite: Bool
   @State var showDeleteAlert: Bool = false
   
-  init(isFavorite: Binding<Bool>) {
-    self._isFavorite = isFavorite
-  }
+//  init(isFavorite: Binding<Bool>) {
+//    self._isFavorite = isFavorite
+//  }
   
   var body: some View {
     ScrollView(.vertical) {
@@ -39,9 +39,10 @@ struct RecordDetailView: View {
         HStack(spacing: 0) {
           Button {
             print("즐겨찾기 버튼 클릭")
-            self.isFavorite.toggle()
+//            self.isFavorite.toggle()
           } label: {
-            Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+//            Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+            Image(systemName: "bookmark")
           }
           Button {
             print("삭제 버큰 클릭")
