@@ -23,15 +23,6 @@ struct UserInfo: Equatable {
   var streak: [DailyStatus]
 }
 
-/// 책 장르입니다.
-/// 선호 도서 추천에서 사용됩니다.
-/// - id : 알라딘 API의 장르 CID
-/// - name : 장르명
-struct Category: Equatable {
-  let id: Int
-  let name: String
-}
-
 /// 최근 검색 키워드입니다.
 /// - date: 키워드를 검색한 날짜
 /// - value: 검색한 키워드 문자열
@@ -47,4 +38,59 @@ struct Keyword: Equatable {
 struct DailyStatus: Equatable {
   let weekday: Int
   var isCompleted: Bool
+}
+
+/// 책 장르입니다.
+/// 선호 도서 추천에서 사용됩니다.
+/// - id : 알라딘 API의 장르 CID
+/// - name : 장르명
+struct Category: Equatable {
+  let id: Int
+  let name: String
+}
+
+enum CategoryType: Int, CaseIterable {
+  case homeCookingBeauty = 0
+  case healthHobbyLeisure
+  case economics
+  case classics
+  case science
+  case comics
+  case socialScience
+  case literature
+  case essay
+  case travel
+  case history
+  case artCulture
+  case foreignLanguage
+  case humanities
+  case selfDevelopment
+  case magazine
+  case genreFiction
+  case religionPhilosophy
+  case computerMobile
+
+  var displayName: String {
+    switch self {
+    case .homeCookingBeauty: "가정/요리/뷰티"
+    case .healthHobbyLeisure: "건강/취미/레저"
+    case .economics: "경제경영"
+    case .classics: "고전"
+    case .science: "과학"
+    case .comics: "만화"
+    case .socialScience: "사회과학"
+    case .literature: "소설/시/희곡"
+    case .essay: "에세이"
+    case .travel: "여행"
+    case .history: "역사"
+    case .artCulture: "예술/대중문화"
+    case .foreignLanguage: "외국어"
+    case .humanities: "인문학"
+    case .selfDevelopment: "자기계발"
+    case .magazine: "잡지"
+    case .genreFiction: "장르소설"
+    case .religionPhilosophy: "종교/역학"
+    case .computerMobile: "컴퓨터/모바일"
+    }
+  }
 }

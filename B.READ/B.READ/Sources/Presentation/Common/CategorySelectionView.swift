@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CategorySelectionView: View {
   
-  @State private var selectedCategories: Set<CategoryTemp> = []
+  @State private var selectedCategories: Set<CategoryType> = []
   private var isButtonEnabled: Bool {
     selectedCategories.count == 2
   }
@@ -42,12 +42,12 @@ struct CategorySelectionView: View {
 // MARK: - (S)CategoryListView
 private struct CategoryListView: View {
   
-  @Binding var selectedCategories: Set<CategoryTemp>
+  @Binding var selectedCategories: Set<CategoryType>
   
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 16) {
-        ForEach(CategoryTemp.allCases, id: \.self) {
+        ForEach(CategoryType.allCases, id: \.self) {
           SelectionRow(selectedCategories: $selectedCategories, category: $0)
         }
       }
@@ -59,8 +59,8 @@ private struct CategoryListView: View {
 // MARK: - (S)SelectionRow
 private struct SelectionRow: View {
   
-  @Binding var selectedCategories: Set<CategoryTemp>
-  let category: CategoryTemp
+  @Binding var selectedCategories: Set<CategoryType>
+  let category: CategoryType
   private var isSelected: Bool {
     selectedCategories.contains(category)
   }
