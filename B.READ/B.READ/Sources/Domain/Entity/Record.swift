@@ -33,6 +33,7 @@ struct Record {
   var summaryID: String?
   var memoIDs: [String]
   var quoteIDs: [String]
+  var createdAt: Date
 }
 
 /// 독서 상태 정보입니다.
