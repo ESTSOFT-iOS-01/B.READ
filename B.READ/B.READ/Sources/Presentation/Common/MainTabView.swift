@@ -22,7 +22,7 @@ struct MainTabView: View {
           Text("검색")
         }
       
-      LibraryView()
+      LibraryView(viewModel: LibraryViewModel())
         .tabItem {
           Image(systemName: "books.vertical.fill")
           Text("책빵")
