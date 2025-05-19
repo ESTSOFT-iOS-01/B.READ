@@ -21,8 +21,9 @@ struct SearchView: View {
       
       // 검색창은 한 개만 존재해야함
       searchBarSection
-        .padding(.top,
-                 viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+        .padding(
+          .top,
+          viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
        
       if viewModel.state.isSearchFocused {
         RecentSearchView(viewModel: viewModel)
