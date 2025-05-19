@@ -10,12 +10,11 @@ import SwiftUI
 // MARK: - (S)SearchView
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
-  @State private var isSearchFocused: Bool = false
   private let layoutSize: CGFloat = 16
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      if !isSearchFocused && !viewModel.state.isSearchSubmitted {
+      if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
         logoView
           .transition(.opacity)
       }
@@ -23,16 +22,16 @@ struct SearchView: View {
       // 검색창은 한 개만 존재해야함
       searchBarSection
         .padding(.top,
-                 isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+                 viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
        
-      if isSearchFocused {
+      if viewModel.state.isSearchFocused {
         RecentSearchView(viewModel: viewModel)
           .transition(.opacity)
           .frame(maxHeight: .infinity, alignment: .top)
           .padding(.horizontal, 24)
       } else {
         if viewModel.state.isSearchSubmitted {
-          SearchResultView()
+          SearchResultView(viewModel: viewModel)
             .transition(.opacity)
             .frame(maxHeight: .infinity, alignment: .top)
         } else {
@@ -43,8 +42,8 @@ struct SearchView: View {
       }
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .toolbar(isSearchFocused ? .hidden : .visible, for: .tabBar)
-    .animation(.easeInOut(duration: 0.25), value: isSearchFocused)
+    .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
+    .animation(.easeInOut(duration: 0.25), value: viewModel.state.isSearchFocused)
     .onAppear {
       viewModel.send(.onAppear)
     }
@@ -61,11 +60,10 @@ struct SearchView: View {
     HStack(spacing: layoutSize) {
       SearchBar(
         text: $viewModel.state.searchText,
-        isFocused: $isSearchFocused,
+        isFocused: $viewModel.state.isSearchFocused,
         onSubmit: {
           if !viewModel.state.searchText.isEmpty {
             viewModel.send(.onSubmitSearch)
-            viewModel.state.isSearchSubmitted = true
           }
         })
       
@@ -76,9 +74,6 @@ struct SearchView: View {
       } else {
         SearchButton(style: .close) {
           viewModel.send(.onTapClear)
-          isSearchFocused = true
-          viewModel.state.searchText = ""
-          viewModel.state.isSearchSubmitted = false
         }
       }
     } // : Hstack - 검색창 영역
