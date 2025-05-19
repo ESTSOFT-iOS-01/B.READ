@@ -73,13 +73,22 @@ struct ProfileUseCaseTest {
 
     // when
     try await profileUseCase.addRecentKeyword("새로운 것")
-    let debugUserInfo = try await userInfoRepository.fetchUserInfo()
-    print("현재 keywords:", debugUserInfo.recentKeywords.map(\.value))
 
     // then
     let keywords = try await profileUseCase.fetchRecentKeywords()
     let expected = ["새로운 것", "미움받을 용기", "히가시노 게이고"]
     #expect(keywords == expected)
+  }
+  
+  @Test("빈 검색어 추가 - 에러 발생")
+  func 빈_검색어_추가_시_에러_발생() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+
+    // when-then
+    await #expect(throws: ProfileUseCaseError.emptyInput, performing: {
+      try await profileUseCase.addRecentKeyword("")
+    })
   }
   
   @Test("최근 검색어 추가 - 중복 제거 및 정렬")
@@ -120,6 +129,60 @@ struct ProfileUseCaseTest {
     #expect(keywords == expected)
   }
 
+  @Test("최근 검색어 삭제")
+  func 최근_검색어_삭제() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+
+    // when
+    try await profileUseCase.deleteRecentKeyword("히가시노 게이고")
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    let expected = ["미움받을 용기"]
+    #expect(keywords == expected)
+  }
   
+  @Test("리스트에 없는 검색어 삭제")
+  func 없는_검색어_삭제() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+
+    // when
+    try await profileUseCase.deleteRecentKeyword("이게뭐야")
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    let expected = ["미움받을 용기", "히가시노 게이고"]
+    #expect(keywords == expected)
+  }
+  
+  @Test("최근 검색어 전체 삭제")
+  func 최근_검색어_전체_삭제() async throws {
+    // given
+    try await userInfoRepository.createUserInfo(DummyData.userInfo)
+
+    // when
+    try await profileUseCase.clearRecentKeywords()
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    #expect(keywords.isEmpty)
+  }
+  
+  @Test("빈 최근 검색어 목록에서 전체 삭제 시도")
+  func 빈_검색어_목록에서_전체_삭제_시도() async throws {
+    // given
+    var emptyUserInfo = DummyData.userInfo
+    emptyUserInfo.recentKeywords = []
+    try await userInfoRepository.createUserInfo(emptyUserInfo)
+
+    // when
+    try await profileUseCase.clearRecentKeywords()
+
+    // then
+    let keywords = try await profileUseCase.fetchRecentKeywords()
+    #expect(keywords.isEmpty)
+  }
   
 }
