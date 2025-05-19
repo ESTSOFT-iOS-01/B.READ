@@ -80,7 +80,7 @@ private struct SelectionRow: View {
           .frame(width: 14, height: 11)
           .foregroundStyle(isSelected ? .brown8 : .gray1)
           .bold(isSelected)
-        Text(category.displayName)
+        Text(category.name)
           .foregroundStyle(.black)
           .brStyleFont(.pretendard(.medium, size: 18), lineHeight: 1.35, letterSpacing: 0.02)
           .frame(maxWidth: .infinity, alignment: .leading)
