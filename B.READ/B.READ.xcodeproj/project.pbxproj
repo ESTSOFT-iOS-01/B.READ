@@ -50,6 +50,8 @@
 				Sources/Network/Errors/AlanError.swift,
 				Sources/Network/Impls/AlanService.swift,
 				Sources/Network/Models/QuestionResponse.swift,
+				Sources/Network/NetworkClient/GlobalAlias.swift,
+				Sources/Network/NetworkClient/HTTPMethod.swift,
 				Sources/Network/NetworkClient/NetworkClient.swift,
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				Sources/Network/Router/AlanRouter.swift,

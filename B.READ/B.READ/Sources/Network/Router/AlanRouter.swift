@@ -7,7 +7,6 @@
 
 import Foundation
 
-// TODO: 프로토콜을 만들면 좋을것 같다.
 enum AlanRouter: RequestConvertible {
   
   case question(String)
@@ -28,18 +27,18 @@ enum AlanRouter: RequestConvertible {
     }
   }
   
-  // MARK: - Method(TODO Method 열거형 만들기)
-  private var method: String {
+  // MARK: - Method
+  private var method: HTTPMethod {
     switch self {
     case .question:
-      "GET"
+        .get
     case .resetState:
-      "DELETE"
+        .delete
     }
   }
   
   
-  // MARK: - QueryItems(TODO 여긴 어떻게 할지 고민)
+  // MARK: - QueryItems
   private var queryItems: [URLQueryItem]? {
     switch self {
     case .question(let prompt):
@@ -55,19 +54,21 @@ enum AlanRouter: RequestConvertible {
   }
   
   
-  // MARK: - Parameters(TODO 파라미터 구조체..)
-  private var parameters: [String: String]? {
+  // MARK: - Parameters
+  private var parameters: Parameters? {
     switch self {
     case .question:
       return nil
     case .resetState:
-      let params = ["client_id": Bundle.ALAN_CLIENT_ID]
+      var params = Parameters()
+      params["client_id"] = Bundle.ALAN_CLIENT_ID
       return params
     }
   }
   
-  // MARK: - asURLRequest(이거는 프로토콜에 넣어야겠다)
+  // MARK: - asURLRequest
   func asURLRequest() throws -> URLRequest {
+
     var components = URLComponents(
       url: baseURL.appendingPathComponent(path),
       resolvingAgainstBaseURL: false
@@ -76,7 +77,7 @@ enum AlanRouter: RequestConvertible {
     
     var request = URLRequest(url: components.url!)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.httpMethod = method
+    request.method = method
     
     if let parameters {
       request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
