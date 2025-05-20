@@ -8,6 +8,7 @@
 import Foundation
 
 actor AlanService: AIService {
+  // TODO: 내가 여기서 얼마만큼 덜어낼 것 인가? 모듈화에 대한 고민
   func request(prompt: String) async throws -> String {
     print("Impl: ", #function)
     
