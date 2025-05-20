@@ -46,3 +46,4 @@ extension QuoteDTO {
       page: self.page
     )
   }
+}
