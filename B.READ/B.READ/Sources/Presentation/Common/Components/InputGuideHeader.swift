@@ -35,7 +35,7 @@ struct InputGuideHeader: View {
   let type: GuideType
   
   var body: some View {
-    VStack(spacing: 0) {
+    VStack(alignment: .leading, spacing: 0) {
       Text(type.title)
         .foregroundStyle(.black)
         .brStyleFont(.pretendard(.semiBold, size: 24), lineHeight: 1.4)
