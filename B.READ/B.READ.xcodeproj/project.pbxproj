@@ -40,6 +40,7 @@
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Error/RepositoryError.swift,
+				Sources/Data/Impls/BookRepositoryImpl.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
 				Sources/Domain/Entity/Record.swift,

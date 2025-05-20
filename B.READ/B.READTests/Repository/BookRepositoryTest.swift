@@ -14,6 +14,8 @@ struct BookRepositoryTest {
   
   init() {
     bookRepository = BookRepositoryStub()
+//    let storage = SwiftDataTestStorage()
+//    bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
   }
   
   @Test("Book Create Test")
@@ -43,25 +45,20 @@ struct BookRepositoryTest {
   
   @Test("Book All Update Test")
   func updateBookAll() async throws {
-    let basicBook = DummyData.books[0]
-    let updateBook = DummyData.books[1]
-    try await bookRepository.createBook(basicBook)
+    try await bookRepository.createBook(DummyData.books[0])
     
-    // isbn만 0번 도서이고, 내용은 1번 도서로 바꿈
     let updatedBook = Book(
-      isbn: basicBook.isbn,
-      name: updateBook.name,
-      author: updateBook.author,
-      publisher: updateBook.publisher,
-      publishedAt: updateBook.publishedAt,
-      totalPages: updateBook.totalPages
+      isbn: DummyData.books[0].isbn,
+      name: "책 제목",
+      author: "작가",
+      publisher: DummyData.books[0].publisher,
+      publishedAt: DummyData.books[0].publishedAt,
+      totalPages: 100
     )
     
     try await bookRepository.updateBook(updatedBook)
-    
-    let fetchBook = try await bookRepository.fetchBook(isbn: basicBook.isbn)
-    
-    #expect(updatedBook == fetchBook)
+    let fetchedBook = try await bookRepository.fetchBook(isbn: DummyData.books[0].isbn)
+    #expect(fetchedBook == updatedBook)
   }
   
   @Test("Book Partial Update Test - CoverImage, TotalPage")
