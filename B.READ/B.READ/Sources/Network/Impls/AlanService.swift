@@ -7,46 +7,38 @@
 
 import Foundation
 
-actor AlanService: AIService {
-  // TODO: 내가 여기서 얼마만큼 덜어낼 것 인가? 모듈화에 대한 고민
+final class AlanService: AIService {
+  
   func request(prompt: String) async throws -> String {
     print("Impl: ", #function)
     
-    let request = try AlanRouter.asURLRequest(.question(prompt))()
-    let (data, response) = try await URLSession.shared.data(for: request)
+    let (data, response) = try await NetworkClient.shared.perform(
+      AlanRouter.question(prompt),
+      decodeType: QuestionResponse.self
+    )
     
-    guard let httpResponse = response as? HTTPURLResponse else {
-      throw URLError(.badServerResponse)
-    }
-    
-    switch httpResponse.statusCode {
+    switch response.statusCode {
     case 200:
-      let response = try JSONDecoder().decode(QuestionResponse.self, from: data)
-      return response.content
+      return data.content
     case 422:
       throw AlanError.validationError
     default:
-      throw AlanError.unknownError(httpResponse.statusCode)
+      throw AlanError.unknownError(response.statusCode)
     }
   }
   
   func reset() async throws {
     print("Impl: ", #function)
     
-    let request = try AlanRouter.asURLRequest(.resetState)()
-    let (_, response) = try await URLSession.shared.data(for: request)
+    let response = try await NetworkClient.shared.performStatusOnly(AlanRouter.resetState)
     
-    guard let httpResponse = response as? HTTPURLResponse else {
-      throw URLError(.badServerResponse)
-    }
-    
-    switch httpResponse.statusCode {
+    switch response.statusCode {
     case 200:
-      break
+      print("초기화 성공")
     case 422:
       throw AlanError.validationError
     default:
-      throw AlanError.unknownError(httpResponse.statusCode)
+      throw AlanError.unknownError(response.statusCode)
     }
   }
 }

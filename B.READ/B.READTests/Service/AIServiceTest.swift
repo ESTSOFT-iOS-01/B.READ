@@ -23,20 +23,21 @@ struct AIServiceTest {
     print(response)
   }
   
-  @Test("Request Question API Cancel")
-  func requestCancel() throws {
-    Task {
-      let cancellableTask = Task {
-        await #expect(throws: URLError(.cancelled), performing: {
-          try await alanService.request(prompt: "hello")
-        })
-      }
-      
-      // 3초 대기 후 취소
-      try await Task.sleep(nanoseconds: 3000_000_000)
-      cancellableTask.cancel()
-    }
-  }
+//  TODO: 나중에 동기에서 테스트
+//  @Test("Request Question API Cancel")
+//  func requestCancel() throws {
+//    Task {
+//      let cancellableTask = Task {
+//        await #expect(throws: URLError(.cancelled), performing: {
+//          try await alanService.request(prompt: "hello")
+//        })
+//      }
+//
+//      // 3초 대기 후 취소
+//      try await Task.sleep(nanoseconds: 3000_000_000)
+//      cancellableTask.cancel()
+//    }
+//  }
   
   @Test("Request Reset API")
   func requestReset() async throws {

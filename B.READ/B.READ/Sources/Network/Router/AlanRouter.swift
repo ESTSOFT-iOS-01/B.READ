@@ -8,7 +8,7 @@
 import Foundation
 
 // TODO: 프로토콜을 만들면 좋을것 같다.
-enum AlanRouter {
+enum AlanRouter: RequestConvertible {
   
   case question(String)
   case resetState
