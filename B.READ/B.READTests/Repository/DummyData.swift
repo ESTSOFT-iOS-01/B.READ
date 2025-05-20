@@ -8,7 +8,7 @@
 import Foundation
 
 enum DummyData {
-  static let userInfo = UserInfo(
+  static var userInfo = UserInfo(
     nickname: "모옹피",
     categories: [
       Category(id: 101, name: "소설"),
