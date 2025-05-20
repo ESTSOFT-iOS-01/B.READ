@@ -47,8 +47,11 @@
 				Sources/Domain/UseCase/ProfileUseCase.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
 				Sources/Network/Config/AlanAPI.swift,
+				Sources/Network/Errors/AlanError.swift,
 				Sources/Network/Impls/AlanService.swift,
+				Sources/Network/Models/QuestionResponse.swift,
 				Sources/Network/Router/AlanRouter.swift,
+				"Sources/Util/Extensions/Bundle+.swift",
 			);
 			target = 35D13CEE2DD81C870059A894 /* B.READTests */;
 		};

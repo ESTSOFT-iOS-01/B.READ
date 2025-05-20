@@ -45,7 +45,7 @@ enum AlanRouter {
     case .question(let prompt):
       let queryItems = [
         URLQueryItem(name: "content", value: prompt),
-        URLQueryItem(name: "client_id", value: "example Value")
+        URLQueryItem(name: "client_id", value: Bundle.ALAN_CLIENT_ID)
       ]
       return queryItems
       
@@ -61,7 +61,7 @@ enum AlanRouter {
     case .question:
       return nil
     case .resetState:
-      let params = ["client_id": "example Value"]
+      let params = ["client_id": Bundle.ALAN_CLIENT_ID]
       return params
     }
   }
