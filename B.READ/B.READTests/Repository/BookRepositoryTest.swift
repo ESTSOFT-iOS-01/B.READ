@@ -13,9 +13,9 @@ struct BookRepositoryTest {
   private let bookRepository: BookRepository
   
   init() {
-    bookRepository = BookRepositoryStub()
-//    let storage = SwiftDataTestStorage()
-//    bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
+//    bookRepository = BookRepositoryStub()
+    let storage = SwiftDataTestStorage()
+    bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
   }
   
   @Test("Book Create Test")
