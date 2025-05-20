@@ -9,10 +9,13 @@ import Foundation
 
 actor AlanService: AIService {
   func request(prompt: String) async throws -> String {
-    <#code#>
+    print("Impl: ", #function)
+    
+    let request = AlanRouter.asURLRequest(.question(prompt))
+    return "test"
   }
   
   func reset() async throws {
-    <#code#>
+    print("Impl: ", #function)
   }
 }

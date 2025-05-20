@@ -44,6 +44,8 @@
 				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
 				Sources/Domain/Service/Interface/AIService.swift,
 				Sources/Domain/Service/Stub/AIServiceStub.swift,
+				Sources/Domain/UseCase/ProfileUseCase.swift,
+				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
 				Sources/Network/Config/AlanAPI.swift,
 				Sources/Network/Impls/AlanService.swift,
 				Sources/Network/Router/AlanRouter.swift,

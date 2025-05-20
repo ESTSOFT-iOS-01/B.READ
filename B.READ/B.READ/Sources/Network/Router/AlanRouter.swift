@@ -58,7 +58,7 @@ enum AlanRouter {
   // MARK: - Parameters(TODO 파라미터 구조체..)
   private var parameters: [String: String]? {
     switch self {
-    case .question(let string):
+    case .question:
       return nil
     case .resetState:
       let params = ["client_id": "example Value"]
