@@ -49,6 +49,7 @@ struct BookRepositoryTest {
     let dummyUpdateBook = DummyData.books[1]
     try await bookRepository.createBook(dummyBook)
     
+    // isbn만 0번 도서이고, 내용은 1번 도서로 바꿈
     let updatedBook = Book(
       isbn: dummyBook.isbn,
       name: dummyUpdateBook.name,
