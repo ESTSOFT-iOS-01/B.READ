@@ -77,6 +77,25 @@ enum DummyData {
       quoteIDs: [],
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
       updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
+    ),
+    Record( // 싯다르타
+      id: UUID().uuidString,
+      isbn: "9788937460586",
+      state: .reading,
+      heartCount: 0,
+      starCount: 4,
+      isFavorite: false,
+      period: (
+        Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
+        Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
+      ),
+      currentPage: 252,
+      review: "",
+      summaryID: nil,
+      memoIDs: [],
+      quoteIDs: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
     )
   ]
 }

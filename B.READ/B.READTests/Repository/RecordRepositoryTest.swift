@@ -36,6 +36,21 @@ struct RecordRepositoryTest {
     })
   }
   
+  @Test("Recent Reading Record Fetch Test")
+  func fetchRecentReadingRecord() async throws {
+    let fetchedRecords = DummyData.records
+      .filter { $0.state == .reading }
+      .sorted { $0.updatedAt > $1.updatedAt }
+    
+    for record in DummyData.records {
+      try await recordRepository.createRecord(record)
+    }
+    
+    let fetchRecords = try await recordRepository.fetchRecentReadingRecord(count: 3)
+    #expect(fetchedRecords == fetchRecords)
+  }
+  
+  
   @Test("Record Update Test")
   func updateRecord() async throws {
     // 초기의 레코드
