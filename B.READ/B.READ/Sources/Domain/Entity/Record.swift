@@ -29,7 +29,7 @@ struct Record {
   var heartCount: Int
   var starCount: Int
   var isFavorite: Bool
-  var period: (Date?, Date?)
+  var period: (startDate: Date?, endDate: Date?)
   var currentPage: Int
   var review: String
   var summaryID: String?

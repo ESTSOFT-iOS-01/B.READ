@@ -63,6 +63,7 @@ struct RecordRepositoryTest {
       heartCount: basicRecord.heartCount,
       starCount: 4,
       isFavorite: basicRecord.isFavorite,
+      period: basicRecord.period,
       currentPage: basicRecord.currentPage,
       review: basicRecord.review,
       memoIDs: basicRecord.memoIDs,
