@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct ScanView: View {
+  @State private var isbnNumber: String = ""
+  
     var body: some View {
       NavigationStack {
         VStack {
-          Rectangle()
-            .fill(.gray3)
-            .frame(width: .infinity, height: 400, alignment: .top)
+          BarcodeScannerView(isbnNumber: $isbnNumber)
+            .frame(height: 400, alignment: .top)
+            .frame(maxWidth: .infinity)
             .padding(.top, 16)
           
           Text("빵식이가 빠르게 책을 찾을 수 있도록\n책의 ISBN 바코드를 정확히 스캔해주세요!")
@@ -51,3 +53,4 @@ struct ScanView: View {
 #Preview {
     ScanView()
 }
+
