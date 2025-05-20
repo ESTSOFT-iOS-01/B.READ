@@ -41,7 +41,7 @@
 				Sources/Data/Error/RepositoryError.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/UserInfo.swift,
-				Sources/Domain/Repository/Inerface/BookInfoRepository.swift,
+				Sources/Domain/Repository/Inerface/BookRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,

@@ -40,7 +40,7 @@ protocol RecordRepository {
   
   /// 특정 Record를 삭제합니다.
   ///
-  /// - Parameter id: Record.id
+  /// - Parameter id: 독서 기록의 id
   /// - Throws:
   ///   - `RepositoryError.dataNotFound`: 삭제할 독서기록이 존재하지 않는 경우
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
