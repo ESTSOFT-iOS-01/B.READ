@@ -15,12 +15,12 @@ import Foundation
 /// - publisher : 출판사
 /// - publishedAt : 출판일
 /// - totalPages: 총 페이지
-struct Book {
+struct Book: Equatable {
   let isbn: String
   var coverImage: Data?
   let name: String
   let author: String
   let publisher: String
   let publishedAt: Date
-  let totalPages: Int
+  var totalPages: Int
 }
