@@ -27,12 +27,12 @@ actor QuoteRepositoryStub: QuoteRepository {
     storedQuote = quote
   }
   
-  func fetchAllQuotes() throws -> [Quote] {
+  func fetchQuote() throws -> Quote {
     print("Stub: \(#function)")
     guard let quote = storedQuote else {
       throw RepositoryError.dataNotFound
     }
-    return [quote]
+    return quote
   }
   
   func deleteQuote(_ quote: Quote) throws {

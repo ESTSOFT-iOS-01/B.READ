@@ -30,7 +30,7 @@ protocol QuoteRepository {
   /// - Returns: 저장된 Quote Entity 배열
   /// - Throws:
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
-  func fetchAllQuotes() async throws -> [Quote]
+  func fetchQuote() async throws -> Quote
   
   /// Quote를 삭제합니다.
   ///
