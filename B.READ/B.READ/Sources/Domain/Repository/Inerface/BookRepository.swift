@@ -33,6 +33,4 @@ protocol BookRepository {
   ///   - `RepositoryError.dataNotFound`: 기존 도서가 존재하지 않는 경우
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
   func updateBook(_ book: Book) async throws
-  
-  
 }
