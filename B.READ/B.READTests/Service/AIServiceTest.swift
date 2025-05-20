@@ -16,8 +16,15 @@ struct AIServiceTest {
     self.alanService = AlanService()
   }
   
-  @Test
-  func test() async throws {
-    let _ = try await alanService.request(prompt: "hello")
+  @Test("Request Question API")
+  func requestQuestion() async throws {
+    let response = try await alanService.request(prompt: "hello")
+    
+    print(response)
+  }
+  
+  @Test("Request Reset API")
+  func requestReset() async throws {
+    try await alanService.reset()
   }
 }
