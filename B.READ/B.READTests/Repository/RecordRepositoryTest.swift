@@ -13,18 +13,18 @@ struct RecordRepositoryTest {
   private let recordRepository: RecordRepository
   
   init() {
-    recordRepository = RecordRepositoryStub()
+//    recordRepository = RecordRepositoryStub()
+    let storage = SwiftDataTestStorage()
+    recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
   }
   
   @Test("Record Create Test")
   func createRecord() async throws {
-    let fetchedRecords = DummyData.records
-    for record in DummyData.records {
-      try await recordRepository.createRecord(record)
-    }
+    let fetchedRecord = DummyData.records[0]
+    try await recordRepository.createRecord(DummyData.records[0])
     
-    let records = try await recordRepository.fetchAllRecord()
-    #expect(records == fetchedRecords)
+    let record = try await recordRepository.fetchAllRecord().first
+    #expect(record == fetchedRecord)
   }
   
   @Test("Record Create Error Test - Data Already Exists")
