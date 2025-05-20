@@ -14,7 +14,7 @@ protocol BookRepository {
   /// - Parameter book: Book Entity
   /// - Throws:
   ///   - `RepositoryError.dataAlreadyExist`: 이미 도서가 존재하는 경우
-  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  ///   - `RepositoryError.fetchError`: 기존 데이터 조회 중 에러가 발생한 경우
   func createBook(_ book: Book) async throws
   
   /// 특정 Book을 조회합니다
