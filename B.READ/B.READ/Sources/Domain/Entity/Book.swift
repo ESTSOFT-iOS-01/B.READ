@@ -17,7 +17,7 @@ import Foundation
 /// - totalPages: 총 페이지
 struct Book {
   let isbn: String
-  var coverImg: Data?
+  var coverImage: Data?
   let name: String
   let author: String
   let publisher: String
