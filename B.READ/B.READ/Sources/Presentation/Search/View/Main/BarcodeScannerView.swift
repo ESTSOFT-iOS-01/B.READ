@@ -10,6 +10,7 @@ import UIKit
 import Combine
 import AVFoundation
 
+// MARK: - (S)BarcodeScannerView
 struct BarcodeScannerView: View {
   @State private var inputImage: UIImage?
   @Binding var isbnNumber: String
@@ -19,6 +20,7 @@ struct BarcodeScannerView: View {
   }
 }
 
+// MARK: - (S)CustomCameraRepresentable
 struct CustomCameraRepresentable: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     @Binding var isbnNumber: String
@@ -70,6 +72,7 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
     }
 }
 
+// MARK: - UIViewController
 class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
   var image: UIImage?
   var captureSession = AVCaptureSession()
