@@ -84,7 +84,8 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
           ),
     Record( // 타이탄의 도구들
       id: UUID().uuidString,
@@ -99,7 +100,8 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
           ),
     Record( // 싯다르타
       id: UUID().uuidString,
@@ -117,7 +119,8 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
           ),
     Record( // 아주 작은 습관들
       id: UUID().uuidString,
@@ -132,7 +135,8 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!
           ),
     Record( // 위버멘쉬
       id: UUID().uuidString,
@@ -150,7 +154,8 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1))!
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1))!
           ),
     Record( // 이기적 유전자
       id: UUID().uuidString,
@@ -168,7 +173,8 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 30))!
+      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 30))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 30))!
           ),
     Record( // 듀얼 브레인
       id: UUID().uuidString,
@@ -186,8 +192,9 @@ enum DummyData {
       summaryID: nil,
       memoIDs: [],
       quoteIDs: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!
-          )
+      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!
+    )
   ]
-
+  
 }
