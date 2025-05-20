@@ -5,14 +5,6 @@
 //  Created by 도민준 on 5/19/25.
 //
 
-
-//
-//  SentenceInputView.swift
-//  B.READ
-//
-//  Created by 도민준 on 5/19/25.
-//
-
 import SwiftUI
 
 struct SentenceInputView: View {
@@ -20,19 +12,20 @@ struct SentenceInputView: View {
   
   @State private var text = ""
   @State private var goNext = false
-  @State private var frozenText = ""
+  @FocusState private var isEditorFocused: Bool
   
-  private var cleaned: String {
+  private var trimmedText: String {
     text.trimmingCharacters(in: .whitespacesAndNewlines)
   }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       Text("기록할 문장을 작성해주세요")
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2, letterSpacing: 0)
+        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.4, letterSpacing: -0.0025)
       
       ZStack(alignment: .topLeading) {
         TextEditor(text: $text)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.4, letterSpacing: -0.0025)
           .padding(.horizontal, 16)
           .padding(.vertical, 12)
           .frame(height: 130)     // 고정 높이
@@ -42,8 +35,9 @@ struct SentenceInputView: View {
           )
           .scrollContentBackground(.hidden)
           .scrollDisabled(false)
+          .focused($isEditorFocused)
         
-        if text.isEmpty {
+        if text.isEmpty && !isEditorFocused {
           Text("여기를 터치해서 문장을 입력할 수 있어요")
             .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .foregroundStyle(.gray2)
@@ -52,35 +46,32 @@ struct SentenceInputView: View {
             .allowsHitTesting(false)
         }
       }
-      Spacer()
     }
+    .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
-    .navigationTitle("")
-    .navigationBarTitleDisplayMode(.inline)
     .navigationBarBackButtonHidden(true)
     .toolbar {
-      ToolbarItem(placement: .navigationBarLeading) {
+      ToolbarItem(placement: .topBarLeading) {
         Button { dismiss() } label: {
           Image(systemName: "chevron.left")
-            .font(.system(size: 17, weight: .regular))
+            .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
             .foregroundStyle(.green6)
         }
       }
-      ToolbarItem(placement: .navigationBarTrailing) {
+      ToolbarItem(placement: .topBarTrailing) {
         Button("다음") {
-          frozenText = cleaned
           goNext = true
         }
-        .font(.system(size: 16, weight: .regular))
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
-        .disabled(cleaned.isEmpty)
-        .opacity(cleaned.isEmpty ? 0 : 1)
+        .disabled(trimmedText.isEmpty)
+        .opacity(trimmedText.isEmpty ? 0 : 1)
       }
     }
     .background(.backgroundDefault)
     .navigationDestination(isPresented: $goNext) {
-      PageInputView(sentence: frozenText) { page in
+      PageInputView(sentence: trimmedText) { page in
         dismiss()
       }
     }
