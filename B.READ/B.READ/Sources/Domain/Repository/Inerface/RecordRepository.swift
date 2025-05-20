@@ -1,0 +1,48 @@
+//
+//  LibraryRepository.swift
+//  B.READ
+//
+//  Created by 심근웅 on 5/20/25.
+//
+
+import Foundation
+
+protocol RecordRepository {
+  
+  /// Record를 생성합니다.
+  ///
+  /// - Parameter record: Record Entity
+  /// - Throws:
+  func createRecord(_ record: Record) async throws
+  
+  /// 전체 Record를 조회합니다.
+  ///
+  /// - Returns: [Record Entity]
+  /// - Throws:
+  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  func fetchAllRecord() -> [Record] async throws
+  
+  /// 최근 업데이트한 `읽는 중` 상태의 독서 기록을 조회합니다.
+  ///
+  /// - Parameter count: Int 조회할 독서 기록의 최대 개수
+  /// - Returns: [Record Entity]
+  /// - Throws:
+  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  func fetchRecentReadingRecord(count: Int) -> [Record] async throws
+  
+  /// 특정 Record를 갱신합니다.
+  ///
+  /// - Parameter record: Record Entity
+  /// - Throws:
+  ///   - `RepositoryError.dataNotFound`: 수정할 독서 기록이 존재하지 않는 경우
+  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  func updateRecord(_ record: Record) async throws
+  
+  /// 특정 Record를 삭제합니다.
+  ///
+  /// - Parameter id: Record.id
+  /// - Throws:
+  ///   - `RepositoryError.dataNotFound`: 삭제할 독서기록이 존재하지 않는 경우
+  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  func deleteRecord(_ id: String) async throws
+}
