@@ -20,7 +20,7 @@ protocol RecordRepository {
   /// - Returns: [Record Entity]
   /// - Throws:
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
-  func fetchAllRecord() -> [Record] async throws
+  func fetchAllRecord() async throws -> [Record]
   
   /// 최근 업데이트한 `읽는 중` 상태의 독서 기록을 조회합니다.
   ///
@@ -28,7 +28,7 @@ protocol RecordRepository {
   /// - Returns: [Record Entity]
   /// - Throws:
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
-  func fetchRecentReadingRecord(count: Int) -> [Record] async throws
+  func fetchRecentReadingRecord(count: Int) async throws -> [Record]
   
   /// 특정 Record를 갱신합니다.
   ///
