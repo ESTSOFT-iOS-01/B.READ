@@ -14,7 +14,7 @@ final class AlanService: AIService {
     
     let (data, response) = try await NetworkClient.shared.perform(
       AlanRouter.question(prompt),
-      decodeType: QuestionResponse.self
+      decodeType: ResponseModel.self
     )
     
     switch response.statusCode {

@@ -18,7 +18,7 @@ struct AIServiceTest {
   
   @Test("Request Question API")
   func requestQuestion() async throws {
-    let response = try await alanService.request(prompt: "hello")
+    let response = try await alanService.request(prompt: "너 길게 말해봐")
     
     print(response)
   }
