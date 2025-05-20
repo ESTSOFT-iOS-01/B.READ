@@ -13,6 +13,8 @@ protocol RecordRepository {
   ///
   /// - Parameter record: Record Entity
   /// - Throws:
+  ///   - `RepositoryError.dataAlreadyExist`: 이미 독서 기록이 존재하는 경우
+  ///   - `RepositoryError.fetchError`: 기존 데이터를 조회하는 과정에서 에러가 발생한 경우   
   func createRecord(_ record: Record) async throws
   
   /// 전체 Record를 조회합니다.
