@@ -8,5 +8,6 @@
 import Foundation
 
 enum AlanAPI {
-  static let baseURL = URL(string: "https://kdt-api-function.azurewebsites.net")!
+  static let baseURL = URL(string: Bundle.ALAN_BASE_URL)!
+  static let clientID = Bundle.ALAN_CLIENT_ID
 }

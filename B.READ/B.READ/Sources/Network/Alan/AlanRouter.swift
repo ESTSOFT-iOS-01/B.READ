@@ -44,7 +44,7 @@ enum AlanRouter: RequestConvertible {
     case .question(let prompt):
       let queryItems = [
         URLQueryItem(name: "content", value: prompt),
-        URLQueryItem(name: "client_id", value: Bundle.ALAN_CLIENT_ID)
+        URLQueryItem(name: "client_id", value: AlanAPI.clientID)
       ]
       return queryItems
       
@@ -61,7 +61,7 @@ enum AlanRouter: RequestConvertible {
       return nil
     case .resetState:
       var params = Parameters()
-      params["client_id"] = Bundle.ALAN_CLIENT_ID
+      params["client_id"] = AlanAPI.clientID
       return params
     }
   }

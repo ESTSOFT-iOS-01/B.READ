@@ -104,4 +104,4 @@ iOSInjectionProject/
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode
 
 ### APIKey.plist ###
-B.READ/B.READ/Resources/APIKey.plist
+B.READ/B.READ/Resources/APIConfig/APIKey.plist

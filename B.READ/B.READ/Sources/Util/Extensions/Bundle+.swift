@@ -8,15 +8,21 @@
 import Foundation
 
 extension Bundle {
+  
   static let ALAN_CLIENT_ID: String = {
-    guard let filePath = Bundle.main.path(forResource: "APIKey", ofType: "plist") else {
-      fatalError("Couldn't find file 'APIKey.plist'.")
-    }
-    let plist = NSDictionary(contentsOfFile: filePath)
-    
-    guard let value = plist?.object(forKey: "ALAN_CLIENT_ID") as? String else {
-      fatalError("Couldn't find key 'ALAN_CLIENT_ID' in 'APIKey.plist'.")
+    value(forKey: "ALAN_CLIENT_ID", fromPlistNamed: "APIKey")
+  }()
+  
+  static let ALAN_BASE_URL: String = {
+    value(forKey: "ALAN_BASE_URL", fromPlistNamed: "APIUrl")
+  }()
+  
+  private static func value<T>(forKey key: String, fromPlistNamed name: String) -> T {
+    guard let filePath = Bundle.main.path(forResource: name, ofType: "plist"),
+          let plist = NSDictionary(contentsOfFile: filePath),
+          let value = plist[key] as? T else {
+      fatalError("Couldn't find key '\(key)' in '\(name).plist'")
     }
     return value
-  }()
+  }
 }
