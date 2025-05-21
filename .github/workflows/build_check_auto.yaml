@@ -47,7 +47,6 @@ jobs:
           -scheme B.READ \
           -destination 'generic/platform=iOS Simulator' \
           CODE_SIGNING_ALLOWED=NO
-          | xcpretty && exit ${PIPESTATUS[0]}
 
       - name: Save build log
         run: |
