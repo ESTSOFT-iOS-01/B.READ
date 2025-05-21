@@ -1,0 +1,49 @@
+# This workflow will build a iOS project
+
+name: iOS Build Check
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build iOS Project
+    runs-on: macos-15
+
+    # env:
+      # SECRET_XCCONFIG_PATH: Project/app/config/Debug.xcconfig
+      # GOOGLE_SERVICE_INFO_PLIST_PATH: Project/app/GoogleService-Info.plist
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      # Set up Xcode
+      - name: Select Xcode 16.2
+        run: sudo xcode-select -s /Applications/Xcode_16.2.0.app/Contents/Developer
+
+      # Install any dependencies
+      - name: Resolve Swift Package Dependencies
+        run: xcodebuild -resolvePackageDependencies -project vlip.xcodeproj
+
+      # Secrets
+      # - name: Create Debug.xcconfig
+      #   run: |
+      #     mkdir -p vlip-ios/app/config
+      #     echo "${{ secrets.DEBUG_XCCONFIG }}" | base64 --decode > ${{ env.SECRET_XCCONFIG_PATH }}
+          
+      # Build iOS Project
+      - name: Build iOS Project
+        run: |
+          xcodebuild clean build \
+          -project B.READ.xcodeproj \
+          -scheme B.READ \
+          -destination 'generic/platform=iOS Simulator' \
+          CODE_SIGNING_ALLOWED=NO
+          | xcpretty && exit ${PIPESTATUS[0]}
