@@ -25,7 +25,7 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
   @Binding var image: UIImage?
   @Binding var isbnNumber: String
   
-  func makeUIViewController(context: Context) -> CustomCameraController {
+  internal func makeUIViewController(context: Context) -> CustomCameraController {
     let controller = CustomCameraController()
     controller.delegate = context.coordinator
     context.coordinator.bindPublisher(from: controller)
@@ -33,10 +33,10 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
     return controller
   }
   
-  func updateUIViewController(_ cameraViewController: CustomCameraController, context: Context) {
+  internal func updateUIViewController(_ cameraViewController: CustomCameraController, context: Context) {
   }
   
-  func makeCoordinator() -> Coordinator {
+  internal func makeCoordinator() -> Coordinator {
     Coordinator(self, isbnNumber: $isbnNumber)
   }
   
@@ -51,13 +51,17 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
       _isbnNumber = isbnNumber
     }
     
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+    internal func photoOutput(
+      _ output: AVCapturePhotoOutput,
+      didFinishProcessingPhoto photo: AVCapturePhoto,
+      error: Error?
+    ) {
       if let imageData = photo.fileDataRepresentation() {
         parent.image = UIImage(data: imageData)
       }
     }
     
-    func bindPublisher(from controller: CustomCameraController) {
+    internal func bindPublisher(from controller: CustomCameraController) {
       controller.$scannedISBN
         .receive(on: DispatchQueue.main)
         .sink { [weak self] value in
@@ -74,12 +78,12 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
 
 // MARK: - UIViewController
 class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
-  var image: UIImage?
-  var captureSession = AVCaptureSession()
-  var currentCamera: AVCaptureDevice?
-  var photoOutput: AVCapturePhotoOutput?
-  var metadataOutput: AVCaptureMetadataOutput?
-  var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
+  private var image: UIImage?
+  private var captureSession = AVCaptureSession()
+  private var currentCamera: AVCaptureDevice?
+  private var photoOutput: AVCapturePhotoOutput?
+  private var metadataOutput: AVCaptureMetadataOutput?
+  private var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
   
   @Published var scannedISBN: String = ""
   @Published var resetTrigger: Bool = false
@@ -89,7 +93,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   
   var delegate: AVCapturePhotoCaptureDelegate?
   
-  func didTapRecord() {
+  private func didTapRecord() {
     let settings = AVCapturePhotoSettings()
     photoOutput?.capturePhoto(with: settings, delegate: delegate!)
   }
@@ -99,7 +103,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     setup()
   }
   
-  func setup() {
+  private func setup() {
     setupCaptureSession()
     setupDevice()
     setupInputOutput()
@@ -120,15 +124,15 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
       .store(in: &cancellables)
   }
   
-  func setupCaptureSession() {
+  private func setupCaptureSession() {
     captureSession.sessionPreset = AVCaptureSession.Preset.photo
   }
   
-  func setupDevice() {
+  private func setupDevice() {
     self.currentCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
   }
   
-  func setupInputOutput() {
+  private func setupInputOutput() {
     do {
       let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera!)
       captureSession.addInput(captureDeviceInput)
@@ -152,7 +156,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     
   }
   
-  func setupPreviewLayer() {
+  private func setupPreviewLayer() {
     self.cameraPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     self.cameraPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
     self.cameraPreviewLayer?.connection?.videoRotationAngle = 90.0
@@ -165,7 +169,11 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     self.view.layer.insertSublayer(cameraPreviewLayer!, at: 0)
   }
   
-  func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+  internal func metadataOutput(
+    _ output: AVCaptureMetadataOutput,
+    didOutput metadataObjects: [AVMetadataObject],
+    from connection: AVCaptureConnection
+  ) {
     guard let object = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
           let value = object.stringValue,
           currentDetected != value else { return }
