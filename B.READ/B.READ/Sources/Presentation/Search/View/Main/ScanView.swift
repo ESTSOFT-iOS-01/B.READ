@@ -15,7 +15,7 @@ struct ScanView: View {
   var body: some View {
     NavigationStack {
       VStack {
-        BarcodeScannerView(isbnNumber: $isbnNumber)
+        CustomCameraRepresentable(isbnNumber: $isbnNumber)
           .frame(height: 400, alignment: .top)
           .frame(maxWidth: .infinity)
           .padding(.top, 16)

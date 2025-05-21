@@ -1,5 +1,5 @@
 //
-//  BarcodeScannerView.swift
+//  CustomCameraRepresentable.swift
 //  B.READ
 //
 //  Created by 김도연 on 5/20/25.
@@ -10,24 +10,12 @@ import UIKit
 import Combine
 import AVFoundation
 
-// MARK: - (S)BarcodeScannerView
-struct BarcodeScannerView: View {
-  @State private var inputImage: UIImage?
-  @Binding var isbnNumber: String
-  
-  var body: some View {
-    CustomCameraRepresentable(image: self.$inputImage, isbnNumber: $isbnNumber)
-  }
-}
-
 // MARK: - (S)CustomCameraRepresentable
 struct CustomCameraRepresentable: UIViewControllerRepresentable {
-  @Binding var image: UIImage?
   @Binding var isbnNumber: String
   
   internal func makeUIViewController(context: Context) -> CustomCameraController {
     let controller = CustomCameraController()
-    controller.delegate = context.coordinator
     context.coordinator.bindPublisher(from: controller)
     
     return controller
@@ -51,16 +39,6 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
       _isbnNumber = isbnNumber
     }
     
-    internal func photoOutput(
-      _ output: AVCapturePhotoOutput,
-      didFinishProcessingPhoto photo: AVCapturePhoto,
-      error: Error?
-    ) {
-      if let imageData = photo.fileDataRepresentation() {
-        parent.image = UIImage(data: imageData)
-      }
-    }
-    
     internal func bindPublisher(from controller: CustomCameraController) {
       controller.$scannedISBN
         .receive(on: DispatchQueue.main)
@@ -78,10 +56,8 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
 
 // MARK: - UIViewController
 class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
-  private var image: UIImage?
   private var captureSession = AVCaptureSession()
   private var currentCamera: AVCaptureDevice?
-  private var photoOutput: AVCapturePhotoOutput?
   private var metadataOutput: AVCaptureMetadataOutput?
   private var cameraPreviewLayer: AVCaptureVideoPreviewLayer?
   
@@ -90,13 +66,6 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   
   private var currentDetected: String = ""
   private var cancellables = Set<AnyCancellable>()
-  
-  var delegate: AVCapturePhotoCaptureDelegate?
-  
-  private func didTapRecord() {
-    let settings = AVCapturePhotoSettings()
-    photoOutput?.capturePhoto(with: settings, delegate: delegate!)
-  }
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -109,14 +78,17 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     setupInputOutput()
     bindResetTrigger()
     setupPreviewLayer()
-    captureSession.startRunning()
     
+    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        self?.captureSession.startRunning()
+    }
+
   }
   
   private func bindResetTrigger() {
     $resetTrigger
       .removeDuplicates()
-      .filter { $0 == true }
+      .filter { $0 }
       .sink { [weak self] _ in
         self?.currentDetected = ""
         self?.resetTrigger = false
@@ -125,30 +97,36 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   }
   
   private func setupCaptureSession() {
-    captureSession.sessionPreset = AVCaptureSession.Preset.photo
+    captureSession.sessionPreset = .photo
   }
   
   private func setupDevice() {
-    self.currentCamera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+    guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
+      print("카메라를 사용할 수 없습니다.")
+      return
+    }
+    
+    currentCamera = device
   }
   
   private func setupInputOutput() {
     do {
-      let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera!)
-      captureSession.addInput(captureDeviceInput)
-      photoOutput = AVCapturePhotoOutput()
-      
-      photoOutput?.setPreparedPhotoSettingsArray([AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])], completionHandler: nil)
-      
-      captureSession.addOutput(photoOutput!)
-      metadataOutput = AVCaptureMetadataOutput()
-      
-      if metadataOutput != nil {
-        captureSession.addOutput(metadataOutput!)
-        metadataOutput?.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-        metadataOutput?.metadataObjectTypes = [.ean13]
-      } else {
+      // MARK: - 카메라 입력
+      guard let currentCamera else {
+        print("currentCamera is nil")
         return
+      }
+      let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera)
+      if captureSession.canAddInput(captureDeviceInput) {
+        captureSession.addInput(captureDeviceInput)
+      }
+    
+      let metadataOutput = AVCaptureMetadataOutput()
+      if captureSession.canAddOutput(metadataOutput) {
+        captureSession.addOutput(metadataOutput)
+        metadataOutput.setMetadataObjectsDelegate(self, queue: .main)
+        metadataOutput.metadataObjectTypes = [.ean13]
+        self.metadataOutput = metadataOutput
       }
     } catch {
       print(error)
@@ -157,16 +135,19 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   }
   
   private func setupPreviewLayer() {
-    self.cameraPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-    self.cameraPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
-    self.cameraPreviewLayer?.connection?.videoRotationAngle = 90.0
-    self.cameraPreviewLayer?.frame = CGRect(
+    cameraPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+    cameraPreviewLayer?.videoGravity = .resizeAspectFill
+    cameraPreviewLayer?.connection?.videoRotationAngle = 90.0
+    cameraPreviewLayer?.frame = CGRect(
       x: 0,
       y: 0,
-      width: self.view.frame.width,
-      height: self.view.frame.width
+      width: view.frame.width,
+      height: view.frame.width
     )
-    self.view.layer.insertSublayer(cameraPreviewLayer!, at: 0)
+    
+    if let previewLayer = cameraPreviewLayer {
+      view.layer.insertSublayer(previewLayer, at: 0)
+    }
   }
   
   internal func metadataOutput(
