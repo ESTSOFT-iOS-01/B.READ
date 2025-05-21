@@ -20,6 +20,8 @@ import Foundation
 /// - summaryID : AI 요약노트 id (빵식이의 요약노트)
 /// - memoIDs : 메모 id - [String]
 /// - quoteIDs : 문장수집 id - [String]
+/// - createdAt : 처음 생성된 날짜
+/// - updatedAt : 업데이트된 날짜
 struct Record {
   let id: String
   let isbn: String
@@ -27,13 +29,14 @@ struct Record {
   var heartCount: Int
   var starCount: Int
   var isFavorite: Bool
-  var period: (Date?, Date?)
+  var period: (startDate: Date?, endDate: Date?)
   var currentPage: Int
   var review: String
   var summaryID: String?
   var memoIDs: [String]
   var quoteIDs: [String]
   var createdAt: Date
+  var updatedAt: Date
 }
 
 /// 독서 상태 정보입니다.
