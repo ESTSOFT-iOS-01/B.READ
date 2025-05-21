@@ -30,6 +30,7 @@ struct QuoteRepositoryTest {
   @Test("Quote Create Error Test - Data Already Exists")
   func createQuoteDataAlreadyExist() async throws {
     try await quoteRepository.createQuote(DummyData.quote)
+    
     await #expect(throws: RepositoryError.dataAlreadyExist, performing: {
       try await quoteRepository.createQuote(DummyData.quote)
     })
@@ -58,21 +59,25 @@ struct QuoteRepositoryTest {
 
   @Test("Quote Update Error Test - Data Not Found")
   func updateQuoteDataNotFound() async throws {
+    
     let missing = Quote(
       id: "missing-id",
       isbn: "none",
       content: "none",
       page: 0
     )
+    
     await #expect(throws: RepositoryError.dataNotFound, performing: {
       try await quoteRepository.updateQuote(missing)
     })
+
   }
 
   @Test("Quote Delete Test")
   func deleteQuote() async throws {
     try await quoteRepository.createQuote(DummyData.quote)
     try await quoteRepository.deleteQuote(id: DummyData.quote.id)
+    
     await #expect(throws: RepositoryError.dataNotFound, performing: {
       _ = try await quoteRepository.fetchQuote(id: DummyData.quote.id)
     })
