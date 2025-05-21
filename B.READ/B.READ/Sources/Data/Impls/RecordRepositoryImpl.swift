@@ -38,10 +38,11 @@ actor RecordRepositoryImpl: RecordRepository {
     print("Impl: ", #function)
     let predicate = #Predicate<RecordDTO> { $0.state == 1 }
     let sort = SortDescriptor(\RecordDTO.updatedAt, order: .reverse)
-    let descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
+    var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
+    descriptor.fetchLimit = count
     
     do {
-      let data = try modelContext.fetch(descriptor).prefix(count)
+      let data = try modelContext.fetch(descriptor)
       return Array(data.map { $0.toEntity() })
     } catch {
       throw RepositoryError.fetchError
