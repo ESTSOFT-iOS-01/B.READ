@@ -11,8 +11,7 @@ import SwiftData
 final class SwiftDataTestStorage {
   let modelContainer = {
     let schema = Schema(
-      [UserInfoDTO.self,
-      QuoteDTO.self]
+      [UserInfoDTO.self, BookDTO.self, RecordDTO.self, QuoteDTO.self]
     )
     let configuration = ModelConfiguration(
       isStoredInMemoryOnly: true

@@ -26,7 +26,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Resources/B-READ-Info.plist",
-				Sources/Network/.gitkeep,
 				Sources/Util/Constants/.gitkeep,
 			);
 			target = 35C171DF2DCB34320049724A /* B.READ */;
@@ -34,17 +33,40 @@
 		35D13CFB2DD81D7C0059A894 /* Exceptions for "B.READ" folder in "B.READTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Sources/Data/DTOs/Record/BookDTO.swift,
+				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Error/RepositoryError.swift,
+				Sources/Data/Impls/BookRepositoryImpl.swift,
+				Sources/Data/Impls/RecordRepositoryImpl.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
+				Sources/Domain/Entity/Book.swift,
+				Sources/Domain/Entity/Record.swift,
 				Sources/Domain/Entity/UserInfo.swift,
+				Sources/Domain/Repository/Inerface/BookRepository.swift,
+				Sources/Domain/Repository/Inerface/RecordRepository.swift,
+				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
+				Sources/Domain/Repository/Stubs/BookRepositoryStub.swift,
+				Sources/Domain/Repository/Stubs/RecordRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
+				Sources/Domain/Service/Interface/AIService.swift,
+				Sources/Domain/Service/Stub/AIServiceStub.swift,
 				Sources/Domain/UseCase/ProfileUseCase.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
+				Sources/Network/Alan/AlanAPI.swift,
+				Sources/Network/Alan/AlanError.swift,
+				Sources/Network/Alan/AlanRouter.swift,
+				Sources/Network/Alan/AlanService.swift,
+				Sources/Network/Alan/ResponseModel.swift,
+				Sources/Network/NetworkClient/GlobalAlias.swift,
+				Sources/Network/NetworkClient/HTTPMethod.swift,
+				Sources/Network/NetworkClient/NetworkClient.swift,
+				Sources/Network/NetworkClient/RequestConvertible.swift,
+				"Sources/Util/Extensions/Bundle+.swift",
 			);
 			target = 35D13CEE2DD81C870059A894 /* B.READTests */;
 		};
@@ -364,7 +386,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = C3P52YR8KJ;
+				DEVELOPMENT_TEAM = 83K577A944;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
@@ -400,7 +422,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = C3P52YR8KJ;
+				DEVELOPMENT_TEAM = 83K577A944;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";

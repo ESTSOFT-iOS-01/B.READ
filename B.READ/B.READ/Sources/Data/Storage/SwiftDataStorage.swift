@@ -10,10 +10,12 @@ import SwiftData
 
 final class SwiftDataStorage {
   let modelContainer = {
-    let schema = Schema(
-      [UserInfoDTO.self,
-       QuoteDTO.self]
-    )
+    let schema = Schema([
+      UserInfoDTO.self,
+      RecordDTO.self,
+      BookDTO.self,
+      QuoteDTO.self
+    ])
     let configuration = ModelConfiguration(
       isStoredInMemoryOnly: false
     )
