@@ -80,9 +80,9 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     setupPreviewLayer()
     
     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-        self?.captureSession.startRunning()
+      self?.captureSession.startRunning()
     }
-
+    
   }
   
   private func bindResetTrigger() {
@@ -120,7 +120,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
       if captureSession.canAddInput(captureDeviceInput) {
         captureSession.addInput(captureDeviceInput)
       }
-    
+      
       let metadataOutput = AVCaptureMetadataOutput()
       if captureSession.canAddOutput(metadataOutput) {
         captureSession.addOutput(metadataOutput)
