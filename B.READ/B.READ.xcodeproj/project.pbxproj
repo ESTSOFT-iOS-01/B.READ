@@ -34,11 +34,11 @@
 		35D13CFB2DD81D7C0059A894 /* Exceptions for "B.READ" folder in "B.READTests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Sources/Data/DTOs/UserInfo/BookDTO.swift,
+				Sources/Data/DTOs/Record/BookDTO.swift,
+				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
-				Sources/Data/DTOs/UserInfo/RecordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Error/RepositoryError.swift,
 				Sources/Data/Impls/BookRepositoryImpl.swift,

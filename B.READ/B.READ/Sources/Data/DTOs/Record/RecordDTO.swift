@@ -28,7 +28,7 @@ final class RecordDTO {
   var updatedAt: Date
   
   init(
-    id: String = UUID().uuidString,
+    id: String,
     isbn: String,
     state: Int,
     heartCount: Int,
