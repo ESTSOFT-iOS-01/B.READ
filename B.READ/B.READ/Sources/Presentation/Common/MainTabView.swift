@@ -17,6 +17,7 @@ struct MainTabView: View {
         }
       
       SearchView(viewModel: SearchViewModel())
+//      ScanView() // 스캐너뷰 테스트용
         .tabItem {
           Image(systemName: "magnifyingglass")
           Text("검색")
