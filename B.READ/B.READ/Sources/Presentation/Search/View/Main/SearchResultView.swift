@@ -85,7 +85,7 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
   
   var body: some View {
     ScrollView {
-      VStack(spacing: 0) {
+      LazyVStack(spacing: 0) {
         ForEach(Array(items.enumerated()), id: \.1.id) { index, item in
           content(item)
             .padding(.horizontal, layoutPadding)
