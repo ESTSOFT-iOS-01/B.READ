@@ -20,7 +20,7 @@ struct QuoteRepositoryTest {
     quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
   }
 
-  @Test("Quote Create Test")
+  @Test("Quote Create and Fetch Test")
   func createQuote() async throws {
     try await quoteRepository.createQuote(DummyData.quote)
     let fetched = try await quoteRepository.fetchQuote(id: DummyData.quote.id)
@@ -36,11 +36,31 @@ struct QuoteRepositoryTest {
     })
   }
 
-  @Test("Quote Fetch Error Test - Data Not Found")
+  @Test("Error on Fetch by ID When Not Found")
   func fetchQuoteDataNotFound() async throws {
     await #expect(throws: RepositoryError.dataNotFound, performing: {
       _ = try await quoteRepository.fetchQuote(id: "non-existent-id")
     })
+  }
+  
+  @Test("Fetch Quotes by ISBN")
+  func fetchQuotesByISBN() async throws {
+    let other = Quote(id: "id-2", isbn: "999", content: "Other Book", page: 1)
+    try await quoteRepository.createQuote(DummyData.quote)
+    try await quoteRepository.createQuote(other)
+    
+    let fetchedList = try await quoteRepository.fetchQuotes(isbn: DummyData.quote.isbn)
+    #expect(fetchedList == [DummyData.quote])
+  }
+  
+  @Test("Fetch All Quotes Test")
+  func fetchAllQuotes() async throws {
+    try await quoteRepository.createQuote(DummyData.quote)
+    let another = Quote(id: "id-2", isbn: DummyData.quote.isbn, content: "Additional Content", page: 5)
+    try await quoteRepository.createQuote(another)
+    
+    let all = try await quoteRepository.fetchAllQuotes()
+    #expect(all.count == 2)
   }
 
   @Test("Quote Update Test")
