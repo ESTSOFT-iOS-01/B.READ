@@ -43,14 +43,51 @@ struct MyPageView: View {
 
 // MARK: - (S)MenuListView
 private struct MenuListView: View {
+  
+  // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
+  enum WeekDay: Int, CaseIterable {
+    case sun = 1
+    case mon
+    case tue
+    case wed
+    case thu
+    case fri
+    case sat
+    
+    var streakImage: Image {
+      switch self {
+      case .sun, .sat:
+        Image(.stampS)
+      case .mon:
+        Image(.stampM)
+      case .tue, .thu:
+        Image(.stampT)
+      case .wed:
+        Image(.stampW)
+      case .fri:
+        Image(.stampF)
+      }
+    }
+  }
+  
+  private let menuSpacing = 24.0
+  private let menuInnerSpacing = 8.0
+  
   var body: some View {
-    VStack(alignment: .leading, spacing: 32) {
+    VStack(alignment: .leading, spacing: 0) {
+      
       menuTitle(title: "금주의 책빵", subtitle: "문장을 수집하거나 메모를 남기면 불이 들어와요")
       
-      VStack(alignment: .leading) {
+      HStack {
+        ForEach(WeekDay.allCases, id: \.self) {
+          streakImage(weekDay: $0)
+        }
+      }.padding(.top, menuInnerSpacing)
+      
+      VStack(alignment: .leading, spacing: menuInnerSpacing) {
         menuTitle(title: "관심 분야", chevronHidden: false)
         selectedCategories(categories: [.classics, .artCulture])
-      }
+      }.padding(.top, menuSpacing)
       
       // TODO: Sprint 2
       //menuTitle(title: "오늘의 빵식이 요약 횟수", subtitle: "매일 자정에 초기화됩니다")
@@ -65,7 +102,7 @@ private struct MenuListView: View {
           .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.35, letterSpacing: 0.02)
           .foregroundStyle(.red)
           .underline()
-      }
+      }.padding(.top, menuSpacing)
 
       Image(.readBreadMyPage)
         .resizable()
@@ -115,6 +152,18 @@ private struct MenuListView: View {
           .clipShape(Capsule())
       }
     }
+  }
+  
+  // MARK: (F)streakImage
+  @ViewBuilder
+  private func streakImage(weekDay: WeekDay) -> some View {
+    weekDay.streakImage
+      .renderingMode(.template)
+      .resizable()
+      .aspectRatio(contentMode: .fit)
+      .frame(width: 40, height: 40)
+      .frame(maxWidth: .infinity)
+      .foregroundStyle(weekDay.rawValue % 2 == 0 ? .gray1 : .gray9)
   }
 }
 
