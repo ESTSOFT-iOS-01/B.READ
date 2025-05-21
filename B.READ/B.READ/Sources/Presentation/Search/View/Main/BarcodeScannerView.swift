@@ -22,54 +22,54 @@ struct BarcodeScannerView: View {
 
 // MARK: - (S)CustomCameraRepresentable
 struct CustomCameraRepresentable: UIViewControllerRepresentable {
-    @Binding var image: UIImage?
+  @Binding var image: UIImage?
+  @Binding var isbnNumber: String
+  
+  func makeUIViewController(context: Context) -> CustomCameraController {
+    let controller = CustomCameraController()
+    controller.delegate = context.coordinator
+    context.coordinator.bindPublisher(from: controller)
+    
+    return controller
+  }
+  
+  func updateUIViewController(_ cameraViewController: CustomCameraController, context: Context) {
+  }
+  
+  func makeCoordinator() -> Coordinator {
+    Coordinator(self, isbnNumber: $isbnNumber)
+  }
+  
+  class Coordinator: NSObject, UINavigationControllerDelegate, AVCapturePhotoCaptureDelegate {
+    let parent: CustomCameraRepresentable
+    
+    private var cancellables = Set<AnyCancellable>()
     @Binding var isbnNumber: String
     
-    func makeUIViewController(context: Context) -> CustomCameraController {
-        let controller = CustomCameraController()
-        controller.delegate = context.coordinator
-        context.coordinator.bindPublisher(from: controller)
-        
-        return controller
+    init(_ parent: CustomCameraRepresentable, isbnNumber: Binding<String>) {
+      self.parent = parent
+      _isbnNumber = isbnNumber
     }
     
-    func updateUIViewController(_ cameraViewController: CustomCameraController, context: Context) {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+      if let imageData = photo.fileDataRepresentation() {
+        parent.image = UIImage(data: imageData)
+      }
     }
     
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self, isbnNumber: $isbnNumber)
+    func bindPublisher(from controller: CustomCameraController) {
+      controller.$scannedISBN
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] value in
+          self?.isbnNumber = value
+          // isbnNumber가 비워지면 currentDetected 초기화 트리거
+          if value.isEmpty {
+            controller.resetTrigger = true
+          }
+        }
+        .store(in: &cancellables)
     }
-    
-    class Coordinator: NSObject, UINavigationControllerDelegate, AVCapturePhotoCaptureDelegate {
-        let parent: CustomCameraRepresentable
-        
-        private var cancellables = Set<AnyCancellable>()
-        @Binding var isbnNumber: String
-        
-        init(_ parent: CustomCameraRepresentable, isbnNumber: Binding<String>) {
-            self.parent = parent
-            _isbnNumber = isbnNumber
-        }
-        
-        func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-            if let imageData = photo.fileDataRepresentation() {
-                parent.image = UIImage(data: imageData)
-            }
-        }
-        
-        func bindPublisher(from controller: CustomCameraController) {
-            controller.$scannedISBN
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] value in
-                    self?.isbnNumber = value
-                    // isbnNumber가 비워지면 currentDetected 초기화 트리거
-                    if value.isEmpty {
-                        controller.resetTrigger = true
-                    }
-                }
-                .store(in: &cancellables)
-        }
-    }
+  }
 }
 
 // MARK: - UIViewController

@@ -37,7 +37,7 @@ struct SearchResultView: View {
 }
 
 #Preview {
-//  SearchResultView(viewModel: SearchViewModel())
+  //  SearchResultView(viewModel: SearchViewModel())
   // onAppear에서만 더미데이터 들어감
 }
 
