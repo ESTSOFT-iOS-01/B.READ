@@ -8,38 +8,46 @@
 import SwiftUI
 
 struct MainTabView: View {
+  @State private var coordinator = TabBarCoordinator()
+  
   var body: some View {
-    TabView {
-      HomeView()
+    TabView(selection: $coordinator.selectedTab) {
+      coordinator.buildPage(.Home)
         .tabItem {
           Image(systemName: "house.fill")
           Text("홈")
         }
+        .tag(TabBarAppScene.Home)
       
-      SearchView(viewModel: SearchViewModel())
-//      ScanView() // 스캐너뷰 테스트용
+      coordinator.buildPage(.Search)
         .tabItem {
           Image(systemName: "magnifyingglass")
           Text("검색")
         }
+        .tag(TabBarAppScene.Search)
       
-      LibraryView(viewModel: LibraryViewModel())
+      coordinator.buildPage(.Library)
         .tabItem {
           Image(systemName: "books.vertical.fill")
           Text("책빵")
         }
+        .tag(TabBarAppScene.Library)
       
-      RecordView()
+      
+      coordinator.buildPage(.Record)
         .tabItem {
           Image(systemName: "doc.text.magnifyingglass")
           Text("기록")
         }
+        .tag(TabBarAppScene.Record)
       
-      MyPageView()
+      coordinator.buildPage(.MyPage)
         .tabItem {
           Image(systemName: "person.fill")
           Text("마이")
         }
+        .tag(TabBarAppScene.MyPage)
+      
     }.tint(.brown3)
   }
 }
