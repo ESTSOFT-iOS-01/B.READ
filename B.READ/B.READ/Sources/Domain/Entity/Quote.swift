@@ -13,7 +13,7 @@ import Foundation
 /// - content : 내용
 /// - page : 문장 수집 페이지
 struct Quote {
-  let id: String
+  let id: UUID
   let isbn: String
   var content: String
   var page: Int

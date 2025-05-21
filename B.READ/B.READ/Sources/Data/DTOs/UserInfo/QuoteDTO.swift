@@ -10,23 +10,17 @@ import SwiftData
 
 @Model
 final class QuoteDTO {
-  var id: String
+  var id: UUID
   var isbn: String
   var content: String
   var page: Int
 
-  init(
-    id: String = UUID().uuidString,
-    isbn: String,
-    content: String,
-    page: Int
-  ) {
-    self.id = id
-    self.isbn = isbn
-    self.content = content
-    self.page = page
-  }
-
+  init(id: UUID, isbn: String, content: String, page: Int) {
+      self.id = id
+      self.isbn = isbn
+      self.content = content
+      self.page = page
+    }
   convenience init(_ entity: Quote) {
     self.init(
       id: entity.id,
