@@ -93,7 +93,7 @@ struct RecordDetailView: View {
   // MARK: - (S)covorImage
   private var covorImage: some View {
     Group {
-      if viewModel.book?.coverImg != nil {
+      if viewModel.book?.coverImage != nil {
         // TODO: - 가져온 표지 이미지를 넣음
         Image(systemName: "")
       } else {

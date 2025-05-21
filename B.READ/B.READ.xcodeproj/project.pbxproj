@@ -26,7 +26,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Resources/B-READ-Info.plist",
-				Sources/Network/.gitkeep,
 				Sources/Util/Constants/.gitkeep,
 			);
 			target = 35C171DF2DCB34320049724A /* B.READ */;
@@ -40,16 +39,15 @@
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
-				Sources/Data/Error/RepositoryError.swift,
 				Sources/Data/Impls/BookRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
 				Sources/Domain/Entity/Record.swift,
 				Sources/Domain/Entity/UserInfo.swift,
+				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/BookRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
-				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Repository/Stubs/BookRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/RecordRepositoryStub.swift,
@@ -68,10 +66,6 @@
 				Sources/Network/NetworkClient/NetworkClient.swift,
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				"Sources/Util/Extensions/Bundle+.swift",
-				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
-				Sources/Domain/Entity/UserInfo.swift,
-				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
-				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
 			);
 			target = 35D13CEE2DD81C870059A894 /* B.READTests */;
 		};
