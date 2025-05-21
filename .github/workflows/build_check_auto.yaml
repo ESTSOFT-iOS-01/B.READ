@@ -1,0 +1,65 @@
+# This workflow will build a iOS project
+
+name: iOS Build Check
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build iOS Project
+    runs-on: macos-15
+
+    # env:
+      # SECRET_XCCONFIG_PATH: Project/app/config/Debug.xcconfig
+      # GOOGLE_SERVICE_INFO_PLIST_PATH: Project/app/GoogleService-Info.plist
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        
+      # Set up Xcode
+      - name: Select Xcode 16.3
+        run: sudo xcode-select -s /Applications/Xcode_16.3.0.app/Contents/Developer
+
+      # Install any dependencies
+      # - name: Resolve Swift Package Dependencies
+      #   run: xcodebuild -resolvePackageDependencies -project B.READ.xcodeproj
+
+      # Secrets
+      # - name: Create Debug.xcconfig
+      #   run: |
+      #     mkdir -p bread-ios/app/config
+      #     echo "${{ secrets.DEBUG_XCCONFIG }}" | base64 --decode > ${{ env.SECRET_XCCONFIG_PATH }}
+          
+      # Build iOS Project
+      - name: Build iOS Project
+        run: |
+          xcodebuild clean build \
+          -project B.READ/B.READ.xcodeproj \
+          -scheme B.READ \
+          -destination 'generic/platform=iOS Simulator' \
+          CODE_SIGNING_ALLOWED=NO
+
+      - name: Save build log
+        run: |
+          mkdir -p logs
+          xcodebuild clean build \
+          -project B.READ/B.READ.xcodeproj \
+          -scheme B.READ \
+          -destination 'generic/platform=iOS Simulator' \
+          CODE_SIGNING_ALLOWED=NO \
+          > logs/build.log || true
+
+      - name: Upload build log
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: build-log
+          path: logs/build.log
