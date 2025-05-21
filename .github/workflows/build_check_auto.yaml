@@ -31,19 +31,19 @@ jobs:
 
       # Install any dependencies
       # - name: Resolve Swift Package Dependencies
-      #   run: xcodebuild -resolvePackageDependencies -project vlip.xcodeproj
+      #   run: xcodebuild -resolvePackageDependencies -project B.READ.xcodeproj
 
       # Secrets
       # - name: Create Debug.xcconfig
       #   run: |
-      #     mkdir -p vlip-ios/app/config
+      #     mkdir -p bread-ios/app/config
       #     echo "${{ secrets.DEBUG_XCCONFIG }}" | base64 --decode > ${{ env.SECRET_XCCONFIG_PATH }}
           
       # Build iOS Project
       - name: Build iOS Project
         run: |
           xcodebuild clean build \
-          -project B.READ.xcodeproj \
+          -project B.READ/B.READ.xcodeproj \
           -scheme B.READ \
           -destination 'generic/platform=iOS Simulator' \
           CODE_SIGNING_ALLOWED=NO
