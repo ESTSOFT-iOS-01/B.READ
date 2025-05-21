@@ -34,22 +34,27 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Sources/Data/DTOs/Record/BookDTO.swift,
+				Sources/Data/DTOs/Record/QuoteDTO.swift,
 				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Impls/BookRepositoryImpl.swift,
+				Sources/Data/Impls/QuoteRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
+				Sources/Domain/Entity/Quote.swift,
 				Sources/Domain/Entity/Record.swift,
 				Sources/Domain/Entity/UserInfo.swift,
 				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/BookRepository.swift,
+				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Repository/Stubs/BookRepositoryStub.swift,
+				Sources/Domain/Repository/Stubs/QuoteRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/RecordRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
 				Sources/Domain/Service/Interface/AIService.swift,
@@ -455,7 +460,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C3P52YR8KJ;
+				DEVELOPMENT_TEAM = 83K577A944;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "shin.B-READTests";
@@ -473,7 +478,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = C3P52YR8KJ;
+				DEVELOPMENT_TEAM = 83K577A944;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "shin.B-READTests";
