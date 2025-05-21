@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryListView: View {
   let records: [Record]
+  @State var selectedRecord: Record? = nil
   
   var body: some View {
     if records.isEmpty {
@@ -18,28 +19,25 @@ struct LibraryListView: View {
     } else {
       List {
         ForEach(records, id: \.id) { record in
-          ZStack {
-            NavigationLink(
-              destination: RecordDetailView(viewModel: RecordDetailViewModel(record: record))
-            ) {
-              EmptyView()
-            } // : NavigationLink
-            .opacity(0)
-            
-            LibraryListCell(record: record)
-              .frame(height: 114)
-              .background(.green1.opacity(0.6))
-            
-          } // : ZStack
-          .cornerRadius(16)
-          .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
-          .listRowSeparator(.hidden) // separator 제거
-          .padding(.vertical, 4)
+          LibraryListCell(record: record)
+            .frame(height: 114)
+            .background(.green1.opacity(0.6))
+            .cornerRadius(16)
+            .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
+            .listRowSeparator(.hidden) // separator 제거
+            .padding(.vertical, 4)
+            .onTapGesture {
+              selectedRecord = record
+            }
         } // : ForEach
         
       } // : List
       .listStyle(.plain)
       .scrollIndicators(.hidden)
+      .navigationDestination(item: $selectedRecord) { record in
+        let viewModel = RecordDetailViewModel(record: record)
+        RecordDetailView(viewModel: viewModel)
+      }
     }
   }
 }
