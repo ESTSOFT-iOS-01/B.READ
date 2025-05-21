@@ -30,8 +30,8 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_16.2.0.app/Contents/Developer
 
       # Install any dependencies
-      - name: Resolve Swift Package Dependencies
-        run: xcodebuild -resolvePackageDependencies -project vlip.xcodeproj
+      # - name: Resolve Swift Package Dependencies
+      #   run: xcodebuild -resolvePackageDependencies -project vlip.xcodeproj
 
       # Secrets
       # - name: Create Debug.xcconfig
