@@ -13,7 +13,8 @@ final class SwiftDataStorage {
     let schema = Schema([
       UserInfoDTO.self,
       RecordDTO.self,
-      BookDTO.self
+      BookDTO.self,
+      QuoteDTO.self
     ])
     let configuration = ModelConfiguration(
       isStoredInMemoryOnly: false
