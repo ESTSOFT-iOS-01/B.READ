@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct B_READApp: App {
+  @State private var tabBarCoordinator = TabBarCoordinator()
+  
   var body: some Scene {
     WindowGroup {
-      MainTabView()
+      MainTabView(coordinator: tabBarCoordinator)
     }
   }
 }

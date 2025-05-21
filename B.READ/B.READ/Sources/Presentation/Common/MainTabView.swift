@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
-  @State private var coordinator = TabBarCoordinator()
+  @Bindable var coordinator: TabBarCoordinator
   
   var body: some View {
     TabView(selection: $coordinator.selectedTab) {
@@ -52,6 +52,6 @@ struct MainTabView: View {
   }
 }
 
-#Preview {
-  MainTabView()
-}
+//#Preview {
+//  MainTabView()
+//}
