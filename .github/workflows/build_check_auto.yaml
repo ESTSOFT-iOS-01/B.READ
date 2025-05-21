@@ -40,11 +40,27 @@ jobs:
       #     echo "${{ secrets.DEBUG_XCCONFIG }}" | base64 --decode > ${{ env.SECRET_XCCONFIG_PATH }}
           
       # Build iOS Project
-      - name: Build iOS Project
+      # - name: Build iOS Project
+      #   run: |
+      #     xcodebuild clean build \
+      #     -project B.READ/B.READ.xcodeproj \
+      #     -scheme B.READ \
+      #     -destination 'generic/platform=iOS Simulator' \
+      #     CODE_SIGNING_ALLOWED=NO
+          | xcpretty && exit ${PIPESTATUS[0]}
+
+      - name: Save build log
         run: |
+          mkdir -p logs
           xcodebuild clean build \
           -project B.READ/B.READ.xcodeproj \
           -scheme B.READ \
           -destination 'generic/platform=iOS Simulator' \
-          CODE_SIGNING_ALLOWED=NO
-          | xcpretty && exit ${PIPESTATUS[0]}
+          CODE_SIGNING_ALLOWED=NO \
+          > logs/build.log || true
+
+      - name: Upload build log
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-log
+          path: logs/build.log
