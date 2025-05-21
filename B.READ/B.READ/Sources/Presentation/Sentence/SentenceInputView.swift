@@ -36,6 +36,7 @@ struct SentenceInputView: View {
           .scrollContentBackground(.hidden)
           .scrollDisabled(false)
           .focused($isEditorFocused)
+          .tint(.gray9)
         
         if text.isEmpty && !isEditorFocused {
           Text("여기를 터치해서 문장을 입력할 수 있어요")
