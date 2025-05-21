@@ -25,7 +25,6 @@ enum DummyData {
     }
   )
 
-
   static var quote = Quote(
     id: "id-1",
     isbn: "123",
