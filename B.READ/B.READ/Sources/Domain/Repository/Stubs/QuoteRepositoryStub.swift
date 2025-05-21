@@ -8,38 +8,41 @@
 import Foundation
 
 actor QuoteRepositoryStub: QuoteRepository {
-  
-  private var storedQuote: Quote?
-  
-  func createQuote(_ quote: Quote) throws {
-    print("Stub: ", #function)
-    guard storedQuote == nil else {
+  private var storedQuotes: [Quote] = []
+
+  func createQuote(_ quote: Quote) async throws {
+    guard !storedQuotes.contains(where: { $0.id == quote.id }) else {
       throw RepositoryError.dataAlreadyExist
     }
-    storedQuote = quote
+    storedQuotes.append(quote)
   }
-  
-  func updateQuote(_ quote: Quote) throws {
-    print("Stub: \(#function)")
-    guard storedQuote != nil else {
+
+  func updateQuote(_ quote: Quote) async throws {
+    guard let idx = storedQuotes.firstIndex(where: { $0.id == quote.id }) else {
       throw RepositoryError.dataNotFound
     }
-    storedQuote = quote
+    storedQuotes[idx] = quote
   }
-  
-  func fetchQuote() throws -> Quote {
-    print("Stub: \(#function)")
-    guard let quote = storedQuote else {
+
+  func deleteQuote(id: String) async throws {
+    guard let idx = storedQuotes.firstIndex(where: { $0.id == id }) else {
+      throw RepositoryError.dataNotFound
+    }
+    storedQuotes.remove(at: idx)
+  }
+
+  func fetchQuotes(isbn: String) async throws -> [Quote] {
+    return storedQuotes.filter { $0.isbn == isbn }
+  }
+
+  func fetchQuote(id: String) async throws -> Quote {
+    guard let quote = storedQuotes.first(where: { $0.id == id }) else {
       throw RepositoryError.dataNotFound
     }
     return quote
   }
-  
-  func deleteQuote(_ quote: Quote) throws {
-    print("Stub: \(#function)")
-    guard storedQuote != nil else {
-      throw RepositoryError.dataNotFound
-    }
-    storedQuote = nil
+
+  func fetchAllQuotes() async throws -> [Quote] {
+    return storedQuotes
   }
 }

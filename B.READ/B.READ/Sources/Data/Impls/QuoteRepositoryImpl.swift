@@ -11,46 +11,65 @@ import SwiftData
 @ModelActor
 actor QuoteRepositoryImpl: QuoteRepository {
   func createQuote(_ quote: Quote) async throws {
-    print("Impl: ", #function)
-    
-    if let _ = try findQuote() {
-      throw RepositoryError.dataAlreadyExist
+      print("Impl: \(#function)")
+      if let _ = try findQuote(id: quote.id) {
+        throw RepositoryError.dataAlreadyExist
+      }
+      let dto = QuoteDTO(quote)
+      modelContext.insert(dto)
     }
-    
-    let model = QuoteDTO(quote)
-    modelContext.insert(model)
-  }
 
   func updateQuote(_ quote: Quote) async throws {
-    print("Impl: ", #function)
-    
-    guard let data = try findQuote() else {
+      print("Impl: \(#function)")
+      guard let dto = try findQuote(id: quote.id) else {
+        throw RepositoryError.dataNotFound
+      }
+      dto.isbn = quote.isbn
+      dto.content = quote.content
+      dto.page = quote.page
+    }
+
+  func deleteQuote(id: String) async throws {
+    print("Impl: \(#function)")
+    guard let dto = try findQuote(id: id) else {
       throw RepositoryError.dataNotFound
     }
-    
-    data.isbn = quote.isbn
-    data.content = quote.content
-    data.page = quote.page
+    modelContext.delete(dto)
   }
   
-  func fetchQuote() async throws -> Quote {
-    print("Impl: ", #function)
-    
-    guard let data = try findQuote() else {
-      throw RepositoryError.dataNotFound
+  func fetchQuotes(isbn: String) async throws -> [Quote] {
+    print("Impl: \(#function)")
+    do {
+      let descriptor = FetchDescriptor<QuoteDTO>(
+        predicate: #Predicate { $0.isbn == isbn },
+        sortBy: [.init(\.page, order: .forward)]
+      )
+      let dtos = try modelContext.fetch(descriptor)
+      return dtos.map { $0.toEntity() }
+    } catch {
+      throw RepositoryError.fetchError
     }
-    
-    return data.toEntity()
   }
   
-  func deleteQuote(_ quote: Quote) async throws {
-    print("Impl: ", #function)
-    
-    guard let data = try findQuote() else {
-      throw RepositoryError.dataNotFound
+  func fetchQuote(id: String) async throws -> Quote {
+     print("Impl: \(#function)")
+     guard let dto = try findQuote(id: id) else {
+       throw RepositoryError.dataNotFound
+     }
+     return dto.toEntity()
+   }
+  
+  func fetchAllQuotes() async throws -> [Quote] {
+    print("Impl: \(#function)")
+    do {
+      let descriptor = FetchDescriptor<QuoteDTO>(
+        sortBy: [.init(\.page, order: .forward)]
+      )
+      let dtos = try modelContext.fetch(descriptor)
+      return dtos.map { $0.toEntity() }
+    } catch {
+      throw RepositoryError.fetchError
     }
-    
-    modelContext.delete(data)
   }
 }
 
@@ -62,9 +81,9 @@ extension QuoteRepositoryImpl {
   ///
   /// - Returns:
   ///   - `QuoteDTO?`: 조회된 첫 번째 문장 정보 DTO, 없으면 `nil`
-  private func findQuote() throws -> QuoteDTO? {
-    let descriptor = FetchDescriptor<QuoteDTO>()
+  private func findQuote(id: String) throws -> QuoteDTO? {
     do {
+      let descriptor = FetchDescriptor<QuoteDTO>(predicate: #Predicate { $0.id == id })
       return try modelContext.fetch(descriptor).first
     } catch {
       throw RepositoryError.fetchError

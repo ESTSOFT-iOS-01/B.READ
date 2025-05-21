@@ -10,12 +10,13 @@ import SwiftData
 
 @Model
 final class QuoteDTO {
-  var id: UUID
+  @Attribute(.unique)
+  var id: String
   var isbn: String
   var content: String
   var page: Int
 
-  init(id: UUID, isbn: String, content: String, page: Int) {
+  init(id: String, isbn: String, content: String, page: Int) {
       self.id = id
       self.isbn = isbn
       self.content = content

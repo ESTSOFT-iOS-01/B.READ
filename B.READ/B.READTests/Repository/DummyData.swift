@@ -24,9 +24,9 @@ enum DummyData {
       DailyStatus(weekday: index, isCompleted: index % 2 == 0)
     }
   )
-  
+
   static var quote = Quote(
-    id: UUID(),
+    id: "id-1",
     isbn: "123",
     content: "테스트",
     page: 8
