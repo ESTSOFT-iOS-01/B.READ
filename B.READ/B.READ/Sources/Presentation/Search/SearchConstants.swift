@@ -18,4 +18,8 @@ struct SearchConstants {
     public static let memo = "note.text"
     public static let quote = "ellipsis.bubble"
   }
+  
+  struct Image {
+    public static let isbnEx = "ISBN"
+  }
 }
