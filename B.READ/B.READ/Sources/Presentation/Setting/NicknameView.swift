@@ -39,7 +39,7 @@ struct NicknameView: View {
         textColor: isButtonEnabled ? .backgroundDefault : .gray3,
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
-        print("next")
+        settingViewModel.send(.saveNickname)
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)

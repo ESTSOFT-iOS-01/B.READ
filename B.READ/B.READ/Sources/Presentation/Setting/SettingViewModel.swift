@@ -16,7 +16,8 @@ final class SettingViewModel: ObservableObject {
   private var example: String?
   
   // MARK: - Dependency
-  //@Dependency private var exampleUseCase: ExampleUseCase
+  // TODO: UseCase 교체
+  private var profileUseCase = ProfileUseCaseImpl(userInfoRepository: UserInfoRepositoryStub())
   
   // MARK: - Action
   enum Action {
@@ -36,5 +37,10 @@ final class SettingViewModel: ObservableObject {
 
 // MARK: - Internal Function
 private extension SettingViewModel {
-  
+  func saveNickName() async {
+    Task {
+      
+    }
+  }
 }
+// 48
