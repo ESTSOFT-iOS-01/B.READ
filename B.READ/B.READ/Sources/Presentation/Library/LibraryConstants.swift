@@ -24,3 +24,13 @@ struct LibraryConstants {
     public static let back = "chevron.left"
   }
 }
+
+// MARK: - viewModel이랑 Usecase 사이에서 사용하는 형태
+typealias LibraryCellInfo = (book: Book, record: Record)
+
+// 공통 상태로 뺄지 각 뷰 마다 만들지는 고민
+// MARK: - (E)SortState
+enum SortState {
+  case recent
+  case older
+}
