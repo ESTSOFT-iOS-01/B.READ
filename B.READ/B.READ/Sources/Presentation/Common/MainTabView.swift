@@ -10,6 +10,7 @@ import SwiftUI
 struct MainTabView: View {
   @Bindable var coordinator: TabBarCoordinator
   
+  
   var body: some View {
     TabView(selection: $coordinator.selectedTab) {
       coordinator.buildPage(.Home)
