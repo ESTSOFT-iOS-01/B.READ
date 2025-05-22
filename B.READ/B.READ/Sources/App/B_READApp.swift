@@ -13,7 +13,9 @@ struct B_READApp: App {
   
   var body: some Scene {
     WindowGroup {
-      MainTabView(coordinator: tabBarCoordinator)
+      NavigationStack(path: $tabBarCoordinator.path) {
+        MainTabView(coordinator: tabBarCoordinator)
+      }
     }
   }
 }

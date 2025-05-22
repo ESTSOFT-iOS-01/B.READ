@@ -51,6 +51,7 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
     switch page {
     case .Barcode:
       ScanView()
+        .navigationBarBackButtonHidden(false)
     case .SearchResultBook:
       ScanView()
     case .SearchResultRecord:
@@ -58,6 +59,7 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
     }
   }
   
+  @ViewBuilder
   func buildSheet(_ sheet: Sheet) -> some View {
     switch sheet {
     case .CreateRecord:
