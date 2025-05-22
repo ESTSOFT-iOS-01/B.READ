@@ -10,7 +10,8 @@ import SwiftUI
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
   
-  @ObservedObject var viewModel: RecordDetailViewModel
+  // TODO: - Usecase 연결 후, ObservedObject로 변경
+  @StateObject var viewModel: RecordDetailViewModel
   
   @State var showDeleteAlert: Bool = false
   @Environment(\.dismiss) var dismiss
@@ -35,17 +36,25 @@ struct RecordDetailView: View {
         // 메모, 문장 탭바
         TopTabBar(
           tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
-          selectedIndex: $viewModel.selectedTab
+          selectedIndex: $viewModel.state.selectedTab
         )
+        .onChange(of: viewModel.state.selectedTab) {
+          viewModel.send(.onAppear)
+        }
         
         // 메모, 문장 리스트
         recordNotesSection
       } // : VStack
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
       .padding(.horizontal, layoutPadding)
+      
     } // : ScrollView
     .background(.backgroundDefault)
     .navigationBarBackButtonHidden(true) // 기본 뒤로가기 버튼 숨김
+    .onAppear {
+      print("DetailView OnAppear")
+      viewModel.send(.onAppear)
+    } // : onAppear
     .toolbar {
       // 뒤로가기 버튼
       ToolbarItem(placement: .topBarLeading) {
@@ -63,7 +72,11 @@ struct RecordDetailView: View {
           Button {
             viewModel.send(.onTapFavorite)
           } label: {
-            Image(systemName: viewModel.record.isFavorite ? "bookmark.fill" : "bookmark")
+            if let isFavorite = viewModel.state.info?.record.isFavorite {
+              Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+            } else {
+              Image(systemName: "bookmark")
+            }
           }
           // 삭제 버튼
           Button {
@@ -85,20 +98,19 @@ struct RecordDetailView: View {
     } message: {
       Text("정말로 독서 기록을 삭제하시겠습니까?")
     } // : alert
-    .onAppear {
-      viewModel.send(.onAppear)
-    }
   }
   
   // MARK: - (S)covorImage
   private var covorImage: some View {
     Group {
-      if viewModel.book?.coverImage != nil {
-        // TODO: - 가져온 표지 이미지를 넣음
-        Image(systemName: "")
+      if let imageData = viewModel.state.info?.book.coverImage,
+         let image = UIImage(data: imageData) {
+        Image(uiImage: image)
+          .resizable()
       } else {
+        // TODO: - 사진이 없을때, 들어갈 이미지 or 도형 추가
         Rectangle()
-          .fill(.blue.opacity(0.3))
+          .fill(.red.opacity(0.2))
       }
     } // : Group
     .frame(width: 176, height: 284)
@@ -108,12 +120,12 @@ struct RecordDetailView: View {
   // MARK: - (S)bookTitleSection
   private var bookTitleSection: some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text(viewModel.book?.name ?? "제목")
+      Text(viewModel.state.info?.book.name ?? "제목")
         .brStyleFont(.pretendard(.semiBold, size: 24), lineHeight: 1)
         .lineLimit(1)
       
       // FIXME: - 확인해보고 weight, size 수정해야할듯 - light는 괜찮은듯 한데, size 12가 너무 작은듯
-      Text(viewModel.book?.author ?? "작가")
+      Text(viewModel.state.info?.book.author ?? "작가")
         .brStyleFont(.pretendard(.light, size: 12), lineHeight: 1)
         .lineLimit(1)
         .foregroundStyle(.gray3)
@@ -128,13 +140,17 @@ struct RecordDetailView: View {
       // 기대 지수, 평점
       // TODO: - 기대 지수, 평점 점수판 만들어서 넣기
       Group {
-        switch viewModel.record.state {
-        case .toRead:
-          Text("기대지수")
-        case .reading:
-          EmptyView()
-        case .completed:
-          Text("평점")
+        if let record = viewModel.state.info?.record {
+          switch record.state {
+          case .toRead:
+            Text("기대지수")
+          case .reading:
+            EmptyView()
+          case .completed:
+            Text("평점")
+          }
+        } else {
+          Text("정보를 찾을 수 없습니다.")
         }
       } // : Group
       .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
@@ -152,9 +168,10 @@ struct RecordDetailView: View {
       } // : VStack
       
       // 독서 진행률 프로그래스바
-      if viewModel.record.state != .completed,
-         let totalPage = viewModel.book?.totalPages {
-        PageProgressbar(currentPage: viewModel.record.currentPage, totalPage: totalPage)
+      if viewModel.state.info?.record.state != .completed,
+         let currentPage = viewModel.state.info?.record.currentPage,
+         let totalPage = viewModel.state.info?.book.totalPages {
+        PageProgressbar(currentPage: currentPage, totalPage: totalPage)
           .frame(height: 28)
       }
     } // : VStack
@@ -171,5 +188,6 @@ struct RecordDetailView: View {
 
 #Preview {
   let record = DummyData.dummyRecords[0]
-  RecordDetailView(viewModel: RecordDetailViewModel(record: record))
+  let viewModel = RecordDetailViewModel(recordID: record.id, isbn: record.isbn)
+  RecordDetailView(viewModel: viewModel)
 }
