@@ -32,7 +32,9 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
   }
   
   func pop() {
-    path.removeLast()
+    if !path.isEmpty {
+      path.removeLast()
+    }
   }
   
   func popToRoot() {
@@ -64,6 +66,7 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
   func buildSheet(_ sheet: Sheet) -> some View {
     switch sheet {
     case .CreateRecord:
+      // 아직 이 부분은 미구현 상태입니다. 추후 추가 예정
       ScanView(viewModel: ScanViewModel(coordinator: self))
     }
   }

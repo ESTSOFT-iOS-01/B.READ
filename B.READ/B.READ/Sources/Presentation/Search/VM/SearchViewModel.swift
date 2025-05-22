@@ -35,6 +35,7 @@ final class SearchViewModel: ObservableObject {
   
   init(coordinator: SearchCoordinator) {
     self.coordinator = coordinator
+    print("SearchViewModel \(ObjectIdentifier(coordinator))")
   }
   
   // MARK: - Action

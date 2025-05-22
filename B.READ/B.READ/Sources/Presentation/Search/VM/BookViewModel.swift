@@ -17,6 +17,7 @@ final class BookViewModel: ObservableObject {
   init(coordinator: SearchCoordinator, isbn: String) {
     self.coordinator = coordinator
     self.isbn = isbn
+    print("BookViewModel \(ObjectIdentifier(coordinator))")
   }
   
 }

@@ -16,5 +16,7 @@ final class ScanViewModel: ObservableObject {
   
   init(coordinator: SearchCoordinator) {
     self.coordinator = coordinator
+    
+    print("ScanViewModel \(ObjectIdentifier(coordinator))")
   }
 }
