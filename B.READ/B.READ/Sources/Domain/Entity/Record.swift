@@ -39,6 +39,16 @@ struct Record: Identifiable {
   var updatedAt: Date
 }
 
+extension Record: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+  
+  static func == (lhs: Record, rhs: Record) -> Bool {
+    return lhs.id == rhs.id
+  }
+}
+
 /// 독서 상태 정보입니다.
 /// - toRead : 읽을 책
 /// - reading : 읽는 중
@@ -47,16 +57,4 @@ enum ReadState: Int {
   case toRead = 0
   case reading
   case completed
-}
-
-extension Record: Hashable {
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-  }
-}
-
-extension Record: Equatable {
-  static func == (lhs: Record, rhs: Record) -> Bool {
-    return lhs.id == rhs.id
-  }
 }
