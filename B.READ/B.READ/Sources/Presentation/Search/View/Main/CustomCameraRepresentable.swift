@@ -13,6 +13,7 @@ import AVFoundation
 // MARK: - (S)CustomCameraRepresentable
 struct CustomCameraRepresentable: UIViewControllerRepresentable {
   @Binding var isbnNumber: String
+  @Binding var noCamera: Bool
   
   internal func makeUIViewController(context: Context) -> CustomCameraController {
     let controller = CustomCameraController()
@@ -25,7 +26,7 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
   }
   
   internal func makeCoordinator() -> Coordinator {
-    Coordinator(self, isbnNumber: $isbnNumber)
+    Coordinator(self, isbnNumber: $isbnNumber, noCamera: $noCamera)
   }
   
   class Coordinator: NSObject, UINavigationControllerDelegate, AVCapturePhotoCaptureDelegate {
@@ -33,10 +34,16 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
     
     private var cancellables = Set<AnyCancellable>()
     @Binding var isbnNumber: String
+    @Binding var noCamera: Bool
     
-    init(_ parent: CustomCameraRepresentable, isbnNumber: Binding<String>) {
+    init(
+      _ parent: CustomCameraRepresentable,
+      isbnNumber: Binding<String>,
+      noCamera: Binding<Bool>
+    ) {
       self.parent = parent
       _isbnNumber = isbnNumber
+      _noCamera = noCamera
     }
     
     internal func bindPublisher(from controller: CustomCameraController) {
@@ -48,6 +55,13 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
           if value.isEmpty {
             controller.resetTrigger = true
           }
+        }
+        .store(in: &cancellables)
+      
+      controller.$noCamera
+        .receive(on: DispatchQueue.main)
+        .sink { [weak self] value in
+          self?.noCamera = value
         }
         .store(in: &cancellables)
     }
@@ -63,6 +77,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   
   @Published var scannedISBN: String = ""
   @Published var resetTrigger: Bool = false
+  @Published var noCamera: Bool = false
   
   private var currentDetected: String = ""
   private var cancellables = Set<AnyCancellable>()
@@ -102,7 +117,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   
   private func setupDevice() {
     guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) else {
-      print("카메라를 사용할 수 없습니다.")
+      noCamera = true
       return
     }
     
@@ -113,7 +128,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     do {
       // MARK: - 카메라 입력
       guard let currentCamera else {
-        print("currentCamera is nil")
+        noCamera = true
         return
       }
       let captureDeviceInput = try AVCaptureDeviceInput(device: currentCamera)

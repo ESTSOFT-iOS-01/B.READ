@@ -9,12 +9,11 @@ import SwiftUI
 
 // MARK: - (S)ScanView
 struct ScanView: View {
-  @State private var showAlert: Bool = false
-  @State private var isbnNumber: String = ""
-  
+  @ObservedObject var viewModel: ScanViewModel
+
   var body: some View {
     VStack {
-      CustomCameraRepresentable(isbnNumber: $isbnNumber)
+      CustomCameraRepresentable(isbnNumber: $viewModel.isbnNumber, noCamera: $viewModel.noCamera)
         .frame(height: 400, alignment: .top)
         .frame(maxWidth: .infinity)
         .padding(.top, 16)
@@ -46,17 +45,17 @@ struct ScanView: View {
     .navigationTitle("ISBN 바코드 스캔")
     .navigationBarBackButtonHidden(false)
     .navigationBarTitleDisplayMode(.inline)
-    .onChange(of: isbnNumber, { oldValue, newValue in
+    .onChange(of: viewModel.isbnNumber, { oldValue, newValue in
       if oldValue != newValue && !newValue.isEmpty {
-        showAlert = true
+        viewModel.coordinator.push(.SearchResultBook(isbn: viewModel.isbnNumber))
       }
     })
-    .alert("스캔된 ISBN", isPresented: $showAlert) {
-      Button("확인", role: .cancel) {
-        showAlert = false
+    .alert("경고", isPresented: $viewModel.noCamera) {
+      Button("직접 검색하기", role: .cancel) {
+        viewModel.coordinator.pop()
       }
     } message: {
-      Text(isbnNumber)
+      Text("카메라를 사용할 수 없습니다.")
     }
     .toolbar(.hidden) // 하단 탭바 안보이게 처리?
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
@@ -64,7 +63,7 @@ struct ScanView: View {
   }
 }
 
-#Preview {
-  ScanView()
-}
+//#Preview {
+//  ScanView()
+//}
 
