@@ -9,6 +9,9 @@ import SwiftUI
 
 struct NicknameView: View {
   
+  // TODO: 코디네이터 완성되면 외부주입으로 변경
+  @StateObject private var settingViewModel = SettingViewModel()
+  
   @FocusState private var isFocused: Bool
   @State private var nicknameText = ""
   @State private var isValid = true
