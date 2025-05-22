@@ -39,7 +39,7 @@ protocol QuoteUseCase {
 }
 
 /// UseCase 오류 정의
-enum QuoteUseCaseError: LocalizedError {
+enum QuoteUseCaseError: LocalizedError, Equatable {
   case emptyContent
   case invalidPage(max: Int)
 
