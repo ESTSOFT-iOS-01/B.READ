@@ -10,6 +10,7 @@ import SwiftUI
 typealias SearchCoordinatorProtocol = Navigatable & SheetPresentable
 typealias SearchAppScene = SearchCoordinator.AppScene
 
+@Observable
 final class SearchCoordinator: SearchCoordinatorProtocol {
   
   enum AppScene: Hashable {

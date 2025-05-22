@@ -58,9 +58,7 @@ final class SearchViewModel: ObservableObject {
       loadDummyData()
       
     case .onTapBarcode:
-      print("바코드 클릭")
       coordinator.push(.Barcode)
-//      print(coordinator.path)
       
     case let .onTapBestSeller(_, name):
       state.searchText = name

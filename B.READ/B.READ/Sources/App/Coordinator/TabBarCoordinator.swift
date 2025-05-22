@@ -12,8 +12,11 @@ typealias TabBarAppScene = TabBarCoordinator.AppScene
 
 @Observable
 final class TabBarCoordinator: Navigatable {
-  
+//  let homeCoordinator = HomeCoordinator()
   let searchCoordinator = SearchCoordinator()
+//  let libraryCoordinator = LibraryCoordinator()
+//  let recordCoordinator = RecordCoordinator()
+//  let myPageCoordinator = MyPageCoordinator()
   
   // MARK: - Enum
   // TODO : 뷰모델 외부에서 주입시 enum 스타일 변경
@@ -49,8 +52,8 @@ final class TabBarCoordinator: Navigatable {
     case .Home:
       HomeView()
     case .Search:
-      
       SearchView(viewModel: SearchViewModel(coordinator: searchCoordinator))
+        .navigationBarBackButtonHidden()
     case .Library:
       LibraryView(viewModel: LibraryViewModel())
     case .Record:
