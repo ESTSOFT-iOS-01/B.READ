@@ -10,7 +10,7 @@ import Foundation
 final class SettingViewModel: ObservableObject {
   
   // MARK: - State
-  @Published var datas: [Data] = []
+  @Published var userInfo: UserInfo? = nil
   
   // MARK: - Internal Variable
   private var example: String?
@@ -19,28 +19,47 @@ final class SettingViewModel: ObservableObject {
   // TODO: UseCase 교체
   private var profileUseCase = ProfileUseCaseImpl(userInfoRepository: UserInfoRepositoryStub())
   
+  init() {
+    fetchUserInfo()
+  }
+  
   // MARK: - Action
   enum Action {
-    case saveNickname
-    case saveCatetories
+    case saveNickname(String)
+    case saveCatetories([CategoryType])
   }
   
   func send(_ action: Action) {
     switch action {
-    case .saveNickname:
-      print(#function)
-    case .saveCatetories:
-      print(#function)
+    case .saveNickname(let nickname):
+      Task {
+        do {
+          try await profileUseCase.setNickname(nickname)
+        } catch {
+          print(error.localizedDescription)
+        }
+      }
+    case .saveCatetories(let categories):
+      Task {
+        do {
+          try await profileUseCase.setCategory(categories)
+        } catch {
+          print(error.localizedDescription)
+        }
+      }
     }
   }
 }
 
 // MARK: - Internal Function
 private extension SettingViewModel {
-  func saveNickName() async {
+  func fetchUserInfo() {
     Task {
-      
+      do {
+        self.userInfo = try await profileUseCase.fetchUserInfo()
+      } catch RepositoryError.dataNotFound {
+        self.userInfo = nil
+      }
     }
   }
 }
-// 48

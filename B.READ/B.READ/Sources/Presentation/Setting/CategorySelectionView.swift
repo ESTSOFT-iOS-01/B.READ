@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CategorySelectionView: View {
   
+  // TODO: 코디네이터 완성되면 외부주입으로 변경
+  @StateObject private var settingViewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
   private var isButtonEnabled: Bool {
     selectedCategories.count == 2
@@ -27,7 +29,7 @@ struct CategorySelectionView: View {
         textColor: isButtonEnabled ?  .backgroundDefault : .gray3,
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
-        print("next")
+        settingViewModel.send(.saveCatetories(Array(selectedCategories)))
       }
       .disabled(!isButtonEnabled)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)

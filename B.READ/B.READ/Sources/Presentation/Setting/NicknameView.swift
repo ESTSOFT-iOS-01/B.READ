@@ -11,7 +11,6 @@ struct NicknameView: View {
   
   // TODO: 코디네이터 완성되면 외부주입으로 변경
   @StateObject private var settingViewModel = SettingViewModel()
-  
   @FocusState private var isFocused: Bool
   @State private var nicknameText = ""
   @State private var isValid = true
@@ -39,7 +38,7 @@ struct NicknameView: View {
         textColor: isButtonEnabled ? .backgroundDefault : .gray3,
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
-        settingViewModel.send(.saveNickname)
+        settingViewModel.send(.saveNickname(nicknameText))
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)
