@@ -98,8 +98,8 @@ struct SearchView: View {
                      letterSpacing: -0.025)
         .foregroundStyle(.black)
       
-      BestSellerView(bookList: viewModel.state.bestBookList) { rank, name in
-        viewModel.send(.onTapBestSeller(rank: rank, name: name))
+      BestSellerView(bookList: viewModel.state.bestBookList) { book in
+        viewModel.send(.onTapBestSeller(book))
       }
     } // : vstack - best seller
   }

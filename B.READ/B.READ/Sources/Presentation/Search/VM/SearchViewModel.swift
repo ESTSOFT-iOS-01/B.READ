@@ -14,7 +14,7 @@ final class SearchViewModel: ObservableObject {
   // MARK: - State
   struct SearchViewState {
     var searchText: String = ""
-    var bestBookList: [String] = []
+    var bestBookList: [BestSellerVO] = []
     var keywordList: [String] = []
     var bookResults: [BookVO] = []
     var recordResults: [RecordVO] = []
@@ -42,7 +42,7 @@ final class SearchViewModel: ObservableObject {
     case onAppear
     case onTapBarcode
     case onTapClear
-    case onTapBestSeller(rank: Int, name: String)
+    case onTapBestSeller(BestSellerVO)
     case onSubmitSearch
     case onTapTab(Int)
     case onTapBook(String)
@@ -60,10 +60,8 @@ final class SearchViewModel: ObservableObject {
     case .onTapBarcode:
       coordinator.push(.Barcode)
       
-    case let .onTapBestSeller(_, name):
-      state.searchText = name
-      state.isSearchSubmitted = true
-      appendKeyword(name)
+    case let .onTapBestSeller(book):
+      coordinator.push(.SearchResultBook(isbn: book.isbn))
       
     case .onTapClear:
       state.searchText = ""
@@ -104,18 +102,9 @@ final class SearchViewModel: ObservableObject {
 // MARK: - Internal Function : DUMMY DATA SETTING
 private extension SearchViewModel {
   func loadDummyData() {
-    state.bestBookList = [
-      "데미안",
-      "미씽",
-      "싯다르타",
-      "하이데거의 사건 존재론",
-      "이것이 취업을 위한 코딩테스트다 with Python",
-      "풀스택 서버리스",
-      "2022 제 16회 젊은작가상 수상작품집",
-      "2023 제 16회 젊은작가상 수상작품집",
-      "2025 제 16회 젊은작가상 수상작품집",
-      "Essentail Grammar in Use with answers and eBook"
-    ]
+    state.bestBookList = (1...10).map {
+      BestSellerVO(isbn: "1234567890\($0)", title: "베스트셀러 \($0)")
+    }
     
     state.keywordList = ["데미안", "코딩테스트", "미씽"]
     

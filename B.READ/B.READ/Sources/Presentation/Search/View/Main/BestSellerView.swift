@@ -9,16 +9,15 @@ import SwiftUI
 
 // MARK: - (S)BestSellerView
 struct BestSellerView: View {
-  var bookList: [String]
-  var onTap: (Int, String) -> Void
+  var bookList: [BestSellerVO]
+  var onTap: (BestSellerVO) -> Void
   
   var body: some View {
     ScrollView {
       VStack(alignment: .leading, spacing: 8) {
-        ForEach(bookList.indices, id: \.self) { index in
-          let name = bookList[index]
-          BestSellerButton(rank: index + 1, name: name) {
-            onTap(index + 1, name)
+        ForEach(Array(bookList.enumerated()), id: \.element.id) { index, book in
+          BestSellerButton(rank: index + 1, name: book.title) {
+            onTap(book)
           }
         }
       } // : Vstack
