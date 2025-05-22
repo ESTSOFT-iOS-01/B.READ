@@ -8,12 +8,19 @@
 import SwiftUI
 
 struct BookDetailView: View {
+  @ObservedObject var viewModel: BookViewModel
+  
   var body: some View {
-    Text("BookDetailView입니다. 아직 아무것도 없습니다.")
-      .padding()
+    VStack {
+      Text(viewModel.text)
+        .padding()
+      
+      Text(viewModel.isbn)
+        .padding()
+    }
   }
 }
 
-#Preview {
-  BookDetailView()
-}
+//#Preview {
+//  BookDetailView()
+//}
