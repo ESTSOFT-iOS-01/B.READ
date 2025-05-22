@@ -15,7 +15,7 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
   
   enum AppScene: Hashable {
     case Barcode
-    case SearchResultBook
+    case SearchResultBook(isbn: String)
     case SearchResultRecord
   }
   
@@ -51,12 +51,12 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
   func buildPage(_ page: AppScene) -> some View {
     switch page {
     case .Barcode:
-      ScanView()
+      ScanView(viewModel: ScanViewModel(coordinator: self))
         .navigationBarBackButtonHidden(false)
-    case .SearchResultBook:
-      ScanView()
+    case let .SearchResultBook(isbn):
+      BookDetailView(viewModel: BookViewModel(coordinator: self, isbn: isbn))
     case .SearchResultRecord:
-      ScanView()
+      ScanView(viewModel: ScanViewModel(coordinator: self))
     }
   }
   
@@ -64,7 +64,7 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
   func buildSheet(_ sheet: Sheet) -> some View {
     switch sheet {
     case .CreateRecord:
-      ScanView()
+      ScanView(viewModel: ScanViewModel(coordinator: self))
     }
   }
 }
