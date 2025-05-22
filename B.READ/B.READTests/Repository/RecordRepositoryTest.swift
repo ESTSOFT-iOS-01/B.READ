@@ -36,6 +36,23 @@ struct RecordRepositoryTest {
     })
   }
   
+  @Test("Record Fetch Test")
+  func fetchRecord() async throws {
+    let record = DummyData.records[0]
+    try await recordRepository.createRecord(record)
+    
+    let fetchedRecord = try await recordRepository.fetchRecord(id: record.id)
+    #expect(record == fetchedRecord)
+  }
+  
+  @Test("Record Fetch Error Test - Data Not Found")
+  func fetchRecordDataNotFound() async throws {
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      try await recordRepository.fetchRecord(id: "111")
+    })
+  }
+  
+  
   @Test("Recent Reading Record Fetch Test")
   func fetchRecentReadingRecord() async throws {
     let fetchedRecords = DummyData.records
