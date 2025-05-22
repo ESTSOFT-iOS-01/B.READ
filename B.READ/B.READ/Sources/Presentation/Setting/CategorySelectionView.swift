@@ -46,8 +46,12 @@ private struct CategoryListView: View {
   
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 16) {
+      LazyVStack(alignment: .leading, spacing: 16) {
         ForEach(CategoryType.allCases, id: \.self) {
+          SelectionRow(selectedCategories: $selectedCategories, category: $0)
+          SelectionRow(selectedCategories: $selectedCategories, category: $0)
+          SelectionRow(selectedCategories: $selectedCategories, category: $0)
+          SelectionRow(selectedCategories: $selectedCategories, category: $0)
           SelectionRow(selectedCategories: $selectedCategories, category: $0)
         }
       }
@@ -65,7 +69,14 @@ private struct SelectionRow: View {
     selectedCategories.contains(category)
   }
   
+  init(selectedCategories: Binding<Set<CategoryType>>, category: CategoryType) {
+    self._selectedCategories = selectedCategories
+    self.category = category
+    print(category)
+  }
+  
   var body: some View {
+    
     Button {
       switch isSelected {
       case false:

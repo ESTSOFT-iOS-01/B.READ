@@ -46,13 +46,12 @@ struct NicknameView: View {
     .padding(.horizontal, 26)
     .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
     .onChange(of: nicknameText) { oldValue, newValue in
-      // 글자수 제한
+
       if newValue.count >= 13 {
         nicknameText = oldValue
         return
       }
       
-      // 유효성 검사
       let regex = /^[a-zA-Z0-9가-힣]*$/
       isValid = newValue.contains(regex)
     }
