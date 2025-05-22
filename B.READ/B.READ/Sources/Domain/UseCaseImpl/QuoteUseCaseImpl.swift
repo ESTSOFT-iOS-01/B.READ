@@ -60,11 +60,15 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     return try await quoteRepo.fetchAllQuotes()
   }
 
+  
+}
+
+extension QuoteUseCaseImpl {
   func validatePage(_ page: Int, forISBN isbn: String) async throws {
     let book = try await bookRepo.fetchBook(isbn: isbn)
-    let max = book.totalPages
-    guard (1...max).contains(page) else {
-      throw QuoteUseCaseError.invalidPage(max: max)
+    let maxPage = book.totalPages
+    guard (1...maxPage).contains(page) else {
+      throw QuoteUseCaseError.invalidPage(max: maxPage)
     }
   }
 }
