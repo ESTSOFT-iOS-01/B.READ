@@ -10,8 +10,8 @@ import SwiftUI
 
 enum DummyData {
   // MARK: - Books Dummy Data
-  static let dummyBooks: [String: Book] = [
-    "9791194368137": Book(
+  static let dummyBooks: [Book] = [
+    Book(
       isbn: "9791194368137",
       name: "워런 버핏 웨이",
       author: "로버트 해그스트롬",
@@ -19,7 +19,7 @@ enum DummyData {
       publishedAt: Calendar.current.date(from:DateComponents(year: 2025, month: 5, day: 21))!,
       totalPages: 500
     ),
-    "9791158510619": Book(
+    Book(
       isbn: "9791158510619",
       name: "타이탄의 도구들",
       author: "팀 페리스",
@@ -27,7 +27,7 @@ enum DummyData {
       publishedAt: Calendar.current.date(from:DateComponents(year: 2022, month: 6, day: 22))!,
       totalPages: 367
     ),
-    "9788937460586": Book(
+    Book(
       isbn: "9788937460586",
       name: "싯다르타",
       author: "헤르만헤세",
@@ -35,7 +35,7 @@ enum DummyData {
       publishedAt: Calendar.current.date(from: DateComponents(year: 2002, month: 1, day: 20))!,
       totalPages: 252
     ),
-    "9791162540640": Book(
+    Book(
       isbn: "9791162540640",
       name: "아주 작은 습관들",
       author: "제임스 클리어",
@@ -43,7 +43,7 @@ enum DummyData {
       publishedAt: Calendar.current.date(from: DateComponents(year: 2019, month: 2, day: 26))!,
       totalPages: 360
     ),
-    "9791192372730": Book(
+    Book(
       isbn: "9791192372730",
       name: "위버멘쉬",
       author: "프리드리히 니체",
@@ -51,7 +51,7 @@ enum DummyData {
       publishedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 14))!,
       totalPages: 260
     ),
-    "9788932473901": Book(
+    Book(
       isbn: "9788932473901",
       name: "이기적 유전자",
       author: "리처드 도킨스",
@@ -59,7 +59,7 @@ enum DummyData {
       publishedAt: Calendar.current.date(from: DateComponents(year: 2018, month: 10, day: 20))!,
       totalPages: 632
     ),
-    "9791194368175": Book(
+    Book(
       isbn: "9791194368175",
       name: "듀얼 브레인",
       author: "이선 몰릭",
