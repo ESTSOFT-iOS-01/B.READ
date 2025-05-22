@@ -56,7 +56,8 @@ struct NicknameView: View {
       let regex = /^[a-zA-Z0-9가-힣]*$/
       isValid = newValue.contains(regex)
     }
-    .onAppear {
+    .task {
+      await Task.yield()
       isFocused = true
     }
   }
