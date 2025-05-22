@@ -55,6 +55,8 @@ final class LibraryViewModel: ObservableObject {
         }
       }
     case .selectTab:
+      filterRecords()
+      sortDisplayRecords()
       return
     }
   }
