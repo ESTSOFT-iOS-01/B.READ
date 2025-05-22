@@ -33,9 +33,19 @@ actor RecordRepositoryImpl: RecordRepository {
       throw RepositoryError.fetchError
     }
   }
+  
+  func fetchRecord(id: String) async throws -> Record {
+    print("Impl: ", #function)
+    
+    guard let data = try findRecord(id: id) else {
+      throw RepositoryError.dataNotFound
+    }
+    return data.toEntity()
+  }
 
   func fetchRecentReadingRecord(count: Int) async throws -> [Record] {
     print("Impl: ", #function)
+    
     let predicate = #Predicate<RecordDTO> { $0.state == 1 }
     let sort = SortDescriptor(\RecordDTO.updatedAt, order: .reverse)
     var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
