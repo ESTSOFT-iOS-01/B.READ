@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 final class SearchViewModel: ObservableObject {
+  var coordinator: SearchCoordinator
   
   // MARK: - State
   struct SearchViewState {
@@ -32,6 +33,10 @@ final class SearchViewModel: ObservableObject {
   // 예시: 실제 구현에서는 UseCase 주입
   // @Dependency private var searchUseCase: SearchUseCase
   
+  init(coordinator: SearchCoordinator) {
+    self.coordinator = coordinator
+  }
+  
   // MARK: - Action
   enum Action {
     case onAppear
@@ -53,9 +58,9 @@ final class SearchViewModel: ObservableObject {
       loadDummyData()
       
     case .onTapBarcode:
-      print("바코드 인식 화면으로 전환")
+      coordinator.push(.Barcode)
       
-    case let .onTapBestSeller(rank, name):
+    case let .onTapBestSeller(_, name):
       state.searchText = name
       state.isSearchSubmitted = true
       appendKeyword(name)

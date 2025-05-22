@@ -14,43 +14,48 @@ struct SearchView: View {
   private let horizontalPadding: CGFloat = 24
   
   var body: some View {
-    VStack(alignment: .center, spacing: layoutSize) {
-      if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
-        logoView
-          .transition(.opacity)
-      }
-      
-      // 검색창은 한 개만 존재해야함
-      searchBarSection
-        .padding(
-          .top,
-          viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
-      
-      Group {
-        if viewModel.state.isSearchFocused {
-          RecentSearchView(viewModel: viewModel)
+    NavigationStack(path: $viewModel.coordinator.path) {
+      VStack(alignment: .center, spacing: layoutSize) {
+        if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
+          logoView
             .transition(.opacity)
-            .frame(maxHeight: .infinity, alignment: .top)
-            .padding(.horizontal, horizontalPadding)
-          
-        } else if viewModel.state.isSearchSubmitted {
-          SearchResultView(viewModel: viewModel)
-            .transition(.opacity)
-            .frame(maxHeight: .infinity, alignment: .top)
-          
-        } else {
-          bestSellerSection
-            .transition(.opacity)
-            .padding(.horizontal, horizontalPadding)
         }
+        
+        // 검색창은 한 개만 존재해야함
+        searchBarSection
+          .padding(
+            .top,
+            viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+        
+        Group {
+          if viewModel.state.isSearchFocused {
+            RecentSearchView(viewModel: viewModel)
+              .transition(.opacity)
+              .frame(maxHeight: .infinity, alignment: .top)
+              .padding(.horizontal, horizontalPadding)
+            
+          } else if viewModel.state.isSearchSubmitted {
+            SearchResultView(viewModel: viewModel)
+              .transition(.opacity)
+              .frame(maxHeight: .infinity, alignment: .top)
+            
+          } else {
+            bestSellerSection
+              .transition(.opacity)
+              .padding(.horizontal, horizontalPadding)
+          }
+        }
+        
       }
-      
-    }
-    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
-    .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
-    .onAppear {
-      viewModel.send(.onAppear)
+      .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+      .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
+      .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
+      .onAppear {
+        viewModel.send(.onAppear)
+      }
+      .navigationDestination(for: SearchAppScene.self) { scene in
+        viewModel.coordinator.buildPage(scene)
+      }
     }
   }
   
@@ -100,6 +105,6 @@ struct SearchView: View {
   }
 }
 
-#Preview {
-  SearchView(viewModel: SearchViewModel())
-}
+//#Preview {
+//  SearchView(viewModel: SearchViewModel())
+//}
