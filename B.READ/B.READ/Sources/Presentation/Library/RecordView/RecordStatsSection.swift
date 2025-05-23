@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)RecordStatsSection
 struct RecordStatsSection: View {
   
   let readState: ReadState
@@ -34,12 +35,10 @@ struct RecordStatsSection: View {
       VStack(alignment: .leading, spacing: 8) {
         Text("독서 기간")
           .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 0.95)
-        // TODO: - 독서 기간 컴포넌트 제작해서 넣기
-        //        recordPeriodView(start: viewModel.state.info?.record.period)
-        Rectangle()
-          .fill(.gray0)
+        
+        recordPeriodView()
           .frame(height: 38)
-          .frame(maxWidth: .infinity)
+          .background(.gray0)
           .cornerRadius(8)
       } // : VStack
       
@@ -49,5 +48,47 @@ struct RecordStatsSection: View {
           .frame(height: 28)
       }
     } // : VStack
+  }
+  
+  // MARK: - (F)recordPeriodView
+  //
+  @ViewBuilder
+  private func recordPeriodView() -> some View {
+    HStack(spacing: 8) {
+      switch period {
+      case (nil, nil):
+        Text("아직 독서를 시작하지 않았어요")
+          .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1.3)
+          .foregroundStyle(.green4)
+      case (let start, _):
+        HStack(spacing: 8) {
+          Text("시작")
+            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1.3)
+            .foregroundStyle(.green4)
+          Text(start!.string(format: .dotSeparated))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(.gray2)
+            .brStyleFont(
+              .pretendard(.regular, size: 14),
+              lineHeight: 1.3,
+              letterSpacing: -0.025
+            )
+          Text("종료")
+            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1.3)
+            .foregroundStyle(.green4)
+          Text(period.end?.string(format: .dotSeparated) ?? "")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(.gray2)
+            .brStyleFont(
+              .pretendard(.regular, size: 14),
+              lineHeight: 1.3,
+              letterSpacing: -0.025
+            )
+        }
+      }
+    } // : HStack
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .padding(.vertical, 8)
+    .padding(.horizontal, 16)
   }
 }
