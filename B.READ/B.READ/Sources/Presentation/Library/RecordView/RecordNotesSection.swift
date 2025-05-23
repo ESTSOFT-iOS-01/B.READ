@@ -34,11 +34,28 @@ struct RecordNotesSection: View {
     LazyVStack {
       switch cellType {
       case .memo:
-        memoCells()
+        ForEach(viewModel.state.memos) { memo in
+          MemoCell(
+            content: memo.content,
+            date: memo.createdAt,
+            startPage: memo.pages.0,
+            endPage: memo.pages.1
+          ) {
+            print("메모 메뉴 버튼 터치")
+            showMenuActionSheet = true
+          }
+        } // : ForEach
       case .quote:
-        quoteCells()
+        ForEach(viewModel.state.quotes) { quote in
+          QuoteCell(content: quote.content, page: quote.page, colorTone: .soft) {
+            print("문장 메뉴 버튼 터치")
+            showMenuActionSheet = true
+          }
+        } // : ForEach
       }
     } // : LazyVStcks
+    .frame(maxWidth: .infinity)
+    .padding(.horizontal, 8)
     .confirmationDialog(
       "메뉴를 선택하세요",
       isPresented: $showMenuActionSheet,
@@ -46,40 +63,6 @@ struct RecordNotesSection: View {
     ) {
       menuActionSheet(type: cellType)
     }
-  }
-  
-  // TODO: - memoCells랑 quoteCell를 하나로 합쳐보겠습니다.(2)
-  // MARK: - (F)memoCells
-  @ViewBuilder
-  private func memoCells() -> some View {
-    ForEach(viewModel.state.memos) { memo in
-      MemoCell(
-        content: memo.content,
-        date: memo.createdAt,
-        startPage: memo.pages.0,
-        endPage: memo.pages.1
-      ) {
-        print("메모 메뉴 버튼 터치")
-        showMenuActionSheet = true
-      }
-      .frame(maxWidth: .infinity)
-      .padding(.horizontal, 8)
-    } // : ForEach
-  }
-  
-  // MARK: - (F)quoteCells
-  @ViewBuilder
-  private func quoteCells() -> some View {
-    ForEach(viewModel.state.quotes) { quote in
-      QuoteCell(
-        content: quote.content,
-        page: quote.page,
-        colorTone: .soft
-      ) {
-        print("문장 메뉴 버튼 터치")
-        showMenuActionSheet = true
-      }
-    } // : ForEach
   }
   
   @ViewBuilder
