@@ -31,7 +31,7 @@ final class Coordinator<T: Hashable>: ObservableObject {
   }
   
   func push(_ path: T) {
-    guard paths.last != path else { return } // 같은 값이면 중복 push 방지
+    guard paths.last != path else { return }
     print("Before push: \(paths)")
     paths.append(path)
     print("After push: \(paths)")

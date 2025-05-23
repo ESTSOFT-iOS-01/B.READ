@@ -25,6 +25,7 @@ struct CustomCameraRepresentable: UIViewControllerRepresentable {
   internal func updateUIViewController(_ cameraViewController: CustomCameraController, context: Context) {
   }
   
+  
   internal func makeCoordinator() -> Coordinator {
     Coordinator(self, isbnNumber: $isbnNumber, noCamera: $noCamera)
   }
@@ -87,16 +88,35 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     setup()
   }
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    if !captureSession.isRunning {
+      DispatchQueue.global(qos: .background).async { [weak self] in
+        self?.captureSession.startRunning()
+      }
+    }
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    if captureSession.isRunning {
+      DispatchQueue.global(qos: .background).async { [weak self] in
+        self?.captureSession.stopRunning()
+      }
+    }
+  }
+  
+  deinit {
+    print("camera deinitialized")
+  }
+  
   private func setup() {
     setupCaptureSession()
     setupDevice()
     setupInputOutput()
     bindResetTrigger()
     setupPreviewLayer()
-    
-    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-      self?.captureSession.startRunning()
-    }
     
   }
   
