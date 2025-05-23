@@ -9,12 +9,6 @@ import SwiftUI
 
 // MARK: - (S)LibraryView
 struct LibraryView: View {
-  enum ViewState {
-    case willLoad // 데이터 로드 전
-    case loading // 데이터 로딩 중 - 로딩 인디케이트
-    case didLoad // 데이터 로드 후 - 데이터 유/무
-  }
-  // 뷰 상태(리스트, 그리드)
   enum RecordPresentType {
     case list
     case grid
@@ -29,9 +23,8 @@ struct LibraryView: View {
   
   @StateObject var viewModel: LibraryViewModel
   @State var recordPresentType: RecordPresentType = .list
-  @State var viewState: ViewState = .didLoad
   @State var selectedRecord: Record? = nil
-  
+
   
   private let layoutPadding: CGFloat = 16
   
@@ -74,9 +67,7 @@ struct LibraryView: View {
       .padding(.top, layoutPadding)
       .padding(.horizontal, 24)
       .onAppear {
-        viewState = .loading
         viewModel.send(.onAppear)
-        viewState = .didLoad
       }
     } // : NavigationStack
     .background(.backgroundDefault)
@@ -86,25 +77,15 @@ struct LibraryView: View {
   // TODO: - (2)그리드 뷰 추가
   private var recordView: some View {
     Group {
-      // TODO: - viewState에 따른 화면 구성
-      switch viewState {
-      case .willLoad:
-        Text("독서 기록을 가져오기 전이에요!.")
+      if viewModel.state.displayRecords.isEmpty {
+        Text("독서 기록이 없습니다.")
           .frame(maxWidth: .infinity, maxHeight: .infinity)
-      case .loading:
-        Text("독서 기록을 가져오고 있어요!.")
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-      case .didLoad:
-        if viewModel.state.displayRecords.isEmpty {
-          Text("독서 기록이 없습니다.")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else {
-          switch recordPresentType {
-          case .list:
-            LibraryListView(records: viewModel.state.displayRecords)
-          case .grid:
-            LibraryGridView()
-          }
+      } else {
+        switch recordPresentType {
+        case .list:
+          LibraryListView(records: viewModel.state.displayRecords)
+        case .grid:
+          LibraryGridView()
         }
       }
     } // : Group
