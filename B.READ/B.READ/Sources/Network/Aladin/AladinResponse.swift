@@ -96,7 +96,7 @@ struct ItemDTO: Decodable {
 }
 
 // 베스트셀러 API
-struct BestSellerListAPI {
+struct BestSellerListDTO: Decodable {
   let item: [BestSellerDTO]
 }
 
