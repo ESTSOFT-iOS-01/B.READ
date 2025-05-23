@@ -9,7 +9,8 @@ import SwiftUI
 
 // MARK: - (S)ScanView
 struct ScanView: View {
-  @ObservedObject var viewModel: ScanViewModel
+  @StateObject var viewModel: ScanViewModel
+  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
 
   var body: some View {
     VStack {
@@ -47,12 +48,12 @@ struct ScanView: View {
     .navigationBarTitleDisplayMode(.inline)
     .onChange(of: viewModel.isbnNumber, { oldValue, newValue in
       if oldValue != newValue && !newValue.isEmpty {
-        viewModel.coordinator.push(.SearchResultBook(isbn: viewModel.isbnNumber))
+        coordinator.push(.searchBook(isbn: viewModel.isbnNumber))
       }
     })
     .alert("경고", isPresented: $viewModel.noCamera) {
       Button("직접 검색하기", role: .cancel) {
-        viewModel.coordinator.pop()
+        coordinator.pop()
       }
     } message: {
       Text("카메라를 사용할 수 없습니다.")

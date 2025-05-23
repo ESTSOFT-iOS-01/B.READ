@@ -9,8 +9,9 @@ import SwiftUI
 
 // MARK: - (S)SearchView
 struct SearchView: View {
-  @ObservedObject var viewModel: SearchViewModel
-  // 코디네이터를 갖게
+  @StateObject var viewModel: SearchViewModel
+  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
+  
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
   
@@ -19,7 +20,7 @@ struct SearchView: View {
   }
   
   var body: some View {
-    NavigationStack(path: $viewModel.coordinator.path) {
+    NavigationStack(path: $coordinator.paths) {
       VStack(alignment: .center, spacing: layoutSize) {
         if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
           logoView
@@ -57,8 +58,8 @@ struct SearchView: View {
       .onAppear {
         viewModel.send(.onAppear)
       }
-      .navigationDestination(for: SearchAppScene.self) { scene in
-        viewModel.coordinator.buildPage(scene)
+      .navigationDestination(for: SearchRoute.self) { route in
+        coordinator.buildView(for: route)
       }
     }
   }
@@ -83,7 +84,7 @@ struct SearchView: View {
       
       if viewModel.state.searchText.isEmpty {
         SearchButton {
-          viewModel.send(.onTapBarcode)
+          coordinator.push(.barcode)
         }
       } else {
         SearchButton(style: .close) {
@@ -103,7 +104,7 @@ struct SearchView: View {
         .foregroundStyle(.black)
       
       BestSellerView(bookList: viewModel.state.bestBookList) { book in
-        viewModel.send(.onTapBestSeller(book))
+        coordinator.push(.searchBook(isbn: book.isbn))
       }
     } // : vstack - best seller
   }

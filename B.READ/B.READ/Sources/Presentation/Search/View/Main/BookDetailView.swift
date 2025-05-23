@@ -9,6 +9,7 @@ import SwiftUI
 
 struct BookDetailView: View {
   @ObservedObject var viewModel: BookViewModel
+  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
   
   var body: some View {
     VStack {
@@ -19,7 +20,7 @@ struct BookDetailView: View {
         .padding()
     }
     .onDisappear {
-      viewModel.coordinator.pop()
+      coordinator.pop()
     }
   }
 }

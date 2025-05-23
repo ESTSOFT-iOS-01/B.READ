@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)SearchResultView
 struct SearchResultView: View {
   @ObservedObject var viewModel: SearchViewModel
+  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
   // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정?
   
   let tabs = [
@@ -43,6 +44,7 @@ struct SearchResultView: View {
 
 // MARK: - (S)SearchTabContentView
 struct SearchTabContentView: View {
+  @EnvironmentObject private var coordinator: Coordinator<SearchRoute>
   let state: SearchViewModel.SearchViewState
   let send: (SearchViewModel.Action) -> Void
   
@@ -53,7 +55,9 @@ struct SearchTabContentView: View {
           items: state.bookResults,
           layoutPadding: 24,
           listPadding: 16,
-          onTap: { send(.onTapBook($0.isbn)) },
+          onTap: {
+            coordinator.push(.searchBook(isbn: $0.isbn))
+          },
           content: { book in
             BookSearchCell(data: book)
           }
@@ -64,7 +68,9 @@ struct SearchTabContentView: View {
           items: state.recordResults,
           layoutPadding: 24,
           listPadding: 16,
-          onTap: { send(.onTapRecord($0.id)) },
+          onTap: {
+            coordinator.push(.searchRecord(id: $0.id))
+          },
           content: { record in
             RecordSearchCell(data: record)
           }
