@@ -9,15 +9,12 @@ import Foundation
 import SwiftUI
 
 final class BookViewModel: ObservableObject {
-  var coordinator: SearchCoordinator
   var isbn: String
   
   @Published var text: String = "BookDetailView입니다. 아직 아무것도 없습니다."
   
-  init(coordinator: SearchCoordinator, isbn: String) {
-    self.coordinator = coordinator
+  init(isbn: String) {
     self.isbn = isbn
-    print("BookViewModel \(ObjectIdentifier(coordinator))")
   }
   
   

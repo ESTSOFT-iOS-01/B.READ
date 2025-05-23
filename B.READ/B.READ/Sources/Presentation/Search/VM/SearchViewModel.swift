@@ -9,8 +9,6 @@ import Foundation
 import SwiftUI
 
 final class SearchViewModel: ObservableObject {
-  var coordinator: SearchCoordinator
-  
   // MARK: - State
   struct SearchViewState {
     var searchText: String = ""
@@ -33,19 +31,12 @@ final class SearchViewModel: ObservableObject {
   // 예시: 실제 구현에서는 UseCase 주입
   // @Dependency private var searchUseCase: SearchUseCase
   
-  init(coordinator: SearchCoordinator) {
-    self.coordinator = coordinator
-  }
-  
   // MARK: - Action
   enum Action {
     case onAppear
-    case onTapBarcode
     case onTapClear
-    case onTapBestSeller(BestSellerVO)
     case onSubmitSearch
     case onTapTab(Int)
-    case onTapBook(String)
     case onTapRecord(String)
     case deleteKeyword(at: Int)
     case deleteAllKeywords
@@ -56,12 +47,6 @@ final class SearchViewModel: ObservableObject {
     switch action {
     case .onAppear:
       loadDummyData()
-      
-    case .onTapBarcode:
-      coordinator.push(.Barcode)
-      
-    case let .onTapBestSeller(book):
-      coordinator.push(.SearchResultBook(isbn: book.isbn))
       
     case .onTapClear:
       state.searchText = ""
@@ -78,9 +63,6 @@ final class SearchViewModel: ObservableObject {
       }
     case let .onTapTab(index):
       state.selectedTabIndex = index
-      
-    case let .onTapBook(isbn):
-      coordinator.push(.SearchResultBook(isbn: isbn))
       
     case let .onTapRecord(id):
       print("기록 \(id) 선택됨")

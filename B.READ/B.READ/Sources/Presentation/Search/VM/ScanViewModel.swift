@@ -9,14 +9,7 @@ import Foundation
 import SwiftUI
 
 final class ScanViewModel: ObservableObject {
-  var coordinator: SearchCoordinator
-  
   @Published var noCamera: Bool = false
   @Published var isbnNumber: String = ""
-  
-  init(coordinator: SearchCoordinator) {
-    self.coordinator = coordinator
-    
-    print("ScanViewModel \(ObjectIdentifier(coordinator))")
-  }
+
 }
