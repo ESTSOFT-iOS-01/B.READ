@@ -73,14 +73,14 @@ struct LibraryListCell: View {
     HStack(spacing: 12) {
       switch record.state {
       case .toRead: // 기대지수
-        propertyView(LibraryConstants.Icon.heart, "\(record.heartCount)")
+        PropertyView(LibraryConstants.Icon.heart, "\(record.heartCount)")
       case .reading: // 독서진행률
-        propertyView(LibraryConstants.Icon.progress, "\(record.percent)%")
+        PropertyView(LibraryConstants.Icon.progress, "\(record.percent)", .percent)
       case .completed: // 평점
-        propertyView(LibraryConstants.Icon.star, "\(record.starCount)")
+        PropertyView(LibraryConstants.Icon.star, "\(record.starCount)")
       }
-      propertyView(LibraryConstants.Icon.memo, "\(record.starCount)개") // 메모
-      propertyView(LibraryConstants.Icon.quote, "\(record.starCount)개") // 문장
+      PropertyView(LibraryConstants.Icon.memo, "\(record.starCount)", .count) // 메모
+      PropertyView(LibraryConstants.Icon.quote, "\(record.starCount)", .count) // 문장
     } // : HStack
   }
   
@@ -97,23 +97,5 @@ struct LibraryListCell: View {
         Text("\(startDay) ~ \(endDay)")
       }
     } // : VStack
-  }
-  
-  // MARK: - (F)propertyView
-  // TODO: - (1)공통컴포넌트로 분리
-  @ViewBuilder
-  public func propertyView(_ iconName: String, _ content: String) -> some View {
-    HStack(spacing: 4) {
-      Image(systemName: iconName)
-        .resizable()
-        .aspectRatio(contentMode: .fit)
-        .frame(width: 16, height: 16, alignment: .center)
-      
-      Text(content)
-        .brStyleFont(.pretendard(.medium, size: 14), lineHeight: 1.0)
-        .lineLimit(1)
-        .truncationMode(.tail)
-    }
-    .foregroundStyle(.orange9)
   }
 }
