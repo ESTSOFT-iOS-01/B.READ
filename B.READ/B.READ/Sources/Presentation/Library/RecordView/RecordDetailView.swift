@@ -149,8 +149,9 @@ struct RecordDetailView: View {
   }
 }
 
-//#Preview {
-//  let record = DummyData.dummyRecords[0]
-//  let viewModel = RecordDetailViewModel(recordID: record.id, isbn: record.isbn)
-////  RecordDetailView(viewModel: viewModel)
-//}
+#Preview {
+  RecordDetailView(viewModel: .init(
+    recordID: DummyData.dummyRecords[2].id,
+    isbn: DummyData.dummyRecords[2].isbn
+  ))
+}

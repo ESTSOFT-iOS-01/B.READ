@@ -104,3 +104,10 @@ struct RecordNotesSection: View {
     Button("취소", role: .cancel) { }
   }
 }
+
+#Preview {
+  RecordDetailView(viewModel: .init(
+    recordID: DummyData.dummyRecords[2].id,
+    isbn: DummyData.dummyRecords[2].isbn
+  ))
+}

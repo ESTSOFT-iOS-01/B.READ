@@ -92,3 +92,10 @@ struct RecordStatsSection: View {
     .padding(.horizontal, 16)
   }
 }
+
+#Preview {
+  RecordDetailView(viewModel: .init(
+    recordID: DummyData.dummyRecords[2].id,
+    isbn: DummyData.dummyRecords[2].isbn
+  ))
+}
