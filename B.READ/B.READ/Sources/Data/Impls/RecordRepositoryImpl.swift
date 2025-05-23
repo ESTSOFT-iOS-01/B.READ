@@ -10,7 +10,7 @@ import SwiftData
 
 @ModelActor
 actor RecordRepositoryImpl: RecordRepository {
-  func createRecord(_ record: Record) async throws {
+  func createRecord(_ record: Record) throws {
     print("Impl: ", #function)
     
     if let _ = try findRecord(id: record.id) {
@@ -21,7 +21,7 @@ actor RecordRepositoryImpl: RecordRepository {
     modelContext.insert(model)
   }
 
-  func fetchAllRecord() async throws -> [Record] {
+  func fetchAllRecord() throws -> [Record] {
     print("Impl: ", #function)
     
     let descriptor = FetchDescriptor<RecordDTO>()
@@ -34,7 +34,7 @@ actor RecordRepositoryImpl: RecordRepository {
     }
   }
 
-  func fetchRecentReadingRecord(count: Int) async throws -> [Record] {
+  func fetchRecentReadingRecord(count: Int) throws -> [Record] {
     print("Impl: ", #function)
     let predicate = #Predicate<RecordDTO> { $0.state == 1 }
     let sort = SortDescriptor(\RecordDTO.updatedAt, order: .reverse)
@@ -49,7 +49,7 @@ actor RecordRepositoryImpl: RecordRepository {
     }
   }
 
-  func updateRecord(_ record: Record) async throws {
+  func updateRecord(_ record: Record) throws {
     print("Impl: ", #function)
     
     guard let data = try findRecord(id: record.id) else {
@@ -73,7 +73,7 @@ actor RecordRepositoryImpl: RecordRepository {
     data.updatedAt = record.updatedAt
   }
 
-  func deleteRecord(_ id: String) async throws {
+  func deleteRecord(_ id: String) throws {
     print("Impl: ", #function)
     
     guard let data = try findRecord(id: id) else {
