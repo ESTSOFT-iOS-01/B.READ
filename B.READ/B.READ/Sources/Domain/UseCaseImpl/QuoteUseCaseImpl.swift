@@ -7,16 +7,16 @@
 
 
 final class QuoteUseCaseImpl: QuoteUseCase {
-  private let quoteRepo: QuoteRepository
-  private let bookRepo: BookRepository
+  private let quoteRepository: QuoteRepository
+  private let bookRepository: BookRepository
 
   /// 생성자
   /// - Parameters:
   ///   - quoteRepo: 문장 저장소 구현체
   ///   - bookRepo: 도서 저장소 구현체(페이지 검증용)
-  init(quoteRepo: QuoteRepository, bookRepo: BookRepository) {
-    self.quoteRepo = quoteRepo
-    self.bookRepo = bookRepo
+  init(quoteRepository: QuoteRepository, bookRepository: BookRepository) {
+    self.quoteRepository = quoteRepository
+    self.bookRepository = bookRepository
   }
 
   func addQuote(_ quote: Quote) async throws {
@@ -28,7 +28,7 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     // 페이지 범위 검증
     try await validatePage(quote.page, forISBN: quote.isbn)
     // 저장 수행
-    try await quoteRepo.createQuote(quote)
+    try await quoteRepository.createQuote(quote)
   }
 
   func updateQuote(_ quote: Quote) async throws {
@@ -40,24 +40,24 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     // 페이지 범위 검증
     try await validatePage(quote.page, forISBN: quote.isbn)
     // 업데이트 수행
-    try await quoteRepo.updateQuote(quote)
+    try await quoteRepository.updateQuote(quote)
   }
 
   func removeQuote(id: String) async throws {
     // 삭제 수행
-    try await quoteRepo.deleteQuote(id: id)
+    try await quoteRepository.deleteQuote(id: id)
   }
 
   func fetchQuote(id: String) async throws -> Quote {
-    return try await quoteRepo.fetchQuote(id: id)
+    return try await quoteRepository.fetchQuote(id: id)
   }
 
   func fetchQuotes(isbn: String) async throws -> [Quote] {
-    return try await quoteRepo.fetchQuotes(isbn: isbn)
+    return try await quoteRepository.fetchQuotes(isbn: isbn)
   }
 
   func fetchAllQuotes() async throws -> [Quote] {
-    return try await quoteRepo.fetchAllQuotes()
+    return try await quoteRepository.fetchAllQuotes()
   }
 
   
@@ -65,7 +65,7 @@ final class QuoteUseCaseImpl: QuoteUseCase {
 
 extension QuoteUseCaseImpl {
   func validatePage(_ page: Int, forISBN isbn: String) async throws {
-    let book = try await bookRepo.fetchBook(isbn: isbn)
+    let book = try await bookRepository.fetchBook(isbn: isbn)
     let maxPage = book.totalPages
     guard (1...maxPage).contains(page) else {
       throw QuoteUseCaseError.invalidPage(max: maxPage)

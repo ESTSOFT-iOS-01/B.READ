@@ -10,28 +10,28 @@ import Foundation
 import Testing
 
 struct QuoteUseCaseTest {
-  private let quoteRepo: QuoteRepository
-  private let bookRepo: BookRepository
-  private var useCase: QuoteUseCase
+  private let quoteRepository: QuoteRepository
+  private let bookRepository: BookRepository
+  private let useCase: QuoteUseCase
   
   init() {
-    self.quoteRepo = QuoteRepositoryStub()
-    self.bookRepo  = BookRepositoryStub()
-    self.useCase = QuoteUseCaseImpl(quoteRepo: quoteRepo, bookRepo: bookRepo)
+    self.quoteRepository = QuoteRepositoryStub()
+    self.bookRepository  = BookRepositoryStub()
+    self.useCase = QuoteUseCaseImpl(quoteRepository: quoteRepository, bookRepository: bookRepository)
   }
   
   @Test("문장 추가 성공 테스트")
   func 문장_추가_성공() async throws {
     // given: 테스트용 도서 등록
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
     
     // when
     try await useCase.addQuote(DummyData.quote)
     
     // then
-    let stored = try await quoteRepo.fetchQuote(id: DummyData.quote.id)
+    let stored = try await quoteRepository.fetchQuote(id: DummyData.quote.id)
     #expect(stored == DummyData.quote)
   }
   
@@ -39,7 +39,7 @@ struct QuoteUseCaseTest {
   func 문장_추가_빈내용_오류() async throws {
     // given
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
     var q = DummyData.quote
     q.content = "   "
@@ -54,7 +54,7 @@ struct QuoteUseCaseTest {
   func 문장_추가_페이지범위초과_오류() async throws {
     // given
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
     var q = DummyData.quote
     let max = DummyData.books.first { $0.isbn == q.isbn }!.totalPages
@@ -70,9 +70,9 @@ struct QuoteUseCaseTest {
   func 문장_수정_성공() async throws {
     // given: 도서 및 문장 등록
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
-    try await quoteRepo.createQuote(DummyData.quote)
+    try await quoteRepository.createQuote(DummyData.quote)
     
     var updated = DummyData.quote
     updated.page    = 5
@@ -82,7 +82,7 @@ struct QuoteUseCaseTest {
     try await useCase.updateQuote(updated)
     
     // then
-    let fetched = try await quoteRepo.fetchQuote(id: updated.id)
+    let fetched = try await quoteRepository.fetchQuote(id: updated.id)
     #expect(fetched == updated)
   }
   
@@ -90,7 +90,7 @@ struct QuoteUseCaseTest {
   func 문장_수정_빈내용_오류() async throws {
     // given
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
     var updated = DummyData.quote
     updated.content = ""
@@ -104,21 +104,21 @@ struct QuoteUseCaseTest {
   @Test("문장 삭제 성공 테스트")
   func 문장_삭제_성공() async throws {
     // given
-    try await quoteRepo.createQuote(DummyData.quote)
+    try await quoteRepository.createQuote(DummyData.quote)
     
     // when
     try await useCase.removeQuote(id: DummyData.quote.id)
     
     // then
     await #expect(throws: RepositoryError.dataNotFound, performing: {
-      _ = try await quoteRepo.fetchQuote(id: DummyData.quote.id)
+      _ = try await quoteRepository.fetchQuote(id: DummyData.quote.id)
     })
   }
   
   @Test("단일 문장 조회 테스트")
   func 단일_문장_조회() async throws {
     // given
-    try await quoteRepo.createQuote(DummyData.quote)
+    try await quoteRepository.createQuote(DummyData.quote)
     
     // when
     let fetched = try await useCase.fetchQuote(id: DummyData.quote.id)
@@ -136,8 +136,8 @@ struct QuoteUseCaseTest {
       content: "다른 문장",
       page: 1
     )
-    try await quoteRepo.createQuote(DummyData.quote)
-    try await quoteRepo.createQuote(other)
+    try await quoteRepository.createQuote(DummyData.quote)
+    try await quoteRepository.createQuote(other)
     
     // when
     let list = try await useCase.fetchQuotes(isbn: DummyData.quote.isbn)
@@ -155,8 +155,8 @@ struct QuoteUseCaseTest {
       content: "X",
       page: 1
     )
-    try await quoteRepo.createQuote(DummyData.quote)
-    try await quoteRepo.createQuote(another)
+    try await quoteRepository.createQuote(DummyData.quote)
+    try await quoteRepository.createQuote(another)
     
     // when
     let all = try await useCase.fetchAllQuotes()
@@ -169,7 +169,7 @@ struct QuoteUseCaseTest {
   func 페이지_유효_범위_테스트() async throws {
     // given
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
     
     // when
@@ -180,7 +180,7 @@ struct QuoteUseCaseTest {
   func 페이지_범위_초과_오류() async throws {
     // given
     for book in DummyData.books {
-      try await bookRepo.createBook(book)
+      try await bookRepository.createBook(book)
     }
     let max = DummyData.books.first { $0.isbn == DummyData.quote.isbn }!.totalPages
     

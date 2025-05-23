@@ -74,7 +74,7 @@ protocol QuoteUseCase {
 }
 
 /// `QuoteUseCase` 수행 중 발생할 수 있는 비즈니스 검증 오류를 정의합니다.
-enum QuoteUseCaseError: LocalizedError {
+enum QuoteUseCaseError: LocalizedError, Equatable {
   /// 문장 내용이 빈 문자열인 경우
   case emptyContent
   /// 페이지 번호가 유효 범위를 벗어나는 경우
