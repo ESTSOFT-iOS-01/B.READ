@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)SearchResultView
 struct SearchResultView: View {
   @ObservedObject var viewModel: SearchViewModel
+  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
   // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정?
   
   let tabs = [
@@ -33,7 +34,7 @@ struct SearchResultView: View {
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
   
-  // TODO : 탭 전환 시 스크롤 위치 기억하게 만들기 ScrollReader?
+  // TODO : 이상한 상황이다...원래 유지되어야 정상임 ㅠ
 }
 
 #Preview {
@@ -43,6 +44,7 @@ struct SearchResultView: View {
 
 // MARK: - (S)SearchTabContentView
 struct SearchTabContentView: View {
+  @EnvironmentObject private var coordinator: Coordinator<SearchRoute>
   let state: SearchViewModel.SearchViewState
   let send: (SearchViewModel.Action) -> Void
   
@@ -53,7 +55,9 @@ struct SearchTabContentView: View {
           items: state.bookResults,
           layoutPadding: 24,
           listPadding: 16,
-          onTap: { send(.onTapBook($0.isbn)) },
+          onTap: {
+            coordinator.push(.searchBook(isbn: $0.isbn))
+          },
           content: { book in
             BookSearchCell(data: book)
           }
@@ -64,7 +68,9 @@ struct SearchTabContentView: View {
           items: state.recordResults,
           layoutPadding: 24,
           listPadding: 16,
-          onTap: { send(.onTapRecord($0.id)) },
+          onTap: {
+            coordinator.push(.searchRecord(id: $0.id))
+          },
           content: { record in
             RecordSearchCell(data: record)
           }
@@ -85,8 +91,8 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
   
   var body: some View {
     ScrollView {
-      VStack(spacing: 0) {
-        ForEach(Array(items.enumerated()), id: \.1.id) { index, item in
+      LazyVStack(spacing: 0) {
+        ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
           content(item)
             .padding(.horizontal, layoutPadding)
             .onTapGesture {

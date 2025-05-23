@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+struct BestSellerVO {
+  let isbn: String
+  let title: String
+}
+
+extension BestSellerVO: Identifiable {
+  var id: String { isbn }
+}
+
 struct BookVO {
   let isbn: String
   let coverImage: Image

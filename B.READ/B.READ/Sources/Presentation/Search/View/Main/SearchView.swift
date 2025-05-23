@@ -9,49 +9,61 @@ import SwiftUI
 
 // MARK: - (S)SearchView
 struct SearchView: View {
-  @ObservedObject var viewModel: SearchViewModel
+  @StateObject var viewModel: SearchViewModel
+  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
+  
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
   
+  init(viewModel: SearchViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
+  }
+  
   var body: some View {
-    VStack(alignment: .center, spacing: layoutSize) {
-      if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
-        logoView
-          .transition(.opacity)
-      }
-      
-      // 검색창은 한 개만 존재해야함
-      searchBarSection
-        .padding(
-          .top,
-          viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
-      
-      Group {
-        if viewModel.state.isSearchFocused {
-          RecentSearchView(viewModel: viewModel)
+    NavigationStack(path: $coordinator.paths) {
+      VStack(alignment: .center, spacing: layoutSize) {
+        if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
+          logoView
             .transition(.opacity)
-            .frame(maxHeight: .infinity, alignment: .top)
-            .padding(.horizontal, horizontalPadding)
-          
-        } else if viewModel.state.isSearchSubmitted {
-          SearchResultView(viewModel: viewModel)
-            .transition(.opacity)
-            .frame(maxHeight: .infinity, alignment: .top)
-          
-        } else {
-          bestSellerSection
-            .transition(.opacity)
-            .padding(.horizontal, horizontalPadding)
+        }
+        
+        // 검색창은 한 개만 존재해야함
+        searchBarSection
+          .padding(
+            .top,
+            viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+        
+        Group {
+          if viewModel.state.isSearchFocused {
+            RecentSearchView(viewModel: viewModel)
+              .transition(.opacity)
+              .frame(maxHeight: .infinity, alignment: .top)
+              .padding(.horizontal, horizontalPadding)
+            
+          } else if viewModel.state.isSearchSubmitted {
+            SearchResultView(viewModel: viewModel)
+              .transition(.opacity)
+              .frame(maxHeight: .infinity, alignment: .top)
+            
+          } else {
+            bestSellerSection
+              .environmentObject(coordinator)
+              .transition(.opacity)
+              .padding(.horizontal, horizontalPadding)
+          }
         }
       }
-      
+      .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+      .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
+      .navigationDestination(for: SearchRoute.self) { route in
+        coordinator.buildView(for: route)
+      }
     }
-    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
     .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
     .onAppear {
       viewModel.send(.onAppear)
     }
+
   }
   
   // MARK: - (S)logoView
@@ -74,7 +86,7 @@ struct SearchView: View {
       
       if viewModel.state.searchText.isEmpty {
         SearchButton {
-          viewModel.send(.onTapBarcode)
+          coordinator.push(.barcode)
         }
       } else {
         SearchButton(style: .close) {
@@ -93,13 +105,13 @@ struct SearchView: View {
                      letterSpacing: -0.025)
         .foregroundStyle(.black)
       
-      BestSellerView(bookList: viewModel.state.bestBookList) { rank, name in
-        viewModel.send(.onTapBestSeller(rank: rank, name: name))
+      BestSellerView(bookList: viewModel.state.bestBookList) { book in
+        coordinator.push(.searchBook(isbn: book.isbn))
       }
     } // : vstack - best seller
   }
 }
 
-#Preview {
-  SearchView(viewModel: SearchViewModel())
-}
+//#Preview {
+//  SearchView(viewModel: SearchViewModel())
+//}

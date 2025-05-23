@@ -10,7 +10,7 @@ import SwiftData
 
 @ModelActor
 actor UserInfoRepositoryImpl: UserInfoRepository {
-  func createUserInfo(_ userInfo: UserInfo) async throws {
+  func createUserInfo(_ userInfo: UserInfo) throws {
     print("Impl: ", #function)
     
     if let _ = try findUserInfo() {
@@ -21,7 +21,7 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     modelContext.insert(model)
   }
   
-  func fetchUserInfo() async throws -> UserInfo {
+  func fetchUserInfo() throws -> UserInfo {
     print("Impl: ", #function)
     
     guard let data = try findUserInfo() else {
@@ -31,7 +31,7 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     return data.toEntity()
   }
   
-  func updateUserInfo(_ userInfo: UserInfo) async throws {
+  func updateUserInfo(_ userInfo: UserInfo) throws {
     print("Impl: ", #function)
     
     guard let data = try findUserInfo() else {
@@ -97,7 +97,7 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     }
   }
   
-  func deleteUserInfo() async throws {
+  func deleteUserInfo() throws {
     print("Impl: ", #function)
     
     guard let data = try findUserInfo() else {
