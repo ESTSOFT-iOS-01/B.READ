@@ -16,6 +16,7 @@ enum SearchRoute: Hashable {
 enum OnboardingRoute: Hashable {
   case insertNickname
   case selectCategory
+  case mainTabBar
 }
 
 //@MainActor
@@ -80,6 +81,8 @@ extension Coordinator where T == OnboardingRoute {
       NicknameView()
     case .selectCategory:
       CategorySelectionView()
+    case .mainTabBar:
+      MainTabView()
     }
   }
 }
