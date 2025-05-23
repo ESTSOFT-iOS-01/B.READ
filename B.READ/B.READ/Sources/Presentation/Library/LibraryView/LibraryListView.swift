@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct LibraryListView: View {
-  let records: [LibraryRecordVO]
-  @State var selectedRecord: LibraryRecordVO? = nil
+  private let records: [LibraryRecordVO]
+  @State var selectedRecord: LibraryRecordVO?
+  
+  init(records: [LibraryRecordVO], selectedRecord: LibraryRecordVO? = nil) {
+    self.records = records
+    self.selectedRecord = selectedRecord
+  }
   
   var body: some View {
     List {

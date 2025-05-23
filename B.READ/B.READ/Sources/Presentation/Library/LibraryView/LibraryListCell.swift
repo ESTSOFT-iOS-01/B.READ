@@ -10,8 +10,12 @@ import SwiftUI
 // MARK: - (S)LibraryListCell
 struct LibraryListCell: View {
   
-  var record: LibraryRecordVO
+  private var record: LibraryRecordVO
   private let layoutPadding: CGFloat = 24
+  
+  init(record: LibraryRecordVO) {
+    self.record = record
+  }
   
   var body: some View {
     HStack(spacing: 0) {

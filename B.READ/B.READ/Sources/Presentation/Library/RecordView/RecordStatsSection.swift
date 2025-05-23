@@ -10,10 +10,25 @@ import SwiftUI
 // MARK: - (S)RecordStatsSection
 struct RecordStatsSection: View {
   
-  let readState: ReadState
-  let period: (start: Date?, end: Date?)
-  let currentPage: Int
-  let totalPage: Int
+  private let readState: ReadState
+  private let period: (start: Date?, end: Date?)
+  private let currentPage: Int
+  private let totalPage: Int
+  
+  private let contentFontSize: CGFloat = 14
+  private let layoutPadding: CGFloat = 8
+  
+  init(
+    readState: ReadState,
+    period: (start: Date?, end: Date?),
+    currentPage: Int,
+    totalPage: Int
+  ) {
+    self.readState = readState
+    self.period = period
+    self.currentPage = currentPage
+    self.totalPage = totalPage
+  }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
@@ -32,9 +47,12 @@ struct RecordStatsSection: View {
       .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
       
       // 독서 기간
-      VStack(alignment: .leading, spacing: 8) {
+      VStack(alignment: .leading, spacing: layoutPadding) {
         Text("독서 기간")
-          .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 0.95)
+          .brStyleFont(
+            .pretendard(.semiBold, size: contentFontSize),
+            lineHeight: 0.95
+          )
         
         recordPeriodView()
           .frame(height: 38)
@@ -54,33 +72,42 @@ struct RecordStatsSection: View {
   //
   @ViewBuilder
   private func recordPeriodView() -> some View {
-    HStack(spacing: 8) {
+    HStack(spacing: layoutPadding) {
       switch period {
       case (nil, nil):
         Text("아직 독서를 시작하지 않았어요")
-          .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1.3)
+          .brStyleFont(
+            .pretendard(.semiBold, size: contentFontSize),
+            lineHeight: 1.3
+          )
           .foregroundStyle(.green4)
       case (let start, _):
-        HStack(spacing: 8) {
+        HStack(spacing: layoutPadding) {
           Text("시작")
-            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1.3)
+            .brStyleFont(
+              .pretendard(.semiBold, size: contentFontSize),
+              lineHeight: 1.3
+            )
             .foregroundStyle(.green4)
           Text(start!.string(format: .dotSeparated))
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundStyle(.gray2)
             .brStyleFont(
-              .pretendard(.regular, size: 14),
+              .pretendard(.regular, size: contentFontSize),
               lineHeight: 1.3,
               letterSpacing: -0.025
             )
           Text("종료")
-            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1.3)
+            .brStyleFont(
+              .pretendard(.semiBold, size: contentFontSize),
+              lineHeight: 1.3
+            )
             .foregroundStyle(.green4)
           Text(period.end?.string(format: .dotSeparated) ?? "")
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundStyle(.gray2)
             .brStyleFont(
-              .pretendard(.regular, size: 14),
+              .pretendard(.regular, size: contentFontSize),
               lineHeight: 1.3,
               letterSpacing: -0.025
             )
@@ -88,7 +115,7 @@ struct RecordStatsSection: View {
       }
     } // : HStack
     .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.vertical, 8)
+    .padding(.vertical, layoutPadding)
     .padding(.horizontal, 16)
   }
 }
