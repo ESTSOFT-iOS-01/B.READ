@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
-//  @State private var searchCoordinator = SearchCoordinator()
-  // tabbarcoordinator
-  
+  @State private var searchCoordinator = Coordinator<SearchRoute>()
   @State private var selectedTab: Tab = .home
   
   enum Tab {
@@ -26,14 +24,10 @@ struct MainTabView: View {
         }
         .tag(Tab.home)
       
-      NavigationStack(path: $searchCoordinator.path) {
-        SearchView(viewModel: ????)
-          .navigationDestination(for: SearchAppScene.self) {
-            searchCoordinator.buildPage($0)
-          }
-      }
-      .tabItem { Label("검색", systemImage: "magnifyingglass") }
-      .tag(Tab.search)
+      SearchView(viewModel: SearchViewModel())
+        .environmentObject(searchCoordinator)
+        .tabItem { Label("검색", systemImage: "magnifyingglass") }
+        .tag(Tab.search)
       
       LibraryView(viewModel: LibraryViewModel())
         .tabItem {
