@@ -49,6 +49,7 @@ final class LibraryViewModel: ObservableObject {
       Task {
         await loadRecords()
         await MainActor.run {
+          // TODO: - load / filter, sort 로 구분해서 Task 생성(Task Group)
           loadTabs()
           filterRecords()
           sortDisplayRecords()
@@ -140,11 +141,12 @@ private extension LibraryViewModel {
   }
 }
 
-
 // MARK: - (F)LibraryViewModel
 // TODO: - 유스케이스로 빠질 함수들
 private extension LibraryViewModel {
-  
+  // TODO: - Task Group으로 변경 (시간체크 꼭 해보기)
+  // 부모 태스크: 레코드s 정보 패치 -> 자식 태스크 실행 -> (도서, 레코드)s 반환
+  // 자식 태스크: 레코드에 따른 도서 정보 패치
   /// 독서 기록 셀에서 필요한 정보를 가져옴
   func fetchRecordCellInfo() async throws -> [LibraryCellInfo] {
     var cellInfos: [LibraryCellInfo] = []
