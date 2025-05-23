@@ -10,6 +10,7 @@ import SwiftUI
 struct NicknameView: View {
   
   // TODO: 코디네이터 완성되면 외부주입으로 변경
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
   @StateObject private var viewModel = SettingViewModel()
   @FocusState private var isFocused: Bool
   @State private var isValid = true
@@ -38,6 +39,7 @@ struct NicknameView: View {
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         viewModel.send(.saveNickname)
+        coordinator.push(.selectCategory)
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)

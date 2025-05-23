@@ -9,10 +9,17 @@ import SwiftUI
 
 @main
 struct B_READApp: App {
+  @State private var coordinator = Coordinator<OnboardingRoute>()
+  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = true
   
   var body: some Scene {
     WindowGroup {
-      MainTabView()
+      if didInitialSetup {
+        OnBoardingView()
+          .environmentObject(coordinator)
+      } else {
+        MainTabView()
+      }
     }
   }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CategorySelectionView: View {
   
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
   // TODO: 코디네이터 완성되면 외부주입으로 변경
   @StateObject private var viewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
@@ -30,6 +31,7 @@ struct CategorySelectionView: View {
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         viewModel.send(.saveCatetories)
+        coordinator.push(.mainTabBar)
       }
       .disabled(!isButtonEnabled)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)

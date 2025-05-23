@@ -10,31 +10,40 @@ import SwiftUI
 
 struct OnBoardingView: View {
   
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
   @State private var currentStep: OnboardingStep = .guide
   
   var body: some View {
-    VStack(spacing: 0) {
-      
-      pageIndicator()
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .padding(.top, 38)
-        .padding(.trailing, 40)
-      
-      PageView(currentStep: $currentStep)
-      
-      BottomButton(
-        buttonTitle: currentStep == .assistant ? "로그인 하러 가기" : "다음으로",
-        textColor: currentStep == .assistant ? .backgroundDefault : .brown7,
-        buttonColor: currentStep == .assistant ? .brown3 : .brown1
-      ) {
-        if currentStep.rawValue < OnboardingStep.allCases.count - 1 {
-          currentStep = OnboardingStep.allCases[currentStep.rawValue + 1]
+    NavigationStack(path: $coordinator.paths) {
+      VStack(spacing: 0) {
+        
+        pageIndicator()
+          .frame(maxWidth: .infinity, alignment: .trailing)
+          .padding(.top, 38)
+          .padding(.trailing, 40)
+        
+        PageView(currentStep: $currentStep)
+        
+        BottomButton(
+          buttonTitle: currentStep == .assistant ? "로그인 하러 가기" : "다음으로",
+          textColor: currentStep == .assistant ? .backgroundDefault : .brown7,
+          buttonColor: currentStep == .assistant ? .brown3 : .brown1
+        ) {
+          if currentStep.rawValue < OnboardingStep.allCases.count - 1 {
+            currentStep = OnboardingStep.allCases[currentStep.rawValue + 1]
+          } else {
+            coordinator.push(.login)
+          }
         }
+        .padding(.horizontal, 30)
+        .animation(.easeInOut(duration: 0.2), value: currentStep)
+        
       }
-      .padding(.horizontal, 30)
-      .animation(.easeInOut(duration: 0.2), value: currentStep)
-      
-    }.background(.backgroundDefault)
+      .background(.backgroundDefault)
+      .navigationDestination(for: OnboardingRoute.self) { route in
+        coordinator.buildView(for: route)
+      }
+    }
   }
   
   // MARK: (F)pageIndicator

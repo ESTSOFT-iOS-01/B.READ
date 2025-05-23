@@ -51,6 +51,8 @@ extension Coordinator where T == OnboardingRoute {
   @ViewBuilder
   func buildView(for route: OnboardingRoute) -> some View {
     switch route {
+    case .login:
+      LoginView()
     case .insertNickname:
       NicknameView()
     case .selectCategory:
