@@ -35,7 +35,6 @@ final class SearchViewModel: ObservableObject {
   
   init(coordinator: SearchCoordinator) {
     self.coordinator = coordinator
-    print("SearchViewModel \(ObjectIdentifier(coordinator))")
   }
   
   // MARK: - Action
@@ -77,13 +76,13 @@ final class SearchViewModel: ObservableObject {
         appendKeyword(state.searchText)
         // TODO: 검색 결과 API 호출 후 bookResults / recordResults 채우기
       }
-    case .onTapTab(let index):
+    case let .onTapTab(index):
       state.selectedTabIndex = index
       
-    case .onTapBook(let isbn):
-      print("도서 \(isbn) 선택됨")
+    case let .onTapBook(isbn):
+      coordinator.push(.SearchResultBook(isbn: isbn))
       
-    case .onTapRecord(let id):
+    case let .onTapRecord(id):
       print("기록 \(id) 선택됨")
       
     case let .deleteKeyword(index):

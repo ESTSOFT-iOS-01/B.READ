@@ -8,46 +8,53 @@
 import SwiftUI
 
 struct MainTabView: View {
-  @Bindable var coordinator: TabBarCoordinator
+//  @State private var searchCoordinator = SearchCoordinator()
+  // tabbarcoordinator
   
+  @State private var selectedTab: Tab = .home
+  
+  enum Tab {
+    case home, search, library, record, mypage
+  }
   
   var body: some View {
-    TabView(selection: $coordinator.selectedTab) {
-      coordinator.buildPage(.Home)
+    TabView(selection: $selectedTab) {
+      HomeView()
         .tabItem {
           Image(systemName: "house.fill")
           Text("홈")
         }
-        .tag(TabBarAppScene.Home)
+        .tag(Tab.home)
       
-      coordinator.buildPage(.Search)
-        .tabItem {
-          Image(systemName: "magnifyingglass")
-          Text("검색")
-        }
-        .tag(TabBarAppScene.Search)
+      NavigationStack(path: $searchCoordinator.path) {
+        SearchView(viewModel: ????)
+          .navigationDestination(for: SearchAppScene.self) {
+            searchCoordinator.buildPage($0)
+          }
+      }
+      .tabItem { Label("검색", systemImage: "magnifyingglass") }
+      .tag(Tab.search)
       
-      coordinator.buildPage(.Library)
+      LibraryView(viewModel: LibraryViewModel())
         .tabItem {
           Image(systemName: "books.vertical.fill")
           Text("책빵")
         }
-        .tag(TabBarAppScene.Library)
+        .tag(Tab.library)
       
-      
-      coordinator.buildPage(.Record)
+      RecordView()
         .tabItem {
           Image(systemName: "doc.text.magnifyingglass")
           Text("기록")
         }
-        .tag(TabBarAppScene.Record)
+        .tag(Tab.record)
       
-      coordinator.buildPage(.MyPage)
+      MyPageView()
         .tabItem {
           Image(systemName: "person.fill")
           Text("마이")
         }
-        .tag(TabBarAppScene.MyPage)
+        .tag(Tab.mypage)
       
     }.tint(.brown3)
   }

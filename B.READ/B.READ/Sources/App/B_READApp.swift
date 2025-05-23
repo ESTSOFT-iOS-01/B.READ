@@ -9,13 +9,10 @@ import SwiftUI
 
 @main
 struct B_READApp: App {
-  @State private var tabBarCoordinator = TabBarCoordinator()
   
   var body: some Scene {
     WindowGroup {
-      NavigationStack(path: $tabBarCoordinator.path) {
-        MainTabView(coordinator: tabBarCoordinator)
-      }
+      MainTabView()
     }
   }
 }

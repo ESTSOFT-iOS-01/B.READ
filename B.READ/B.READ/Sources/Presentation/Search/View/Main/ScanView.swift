@@ -52,9 +52,7 @@ struct ScanView: View {
     })
     .alert("경고", isPresented: $viewModel.noCamera) {
       Button("직접 검색하기", role: .cancel) {
-        DispatchQueue.main.async { [self] in
-          self.viewModel.coordinator.pop()
-        }
+        viewModel.coordinator.pop()
       }
     } message: {
       Text("카메라를 사용할 수 없습니다.")

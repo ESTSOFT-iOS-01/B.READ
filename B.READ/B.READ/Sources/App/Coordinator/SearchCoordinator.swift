@@ -58,7 +58,7 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
     case let .SearchResultBook(isbn):
       BookDetailView(viewModel: BookViewModel(coordinator: self, isbn: isbn))
     case .SearchResultRecord:
-      ScanView(viewModel: ScanViewModel(coordinator: self))
+//      ScanView(viewModel: ScanViewModel(coordinator: self))
     }
   }
   
@@ -69,5 +69,16 @@ final class SearchCoordinator: SearchCoordinatorProtocol {
       // 아직 이 부분은 미구현 상태입니다. 추후 추가 예정
       ScanView(viewModel: ScanViewModel(coordinator: self))
     }
+  }
+}
+
+private struct SearchCoordinatorKey: EnvironmentKey {
+  static let defaultValue = SearchCoordinator()
+}
+
+extension EnvironmentValues {
+  var searchCoordinator: SearchCoordinator {
+    get { self[SearchCoordinatorKey.self] }
+    set { self[SearchCoordinatorKey.self] = newValue }
   }
 }

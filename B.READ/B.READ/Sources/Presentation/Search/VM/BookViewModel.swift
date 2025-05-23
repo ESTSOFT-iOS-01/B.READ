@@ -20,4 +20,6 @@ final class BookViewModel: ObservableObject {
     print("BookViewModel \(ObjectIdentifier(coordinator))")
   }
   
+  
+  
 }

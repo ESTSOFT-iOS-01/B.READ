@@ -10,8 +10,13 @@ import SwiftUI
 // MARK: - (S)SearchView
 struct SearchView: View {
   @ObservedObject var viewModel: SearchViewModel
+  // 코디네이터를 갖게
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
+  
+  init(viewModel: SearchViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
+  }
   
   var body: some View {
     NavigationStack(path: $viewModel.coordinator.path) {
@@ -45,7 +50,6 @@ struct SearchView: View {
               .padding(.horizontal, horizontalPadding)
           }
         }
-        
       }
       .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
       .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)

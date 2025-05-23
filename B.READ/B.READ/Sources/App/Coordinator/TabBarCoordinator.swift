@@ -10,8 +10,11 @@ import SwiftUI
 typealias TabBarCoordinatorProtocol = Navigatable
 typealias TabBarAppScene = TabBarCoordinator.AppScene
 
+@MainActor
 @Observable
 final class TabBarCoordinator: Navigatable {
+  var path: [AppScene]
+
 //  let homeCoordinator = HomeCoordinator()
   let searchCoordinator = SearchCoordinator()
 //  let libraryCoordinator = LibraryCoordinator()
@@ -29,7 +32,7 @@ final class TabBarCoordinator: Navigatable {
   }
   
   // MARK: - NavigationStack 상태 관리
-  var path: [AppScene] = []
+  var searchPath: [SearchAppScene] = []
   var selectedTab: AppScene = .Home
   
   func push(_ page: AppScene) {
@@ -53,7 +56,6 @@ final class TabBarCoordinator: Navigatable {
       HomeView()
     case .Search:
       SearchView(viewModel: SearchViewModel(coordinator: searchCoordinator))
-        .navigationBarBackButtonHidden()
     case .Library:
       LibraryView(viewModel: LibraryViewModel())
     case .Record:
@@ -64,4 +66,5 @@ final class TabBarCoordinator: Navigatable {
   }
   
 }
+
 

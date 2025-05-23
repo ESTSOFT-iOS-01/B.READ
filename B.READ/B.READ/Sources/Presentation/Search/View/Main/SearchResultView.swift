@@ -33,7 +33,7 @@ struct SearchResultView: View {
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
   
-  // TODO : 탭 전환 시 스크롤 위치 기억하게 만들기 ScrollReader?
+  // TODO : 이상한 상황이다...원래 유지되어야 정상임 ㅠ
 }
 
 #Preview {
