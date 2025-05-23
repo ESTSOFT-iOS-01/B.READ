@@ -10,7 +10,8 @@ import Foundation
 final class SettingViewModel: ObservableObject {
   
   // MARK: - State
-  @Published var userInfo: UserInfo? = nil
+  @Published var nicknameText: String = ""
+  @Published var selectedCategories: Set<CategoryType> = []
   
   // MARK: - Internal Variable
   private var example: String?
@@ -25,24 +26,24 @@ final class SettingViewModel: ObservableObject {
   
   // MARK: - Action
   enum Action {
-    case saveNickname(String)
-    case saveCatetories([CategoryType])
+    case saveNickname
+    case saveCatetories
   }
   
   func send(_ action: Action) {
     switch action {
-    case .saveNickname(let nickname):
+    case .saveNickname:
       Task {
         do {
-          try await profileUseCase.setNickname(nickname)
+          try await profileUseCase.setNickname(nicknameText)
         } catch {
           print(error.localizedDescription)
         }
       }
-    case .saveCatetories(let categories):
+    case .saveCatetories:
       Task {
         do {
-          try await profileUseCase.setCategory(categories)
+          try await profileUseCase.setCategory(Array(selectedCategories))
         } catch {
           print(error.localizedDescription)
         }
@@ -56,9 +57,11 @@ private extension SettingViewModel {
   func fetchUserInfo() {
     Task {
       do {
-        self.userInfo = try await profileUseCase.fetchUserInfo()
-      } catch RepositoryError.dataNotFound {
-        self.userInfo = nil
+        let userInfo = try await profileUseCase.fetchUserInfo()
+        self.nicknameText = userInfo.nickname
+        self.selectedCategories = Set(userInfo.categories.compactMap { CategoryType(rawValue: $0.id) })
+      } catch {
+        print(error.localizedDescription)
       }
     }
   }

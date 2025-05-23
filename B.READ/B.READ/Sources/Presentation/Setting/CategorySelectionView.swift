@@ -10,10 +10,10 @@ import SwiftUI
 struct CategorySelectionView: View {
   
   // TODO: 코디네이터 완성되면 외부주입으로 변경
-  @StateObject private var settingViewModel = SettingViewModel()
+  @StateObject private var viewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
   private var isButtonEnabled: Bool {
-    selectedCategories.count == 2
+    viewModel.selectedCategories.count == 2
   }
   
   var body: some View {
@@ -21,7 +21,7 @@ struct CategorySelectionView: View {
       InputGuideHeader(type: .category)
         .padding(.top, 24)
       
-      CategoryListView(selectedCategories: $selectedCategories)
+      CategoryListView(selectedCategories: $viewModel.selectedCategories)
         .padding(.top, 24)
       
       BottomButton(
@@ -29,7 +29,7 @@ struct CategorySelectionView: View {
         textColor: isButtonEnabled ?  .backgroundDefault : .gray3,
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
-        settingViewModel.send(.saveCatetories(Array(selectedCategories)))
+        viewModel.send(.saveCatetories)
       }
       .disabled(!isButtonEnabled)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
