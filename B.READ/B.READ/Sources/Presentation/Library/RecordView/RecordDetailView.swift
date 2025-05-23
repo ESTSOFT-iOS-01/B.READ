@@ -37,7 +37,16 @@ struct RecordDetailView: View {
         bookTitleSection
         
         // 기대지수(평점), 독서기간, 독서량
-        recordStatsSection
+        if let info = viewModel.state.info {
+          RecordStatsSection(
+            readState: info.record.state,
+            period: (info.record.period.startDate, info.record.period.endDate),
+            currentPage: info.record.currentPage,
+            totalPage: info.book.totalPages
+          )
+        } else {
+          Text("info 정보가 없습니다")
+        }
         
         // 메모, 문장 탭바
         TopTabBar(
@@ -141,50 +150,6 @@ struct RecordDetailView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
   }
   
-  // MARK: - (S)recordStatsSection
-  private var recordStatsSection: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      // 기대 지수, 평점
-      // TODO: - 기대 지수, 평점 점수판 만들어서 넣기
-      Group {
-        if let record = viewModel.state.info?.record {
-          switch record.state {
-          case .toRead:
-            Text("기대지수")
-          case .reading:
-            EmptyView()
-          case .completed:
-            Text("평점")
-          }
-        } else {
-          Text("정보를 찾을 수 없습니다.")
-        }
-      } // : Group
-      .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
-      
-      // 독서 기간
-      VStack(alignment: .leading, spacing: 8) {
-        Text("독서 기간")
-          .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 0.95)
-        // TODO: - 독서 기간 컴포넌트 제작해서 넣기
-//        recordPeriodView(start: viewModel.state.info?.record.period)
-        Rectangle()
-          .fill(.gray0)
-          .frame(height: 38)
-          .frame(maxWidth: .infinity)
-          .cornerRadius(8)
-      } // : VStack
-      
-      // 독서 진행률 프로그래스바
-      if viewModel.state.info?.record.state != .completed,
-         let currentPage = viewModel.state.info?.record.currentPage,
-         let totalPage = viewModel.state.info?.book.totalPages {
-        PageProgressbar(currentPage: currentPage, totalPage: totalPage)
-          .frame(height: 28)
-      }
-    } // : VStack
-  }
-  
   // MARK: - (S)recordNotesSection
   // TODO: - 리스트 형태로 메모, 문장을 보여줌
   private var recordNotesSection: some View {
@@ -201,8 +166,8 @@ struct RecordDetailView: View {
   }
 }
 
-#Preview {
-  let record = DummyData.dummyRecords[0]
-  let viewModel = RecordDetailViewModel(recordID: record.id, isbn: record.isbn)
-//  RecordDetailView(viewModel: viewModel)
-}
+//#Preview {
+//  let record = DummyData.dummyRecords[0]
+//  let viewModel = RecordDetailViewModel(recordID: record.id, isbn: record.isbn)
+////  RecordDetailView(viewModel: viewModel)
+//}
