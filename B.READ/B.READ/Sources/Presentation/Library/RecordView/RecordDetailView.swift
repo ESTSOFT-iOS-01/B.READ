@@ -39,7 +39,9 @@ struct RecordDetailView: View {
               readState: info.record.state,
               period: (info.record.period.startDate, info.record.period.endDate),
               currentPage: info.record.currentPage,
-              totalPage: info.book.totalPages
+              totalPage: info.book.totalPages,
+              heartCount: info.record.heartCount,
+              starCount: info.record.starCount
             )
           } else {
             Text("info 정보가 없습니다")

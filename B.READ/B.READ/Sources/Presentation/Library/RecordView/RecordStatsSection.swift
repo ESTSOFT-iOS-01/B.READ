@@ -14,34 +14,42 @@ struct RecordStatsSection: View {
   private let period: (start: Date?, end: Date?)
   private let currentPage: Int
   private let totalPage: Int
+  private let heartCount: Int
+  private let starCount: Int
   
   private let contentFontSize: CGFloat = 14
   private let layoutPadding: CGFloat = 8
+  
   
   init(
     readState: ReadState,
     period: (start: Date?, end: Date?),
     currentPage: Int,
-    totalPage: Int
+    totalPage: Int,
+    heartCount: Int,
+    starCount: Int
   ) {
     self.readState = readState
     self.period = period
     self.currentPage = currentPage
     self.totalPage = totalPage
+    self.heartCount = heartCount
+    self.starCount = starCount
   }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       // 기대 지수, 평점
-      // TODO: - 기대 지수, 평점 점수판 만들어서 넣기
-      Group {
+      VStack(alignment: .leading, spacing: 8) {
         switch readState {
         case .toRead:
           Text("기대지수")
+          ScoreBoardView(heartCount, type: .heart)
         case .reading:
           EmptyView()
         case .completed:
           Text("평점")
+          ScoreBoardView(starCount, type: .star)
         }
       } // : Group
       .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
