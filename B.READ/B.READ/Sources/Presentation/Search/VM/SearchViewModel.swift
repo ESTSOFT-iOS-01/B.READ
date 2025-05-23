@@ -9,11 +9,10 @@ import Foundation
 import SwiftUI
 
 final class SearchViewModel: ObservableObject {
-  
   // MARK: - State
   struct SearchViewState {
     var searchText: String = ""
-    var bestBookList: [String] = []
+    var bestBookList: [BestSellerVO] = []
     var keywordList: [String] = []
     var bookResults: [BookVO] = []
     var recordResults: [RecordVO] = []
@@ -35,12 +34,9 @@ final class SearchViewModel: ObservableObject {
   // MARK: - Action
   enum Action {
     case onAppear
-    case onTapBarcode
     case onTapClear
-    case onTapBestSeller(rank: Int, name: String)
     case onSubmitSearch
     case onTapTab(Int)
-    case onTapBook(String)
     case onTapRecord(String)
     case deleteKeyword(at: Int)
     case deleteAllKeywords
@@ -51,14 +47,6 @@ final class SearchViewModel: ObservableObject {
     switch action {
     case .onAppear:
       loadDummyData()
-      
-    case .onTapBarcode:
-      print("바코드 인식 화면으로 전환")
-      
-    case let .onTapBestSeller(rank, name):
-      state.searchText = name
-      state.isSearchSubmitted = true
-      appendKeyword(name)
       
     case .onTapClear:
       state.searchText = ""
@@ -73,13 +61,10 @@ final class SearchViewModel: ObservableObject {
         appendKeyword(state.searchText)
         // TODO: 검색 결과 API 호출 후 bookResults / recordResults 채우기
       }
-    case .onTapTab(let index):
+    case let .onTapTab(index):
       state.selectedTabIndex = index
       
-    case .onTapBook(let isbn):
-      print("도서 \(isbn) 선택됨")
-      
-    case .onTapRecord(let id):
+    case let .onTapRecord(id):
       print("기록 \(id) 선택됨")
       
     case let .deleteKeyword(index):
@@ -99,18 +84,9 @@ final class SearchViewModel: ObservableObject {
 // MARK: - Internal Function : DUMMY DATA SETTING
 private extension SearchViewModel {
   func loadDummyData() {
-    state.bestBookList = [
-      "데미안",
-      "미씽",
-      "싯다르타",
-      "하이데거의 사건 존재론",
-      "이것이 취업을 위한 코딩테스트다 with Python",
-      "풀스택 서버리스",
-      "2022 제 16회 젊은작가상 수상작품집",
-      "2023 제 16회 젊은작가상 수상작품집",
-      "2025 제 16회 젊은작가상 수상작품집",
-      "Essentail Grammar in Use with answers and eBook"
-    ]
+    state.bestBookList = (1...10).map {
+      BestSellerVO(isbn: "1234567890\($0)", title: "베스트셀러 \($0)")
+    }
     
     state.keywordList = ["데미안", "코딩테스트", "미씽"]
     

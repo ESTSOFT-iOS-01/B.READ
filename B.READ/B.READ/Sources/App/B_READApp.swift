@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct B_READApp: App {
+  
   var body: some Scene {
     WindowGroup {
       MainTabView()
