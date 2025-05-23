@@ -10,7 +10,7 @@ import SwiftData
 
 @ModelActor
 actor BookRepositoryImpl: BookRepository {
-  func createBook(_ book: Book) async throws {
+  func createBook(_ book: Book) throws {
     print("Impl: ", #function)
     
     if let _ = try findBook(isbn: book.isbn) {
@@ -21,7 +21,7 @@ actor BookRepositoryImpl: BookRepository {
     modelContext.insert(model)
   }
 
-  func fetchBook(isbn: String) async throws -> Book {
+  func fetchBook(isbn: String) throws -> Book {
     print("Impl: ", #function)
     
     guard let data = try findBook(isbn: isbn) else {
@@ -31,7 +31,7 @@ actor BookRepositoryImpl: BookRepository {
     return data.toEntity()
   }
 
-  func updateBook(_ book: Book) async throws {
+  func updateBook(_ book: Book) throws {
     print("Impl: ", #function)
     
     guard let data = try findBook(isbn: book.isbn) else {

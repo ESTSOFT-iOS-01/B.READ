@@ -9,9 +9,10 @@ import Foundation
 
 actor RecordRepositoryStub: RecordRepository {
   
-  private var storedRecords: [Record] = []
+//  private var storedRecords: [Record] = []
+  private var storedRecords: [Record] = DummyData.dummyRecords
   
-  func createRecord(_ record: Record) async throws {
+  func createRecord(_ record: Record) throws {
     print("Stub: ", #function)
     guard storedRecords.first(where: { $0.id == record.id }) == nil else {
       throw RepositoryError.dataAlreadyExist
@@ -20,14 +21,14 @@ actor RecordRepositoryStub: RecordRepository {
     storedRecords.append(record)
   }
 
-  func fetchAllRecord() async throws -> [Record] {
+  func fetchAllRecord() throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
     
     return records
   }
   
-  func fetchRecord(id: String) async throws -> Record {
+  func fetchRecord(id: String) throws -> Record {
     print("Stub: ", #function)
     guard let record = storedRecords.filter({ $0.id == id }).first else {
       throw RepositoryError.dataNotFound
@@ -36,7 +37,7 @@ actor RecordRepositoryStub: RecordRepository {
     return record
   }
   
-  func fetchRecentReadingRecord(count: Int) async throws -> [Record] {
+  func fetchRecentReadingRecord(count: Int) throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
       .filter { $0.state == .reading }
@@ -46,7 +47,7 @@ actor RecordRepositoryStub: RecordRepository {
     return Array(records)
   }
 
-  func updateRecord(_ record: Record) async throws {
+  func updateRecord(_ record: Record) throws {
     print("Stub: ", #function)
     guard let recordIndex = storedRecords.firstIndex(where: { $0.id == record.id }) else {
       throw RepositoryError.dataNotFound
@@ -55,7 +56,7 @@ actor RecordRepositoryStub: RecordRepository {
     storedRecords[recordIndex] = record
   }
 
-  func deleteRecord(_ id: String) async throws {
+  func deleteRecord(_ id: String) throws {
     print("Stub: ", #function)
     guard let recordIndex = storedRecords.firstIndex(where: { $0.id == id }) else {
       throw RepositoryError.dataNotFound
