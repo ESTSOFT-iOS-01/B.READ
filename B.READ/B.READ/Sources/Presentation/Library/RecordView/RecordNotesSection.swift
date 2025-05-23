@@ -48,6 +48,7 @@ struct RecordNotesSection: View {
     }
   }
   
+  // TODO: - memoCells랑 quoteCell를 하나로 합쳐보겠습니다.(2)
   // MARK: - (F)memoCells
   @ViewBuilder
   private func memoCells() -> some View {
