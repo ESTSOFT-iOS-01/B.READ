@@ -41,7 +41,6 @@
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Impls/BookRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
-				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
 				Sources/Domain/Entity/Record.swift,
 				Sources/Domain/Entity/UserInfo.swift,

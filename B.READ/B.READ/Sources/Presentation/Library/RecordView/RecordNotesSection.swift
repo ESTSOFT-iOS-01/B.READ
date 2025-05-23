@@ -23,12 +23,11 @@ struct RecordNotesSection: View {
   }
   
   @ObservedObject var viewModel: RecordDetailViewModel
-  
+  @State var showMenuActionSheet: Bool = false
   var cellType: CellType {
     if viewModel.state.selectedTab == 0 { return .memo }
     else { return .quote }
   }
-  @State var showMenuActionSheet: Bool = false
 
   
   var body: some View {
