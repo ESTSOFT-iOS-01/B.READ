@@ -84,3 +84,29 @@ final class NetworkClient {
     return (string, httpResponse)
   }
 }
+
+extension NetworkClient {
+  func performOrDecodeAladinError<T: Decodable>(
+    _ request: RequestConvertible,
+    decodeType: T.Type
+  ) async throws -> T {
+    let urlRequest = try request.asURLRequest()
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    guard let httpResponse = response as? HTTPURLResponse else {
+      throw URLError(.badServerResponse)
+    }
+
+    do {
+      let decoded = try JSONDecoder().decode(T.self, from: data)
+      return decoded
+    } catch {
+      // 디코딩 실패 → 알라딘 에러 DTO로 다시 시도
+      if let aladinError = try? JSONDecoder().decode(AladinErrorDTO.self, from: data) {
+        throw AladinError.serverError(code: aladinError.errorCode, message: aladinError.errorMessage)
+      } else {
+        throw AladinError.decodingError(message: error.localizedDescription)
+      }
+    }
+  }
+}
