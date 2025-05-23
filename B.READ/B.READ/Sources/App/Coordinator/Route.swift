@@ -8,14 +8,14 @@
 import SwiftUI
 
 enum SearchRoute: Hashable {
-  case root
   case barcode
   case searchBook(isbn: String)
   case searchRecord(id: String)
 }
 
 enum OnboardingRoute: Hashable {
-  // 다른 케이스들 ...
+  case insertNickname
+  case selectCategory
 }
 
 //@MainActor
@@ -68,8 +68,18 @@ extension Coordinator where T == SearchRoute {
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
     case .searchRecord(let id):
       BookDetailView(viewModel: BookViewModel(isbn: id))
-    case .root:
-      SearchView(viewModel: SearchViewModel())
+    }
+  }
+}
+
+extension Coordinator where T == OnboardingRoute {
+  @ViewBuilder
+  func buildView(for route: OnboardingRoute) -> some View {
+    switch route {
+    case .insertNickname:
+      NicknameView()
+    case .selectCategory:
+      CategorySelectionView()
     }
   }
 }
