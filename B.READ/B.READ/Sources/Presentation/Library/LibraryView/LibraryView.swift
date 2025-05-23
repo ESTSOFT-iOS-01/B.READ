@@ -27,13 +27,20 @@ struct LibraryView: View {
     }
   }
   
-  @ObservedObject var viewModel: LibraryViewModel
+  @StateObject var viewModel: LibraryViewModel
   @State var recordPresentType: RecordPresentType = .list
   @State var viewState: ViewState = .didLoad
   @State var selectedRecord: Record? = nil
   
   
   private let layoutPadding: CGFloat = 16
+  
+  // MARK: - Init
+  // TODO: - 외부 주입을 할지도 몰라서 init으로 해둠
+  // -> 외부 주입이 필요없으면 viewModel = LibraryViewModel()로 변경
+  init(viewModel: @autoclosure @escaping () -> LibraryViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel())
+  }
   
   var body: some View {
     NavigationStack {

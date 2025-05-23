@@ -28,7 +28,7 @@ struct LibraryListView: View {
     .listStyle(.plain)
     .scrollIndicators(.hidden)
     .navigationDestination(item: $selectedRecord) { record in
-      RecordDetailView(viewModel: RecordDetailViewModel(recordID: record.id, isbn: record.isbn))
+      RecordDetailView(viewModel: .init(recordID: record.id, isbn: record.isbn))
     }
   }
 }

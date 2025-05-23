@@ -18,6 +18,7 @@ struct RecordDetailView: View {
   
   private let layoutPadding: CGFloat = 24
   
+  // MARK: - Init
   init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel())
     // 24615번 줄
