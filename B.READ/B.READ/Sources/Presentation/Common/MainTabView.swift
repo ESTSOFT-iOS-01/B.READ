@@ -8,42 +8,52 @@
 import SwiftUI
 
 struct MainTabView: View {
+  @State private var searchCoordinator = Coordinator<SearchRoute>()
+  @State private var selectedTab: Tab = .home
+  
+  enum Tab {
+    case home, search, library, record, mypage
+  }
+  
   var body: some View {
-    TabView {
+    TabView(selection: $selectedTab) {
       HomeView()
         .tabItem {
           Image(systemName: "house.fill")
           Text("홈")
         }
+        .tag(Tab.home)
       
       SearchView(viewModel: SearchViewModel())
-//      ScanView() // 스캐너뷰 테스트용
-        .tabItem {
-          Image(systemName: "magnifyingglass")
-          Text("검색")
-        }
+        .environmentObject(searchCoordinator)
+        .tabItem { Label("검색", systemImage: "magnifyingglass") }
+        .tag(Tab.search)
       
       LibraryView(viewModel: .init())
         .tabItem {
           Image(systemName: "books.vertical.fill")
           Text("책빵")
         }
+        .tag(Tab.library)
       
       RecordView()
         .tabItem {
           Image(systemName: "doc.text.magnifyingglass")
           Text("기록")
         }
+        .tag(Tab.record)
       
       MyPageView()
         .tabItem {
           Image(systemName: "person.fill")
           Text("마이")
         }
+        .tag(Tab.mypage)
+      
     }.tint(.brown3)
   }
 }
 
-#Preview {
-  MainTabView()
-}
+//#Preview {
+//  MainTabView()
+//}

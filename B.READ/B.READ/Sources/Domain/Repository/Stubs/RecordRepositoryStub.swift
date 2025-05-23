@@ -36,7 +36,6 @@ actor RecordRepositoryStub: RecordRepository {
     
     return record
   }
-  
   func fetchRecentReadingRecord(count: Int) throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
