@@ -9,5 +9,5 @@ import Foundation
 
 enum AladinAPI {
   static let baseURL = URL(string: Bundle.ALADIN_BASE_URL)!
-  static let clientID = Bundle.ALADIN_TTB_KEY
+  static let ttbKey = Bundle.ALADIN_TTB_KEY
 }
