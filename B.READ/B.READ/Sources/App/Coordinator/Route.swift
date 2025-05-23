@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum SearchRoute: Hashable {
+  case root
   case barcode
   case searchBook(isbn: String)
   case searchRecord(id: String)
@@ -17,27 +18,43 @@ enum OnboardingRoute: Hashable {
   // 다른 케이스들 ...
 }
 
+//@MainActor
 final class Coordinator<T: Hashable>: ObservableObject {
   @Published var paths: [T] = []
   
-  func push(_ path: T) {
-    paths.append(path)
+  init(initial: T? = nil) {
+    if let initial = initial {
+      self.paths = [initial]
+    } else {
+      self.paths = []
+    }
   }
   
+  func push(_ path: T) {
+    guard paths.last != path else { return } // 같은 값이면 중복 push 방지
+    print("Before push: \(paths)")
+    paths.append(path)
+    print("After push: \(paths)")
+  }
+
   func pop() {
-    if !paths.isEmpty {
-      paths.removeLast()
-    }
+    guard !paths.isEmpty else { return }
+    print("Before pop: \(paths)")
+    paths.removeLast()
+    print("After pop: \(paths)")
+  }
+
+  func popToRoot() {
+    print("Before popToRoot: \(paths)")
+    paths.removeAll()
+    print("After popToRoot: \(paths)")
   }
   
   func pop(to: T) {
     guard let index = paths.firstIndex(of: to) else { return }
     paths = Array(paths.prefix(upTo: index + 1))
   }
-  
-  func popToRoot() {
-    paths.removeAll()
-  }
+
 }
 
 
@@ -51,6 +68,8 @@ extension Coordinator where T == SearchRoute {
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
     case .searchRecord(let id):
       BookDetailView(viewModel: BookViewModel(isbn: id))
+    case .root:
+      SearchView(viewModel: SearchViewModel())
     }
   }
 }

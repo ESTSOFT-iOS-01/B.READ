@@ -47,6 +47,7 @@ struct SearchView: View {
             
           } else {
             bestSellerSection
+              .environmentObject(coordinator)
               .transition(.opacity)
               .padding(.horizontal, horizontalPadding)
           }
@@ -54,14 +55,15 @@ struct SearchView: View {
       }
       .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
       .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
-      .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
-      .onAppear {
-        viewModel.send(.onAppear)
-      }
       .navigationDestination(for: SearchRoute.self) { route in
         coordinator.buildView(for: route)
       }
     }
+    .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
+
   }
   
   // MARK: - (S)logoView

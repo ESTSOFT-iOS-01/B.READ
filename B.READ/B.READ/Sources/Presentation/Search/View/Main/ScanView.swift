@@ -15,6 +15,7 @@ struct ScanView: View {
   var body: some View {
     VStack {
       CustomCameraRepresentable(isbnNumber: $viewModel.isbnNumber, noCamera: $viewModel.noCamera)
+      
         .frame(height: 400, alignment: .top)
         .frame(maxWidth: .infinity)
         .padding(.top, 16)

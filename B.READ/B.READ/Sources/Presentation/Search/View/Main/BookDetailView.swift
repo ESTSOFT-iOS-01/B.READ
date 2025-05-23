@@ -18,9 +18,15 @@ struct BookDetailView: View {
       
       Text(viewModel.isbn)
         .padding()
-    }
-    .onDisappear {
-      coordinator.pop()
+      
+      Button {
+        coordinator.pop()
+      } label: {
+        Text("pop page")
+          .padding()
+          .border(.brown7)
+      }
+
     }
   }
 }
