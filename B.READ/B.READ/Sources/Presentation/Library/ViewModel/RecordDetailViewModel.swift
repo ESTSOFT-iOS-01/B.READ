@@ -15,6 +15,8 @@ final class RecordDetailViewModel: ObservableObject {
   // MARK: - State
   struct RecordDetailState {
     var info: LibraryCellInfo? = nil
+    var memos: [Memo] = []
+    var quotes: [Quote] = []
     var selectedTab: Int = 0
   }
   
@@ -48,6 +50,8 @@ final class RecordDetailViewModel: ObservableObject {
     case .onAppear:
       Task {
         await loadInfo(id: recordID, isbn: isbn)
+        await loadMemos()
+        await loadQuote()
       }
     case .onTapFavorite:
       Task {
@@ -67,10 +71,11 @@ final class RecordDetailViewModel: ObservableObject {
 private extension RecordDetailViewModel {
   
   /// 독서 기록 조회에서 필요한 정보를 불러옴
+  @MainActor
   func loadInfo(id: String, isbn: String) async {
     do {
       let info: LibraryCellInfo = try await self.fetchRecordInfo(id: recordID, isbn: isbn)
-      await MainActor.run { self.state.info = info }
+      self.state.info = info
     } catch {
       print(error.localizedDescription)
     }
@@ -107,6 +112,22 @@ private extension RecordDetailViewModel {
       try await self.deleteRecordInfo(id: record.id)
     } catch {
       
+    }
+  }
+  
+  @MainActor
+  func loadMemos() {
+    self.state.memos = DummyData.dummyMemos.filter {
+      if let info = state.info { return info.record.memoIDs.contains($0.id) }
+      return false
+    }
+  }
+  
+  @MainActor
+  func loadQuote() {
+    self.state.quotes = DummyData.dummyQuote.filter {
+      if let info = state.info { return info.record.memoIDs.contains($0.id) }
+      return false
     }
   }
 }
