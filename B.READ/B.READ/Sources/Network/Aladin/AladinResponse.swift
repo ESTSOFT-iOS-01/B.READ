@@ -114,3 +114,9 @@ struct BestSellerDTO: Decodable {
     case rank = "bestRank"
   }
 }
+
+// 공통 Error DTO
+struct AladinErrorDTO: Decodable {
+  let errorCode: Int
+  let errorMessage: String
+}
