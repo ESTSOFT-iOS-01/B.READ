@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)LibraryListCell
 struct LibraryListCell: View {
   
-  private var record: LibraryRecordVO
+  private let record: LibraryRecordVO
   private let layoutPadding: CGFloat = 24
   
   init(record: LibraryRecordVO) {

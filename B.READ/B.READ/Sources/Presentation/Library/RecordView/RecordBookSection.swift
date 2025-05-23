@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)RecordBookSection
 struct RecordBookSection: View {
-  private var book: Book?
+  private let book: Book?
   
   init(book: Book? = nil) {
     self.book = book
