@@ -18,6 +18,11 @@ struct RecordDetailView: View {
   
   private let layoutPadding: CGFloat = 24
   
+  init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel())
+    // 24615번 줄
+  }
+  
   var body: some View {
     // TODO: - ZStack으로 플로팅 버튼 만들기 -> 액션 시트?
     ScrollView(.vertical) {
@@ -44,6 +49,7 @@ struct RecordDetailView: View {
         
         // 메모, 문장 리스트
         recordNotesSection
+        
       } // : VStack
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
       .padding(.horizontal, layoutPadding)
@@ -160,6 +166,7 @@ struct RecordDetailView: View {
         Text("독서 기간")
           .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 0.95)
         // TODO: - 독서 기간 컴포넌트 제작해서 넣기
+//        recordPeriodView(start: viewModel.state.info?.record.period)
         Rectangle()
           .fill(.gray0)
           .frame(height: 38)
@@ -184,10 +191,17 @@ struct RecordDetailView: View {
       
     }
   }
+  
+  // MARK: - (F)recordPeriodView
+  // 독서 기간 뷰
+  @ViewBuilder
+  private func recordPeriodView() -> some View {
+    
+  }
 }
 
 #Preview {
   let record = DummyData.dummyRecords[0]
   let viewModel = RecordDetailViewModel(recordID: record.id, isbn: record.isbn)
-  RecordDetailView(viewModel: viewModel)
+//  RecordDetailView(viewModel: viewModel)
 }
