@@ -7,9 +7,13 @@
 
 import Foundation
 
-final class AladinService: BookService {
+public final class AladinService: BookService {
   
-  private let client = NetworkClient.shared
+  private let client: NetworkClient
+  
+  init(client: NetworkClient = .shared) {
+    self.client = client
+  }
   
   func fetchBookList(for keyword: String, index pageIndex: Int = 1) async throws -> SearchPagnation {
     print("Impl: ", #function)
