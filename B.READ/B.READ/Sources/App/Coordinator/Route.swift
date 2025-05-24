@@ -7,14 +7,19 @@
 
 import SwiftUI
 
+enum OnboardingRoute: Hashable {
+  case login
+  case insertNickname
+  case selectCategory
+}
+
 enum SearchRoute: Hashable {
   case barcode
   case searchBook(isbn: String)
   case searchRecord(id: String)
 }
 
-enum OnboardingRoute: Hashable {
-  case login
+enum MyPageRoute: Hashable {
   case insertNickname
   case selectCategory
 }

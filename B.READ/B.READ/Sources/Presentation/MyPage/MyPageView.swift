@@ -8,24 +8,33 @@
 import SwiftUI
 
 struct MyPageView: View {
+  
+  @EnvironmentObject private var coordinator: Coordinator<MyPageRoute>
+  
   var body: some View {
-    VStack(alignment: .leading, spacing: 32) {
-      
-      nicknameButton()
-      
-      MenuListView()
-      
+    NavigationStack(path: $coordinator.paths) {
+      VStack(alignment: .leading, spacing: 32) {
+        
+        nicknameButton()
+        
+        MenuListView(coordinator: coordinator)
+        
+      }
+      .padding(.horizontal, 24)
+      .frame(maxHeight: .infinity, alignment: .top)
+      .background(.backgroundDefault)
+      .toolbar(coordinator.paths.isEmpty ? .visible : .hidden, for: .tabBar)
+      .navigationDestination(for: MyPageRoute.self) { route in
+        coordinator.buildView(for: route)
+      }
     }
-    .padding(.horizontal, 24)
-    .frame(maxHeight: .infinity, alignment: .top)
-    .background(.backgroundDefault)
   }
   
   // MARK: (F)nicknameButton
   @ViewBuilder
   private func nicknameButton() -> some View {
     Button {
-      print("tab")
+      coordinator.push(.insertNickname)
     } label: {
       HStack(spacing: 14) {
         Text("닉네임")
@@ -43,6 +52,8 @@ struct MyPageView: View {
 
 // MARK: - (S)MenuListView
 private struct MenuListView: View {
+  
+  let coordinator: Coordinator<MyPageRoute>
   
   // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
   enum WeekDay: Int, CaseIterable {
@@ -87,7 +98,12 @@ private struct MenuListView: View {
       VStack(alignment: .leading, spacing: menuInnerSpacing) {
         menuTitle(title: "관심 분야", chevronHidden: false)
         selectedCategories(categories: [.classics, .artCulture])
-      }.padding(.top, menuSpacing)
+      }
+      .padding(.top, menuSpacing)
+      .onTapGesture {
+        coordinator.push(.selectCategory)
+      }
+      
       
       // TODO: Sprint 2
       //menuTitle(title: "오늘의 빵식이 요약 횟수", subtitle: "매일 자정에 초기화됩니다")
@@ -171,4 +187,5 @@ private struct MenuListView: View {
 
 #Preview {
   MyPageView()
+    .environmentObject(Coordinator<MyPageRoute>())
 }

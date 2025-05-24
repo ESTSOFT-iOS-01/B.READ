@@ -49,7 +49,7 @@ final class Coordinator<T: Hashable>: ObservableObject {
 // MARK: - Onboarding Flow
 extension Coordinator where T == OnboardingRoute {
   @ViewBuilder
-  func buildView(for route: OnboardingRoute) -> some View {
+  func buildView(for route: T) -> some View {
     switch route {
     case .login:
       LoginView()
@@ -64,7 +64,7 @@ extension Coordinator where T == OnboardingRoute {
 // MARK: - Search Flow
 extension Coordinator where T == SearchRoute {
   @ViewBuilder
-  func buildView(for route: SearchRoute) -> some View {
+  func buildView(for route: T) -> some View {
     switch route {
     case .barcode:
       ScanView(viewModel: ScanViewModel())
@@ -76,4 +76,15 @@ extension Coordinator where T == SearchRoute {
   }
 }
 
-
+// MARK: - MyPage Flow
+extension Coordinator where T == MyPageRoute {
+  @ViewBuilder
+  func buildView(for route: T) -> some View {
+    switch route {
+    case .insertNickname:
+      NicknameView()
+    case .selectCategory:
+      CategorySelectionView()
+    }
+  }
+}

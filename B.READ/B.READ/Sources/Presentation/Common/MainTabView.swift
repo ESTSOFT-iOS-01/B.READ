@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
   @State private var searchCoordinator = Coordinator<SearchRoute>()
+  @State private var myPageCoordinator = Coordinator<MyPageRoute>()
   @State private var selectedTab: Tab = .home
   
   enum Tab {
@@ -53,6 +54,7 @@ struct MainTabView: View {
         .tag(Tab.record)
       
       MyPageView()
+        .environmentObject(myPageCoordinator)
         .tabItem {
           Image(systemName: "person.fill")
           Text("마이")
