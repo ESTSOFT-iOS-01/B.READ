@@ -15,6 +15,15 @@ struct MainTabView: View {
     case home, search, library, record, mypage
   }
   
+  init() {
+    let appearance = UITabBarAppearance()
+    appearance.configureWithOpaqueBackground()
+    appearance.backgroundColor = .backgroundDefault
+
+    UITabBar.appearance().standardAppearance = appearance
+    UITabBar.appearance().scrollEdgeAppearance = appearance
+  }
+  
   var body: some View {
     TabView(selection: $selectedTab) {
       HomeView()
@@ -54,6 +63,6 @@ struct MainTabView: View {
   }
 }
 
-//#Preview {
-//  MainTabView()
-//}
+#Preview {
+  MainTabView()
+}
