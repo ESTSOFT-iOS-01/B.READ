@@ -21,7 +21,7 @@ struct LoginView: View {
     VStack(alignment: .leading, spacing: 0) {
       Text(subtitle)
         .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.1)
-        .padding(.top, 44)
+        .padding(.top, 60)
       
       Text("B. READ")
         .brStyleFont(.peaceSans(size: 48), lineHeight: 1.1)
@@ -33,7 +33,7 @@ struct LoginView: View {
         .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
       
       startButton()
-        .padding(.bottom, 280)
+        .padding(.bottom, 240)
         .padding(.top, 16)
       
     }
