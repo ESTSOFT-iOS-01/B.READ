@@ -14,12 +14,15 @@ struct B_READApp: App {
   
   var body: some Scene {
     WindowGroup {
-      if didInitialSetup {
-        OnBoardingView()
-          .environmentObject(coordinator)
-      } else {
-        MainTabView()
-      }
+      Group {
+        if didInitialSetup {
+          OnBoardingView()
+            .environmentObject(coordinator)
+        } else {
+          MainTabView()
+            .transition(.move(edge: .trailing))
+        }
+      }.animation(.linear(duration: 0.3), value: didInitialSetup)
     }
   }
 }

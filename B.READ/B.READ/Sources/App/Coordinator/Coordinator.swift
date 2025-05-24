@@ -57,8 +57,6 @@ extension Coordinator where T == OnboardingRoute {
       NicknameView()
     case .selectCategory:
       CategorySelectionView()
-    case .mainTabBar:
-      MainTabView()
     }
   }
 }

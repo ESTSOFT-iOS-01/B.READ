@@ -17,5 +17,4 @@ enum OnboardingRoute: Hashable {
   case login
   case insertNickname
   case selectCategory
-  case mainTabBar
 }
