@@ -23,9 +23,12 @@ struct HomeView: View {
 // MARK: - (S)BreadGuideView
 private struct BreadGuideView: View {
   var body: some View {
-    HStack(spacing: 16.5) {
+    HStack(alignment: .top, spacing: 16.5) {
       
       Image(.happyBread)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 100, height: 109)
       
       VStack(alignment: .trailing, spacing: 5) {
         Text("빵식이가 요약할 수 있는 책이 있어요!")
