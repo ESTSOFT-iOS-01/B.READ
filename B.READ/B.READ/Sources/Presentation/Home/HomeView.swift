@@ -47,6 +47,8 @@ struct HomeView: View {
   }
 }
 
+
+// MARK: - (S)RecentBookSectionView
 private struct RecentBookSectionView: View {
   
   @State private var currentIndex = 0
@@ -59,7 +61,7 @@ private struct RecentBookSectionView: View {
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
           .frame(maxWidth: .infinity, alignment: .leading)
         
-        indicator()
+        pageIndicator()
 
       }.padding(.horizontal, 24)
       
@@ -78,9 +80,9 @@ private struct RecentBookSectionView: View {
     }
   }
   
-  // MARK: (F)indicator
+  // MARK: (F)pageIndicator
   @ViewBuilder
-  private func indicator() -> some View {
+  private func pageIndicator() -> some View {
     ForEach(0...2, id: \.self) { index in
       HStack(spacing: 6) {
         Circle()
