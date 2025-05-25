@@ -10,32 +10,29 @@ import SwiftUI
 struct HomeView: View {
   var body: some View {
     ScrollView {
-      breadGuide()
+      BreadGuideView()
       
       RecentBookSectionView()
         .padding(.top, 24)
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top) // TODO: 컨텐츠 들어오면 maxHeigth 빼기
+    .frame(maxWidth: .infinity, alignment: .top)
     .background(.backgroundDefault)
   }
-  
-  // MARK: (F)breadGuide
-  @ViewBuilder
-  private func breadGuide() -> some View {
+}
+
+// MARK: - (S)BreadGuideView
+private struct BreadGuideView: View {
+  var body: some View {
     HStack(spacing: 16.5) {
+      
       Image(.happyBread)
+      
       VStack(alignment: .trailing, spacing: 5) {
         Text("빵식이가 요약할 수 있는 책이 있어요!")
           .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.semiBold, size: 13), lineHeight: 1.3, letterSpacing: 0.02)
-        HStack(spacing: 3) {
-          Text("자세히 보기")
-            .brStyleFont(.pretendard(.regular, size: 10), lineHeight: 1.3, letterSpacing: 0.02)
-          Image(systemName: "chevron.right")
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 7, height: 7)
-        }.foregroundStyle(.gray5)
+        
+        talkBubble()
       }
       .padding(.vertical, 8)
       .padding(.horizontal, 16)
@@ -45,8 +42,20 @@ struct HomeView: View {
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.leading, 24)
   }
+  
+  // MARK: (F)talkBubble
+  @ViewBuilder
+  private func talkBubble() -> some View {
+    HStack(spacing: 3) {
+      Text("자세히 보기")
+        .brStyleFont(.pretendard(.regular, size: 10), lineHeight: 1.3, letterSpacing: 0.02)
+      Image(systemName: "chevron.right")
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 7, height: 7)
+    }.foregroundStyle(.gray5)
+  }
 }
-
 
 // MARK: - (S)RecentBookSectionView
 private struct RecentBookSectionView: View {
@@ -65,18 +74,7 @@ private struct RecentBookSectionView: View {
 
       }.padding(.horizontal, 24)
       
-      TabView(selection: $currentIndex) {
-        ForEach(0...2, id: \.self) { index in
-          LibraryListCell(record: DummyData.dummyRecords.first!)
-            .frame(height: 114)
-            .background(.green1.opacity(0.6))
-            .cornerRadius(16)
-            .padding(.horizontal, 24)
-            .tag(index)
-        }
-      }
-      .frame(height: 114)
-      .tabViewStyle(.page(indexDisplayMode: .never))
+      InfiniteBannerView(currentIndex: $currentIndex)
     }
   }
   
@@ -91,6 +89,51 @@ private struct RecentBookSectionView: View {
           .animation(.easeInOut(duration: 0.2), value: currentIndex)
       }
     }
+  }
+}
+
+
+// MARK: - (S)InfiniteBannerView
+private struct InfiniteBannerView: View {
+  
+  // TODO: 근웅님한테 Cell이 Entity가 넘어가지 않게 해달라고 요청
+  let items = Array(DummyData.dummyRecords.prefix(3))
+  @Binding var currentIndex: Int
+  
+  var body: some View {
+    TabView(selection: $currentIndex) {
+      bannerCell(record: items.last!)
+        .tag(-1)
+
+      ForEach(0..<items.count, id: \.self) { index in
+        bannerCell(record: items[index])
+          .tag(index)
+      }
+      .onDisappear {
+        if currentIndex == -1 {
+          currentIndex = items.count - 1
+        } else if currentIndex == items.count {
+          currentIndex = 0
+        }
+      }
+
+      bannerCell(record: items.first!)
+        .tag(items.count)
+    }
+    .frame(height: 114)
+    .tabViewStyle(.page(indexDisplayMode: .never))
+    .onAppear {
+      currentIndex = 0
+    }
+  }
+  
+  // MARK: (F)bannerCell
+  @ViewBuilder
+  private func bannerCell(record: Record) -> some View {
+    LibraryListCell(record: record)
+      .background(.green1.opacity(0.6))
+      .cornerRadius(16)
+      .padding(.horizontal, 24)
   }
 }
 
