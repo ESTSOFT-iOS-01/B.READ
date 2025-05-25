@@ -47,25 +47,3 @@ final class Coordinator<T: Hashable>: ObservableObject {
 }
 
 
-extension Coordinator where T == MainRoute {
-  
-  @ViewBuilder
-  func buildView(for route: T) -> some View {
-    switch route {
-      
-    // MARK: - Search Flow
-    case .barcode:
-      ScanView(viewModel: ScanViewModel())
-    case .searchBook(let isbn):
-      BookDetailView(viewModel: BookViewModel(isbn: isbn))
-    case .searchRecord(let id):
-      BookDetailView(viewModel: BookViewModel(isbn: id))
-      
-    // MARK: - MyPage Flow
-    case .insertNickname:
-      NicknameView()
-    case .selectCategory:
-      CategorySelectionView()
-    }
-  }
-}

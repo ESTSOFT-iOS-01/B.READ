@@ -1,5 +1,5 @@
 //
-//  MainCoordinatorContainer.swift
+//  CoordinatorContainer.swift
 //  B.READ
 //
 //  Created by 신승재 on 5/25/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MainCoordinatorContainer<Content: View>: View {
+struct CoordinatorContainer<Content: View>: View {
   
   @StateObject private var coordinator = Coordinator<MainRoute>()
   
