@@ -22,7 +22,7 @@ import Foundation
 /// - quoteIDs : 문장수집 id - [String]
 /// - createdAt : 처음 생성된 날짜
 /// - updatedAt : 업데이트된 날짜
-struct Record {
+struct Record: Identifiable {
   let id: String
   let isbn: String
   var state: ReadState
@@ -37,6 +37,16 @@ struct Record {
   var quoteIDs: [String]
   var createdAt: Date
   var updatedAt: Date
+}
+
+extension Record: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+  
+  static func == (lhs: Record, rhs: Record) -> Bool {
+    return lhs.id == rhs.id
+  }
 }
 
 /// 독서 상태 정보입니다.

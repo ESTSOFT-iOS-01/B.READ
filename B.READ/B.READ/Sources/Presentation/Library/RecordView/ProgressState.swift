@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ProgressState {
-  // TODO: 빵 굽기에 맞는 이름으로 변경
+  
   case raw
   case rare
   case medium
@@ -48,5 +48,4 @@ enum ProgressState {
       Image(.bread3)
     }
   }
-  
 }

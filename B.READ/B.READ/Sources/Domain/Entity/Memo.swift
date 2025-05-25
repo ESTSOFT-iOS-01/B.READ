@@ -14,7 +14,7 @@ import Foundation
 /// - content : 내용
 /// - pages : (메모 첫 페이지, 메모 끝 페이지)
 /// - guides : AI 제안 내용 - [String]
-struct Memo {
+struct Memo: Identifiable {
   let id: String
   let isbn: String
   var createdAt: Date

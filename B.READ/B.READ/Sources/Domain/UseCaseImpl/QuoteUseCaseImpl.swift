@@ -1,0 +1,74 @@
+//
+//  QuoteUseCaseImpl.swift
+//  B.READ
+//
+//  Created by 도민준 on 5/22/25.
+//
+
+
+final class QuoteUseCaseImpl: QuoteUseCase {
+  private let quoteRepository: QuoteRepository
+  private let bookRepository: BookRepository
+
+  /// 생성자
+  /// - Parameters:
+  ///   - quoteRepo: 문장 저장소 구현체
+  ///   - bookRepo: 도서 저장소 구현체(페이지 검증용)
+  init(quoteRepository: QuoteRepository, bookRepository: BookRepository) {
+    self.quoteRepository = quoteRepository
+    self.bookRepository = bookRepository
+  }
+
+  func addQuote(_ quote: Quote) async throws {
+    // 빈 내용 검증
+    let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !content.isEmpty else {
+      throw QuoteUseCaseError.emptyContent
+    }
+    // 페이지 범위 검증
+    try await validatePage(quote.page, forISBN: quote.isbn)
+    // 저장 수행
+    try await quoteRepository.createQuote(quote)
+  }
+
+  func updateQuote(_ quote: Quote) async throws {
+    // 빈 내용 검증
+    let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !content.isEmpty else {
+      throw QuoteUseCaseError.emptyContent
+    }
+    // 페이지 범위 검증
+    try await validatePage(quote.page, forISBN: quote.isbn)
+    // 업데이트 수행
+    try await quoteRepository.updateQuote(quote)
+  }
+
+  func removeQuote(id: String) async throws {
+    // 삭제 수행
+    try await quoteRepository.deleteQuote(id: id)
+  }
+
+  func fetchQuote(id: String) async throws -> Quote {
+    return try await quoteRepository.fetchQuote(id: id)
+  }
+
+  func fetchQuotes(isbn: String) async throws -> [Quote] {
+    return try await quoteRepository.fetchQuotes(isbn: isbn)
+  }
+
+  func fetchAllQuotes() async throws -> [Quote] {
+    return try await quoteRepository.fetchAllQuotes()
+  }
+
+  
+}
+
+extension QuoteUseCaseImpl {
+  func validatePage(_ page: Int, forISBN isbn: String) async throws {
+    let book = try await bookRepository.fetchBook(isbn: isbn)
+    let maxPage = book.totalPages
+    guard (1...maxPage).contains(page) else {
+      throw QuoteUseCaseError.invalidPage(max: maxPage)
+    }
+  }
+}
