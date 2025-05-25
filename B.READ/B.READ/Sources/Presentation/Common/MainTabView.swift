@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct MainTabView: View {
-  @State private var searchCoordinator = Coordinator<SearchRoute>()
-  @State private var myPageCoordinator = Coordinator<MyPageRoute>()
   @State private var selectedTab: Tab = .home
   
   enum Tab {
@@ -26,42 +24,42 @@ struct MainTabView: View {
   }
   
   var body: some View {
-    TabView(selection: $selectedTab) {
-      HomeView()
-        .tabItem {
-          Image(systemName: "house.fill")
-          Text("홈")
-        }
-        .tag(Tab.home)
-      
-      SearchView(viewModel: SearchViewModel())
-        .environmentObject(searchCoordinator)
-        .tabItem { Label("검색", systemImage: "magnifyingglass") }
-        .tag(Tab.search)
-      
-      LibraryView(viewModel: LibraryViewModel())
-        .tabItem {
-          Image(systemName: "books.vertical.fill")
-          Text("책빵")
-        }
-        .tag(Tab.library)
-      
-      RecordView()
-        .tabItem {
-          Image(systemName: "doc.text.magnifyingglass")
-          Text("기록")
-        }
-        .tag(Tab.record)
-      
-      MyPageView()
-        .environmentObject(myPageCoordinator)
-        .tabItem {
-          Image(systemName: "person.fill")
-          Text("마이")
-        }
-        .tag(Tab.mypage)
-      
-    }.tint(.brown3)
+    MainCoordinatorContainer {
+      TabView(selection: $selectedTab) {
+        
+        HomeView()
+          .tabItem {
+            Image(systemName: "house.fill")
+            Text("홈")
+          }
+          .tag(Tab.home)
+        
+        SearchView(viewModel: SearchViewModel())
+          .tabItem { Label("검색", systemImage: "magnifyingglass") }
+          .tag(Tab.search)
+        
+        LibraryView(viewModel: LibraryViewModel())
+          .tabItem {
+            Image(systemName: "books.vertical.fill")
+            Text("책빵")
+          }
+          .tag(Tab.library)
+        
+        RecordView()
+          .tabItem {
+            Image(systemName: "doc.text.magnifyingglass")
+            Text("기록")
+          }
+          .tag(Tab.record)
+        
+        MyPageView()
+          .tabItem {
+            Image(systemName: "person.fill")
+            Text("마이")
+          }
+          .tag(Tab.mypage)
+      }.tint(.brown3)
+    }
   }
 }
 

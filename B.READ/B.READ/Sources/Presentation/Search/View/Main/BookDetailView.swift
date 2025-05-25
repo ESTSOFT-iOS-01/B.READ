@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BookDetailView: View {
   @ObservedObject var viewModel: BookViewModel
-  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   
   var body: some View {
     VStack {

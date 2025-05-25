@@ -9,25 +9,19 @@ import SwiftUI
 
 struct MyPageView: View {
   
-  @EnvironmentObject private var coordinator: Coordinator<MyPageRoute>
+  @EnvironmentObject private var coordinator: Coordinator<MainRoute>
   
   var body: some View {
-    NavigationStack(path: $coordinator.paths) {
-      VStack(alignment: .leading, spacing: 32) {
-        
-        nicknameButton()
-        
-        MenuListView(coordinator: coordinator)
-        
-      }
-      .padding(.horizontal, 24)
-      .frame(maxHeight: .infinity, alignment: .top)
-      .background(.backgroundDefault)
-      .toolbar(coordinator.paths.isEmpty ? .visible : .hidden, for: .tabBar)
-      .navigationDestination(for: MyPageRoute.self) { route in
-        coordinator.buildView(for: route)
-      }
+    VStack(alignment: .leading, spacing: 32) {
+      
+      nicknameButton()
+      
+      MenuListView(coordinator: coordinator)
+      
     }
+    .padding(.horizontal, 24)
+    .frame(maxHeight: .infinity, alignment: .top)
+    .background(.backgroundDefault)
   }
   
   // MARK: (F)nicknameButton
@@ -53,7 +47,7 @@ struct MyPageView: View {
 // MARK: - (S)MenuListView
 private struct MenuListView: View {
   
-  let coordinator: Coordinator<MyPageRoute>
+  let coordinator: Coordinator<MainRoute>
   
   // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
   enum WeekDay: Int, CaseIterable {
@@ -119,7 +113,7 @@ private struct MenuListView: View {
           .foregroundStyle(.red)
           .underline()
       }.padding(.top, menuSpacing)
-
+      
       Image(.readBreadMyPage)
         .resizable()
         .aspectRatio(contentMode: .fit)
@@ -187,5 +181,5 @@ private struct MenuListView: View {
 
 #Preview {
   MyPageView()
-    .environmentObject(Coordinator<MyPageRoute>())
+    .environmentObject(Coordinator<MainRoute>())
 }
