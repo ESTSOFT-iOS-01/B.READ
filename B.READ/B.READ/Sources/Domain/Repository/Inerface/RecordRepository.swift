@@ -24,6 +24,15 @@ protocol RecordRepository {
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
   func fetchAllRecord() async throws -> [Record]
   
+  /// 특정 Record를 조회합니다.
+  ///
+  /// - Parameter id: 독서 기록의 id
+  /// - Returns: Record Entity
+  /// - Throws:
+  ///   - `RepositoryError.dataNotFound`: 수정할 독서 기록이 존재하지 않는 경우
+  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  func fetchRecord(id: String) async throws -> Record
+  
   /// 최근 업데이트한 `읽는 중` 상태의 독서 기록을 조회합니다.
   ///
   /// - Parameter count: Int 조회할 독서 기록의 최대 개수

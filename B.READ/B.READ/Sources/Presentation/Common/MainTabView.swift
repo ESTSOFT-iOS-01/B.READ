@@ -29,7 +29,7 @@ struct MainTabView: View {
         .tabItem { Label("검색", systemImage: "magnifyingglass") }
         .tag(Tab.search)
       
-      LibraryView(viewModel: LibraryViewModel())
+      LibraryView(viewModel: .init())
         .tabItem {
           Image(systemName: "books.vertical.fill")
           Text("책빵")

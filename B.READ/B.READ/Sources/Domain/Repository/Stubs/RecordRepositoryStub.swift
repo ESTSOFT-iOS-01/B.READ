@@ -9,7 +9,8 @@ import Foundation
 
 actor RecordRepositoryStub: RecordRepository {
   
-  private var storedRecords: [Record] = []
+//  private var storedRecords: [Record] = []
+  private var storedRecords: [Record] = DummyData.dummyRecords
   
   func createRecord(_ record: Record) throws {
     print("Stub: ", #function)
@@ -20,13 +21,21 @@ actor RecordRepositoryStub: RecordRepository {
     storedRecords.append(record)
   }
 
-  func fetchAllRecord() async throws -> [Record] {
+  func fetchAllRecord() throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
     
     return records
   }
-
+  
+  func fetchRecord(id: String) throws -> Record {
+    print("Stub: ", #function)
+    guard let record = storedRecords.filter({ $0.id == id }).first else {
+      throw RepositoryError.dataNotFound
+    }
+    
+    return record
+  }
   func fetchRecentReadingRecord(count: Int) throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
