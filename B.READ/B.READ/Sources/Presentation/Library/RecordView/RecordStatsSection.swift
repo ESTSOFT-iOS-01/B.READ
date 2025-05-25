@@ -77,7 +77,6 @@ struct RecordStatsSection: View {
   }
   
   // MARK: - (F)recordPeriodView
-  //
   @ViewBuilder
   private func recordPeriodView() -> some View {
     HStack(spacing: layoutPadding) {
