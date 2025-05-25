@@ -27,7 +27,7 @@ enum DummyData {
 
   static var quote = Quote(
     id: "id-1",
-    isbn: "123",
+    isbn: "9791194368137",
     content: "테스트",
     page: 8
   )
