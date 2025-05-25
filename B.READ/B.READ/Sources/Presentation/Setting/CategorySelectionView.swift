@@ -11,9 +11,9 @@ struct CategorySelectionView: View {
   
   @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
   @AppStorage("didInitialSetup") private var didInitialSetup: Bool = true
-  // TODO: 코디네이터 완성되면 외부주입으로 변경
   @StateObject private var viewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
+  
   private var isButtonEnabled: Bool {
     viewModel.selectedCategories.count == 2
   }

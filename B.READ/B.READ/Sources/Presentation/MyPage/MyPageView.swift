@@ -10,6 +10,7 @@ import SwiftUI
 struct MyPageView: View {
   
   @EnvironmentObject private var coordinator: Coordinator<MainRoute>
+  @StateObject private var viewModel = SettingViewModel()
   
   var body: some View {
     VStack(alignment: .leading, spacing: 32) {

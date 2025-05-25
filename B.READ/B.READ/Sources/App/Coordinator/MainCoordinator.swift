@@ -22,9 +22,6 @@ enum MainRoute: Hashable {
 
 extension Coordinator where T == MainRoute {
   
-  
-  
-  
   @ViewBuilder
   func buildView(for route: T) -> some View {
     switch route {

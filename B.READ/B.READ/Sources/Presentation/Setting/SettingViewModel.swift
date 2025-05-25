@@ -22,6 +22,7 @@ final class SettingViewModel: ObservableObject {
   
   init() {
     fetchUserInfo()
+    print("SettingViewModel 생성")
   }
   
   // MARK: - Action
@@ -49,6 +50,10 @@ final class SettingViewModel: ObservableObject {
         }
       }
     }
+  }
+  
+  deinit {
+    print("SettingViewModel 소멸")
   }
 }
 
