@@ -13,6 +13,7 @@ final class SettingViewModel: ObservableObject {
   @Published var nicknameText: String = ""
   @Published var selectedCategories: Set<CategoryType> = []
   @Published var weeklyStreak: [Bool] = Array(repeating: false, count: 7)
+  @Published var isSaveComplete: Bool = false
   
   // MARK: - Internal Variable
   private var example: String?
@@ -42,6 +43,7 @@ final class SettingViewModel: ObservableObject {
         guard let self else { return }
         do {
           try await profileUseCase.setNickname(nicknameText)
+          await MainActor.run { self.isSaveComplete = true }
         } catch {
           print(error.localizedDescription)
         }
@@ -51,6 +53,7 @@ final class SettingViewModel: ObservableObject {
         guard let self else { return }
         do {
           try await profileUseCase.setCategory(Array(selectedCategories))
+          await MainActor.run { self.isSaveComplete = true }
         } catch {
           print(error.localizedDescription)
         }

@@ -40,11 +40,6 @@ struct NicknameView: View {
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         viewModel.send(.saveNickname)
-        if didInitialSetup {
-          mainCoordinator.pop()
-        } else {
-          onBoardingCoordinator.push(.selectCategory)
-        }
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)
@@ -62,6 +57,13 @@ struct NicknameView: View {
       
       let regex = /^[a-zA-Z0-9가-힣]*$/
       isValid = newValue.contains(regex)
+    }
+    .onChange(of: viewModel.isSaveComplete) {
+      if didInitialSetup {
+        mainCoordinator.pop()
+      } else {
+        onBoardingCoordinator.push(.selectCategory)
+      }
     }
     .task {
       await Task.yield()

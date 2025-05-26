@@ -32,11 +32,6 @@ struct CategorySelectionView: View {
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         viewModel.send(.saveCatetories)
-        if didInitialSetup {
-          mainCoordinator.pop()
-        } else {
-          didInitialSetup = true
-        }
       }
       .disabled(!isButtonEnabled)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
@@ -45,6 +40,13 @@ struct CategorySelectionView: View {
       
     }
     .padding(.horizontal, 24)
+    .onChange(of: viewModel.isSaveComplete) {
+      if didInitialSetup {
+        mainCoordinator.pop()
+      } else {
+        didInitialSetup = true
+      }
+    }
   }
 }
 
