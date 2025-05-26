@@ -76,7 +76,6 @@ struct LibraryListCell: View {
   }
 }
 
-
 #Preview {
   let record = LibraryRecordVO(
     id: "123",
