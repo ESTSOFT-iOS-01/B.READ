@@ -42,6 +42,7 @@ struct LibraryListCell: View {
         // 독서 현황
         RecordStatsView(record: record)
         
+        // TODO: LibraryRecordVO의 period가 nil일 경우 처리
         // 독서 기간
         Group {
           if let start = record.period.start?.string(format: .dotSeparated) {

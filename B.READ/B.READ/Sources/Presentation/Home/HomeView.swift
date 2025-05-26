@@ -100,16 +100,20 @@ private struct RecentBookSectionView: View {
 private struct InfiniteBannerView: View {
   
   // TODO: 근웅님한테 Cell이 Entity가 넘어가지 않게 해달라고 요청
-  let items = Array(DummyData.dummyRecords.prefix(3))
+  let items = [
+    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
+    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
+    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now)
+  ]
   @Binding var currentIndex: Int
   
   var body: some View {
     TabView(selection: $currentIndex) {
-      bannerCell(record: items.last!)
+      bannerCell(recordVO: items.last!)
         .tag(-1)
 
       ForEach(0..<items.count, id: \.self) { index in
-        bannerCell(record: items[index])
+        bannerCell(recordVO: items[index])
           .tag(index)
       }
       .onDisappear {
@@ -120,7 +124,7 @@ private struct InfiniteBannerView: View {
         }
       }
 
-      bannerCell(record: items.first!)
+      bannerCell(recordVO: items.first!)
         .tag(items.count)
     }
     .frame(height: 114)
@@ -132,20 +136,7 @@ private struct InfiniteBannerView: View {
   
   // MARK: (F)bannerCell
   @ViewBuilder
-  private func bannerCell(record: Record) -> some View {
-    let recordVO: LibraryRecordVO = LibraryRecordVO(
-      id: record.id,
-      isbn: record.isbn,
-      name: "책 제목입니다아아아",
-      state: record.state,
-      heartCount: record.heartCount,
-      starCount: record.starCount,
-      percent: 22,
-      memoCount:  record.memoIDs.count,
-      quoteCount: record.quoteIDs.count,
-      isFavorite: record.isFavorite,
-      createdAt: record.createdAt
-    )
+  private func bannerCell(recordVO: LibraryRecordVO) -> some View {
     LibraryListCell(record: recordVO)
       .background(.green1.opacity(0.6))
       .cornerRadius(16)
