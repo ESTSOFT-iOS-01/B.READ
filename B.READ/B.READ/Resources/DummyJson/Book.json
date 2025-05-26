@@ -1,0 +1,54 @@
+{
+    "version": "20131101",
+    "logo": "http://image.aladin.co.kr/img/header/2011/aladin_logo_new.gif",
+    "title": "알라딘 상품정보 - 데미안 (오리지널 초판본 표지디자인)",
+    "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=98710881&amp;partner=openAPI",
+    "pubDate": "Fri, 23 May 2025 07:07:23 GMT",
+    "totalResults": 1,
+    "startIndex": 1,
+    "itemsPerPage": 1,
+    "query": "isbn13=9791187011590",
+    "searchCategoryId": 0,
+    "searchCategoryName": "",
+    "item": [
+        {
+            "title": "데미안 (오리지널 초판본 표지디자인) - 최신 원전 완역본",
+            "link": "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=98710881&amp;partner=openAPI&amp;start=api",
+            "author": "헤르만 헤세 (지은이), 이미영 (옮긴이), 김선형 (해설)",
+            "pubDate": "2017-01-01",
+            "description": "헤르만 헤세의 ‘영혼의 전기’로 소개되는 《데미안》은 깊이 있는 정신분석과 자기 탐구로 가시밭 같은 자아 성찰의 길을 섬세하게 그려낸 그의 대표작이다. 이 책을 1919년 오리지널 초판본의 우아한 표지로 다시 만나보자.",
+            "isbn": "K042535550",
+            "isbn13": "9791187011590",
+            "itemId": 98710881,
+            "priceSales": 2970,
+            "priceStandard": 3300,
+            "mallType": "BOOK",
+            "stockStatus": "",
+            "mileage": 160,
+            "cover": "https://image.aladin.co.kr/product/9871/8/coversum/k042535550_2.jpg",
+            "categoryId": 50922,
+            "categoryName": "국내도서>소설/시/희곡>독일소설",
+            "publisher": "코너스톤",
+            "salesPoint": 87477,
+            "adult": false,
+            "fixedPrice": true,
+            "customerReviewRank": 10,
+            "seriesInfo": {
+                "seriesId": 1077972,
+                "seriesLink": "http://www.aladin.co.kr/shop/common/wseriesitem.aspx?SRID=1077972&amp;partner=openAPI",
+                "seriesName": "코너스톤 착한 고전 시리즈 1"
+            },
+            "subInfo": {
+                "subTitle": "최신 원전 완역본",
+                "originalTitle": "Demian (1919년)",
+                "itemPage": 220,
+                "ratingInfo": {
+                    "ratingScore": 9.6,
+                    "ratingCount": 25,
+                    "commentReviewCount": 21,
+                    "myReviewCount": 4
+                }
+            }
+        }
+    ]
+}

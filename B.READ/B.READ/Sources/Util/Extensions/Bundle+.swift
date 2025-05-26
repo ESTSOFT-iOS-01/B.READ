@@ -17,6 +17,14 @@ extension Bundle {
     value(forKey: "ALAN_BASE_URL", fromPlistNamed: "APIUrl")
   }()
   
+  static let ALADIN_TTB_KEY: String = {
+    value(forKey: "ALADIN_TTB_KEY", fromPlistNamed: "APIKey")
+  }()
+  
+  static let ALADIN_BASE_URL: String = {
+    value(forKey: "ALADIN_BASE_URL", fromPlistNamed: "APIUrl")
+  }()
+  
   private static func value<T>(forKey key: String, fromPlistNamed name: String) -> T {
     guard let filePath = Bundle.main.path(forResource: name, ofType: "plist"),
           let plist = NSDictionary(contentsOfFile: filePath),

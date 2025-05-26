@@ -4,5 +4,7 @@
 <dict>
 	<key>ALAN_BASE_URL</key>
 	<string>https://kdt-api-function.azurewebsites.net</string>
+	<key>ALADIN_BASE_URL</key>
+	<string>http://www.aladin.co.kr/ttb/api</string>
 </dict>
 </plist>

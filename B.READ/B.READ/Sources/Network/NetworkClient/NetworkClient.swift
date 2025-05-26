@@ -7,11 +7,14 @@
 
 import Foundation
 
-final class NetworkClient {
+class NetworkClient {
   
   static let shared = NetworkClient()
   
-  private init() {}
+//  private init() {}
+  
+  // 테스트 용으로 임시 init public화
+  init() {}
   
   /// 네트워크 요청을 수행하고, 응답 데이터를 그대로 반환합니다.
   /// - Parameter request: 요청 정보
@@ -82,5 +85,29 @@ final class NetworkClient {
 
     let string = String(data: data, encoding: .utf8) ?? "<Invalid UTF-8 Response>"
     return (string, httpResponse)
+  }
+  
+  func performOrDecodeAladinError<T: Decodable>(
+    _ request: RequestConvertible,
+    decodeType: T.Type
+  ) async throws -> T {
+    let urlRequest = try request.asURLRequest()
+    let (data, response) = try await URLSession.shared.data(for: urlRequest)
+
+    guard let _ = response as? HTTPURLResponse else {
+      throw URLError(.badServerResponse)
+    }
+
+    do {
+      let decoded = try JSONDecoder().decode(T.self, from: data)
+      return decoded
+    } catch {
+      // 디코딩 실패 → 알라딘 에러 DTO로 다시 시도
+      if let aladinError = try? JSONDecoder().decode(AladinErrorDTO.self, from: data) {
+        throw AladinError.serverError(code: aladinError.errorCode, message: aladinError.errorMessage)
+      } else {
+        throw AladinError.decodingError(message: error.localizedDescription)
+      }
+    }
   }
 }
