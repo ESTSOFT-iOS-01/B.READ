@@ -29,6 +29,7 @@ struct LibraryListView: View {
             selectedRecord = record
           }
       } // : ForEach
+      .background(.backgroundDefault)
     } // : List
     .listStyle(.plain)
     .scrollIndicators(.hidden)
