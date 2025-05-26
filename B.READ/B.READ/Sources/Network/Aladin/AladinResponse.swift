@@ -22,6 +22,17 @@ struct SearchListDTO: Decodable {
   }
 }
 
+extension SearchListDTO {
+  func toEntity() -> SearchPagnation {
+    return SearchPagnation(
+      totalCount: totalCount,
+      startIndex: startIndex,
+      countPerPage: countPerPage,
+      books: books.map { $0.toEntity() }
+    )
+  }
+}
+
 struct ItemPreviewDTO: Decodable {
   let title: String
   let author: String
@@ -36,6 +47,20 @@ struct ItemPreviewDTO: Decodable {
     case publishedDate = "pubDate"
     case isbn = "isbn13"
     case coverURL = "cover"
+  }
+}
+
+extension ItemPreviewDTO {
+  func toEntity() -> BookPreview {
+    return BookPreview(
+      title: title,
+      author: author,
+      publishedDate: publishedDate,
+      description: description,
+      isbn: isbn,
+      coverURL: coverURL,
+      publisher: publisher
+    )
   }
 }
 
@@ -92,7 +117,23 @@ struct ItemDTO: Decodable {
     self.ratingScore = try ratingInfo.decode(Double.self, forKey: .ratingScore)
     self.ratingCount = try ratingInfo.decode(Int.self, forKey: .ratingCount)
   }
-  
+}
+
+extension ItemDTO {
+  func toEntity() -> BookDetail {
+    return BookDetail(
+      title: title,
+      author: author,
+      publishedDate: publishedDate,
+      description: description,
+      isbn: isbn,
+      coverURL: coverURL,
+      publisher: publisher,
+      pageCount: pageCount,
+      ratingScore: ratingScore,
+      ratingCount: ratingCount
+    )
+  }
 }
 
 // 베스트셀러 API
@@ -112,6 +153,18 @@ struct BestSellerDTO: Decodable {
     case isbn = "isbn13"
     case coverURL = "cover"
     case rank = "bestRank"
+  }
+}
+
+extension BestSellerDTO {
+  func toEntity() -> BestSeller {
+    return BestSeller(
+      title: title,
+      author: author,
+      isbn: isbn,
+      coverURL: coverURL,
+      rank: rank
+    )
   }
 }
 

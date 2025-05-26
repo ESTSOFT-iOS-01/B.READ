@@ -21,23 +21,8 @@ public final class AladinService: BookService {
     let dto = try await client.performOrDecodeAladinError(
       AladinRouter.getBookList(query: keyword),
       decodeType: SearchListDTO.self)
-    
-    return SearchPagnation(
-      totalCount: dto.totalCount,
-      startIndex: dto.startIndex,
-      countPerPage: dto.countPerPage,
-      books: dto.books.map {
-        BookPreview(
-          title: $0.title,
-          author: $0.author,
-          publishedDate: $0.publishedDate,
-          description: $0.description,
-          isbn: $0.isbn,
-          coverURL: $0.coverURL,
-          publisher: $0.publisher
-        )
-      }
-    )
+
+    return dto.toEntity()
   }
 
   func fetchBookDetail(isbn: String) async throws -> BookDetail {
@@ -51,18 +36,7 @@ public final class AladinService: BookService {
       throw AladinError.decodingError(message: "책 정보를 찾을 수 없습니다.")
     }
     
-    return BookDetail(
-      title: book.title,
-      author: book.author,
-      publishedDate: book.publishedDate,
-      description: book.description,
-      isbn: book.isbn,
-      coverURL: book.coverURL,
-      publisher: book.publisher,
-      pageCount: book.pageCount,
-      ratingScore: book.ratingScore,
-      ratingCount: book.ratingCount
-    )
+    return book.toEntity()
     
   }
 
@@ -73,13 +47,6 @@ public final class AladinService: BookService {
       AladinRouter.getBestSellerList(categoryID: category),
       decodeType: BestSellerListDTO.self)
     
-    return dto.item.map{
-      BestSeller(
-        title: $0.title,
-        author: $0.author,
-        isbn: $0.isbn,
-        coverURL: $0.coverURL,
-        rank: $0.rank)
-    }
+    return dto.item.map{ $0.toEntity() }
   }
 }
