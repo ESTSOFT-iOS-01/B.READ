@@ -101,9 +101,9 @@ private struct InfiniteBannerView: View {
   
   // TODO: 근웅님한테 Cell이 Entity가 넘어가지 않게 해달라고 요청
   let items = [
-    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, isFavorite: true, createdAt: .now),
-    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, isFavorite: true, createdAt: .now),
-    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, isFavorite: true, createdAt: .now)
+    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
+    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
+    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now)
   ]
   @Binding var currentIndex: Int
   
