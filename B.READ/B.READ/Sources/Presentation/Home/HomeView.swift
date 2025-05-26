@@ -133,7 +133,20 @@ private struct InfiniteBannerView: View {
   // MARK: (F)bannerCell
   @ViewBuilder
   private func bannerCell(record: Record) -> some View {
-    LibraryListCell(record: record)
+    let recordVO: LibraryRecordVO = LibraryRecordVO(
+      id: record.id,
+      isbn: record.isbn,
+      name: "책 제목입니다아아아",
+      state: record.state,
+      heartCount: record.heartCount,
+      starCount: record.starCount,
+      percent: 22,
+      memoCount:  record.memoIDs.count,
+      quoteCount: record.quoteIDs.count,
+      isFavorite: record.isFavorite,
+      createdAt: record.createdAt
+    )
+    LibraryListCell(record: recordVO)
       .background(.green1.opacity(0.6))
       .cornerRadius(16)
       .padding(.horizontal, 24)

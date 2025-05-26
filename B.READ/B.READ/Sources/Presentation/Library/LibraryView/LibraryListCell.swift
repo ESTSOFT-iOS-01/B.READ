@@ -18,7 +18,7 @@ struct LibraryListCell: View {
   }
   
   var body: some View {
-    HStack(spacing: 0) {
+    HStack(alignment: .top, spacing: 0) {
       // TODO: - (DB연결 후)Book 표지가 들어갈 자리
       Group {
         if let imageData = record.coverImage, let image = UIImage(data: imageData) {
@@ -32,7 +32,7 @@ struct LibraryListCell: View {
       } // : Group
       .frame(width: 57, height: 88)
       .cornerRadius(6)
-        
+      
       VStack(alignment: .leading, spacing: 6) {
         // 도서 제목
         Text(record.name)
@@ -43,13 +43,21 @@ struct LibraryListCell: View {
         RecordStatsView(record: record)
         
         // 독서 기간
-        recordPeriod
-          .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1, letterSpacing: -0.025)
-          .foregroundStyle(.brown5)
+        Group {
+          if let start = record.period.start?.string(format: .dotSeparated) {
+            if let end = record.period.end?.string(format: .dotSeparated) {
+              Text("\(start) ~ \(end)")
+            } else {
+              Text("\(start) ~")
+            }
+          }
+        }
+        .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1, letterSpacing: -0.025)
+        .foregroundStyle(.brown5)
         
       } // : VStack
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-      .padding(.top, 16)
+      .padding(.top, 11)
       .padding(.leading, layoutPadding)
       .padding(.trailing, record.isFavorite ? 2 : 40)
       
@@ -66,19 +74,27 @@ struct LibraryListCell: View {
     .padding(.horizontal, layoutPadding)
     .padding(.vertical, 13) // 114(전체높이) - 88(사진높이) = 26 / 2 = 13 => 내부 요소로 높이 맞추기
   }
-  
-  // MARK: - (S)recordPeriod
-  private var recordPeriod: some View {
-    VStack {
-      if record.state == .reading {
-        let startDay: String = record.period.start!.string(format: .dotSeparated)
-        Text("\(startDay) ~")
-        
-      } else if record.state == .completed {
-        let startDay: String = record.period.start!.string(format: .dotSeparated)
-        let endDay: String = record.period.start!.string(format: .dotSeparated)
-        Text("\(startDay) ~ \(endDay)")
-      }
-    } // : VStack
-  }
+}
+
+
+#Preview {
+  let record = LibraryRecordVO(
+    id: "123",
+    isbn: "9788937460586",
+    name: "싯다르타",
+    coverImage: nil,
+    state: .completed,
+    heartCount: 0,
+    starCount: 4,
+    percent: 100,
+    memoCount: 4,
+    quoteCount: 3,
+    period: (
+      Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
+      Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
+    ),
+    isFavorite: false,
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
+  )
+  LibraryListCell(record: record)
 }
