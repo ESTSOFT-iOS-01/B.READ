@@ -22,14 +22,12 @@ struct LibraryUseCaseTest {
     bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
     
-    
     libraryUseCase = LibraryUseCaseImpl(
       bookRepository: bookRepository,
       recordRepository: recordRepository,
       quoteRepository: quoteRepository
     )
   }
-  
   
   @Test("Save Record Test")
   func saveRecordTest() async throws {
