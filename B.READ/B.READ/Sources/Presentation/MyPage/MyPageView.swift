@@ -23,6 +23,9 @@ struct MyPageView: View {
     .padding(.horizontal, 24)
     .frame(maxHeight: .infinity, alignment: .top)
     .background(.backgroundDefault)
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
   }
   
   // MARK: (F)nicknameButton
@@ -32,7 +35,7 @@ struct MyPageView: View {
       coordinator.push(.insertNickname)
     } label: {
       HStack(spacing: 14) {
-        Text("닉네임")
+        Text(viewModel.nicknameText)
           .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.bold, size: 24), lineHeight: 1.45, letterSpacing: 0.02)
         Image(systemName: "chevron.right")
@@ -49,7 +52,7 @@ struct MyPageView: View {
 private struct MenuListView: View {
   
   let coordinator: Coordinator<MainRoute>
-  let viewModel: SettingViewModel
+  @ObservedObject var viewModel: SettingViewModel
   
   // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
   enum WeekDay: Int, CaseIterable {
@@ -93,7 +96,7 @@ private struct MenuListView: View {
       
       VStack(alignment: .leading, spacing: menuInnerSpacing) {
         menuTitle(title: "관심 분야", chevronHidden: false)
-        selectedCategories(categories: [.classics, .artCulture])
+        selectedCategories(categories: Array(viewModel.selectedCategories))
       }
       .padding(.top, menuSpacing)
       .onTapGesture {

@@ -11,13 +11,13 @@ import SwiftUI
 struct RootViewSwitcher: View {
   
   @State private var coordinator = Coordinator<OnboardingRoute>()
-  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = true
+  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
   
   init() {
     UINavigationBar.configureGlobalAppearance()
   }
   
-  private var rootScene: RootScene { didInitialSetup ? .onboarding : .main }
+  private var rootScene: RootScene { didInitialSetup ? .main : .onboarding }
   enum RootScene {
     case onboarding
     case main

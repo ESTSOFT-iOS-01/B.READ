@@ -95,6 +95,6 @@ enum CategoryType: Int, CaseIterable {
   }
   
   var cid: Int {
-    1 // example 입니다.
+    self.rawValue
   }
 }

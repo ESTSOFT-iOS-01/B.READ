@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct NicknameView: View {
-  
-  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
+  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
+  @EnvironmentObject var onBoardingCoordinator: Coordinator<OnboardingRoute>
+  @EnvironmentObject var mainCoordinator: Coordinator<MainRoute>
   @StateObject private var viewModel = SettingViewModel()
   @FocusState private var isFocused: Bool
   @State private var isValid = true
@@ -39,7 +40,11 @@ struct NicknameView: View {
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         viewModel.send(.saveNickname)
-        coordinator.push(.selectCategory)
+        if didInitialSetup {
+          mainCoordinator.pop()
+        } else {
+          onBoardingCoordinator.push(.selectCategory)
+        }
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)

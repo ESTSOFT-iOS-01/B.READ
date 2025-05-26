@@ -28,12 +28,15 @@ final class SettingViewModel: ObservableObject {
   
   // MARK: - Action
   enum Action {
+    case onAppear
     case saveNickname
     case saveCatetories
   }
   
   func send(_ action: Action) {
     switch action {
+    case .onAppear:
+      fetchUserInfo()
     case .saveNickname:
       Task.detached(priority: .background) { [weak self] in
         guard let self else { return }
