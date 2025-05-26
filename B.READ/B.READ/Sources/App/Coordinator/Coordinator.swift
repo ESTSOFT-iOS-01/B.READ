@@ -46,34 +46,4 @@ final class Coordinator<T: Hashable>: ObservableObject {
 
 }
 
-// MARK: - Onboarding Flow
-extension Coordinator where T == OnboardingRoute {
-  @ViewBuilder
-  func buildView(for route: OnboardingRoute) -> some View {
-    switch route {
-    case .insertNickname:
-      NicknameView()
-    case .selectCategory:
-      CategorySelectionView()
-    case .mainTabBar:
-      MainTabView()
-    }
-  }
-}
-
-// MARK: - Search Flow
-extension Coordinator where T == SearchRoute {
-  @ViewBuilder
-  func buildView(for route: SearchRoute) -> some View {
-    switch route {
-    case .barcode:
-      ScanView(viewModel: ScanViewModel())
-    case .searchBook(let isbn):
-      BookDetailView(viewModel: BookViewModel(isbn: isbn))
-    case .searchRecord(let id):
-      BookDetailView(viewModel: BookViewModel(isbn: id))
-    }
-  }
-}
-
 

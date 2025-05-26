@@ -9,6 +9,8 @@ import SwiftUI
 
 struct LoginView: View {
   
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
+  
   let subtitle: String = """
   책과 함께한 순간들을
   기록하고 간직하세요.
@@ -16,29 +18,27 @@ struct LoginView: View {
   """
   
   var body: some View {
-    NavigationStack {
-      VStack(alignment: .leading, spacing: 0) {
-        Text(subtitle)
-          .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.1)
-          .padding(.top, 44)
-        
-        Text("B. READ")
-          .brStyleFont(.peaceSans(size: 48), lineHeight: 1.1)
-          .padding(.top, 16)
-        
-        Text("누르면 초기 설정을 시작해요!")
-          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-          .foregroundStyle(.gray2)
-          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
-        
-        startButton()
-          .padding(.bottom, 280)
-          .padding(.top, 16)
-
-      }
-      .padding(.horizontal, 56)
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
+    VStack(alignment: .leading, spacing: 0) {
+      Text(subtitle)
+        .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.1)
+        .padding(.top, 60)
+      
+      Text("B. READ")
+        .brStyleFont(.peaceSans(size: 48), lineHeight: 1.1)
+        .padding(.top, 16)
+      
+      Text("누르면 초기 설정을 시작해요!")
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .foregroundStyle(.gray2)
+        .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
+      
+      startButton()
+        .padding(.bottom, 240)
+        .padding(.top, 16)
+      
     }
+    .padding(.horizontal, 56)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
   
   
@@ -46,7 +46,7 @@ struct LoginView: View {
   @ViewBuilder
   private func startButton() -> some View {
     Button {
-      print("tab")
+      coordinator.push(.insertNickname)
     } label: {
       Text("시작하기")
         .foregroundStyle(.gray9)
@@ -54,9 +54,9 @@ struct LoginView: View {
         .frame(height: 56)
         .frame(maxWidth: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 8)
-              .stroke(Color.gray9, lineWidth: 2)
-          )
+          RoundedRectangle(cornerRadius: 8)
+            .stroke(Color.gray9, lineWidth: 2)
+        )
     }
   }
 }

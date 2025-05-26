@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)SearchView
 struct SearchView: View {
   @StateObject var viewModel: SearchViewModel
-  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
@@ -20,50 +20,43 @@ struct SearchView: View {
   }
   
   var body: some View {
-    NavigationStack(path: $coordinator.paths) {
-      VStack(alignment: .center, spacing: layoutSize) {
-        if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
-          logoView
-            .transition(.opacity)
-        }
-        
-        // 검색창은 한 개만 존재해야함
-        searchBarSection
-          .padding(
-            .top,
-            viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
-        
-        Group {
-          if viewModel.state.isSearchFocused {
-            RecentSearchView(viewModel: viewModel)
-              .transition(.opacity)
-              .frame(maxHeight: .infinity, alignment: .top)
-              .padding(.horizontal, horizontalPadding)
-            
-          } else if viewModel.state.isSearchSubmitted {
-            SearchResultView(viewModel: viewModel)
-              .transition(.opacity)
-              .frame(maxHeight: .infinity, alignment: .top)
-            
-          } else {
-            bestSellerSection
-              .environmentObject(coordinator)
-              .transition(.opacity)
-              .padding(.horizontal, horizontalPadding)
-          }
-        }
+    VStack(alignment: .center, spacing: layoutSize) {
+      if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
+        logoView
+          .transition(.opacity)
       }
-      .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-      .toolbar(viewModel.state.isSearchFocused ? .hidden : .visible, for: .tabBar)
-      .navigationDestination(for: SearchRoute.self) { route in
-        coordinator.buildView(for: route)
+      
+      // 검색창은 한 개만 존재해야함
+      searchBarSection
+        .padding(
+          .top,
+          viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+      
+      Group {
+        if viewModel.state.isSearchFocused {
+          RecentSearchView(viewModel: viewModel)
+            .transition(.opacity)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.horizontal, horizontalPadding)
+          
+        } else if viewModel.state.isSearchSubmitted {
+          SearchResultView(viewModel: viewModel)
+            .transition(.opacity)
+            .frame(maxHeight: .infinity, alignment: .top)
+          
+        } else {
+          bestSellerSection
+            .environmentObject(coordinator)
+            .transition(.opacity)
+            .padding(.horizontal, horizontalPadding)
+        }
       }
     }
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
     .onAppear {
       viewModel.send(.onAppear)
     }
-
   }
   
   // MARK: - (S)logoView

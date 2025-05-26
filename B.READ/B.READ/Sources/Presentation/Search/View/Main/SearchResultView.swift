@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)SearchResultView
 struct SearchResultView: View {
   @ObservedObject var viewModel: SearchViewModel
-  @EnvironmentObject var coordinator: Coordinator<SearchRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정?
   
   let tabs = [
@@ -44,7 +44,7 @@ struct SearchResultView: View {
 
 // MARK: - (S)SearchTabContentView
 struct SearchTabContentView: View {
-  @EnvironmentObject private var coordinator: Coordinator<SearchRoute>
+  @EnvironmentObject private var coordinator: Coordinator<MainRoute>
   let state: SearchViewModel.SearchViewState
   let send: (SearchViewModel.Action) -> Void
   

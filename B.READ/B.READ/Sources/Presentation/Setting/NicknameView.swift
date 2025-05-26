@@ -9,12 +9,14 @@ import SwiftUI
 
 struct NicknameView: View {
   
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
+  @StateObject private var viewModel = SettingViewModel()
   @FocusState private var isFocused: Bool
-  @State private var nicknameText = ""
   @State private var isValid = true
   
+  
   private var isButtonEnabled: Bool {
-    !nicknameText.isEmpty && isValid
+    !viewModel.nicknameText.isEmpty && isValid
   }
   
   var body: some View {
@@ -25,7 +27,7 @@ struct NicknameView: View {
       RoundedTextField(
         type: .nickname,
         placeholder: "닉네임을 입력해 주세요",
-        text: $nicknameText,
+        text: $viewModel.nicknameText,
         isValid: isValid
       )
       .padding(.top, 40)
@@ -36,7 +38,8 @@ struct NicknameView: View {
         textColor: isButtonEnabled ? .backgroundDefault : .gray3,
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
-        print("next")
+        viewModel.send(.saveNickname)
+        coordinator.push(.selectCategory)
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)
@@ -45,18 +48,18 @@ struct NicknameView: View {
     }
     .padding(.horizontal, 26)
     .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
-    .onChange(of: nicknameText) { oldValue, newValue in
-      // 글자수 제한
+    .onChange(of: viewModel.nicknameText) { oldValue, newValue in
+
       if newValue.count >= 13 {
-        nicknameText = oldValue
+        viewModel.nicknameText = oldValue
         return
       }
       
-      // 유효성 검사
       let regex = /^[a-zA-Z0-9가-힣]*$/
       isValid = newValue.contains(regex)
     }
-    .onAppear {
+    .task {
+      await Task.yield()
       isFocused = true
     }
   }

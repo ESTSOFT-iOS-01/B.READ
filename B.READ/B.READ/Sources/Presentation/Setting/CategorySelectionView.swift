@@ -9,9 +9,13 @@ import SwiftUI
 
 struct CategorySelectionView: View {
   
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
+  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = true
+  @StateObject private var viewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
+  
   private var isButtonEnabled: Bool {
-    selectedCategories.count == 2
+    viewModel.selectedCategories.count == 2
   }
   
   var body: some View {
@@ -19,7 +23,7 @@ struct CategorySelectionView: View {
       InputGuideHeader(type: .category)
         .padding(.top, 24)
       
-      CategoryListView(selectedCategories: $selectedCategories)
+      CategoryListView(selectedCategories: $viewModel.selectedCategories)
         .padding(.top, 24)
       
       BottomButton(
@@ -27,7 +31,8 @@ struct CategorySelectionView: View {
         textColor: isButtonEnabled ?  .backgroundDefault : .gray3,
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
-        print("next")
+        viewModel.send(.saveCatetories)
+        didInitialSetup = false
       }
       .disabled(!isButtonEnabled)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
@@ -46,7 +51,7 @@ private struct CategoryListView: View {
   
   var body: some View {
     ScrollView {
-      VStack(alignment: .leading, spacing: 16) {
+      LazyVStack(alignment: .leading, spacing: 16) {
         ForEach(CategoryType.allCases, id: \.self) {
           SelectionRow(selectedCategories: $selectedCategories, category: $0)
         }
@@ -66,6 +71,7 @@ private struct SelectionRow: View {
   }
   
   var body: some View {
+    
     Button {
       switch isSelected {
       case false:
