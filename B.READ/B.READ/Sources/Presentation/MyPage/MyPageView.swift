@@ -17,7 +17,7 @@ struct MyPageView: View {
       
       nicknameButton()
       
-      MenuListView(coordinator: coordinator)
+      MenuListView(coordinator: coordinator, viewModel: viewModel)
       
     }
     .padding(.horizontal, 24)
@@ -49,10 +49,11 @@ struct MyPageView: View {
 private struct MenuListView: View {
   
   let coordinator: Coordinator<MainRoute>
+  let viewModel: SettingViewModel
   
   // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
   enum WeekDay: Int, CaseIterable {
-    case sun = 1
+    case sun = 0
     case mon
     case tue
     case wed
@@ -86,7 +87,7 @@ private struct MenuListView: View {
       
       HStack {
         ForEach(WeekDay.allCases, id: \.self) {
-          streakImage(weekDay: $0)
+          streakImage(weekDay: $0, isCompleted: viewModel.weeklyStreak[$0.rawValue])
         }
       }.padding(.top, menuInnerSpacing)
       
@@ -167,14 +168,14 @@ private struct MenuListView: View {
   
   // MARK: (F)streakImage
   @ViewBuilder
-  private func streakImage(weekDay: WeekDay) -> some View {
+  private func streakImage(weekDay: WeekDay, isCompleted: Bool) -> some View {
     weekDay.streakImage
       .renderingMode(.template)
       .resizable()
       .aspectRatio(contentMode: .fit)
       .frame(width: 40, height: 40)
       .frame(maxWidth: .infinity)
-      .foregroundStyle(weekDay.rawValue % 2 == 0 ? .gray1 : .gray9)
+      .foregroundStyle(isCompleted ? .gray9 : .gray1)
   }
 }
 
