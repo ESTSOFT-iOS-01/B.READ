@@ -70,7 +70,7 @@ private extension LibraryViewModel {
   /// 독서 기록 정보를 불러옴
   func loadRecords() async {
     do {
-      let infos: [LibraryCellInfo] = try await self.fetchRecordCellInfo()
+      let infos: [(record: Record, book: Book)] = try await self.fetchRecordCellInfo()
       self.records = infos.map {
         // TODO: - totalPages -> totalPage 변수명 변경
         // TODO: - coverImageData -> coverImage 필요(강제 언래핑X)
@@ -148,8 +148,8 @@ private extension LibraryViewModel {
   // 부모 태스크: 레코드s 정보 패치 -> 자식 태스크 실행 -> (도서, 레코드)s 반환
   // 자식 태스크: 레코드에 따른 도서 정보 패치
   /// 독서 기록 셀에서 필요한 정보를 가져옴
-  func fetchRecordCellInfo() async throws -> [LibraryCellInfo] {
-    var cellInfos: [LibraryCellInfo] = []
+  func fetchRecordCellInfo() async throws -> [(Record, Book)] {
+    var cellInfos: [(Record, Book)] = []
     
     // 1. 독서 기록 정보 패치
     let records = try await recordRepo.fetchAllRecord()
@@ -158,7 +158,7 @@ private extension LibraryViewModel {
     for record in records {
       let book = try await bookRepo.fetchBook(isbn: record.isbn)
       // 정보를 infos에 저장
-      cellInfos.append((book, record))
+      cellInfos.append((record, book))
     }
     return cellInfos
   }
