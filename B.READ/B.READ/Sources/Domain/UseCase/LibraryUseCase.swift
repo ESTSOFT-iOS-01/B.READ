@@ -43,7 +43,7 @@ protocol LibraryUseCase {
   /// - Throws:
   ///   - `RepositoryError.dataNotFound`: 조회할 독서 기록이 존재하지 않는 경우
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
-  func loadRecord(_ recordID: String) async throws -> (Record, Book)
+  func loadRecord(_ recordID: String, _ isbn: String) async throws -> (Record, Book)
   
   /// 전체 독서 기록 목록을 조회합니다.
   ///
