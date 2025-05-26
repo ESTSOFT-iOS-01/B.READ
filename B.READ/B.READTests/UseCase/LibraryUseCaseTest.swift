@@ -107,7 +107,6 @@ struct LibraryUseCaseTest {
     let info: (record: Record, book: Book)
     = try await libraryUseCase.loadRecord(DummyData.records[0].id)
     let record = info.record
-    let book = info.book
     
     #expect(record == DummyData.records[0])
   }
