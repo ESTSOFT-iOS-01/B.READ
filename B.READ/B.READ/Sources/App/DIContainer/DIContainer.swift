@@ -38,3 +38,14 @@ class Dependency<T> {
     self.wrappedValue = DIContainer.shared.resolve(T.self)
   }
 }
+
+extension DIContainer {
+  static func config() {
+    // TODO: 나중에 RepositoryImpl로 대체
+    let userInfoRepository = UserInfoRepositoryStub()
+    self.shared.register(
+      ProfileUseCaseImpl(userInfoRepository: userInfoRepository),
+      for: ProfileUseCase.self
+    )
+  }
+}

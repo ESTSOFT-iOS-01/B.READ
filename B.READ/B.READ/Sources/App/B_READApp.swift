@@ -10,6 +10,10 @@ import SwiftUI
 @main
 struct B_READApp: App {
   
+  init() {
+    DIContainer.config()
+  }
+  
   var body: some Scene {
     WindowGroup {
       RootViewSwitcher()
