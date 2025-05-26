@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DIContainer {
+final class DIContainer {
   
   static let shared = DIContainer()
   
