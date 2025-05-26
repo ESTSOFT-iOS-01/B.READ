@@ -11,11 +11,12 @@ struct RecordView: View {
   @State var selectedTab: Int = 0
   
   var body: some View {
-    VStack {
+    VStack(spacing: .zero) {
       TopTabBar(
         tabs: [TabItem(title: "메모"), TabItem(title: "문장"), TabItem(title: "빵식이")],
         selectedIndex: $selectedTab
       )
+      .frame(height: 34)
       .padding(.top, 16)
       
       if selectedTab == 0 {
