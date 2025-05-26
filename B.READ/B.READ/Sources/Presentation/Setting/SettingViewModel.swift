@@ -17,8 +17,8 @@ final class SettingViewModel: ObservableObject {
   private var example: String?
   
   // MARK: - Dependency
-  // TODO: UseCase 교체
-  private var profileUseCase = ProfileUseCaseImpl(userInfoRepository: UserInfoRepositoryStub())
+  @Dependency
+  private var profileUseCase: ProfileUseCase
   
   init() {
     fetchUserInfo()
