@@ -42,17 +42,8 @@ struct LibraryListCell: View {
         // 독서 현황
         RecordStatsView(record: record)
         
-        // TODO: LibraryRecordVO의 period가 nil일 경우 처리
         // 독서 기간
-        Group {
-          if let start = record.period.start?.string(format: .dotSeparated) {
-            if let end = record.period.end?.string(format: .dotSeparated) {
-              Text("\(start) ~ \(end)")
-            } else {
-              Text("\(start) ~")
-            }
-          }
-        }
+        periodView(record.period)
         .brStyleFont(.pretendard(.regular, size: 12), lineHeight: 1, letterSpacing: -0.025)
         .foregroundStyle(.brown5)
         
@@ -74,6 +65,18 @@ struct LibraryListCell: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.horizontal, layoutPadding)
     .padding(.vertical, 13) // 114(전체높이) - 88(사진높이) = 26 / 2 = 13 => 내부 요소로 높이 맞추기
+  }
+  
+  // MARK: - (F)periodView
+  @ViewBuilder
+  private func periodView(_ period: (start: Date?, end: Date?)) -> some View {
+    if let start = period.start?.string(format: .dotSeparated) {
+      if let end = record.period.end?.string(format: .dotSeparated) {
+        Text("\(start) ~ \(end)")
+      } else {
+        Text("\(start) ~")
+      }
+    }
   }
 }
 
