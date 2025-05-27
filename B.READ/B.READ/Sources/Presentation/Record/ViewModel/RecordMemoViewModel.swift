@@ -11,12 +11,12 @@ import Foundation
 // 2. 검색어 하이라이트
 // 3. 실시간 검색어 반영(combine?)
 
+// MARK: - (C)RecordMemoViewModel
 final class RecordMemoViewModel: ObservableObject {
   
   // MARK: - State
   struct RecordMemoViewState {
-    var displayMemos: [[RecordMemoVO]] = [] // 책에 맞는 메모들
-    var displaybooks: [String] = [] // 책 이름
+    var displayMemoGroups: [MemoGroup] = []
     var searchText: String = ""
   }
   
@@ -24,8 +24,7 @@ final class RecordMemoViewModel: ObservableObject {
   
   
   // MARK: - Internal Variable
-  private var memos: [String: [RecordMemoVO]] = [:] // key: ISBN, value: [MemoVO]
-  private var books: [String: String] = [:] // key: ISBN, value: 책제목
+  private var memoGroups: [MemoGroup] = []
   
   // MARK: - Dependency
 //  @Dependency private var exampleUseCase: ExampleUseCase
@@ -39,12 +38,8 @@ final class RecordMemoViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      loadAllMemos()
-      filterMemos()
-//      print(state.displayMemos)
-      for memo in state.displayMemos {
-        print(memo)
-      }
+        loadMemoGroups()
+        sortDisplayMemoGroups()
     case .onSubmit:
       print("검색어: \(state.searchText)")
     }
@@ -52,34 +47,38 @@ final class RecordMemoViewModel: ObservableObject {
 }
 
 private extension RecordMemoViewModel {
-  
-  func loadAllMemos() {
-    // 방법 1. 메모를 전부 가져옴 -> 메모에 따른 책 정보를 가져옴
-    // 1. Memo UseCase loadAllMemos
-    // 2. MemoVO의 ISBN에 해당하는 책정보를 가져옴
-    let fetchedMemos: [Memo] = DummyData.dummyMemos
-    fetchedMemos.forEach {
-      memos[$0.isbn, default: []].append(RecordMemoVO($0))
+  /// 메모를 불러와서 뷰에 보여줄 형태로 가공합니다.
+  func loadMemoGroups() {
+    // TODO: - memoUseCase.fetchAllMemo()으로 변경
+    let allMemos = DummyData.dummyMemos
+    
+    let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
+    memoGroups = memoDict.compactMap { isbn, memos in
+      
+      let memoVOs = memos.map { MemoVO($0) }
+      // TODO: - libraryUseCase.fetchBook(isbn)으로 변경
+      // let book = await libraryUsecase.fetchBook(isbn)
+      // return MemoGroup(isbn: isbn, bookTitle: book.name, memos: memoVOs)
+      if let book = DummyData.dummyBooks.filter({ $0.isbn == isbn }).first {
+        return MemoGroup(isbn: book.isbn, bookTitle: book.name, memos: memoVOs)
+      } else {
+        return nil
+      }
     }
     
-    // TODO: - 원래는 isbn으로 책정보 바로 가져와야함
-    for isbn in memos.keys {
-      if let book = DummyData.dummyBooks.filter({ $0.isbn == isbn }).first {
-        books[isbn] = book.name
-      }
-    }
+    // TODO: - 검색어 필터 들어가면 필터해주는 곳에서 처리해줌
+    state.displayMemoGroups = memoGroups
   }
   
-  func filterMemos() {
-    for book in books {
-      state.displaybooks.append(book.value)
-      var displayMemo: [RecordMemoVO] = []
-      if let memos = memos[book.key] {
-        for memo in memos {
-          displayMemo.append(memo)
-        }
-      }
-      state.displayMemos.append(displayMemo)
+  // TODO: - 정렬 버트 만들고 기능 추가 예정
+  /// 보여주고자 하는 Memo의 순서를 정렬합니다.
+  func sortDisplayMemoGroups() {
+    // 1. MemoGroup을 정렬
+    // 2. MemoGroup에 담긴 Memos를 정렬
+    state.displayMemoGroups = state.displayMemoGroups.sorted { $0.bookTitle < $1.bookTitle }
+    
+    for (index, memoGroup) in state.displayMemoGroups.enumerated() {
+      state.displayMemoGroups[index].memos = memoGroup.memos.sorted { $0.pages.0 < $1.pages.0 }
     }
   }
 }

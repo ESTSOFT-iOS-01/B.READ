@@ -7,11 +7,12 @@
 
 import SwiftUI
 
+// MARK: - (S)RecordMemoView
 struct RecordMemoView: View {
   @StateObject var viewModel = RecordMemoViewModel()
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 24) {
+    VStack(alignment: .leading) {
       HStack {
         SearchBar(text: $viewModel.state.searchText, onSubmit: {
           if !viewModel.state.searchText.isEmpty {
@@ -20,27 +21,17 @@ struct RecordMemoView: View {
         }, style: .compact)
         
         sortButton()
+          .padding(.trailing, 4)
       } // : HStack
       
-      
-      List {
-        ForEach(viewModel.state.displaybooks.indices, id: \.self) { index in
-          let book = viewModel.state.displaybooks[index]
-          Section(book) {
-            ForEach(viewModel.state.displayMemos[index]) { memo in
-              Text(memo.content)
-            }
-          }
-        }
-      }
-      
+      MemoListView(memoGroups: viewModel.state.displayMemoGroups)
+        .padding(.top, 16)
+        .scrollIndicators(.never)
     } // : VStack
-    .padding(.top, 24)
     .onAppear {
       viewModel.send(.onAppear)
     }
   }
-  
   
   // MARK: - (F)sortButton
   // TODO: - (2)정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
@@ -51,7 +42,7 @@ struct RecordMemoView: View {
       print("정렬 버튼 클릭")
     } label: {
       HStack {
-        Text("정렬 기준")
+        Text("최신 순")
         Image(systemName: LibraryConstants.Icon.menuOn)
           .resizable()
           .frame(width: 8, height: 3)

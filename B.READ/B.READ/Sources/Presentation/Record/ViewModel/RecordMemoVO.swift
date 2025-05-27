@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecordMemoVO: Identifiable {
+struct MemoVO: Identifiable {
   let id: String
   let isbn: String
   let createdAt: Date
@@ -41,4 +41,11 @@ struct RecordMemoVO: Identifiable {
       guides: memo.guides
     )
   }
+}
+
+struct MemoGroup: Identifiable {
+  let id = UUID()
+  let isbn: String
+  let bookTitle: String
+  var memos: [MemoVO]
 }
