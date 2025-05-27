@@ -39,3 +39,7 @@ struct LibraryListView: View {
     }
   }
 }
+
+#Preview {
+  LibraryView(viewModel: LibraryViewModel())
+}
