@@ -14,7 +14,7 @@ final class RecordDetailViewModel: ObservableObject {
   
   // MARK: - State
   struct RecordDetailState {
-    var info: LibraryCellInfo? = nil
+    var info: (record: Record, book: Book)? = nil
     var memos: [Memo] = []
     var quotes: [Quote] = []
     var selectedTab: Int = 0
@@ -74,7 +74,7 @@ private extension RecordDetailViewModel {
   @MainActor
   func loadInfo(id: String, isbn: String) async {
     do {
-      let info: LibraryCellInfo = try await self.fetchRecordInfo(id: recordID, isbn: isbn)
+      let info: (Record, Book) = try await self.fetchRecordInfo(id: recordID, isbn: isbn)
       self.state.info = info
     } catch {
       print(error.localizedDescription)
@@ -137,11 +137,11 @@ private extension RecordDetailViewModel {
 private extension RecordDetailViewModel {
   
   /// 독서 기록 조회에서 필요한 정보(책, 독서 기록)를 가져옴
-  func fetchRecordInfo(id: String, isbn: String) async throws -> LibraryCellInfo {
+  func fetchRecordInfo(id: String, isbn: String) async throws -> (Record, Book) {
     let record = try await recordRepo.fetchRecord(id: recordID)
     let book = try await bookRepo.fetchBook(isbn: isbn)
     
-    return (book, record)
+    return (record, book)
   }
   
   /// 독서 기록 조회에서 수정된 사항을 업데이트
