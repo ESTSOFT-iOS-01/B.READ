@@ -13,7 +13,7 @@ struct RecordQuoteView: View {
   @StateObject var viewModel = RecordQuoteViewModel()
   
   var body: some View {
-    VStack(alignment: .leading) {
+    VStack(alignment: .leading, spacing: 0) {
       HStack {
         SearchBar(text: $viewModel.state.searchText, onSubmit: {
           if !viewModel.state.searchText.isEmpty {
@@ -26,7 +26,7 @@ struct RecordQuoteView: View {
       } // : HStack
       
       QuoteListView(quoteGroups: viewModel.state.displayQuoteGroups)
-      .padding(.top, 16)
+      .padding(.top, 8)
       .scrollIndicators(.never)
     } // : VStack
     .onAppear {

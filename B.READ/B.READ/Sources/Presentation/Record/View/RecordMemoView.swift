@@ -12,7 +12,7 @@ struct RecordMemoView: View {
   @StateObject var viewModel = RecordMemoViewModel()
   
   var body: some View {
-    VStack(alignment: .leading) {
+    VStack(alignment: .leading, spacing: 0) {
       HStack {
         SearchBar(text: $viewModel.state.searchText, onSubmit: {
           if !viewModel.state.searchText.isEmpty {
@@ -25,7 +25,7 @@ struct RecordMemoView: View {
       } // : HStack
       
       MemoListView(memoGroups: viewModel.state.displayMemoGroups)
-        .padding(.top, 16)
+        .padding(.top, 8)
         .scrollIndicators(.never)
     } // : VStack
     .onAppear {

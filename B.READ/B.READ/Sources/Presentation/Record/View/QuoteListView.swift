@@ -13,7 +13,7 @@ struct QuoteListView: View {
   
   var body: some View {
     ScrollView {
-      LazyVStack(alignment: .leading, spacing: 8, pinnedViews: [.sectionHeaders]) {
+      LazyVStack(alignment: .leading, spacing: 8) {
         
         ForEach(quoteGroups) { group in
           Section {
