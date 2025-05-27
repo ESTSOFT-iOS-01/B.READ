@@ -19,6 +19,7 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     
     let model = UserInfoDTO(userInfo)
     modelContext.insert(model)
+    try modelContext.save()
   }
   
   func fetchUserInfo() throws -> UserInfo {
@@ -95,6 +96,8 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
         data.streak.append(newItem)
       }
     }
+    
+    try modelContext.save()
   }
   
   func deleteUserInfo() throws {
@@ -105,6 +108,7 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     }
     
     modelContext.delete(data)
+    try modelContext.save()
   }
 }
 

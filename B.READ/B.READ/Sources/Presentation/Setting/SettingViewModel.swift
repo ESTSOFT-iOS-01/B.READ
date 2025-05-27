@@ -39,25 +39,9 @@ final class SettingViewModel: ObservableObject {
     case .onAppear:
       fetchUserInfo()
     case .saveNickname:
-      Task.detached(priority: .background) { [weak self] in
-        guard let self else { return }
-        do {
-          try await profileUseCase.setNickname(nicknameText)
-          await MainActor.run { self.isSaveComplete = true }
-        } catch {
-          print(error.localizedDescription)
-        }
-      }
+      saveNickname()
     case .saveCatetories:
-      Task.detached(priority: .background) { [weak self] in
-        guard let self else { return }
-        do {
-          try await profileUseCase.setCategory(Array(selectedCategories))
-          await MainActor.run { self.isSaveComplete = true }
-        } catch {
-          print(error.localizedDescription)
-        }
-      }
+      saveCategories()
     }
   }
   
@@ -78,6 +62,30 @@ private extension SettingViewModel {
           self.selectedCategories = Set(userInfo.categories.compactMap { CategoryType(rawValue: $0.id) })
           self.weeklyStreak = userInfo.streak.map { $0.isCompleted }
         }
+      } catch {
+        print(error.localizedDescription)
+      }
+    }
+  }
+  
+  func saveNickname() {
+    Task.detached(priority: .background) { [weak self] in
+      guard let self else { return }
+      do {
+        try await profileUseCase.setNickname(nicknameText)
+        await MainActor.run { self.isSaveComplete = true }
+      } catch {
+        print(error.localizedDescription)
+      }
+    }
+  }
+  
+  func saveCategories() {
+    Task.detached(priority: .background) { [weak self] in
+      guard let self else { return }
+      do {
+        try await profileUseCase.setCategory(Array(selectedCategories))
+        await MainActor.run { self.isSaveComplete = true }
       } catch {
         print(error.localizedDescription)
       }
