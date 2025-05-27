@@ -31,8 +31,13 @@ struct BookDetailView: View {
           BookInfoView(title: "ISBN", content: viewModel.bookVO.isbn)
           BookInfoView(title: "상세 정보", content: viewModel.bookVO.description)
           
-          LinkView(action: { print("\(viewModel.bookVO.link)로 이동") })
-            .padding(.bottom, 40)
+          Button {
+            print("\(viewModel.bookVO.link)로 이동")
+          } label: {
+            LinkView()
+          }
+          .padding(.bottom, 40)
+            
         }
       }
       .scrollIndicators(.hidden)

@@ -88,7 +88,7 @@ struct BookRateView: View {
       .padding(.top, layoutPadding)
       
       HStack(spacing: 8) {
-        ScoreBoardView(Int(rate/2), type: .star)
+        ScoreBoardView(Int(round(rate/2)), type: .star)
         
         Text(rate.toStringForOneDecimal)
           .brStyleFont(.peaceSans(size: 16), lineHeight: 1.2, letterSpacing: 0.002)
@@ -143,9 +143,8 @@ struct BookTitleView: View {
   
 }
 
+// MARK: - (S)LinkView
 struct LinkView: View {
-  let action: (() -> Void)
-  
   var body: some View {
     Text("알라딘에서 책 구매하기")
       .underline(true, color: .gray7)
@@ -155,7 +154,6 @@ struct LinkView: View {
       .padding(.vertical, 16)
       .frame(maxWidth: .infinity, alignment: .leading)
       .background(.white)
-      .onTapGesture(perform: action)
   }
 }
 
