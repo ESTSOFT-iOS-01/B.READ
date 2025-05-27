@@ -36,11 +36,11 @@ final class ProfileUseCaseImpl: ProfileUseCase {
   func setCategory(_ categoryTypes: [CategoryType]) async throws {
     
     // 1. CategoryType -> Category로 변환
-    let categries = categoryTypes.map { Category(id: $0.cid, name: $0.name) }
+    let categories = categoryTypes.map { Category(id: $0.cid, name: $0.name) }
     
     // 2. 카테고리 수정
     var userInfo = try await userInfoRepository.fetchUserInfo()
-    userInfo.categories = categries
+    userInfo.categories = categories
     
     // 3. 업데이트
     try await userInfoRepository.updateUserInfo(userInfo)

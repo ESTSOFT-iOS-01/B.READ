@@ -10,6 +10,7 @@ import SwiftData
 
 @ModelActor
 actor UserInfoRepositoryImpl: UserInfoRepository {
+  
   func createUserInfo(_ userInfo: UserInfo) throws {
     print("Impl: ", #function)
     
@@ -19,9 +20,10 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     
     let model = UserInfoDTO(userInfo)
     modelContext.insert(model)
+    try modelContext.save()
   }
   
-  func fetchUserInfo() throws -> UserInfo {
+  func fetchUserInfo() async throws -> UserInfo {
     print("Impl: ", #function)
     
     guard let data = try findUserInfo() else {
@@ -33,6 +35,8 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
   
   func updateUserInfo(_ userInfo: UserInfo) throws {
     print("Impl: ", #function)
+    print("🔍 isMainThread:", Thread.isMainThread)
+    print("🔍 thread:", Thread.current)
     
     guard let data = try findUserInfo() else {
       throw RepositoryError.dataNotFound
@@ -95,6 +99,8 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
         data.streak.append(newItem)
       }
     }
+    
+    try modelContext.save()
   }
   
   func deleteUserInfo() throws {
@@ -105,6 +111,7 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
     }
     
     modelContext.delete(data)
+    try modelContext.save()
   }
 }
 

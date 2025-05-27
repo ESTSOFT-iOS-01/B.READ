@@ -36,7 +36,6 @@
 				Resources/DummyJson/BestSeller.json,
 				Resources/DummyJson/Book.json,
 				Resources/DummyJson/CategoryBest.json,
-				Resources/DummyJson/MissingQuery.json,
 				Resources/DummyJson/SearchList.json,
 				Sources/Data/DTOs/Record/BookDTO.swift,
 				Sources/Data/DTOs/Record/QuoteDTO.swift,

@@ -12,13 +12,15 @@ final class SettingViewModel: ObservableObject {
   // MARK: - State
   @Published var nicknameText: String = ""
   @Published var selectedCategories: Set<CategoryType> = []
+  @Published var weeklyStreak: [Bool] = Array(repeating: false, count: 7)
+  @Published var isSaveComplete: Bool = false
   
   // MARK: - Internal Variable
   private var example: String?
   
   // MARK: - Dependency
-  // TODO: UseCase 교체
-  private var profileUseCase = ProfileUseCaseImpl(userInfoRepository: UserInfoRepositoryStub())
+  @Dependency
+  private var profileUseCase: ProfileUseCase
   
   init() {
     fetchUserInfo()
@@ -27,28 +29,19 @@ final class SettingViewModel: ObservableObject {
   
   // MARK: - Action
   enum Action {
+    case onAppear
     case saveNickname
     case saveCatetories
   }
   
   func send(_ action: Action) {
     switch action {
+    case .onAppear:
+      fetchUserInfo()
     case .saveNickname:
-      Task {
-        do {
-          try await profileUseCase.setNickname(nicknameText)
-        } catch {
-          print(error.localizedDescription)
-        }
-      }
+      saveNickname()
     case .saveCatetories:
-      Task {
-        do {
-          try await profileUseCase.setCategory(Array(selectedCategories))
-        } catch {
-          print(error.localizedDescription)
-        }
-      }
+      saveCategories()
     }
   }
   
@@ -60,11 +53,39 @@ final class SettingViewModel: ObservableObject {
 // MARK: - Internal Function
 private extension SettingViewModel {
   func fetchUserInfo() {
-    Task {
+    Task { [weak self] in
+      guard let self else { return }
       do {
         let userInfo = try await profileUseCase.fetchUserInfo()
-        self.nicknameText = userInfo.nickname
-        self.selectedCategories = Set(userInfo.categories.compactMap { CategoryType(rawValue: $0.id) })
+        await MainActor.run {
+          self.nicknameText = userInfo.nickname
+          self.selectedCategories = Set(userInfo.categories.compactMap { CategoryType(rawValue: $0.id) })
+          self.weeklyStreak = userInfo.streak.map { $0.isCompleted }
+        }
+      } catch {
+        print(error.localizedDescription)
+      }
+    }
+  }
+  
+  func saveNickname() {
+    Task { [weak self] in
+      guard let self else { return }
+      do {
+        try await profileUseCase.setNickname(nicknameText)
+        await MainActor.run { self.isSaveComplete = true }
+      } catch {
+        print(error.localizedDescription)
+      }
+    }
+  }
+  
+  func saveCategories() {
+    Task { [weak self] in
+      guard let self else { return }
+      do {
+        try await profileUseCase.setCategory(Array(selectedCategories))
+        await MainActor.run { self.isSaveComplete = true }
       } catch {
         print(error.localizedDescription)
       }

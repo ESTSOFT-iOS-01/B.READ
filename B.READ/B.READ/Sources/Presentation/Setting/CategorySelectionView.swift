@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CategorySelectionView: View {
   
-  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
-  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = true
+  @EnvironmentObject var mainCoordinator: Coordinator<MainRoute>
+  @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
   @StateObject private var viewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
   
@@ -32,7 +32,6 @@ struct CategorySelectionView: View {
         buttonColor: isButtonEnabled ? .brown3 : .gray0
       ) {
         viewModel.send(.saveCatetories)
-        didInitialSetup = false
       }
       .disabled(!isButtonEnabled)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
@@ -41,6 +40,13 @@ struct CategorySelectionView: View {
       
     }
     .padding(.horizontal, 24)
+    .onChange(of: viewModel.isSaveComplete) {
+      if didInitialSetup {
+        mainCoordinator.pop()
+      } else {
+        didInitialSetup = true
+      }
+    }
   }
 }
 
