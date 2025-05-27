@@ -7,6 +7,41 @@
 
 import SwiftUI
 
+// MARK: - (S)LargeImageView
+struct LargeImageView: View {
+  let imageURL: String
+  
+  var body: some View {
+    AsyncImage(url: URL(string: imageURL)) { phase in
+      switch phase {
+      case .empty:
+        ProgressView()
+          .frame(width: 190, height: 290)
+        
+      case .success(let image):
+        image
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(width: 190, height: 290)
+          .clipped()
+          .shadow(color: .black.opacity(0.25), radius: 25, x: 0, y: 2)
+        
+      case .failure(_):
+        // TODO : 기본이미지 넣기
+        Image(systemName: "photo")
+          .resizable()
+          .scaledToFit()
+          .frame(width: 190, height: 290)
+          .foregroundStyle(.brown5)
+        
+      @unknown default:
+        EmptyView()
+      }
+    }
+  }
+}
+
+// MARK: - (S)BookInfoView
 struct BookInfoView: View {
   let layoutPadding : CGFloat = 16
   let title : String
@@ -33,6 +68,8 @@ struct BookInfoView: View {
 }
 
 #Preview {
+  LargeImageView(imageURL: ImageURLConverter.highQualityURL(from: "https://image.aladin.co.kr/product/36292/22/coversum/8932043566_1.jpg"))
+  
   BookInfoView(title: "ISBN", content: "974-123-123123")
   BookInfoView(title: "상세 정보", content: "Lorem ipsum dolor sit amet consectetur. Nec neque non sit nulla elit dis morbi sem gravida. Sit semper varius leo sit amet nec ut egestas sapien. At interdum integer consequat at. Proin sit ut venenatis vestibulum maecenas at fermentum. Lorem ipsum dolor sit amet consectetur. Nec neque non sit nulla elit dis morbi sem gravida. Sit semper varius leo sit amet nec ut egestas sapien. At interdum integer consequat at. Proin sit ut venenatis vestibulum maecenas at fermentum.")
 }
