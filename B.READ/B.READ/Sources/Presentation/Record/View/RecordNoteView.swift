@@ -7,9 +7,10 @@
 
 import SwiftUI
 
+// MARK: - (S)RecordNoteView
 struct RecordNoteView: View {
     var body: some View {
-        Text("Hello, Note!")
+        Text("빵식이네 오픈 준비중!")
     }
 }
 

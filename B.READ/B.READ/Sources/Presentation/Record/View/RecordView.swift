@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)RecordView
 struct RecordView: View {
   @State var selectedTab: Int = 0
   
@@ -19,16 +20,20 @@ struct RecordView: View {
       .frame(height: 34)
       .padding(.top, 16)
       
-      if selectedTab == 0 {
-        RecordMemoView()
-      } else if selectedTab == 1 {
-        RecordQuoteView()
-      } else if selectedTab == 2 {
-        RecordNoteView()
-      }
-      
+      Group {
+        if selectedTab == 0 {
+          RecordMemoView()
+        } else if selectedTab == 1 {
+          RecordQuoteView()
+        } else if selectedTab == 2 {
+          RecordNoteView()
+        }
+      } // : Group
+      .padding(.top, 8)
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     } // : VStack
     .padding(.horizontal, 24)
+    .background(.backgroundDefault)
   }
 }
 
