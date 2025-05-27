@@ -42,7 +42,8 @@ class Dependency<T> {
 extension DIContainer {
   static func config() {
     // TODO: 나중에 RepositoryImpl로 대체
-    let userInfoRepository = UserInfoRepositoryStub()
+    let storage = SwiftDataStorage()
+    let userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     self.shared.register(
       ProfileUseCaseImpl(userInfoRepository: userInfoRepository),
       for: ProfileUseCase.self
