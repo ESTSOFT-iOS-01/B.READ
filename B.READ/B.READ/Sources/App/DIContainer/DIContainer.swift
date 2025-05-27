@@ -40,7 +40,7 @@ class Dependency<T> {
 }
 
 extension DIContainer {
-  static func config() {
+  static func config() async {
     // TODO: 나중에 RepositoryImpl로 대체
     let storage = SwiftDataStorage()
     let userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)

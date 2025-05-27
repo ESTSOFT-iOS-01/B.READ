@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct RootViewSwitcher: View {
-  
+  @State private var isReady = false
   @State private var coordinator = Coordinator<OnboardingRoute>()
   @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
   
@@ -17,8 +17,12 @@ struct RootViewSwitcher: View {
     UINavigationBar.configureGlobalAppearance()
   }
   
-  private var rootScene: RootScene { didInitialSetup ? .main : .onboarding }
+  private var rootScene: RootScene {
+    if !isReady { .launch }
+    else { didInitialSetup ? .main : .onboarding }
+  }
   enum RootScene {
+    case launch
     case onboarding
     case main
   }
@@ -26,6 +30,12 @@ struct RootViewSwitcher: View {
   var body: some View {
     Group {
       switch rootScene {
+      case .launch:
+        Color.white.ignoresSafeArea()
+          .task {
+            await DIContainer.config()
+            await MainActor.run { self.isReady = true}
+          }
       case .onboarding:
         OnBoardingView()
           .environmentObject(coordinator)
