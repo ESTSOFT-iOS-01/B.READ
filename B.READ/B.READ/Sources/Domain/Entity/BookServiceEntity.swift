@@ -35,6 +35,7 @@ struct BookDetail {
   let pageCount: Int
   let ratingScore: Double
   let ratingCount : Int
+  let link: String
 }
 
 struct BestSeller {
