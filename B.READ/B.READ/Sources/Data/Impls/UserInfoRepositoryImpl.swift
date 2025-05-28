@@ -35,8 +35,6 @@ actor UserInfoRepositoryImpl: UserInfoRepository {
   
   func updateUserInfo(_ userInfo: UserInfo) throws {
     print("Impl: ", #function)
-    print("🔍 isMainThread:", Thread.isMainThread)
-    print("🔍 thread:", Thread.current)
     
     guard let data = try findUserInfo() else {
       throw RepositoryError.dataNotFound

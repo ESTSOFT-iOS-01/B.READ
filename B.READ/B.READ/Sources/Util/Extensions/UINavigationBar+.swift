@@ -11,7 +11,7 @@ extension UINavigationBar {
   static func configureGlobalAppearance() {
     let appearance = UINavigationBarAppearance()
     appearance.configureWithOpaqueBackground()
-    appearance.backgroundColor = .clear
+    appearance.backgroundColor = .backgroundDefault
     appearance.shadowColor = .clear
 
     let backAppearance = UIBarButtonItemAppearance()

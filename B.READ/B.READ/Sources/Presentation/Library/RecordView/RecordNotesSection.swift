@@ -10,6 +10,8 @@ import SwiftUI
 // MARK: - (S)RecordNotesSection
 struct RecordNotesSection: View {
   
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  
   enum CellType {
     case memo
     case quote
@@ -70,6 +72,8 @@ struct RecordNotesSection: View {
         print("\(type.name) 수정 선택")
       case .quote:
         print("\(type.name) 수정 선택")
+        // TODO: 수정 버전 페이지로 넘어가기
+        coordinator.push(.sentenceInput)
       }
     }
     

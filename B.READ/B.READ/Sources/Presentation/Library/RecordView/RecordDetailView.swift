@@ -120,7 +120,7 @@ struct RecordDetailView: View {
         print("메모 작성 선택")
       }
       Button("문장 작성") {
-        //coordinator.push(.)
+        coordinator.push(.sentenceInput)
       }
       Button("취소", role: .cancel) { }
     }

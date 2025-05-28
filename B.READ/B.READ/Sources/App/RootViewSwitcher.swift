@@ -41,7 +41,7 @@ struct RootViewSwitcher: View {
           .environmentObject(coordinator)
       case .main:
         MainTabView()
-          .transition(.move(edge: .trailing))
+          .transition(.opacity)
       }
     }
     .animation(.linear(duration: 0.3), value: rootScene)

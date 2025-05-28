@@ -16,6 +16,10 @@ enum MainRoute: Hashable {
   // MARK: - Library
   case libraryDetail(id: String, isbn: String)
   
+  // MARK: - Sentence
+  case sentenceInput
+  case pageInput(sentence: String)
+  
   // MARK: - MyPage
   case insertNickname
   case selectCategory
@@ -38,6 +42,12 @@ extension Coordinator where T == MainRoute {
     case .libraryDetail(let id, let isbn):
       RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
       
+    // MARK: - Sentence
+    case .sentenceInput:
+      SentenceInputView()
+    
+    case .pageInput(let sentence):
+      PageInputView(sentence: sentence)
     // MARK: - MyPage Flow
     case .insertNickname:
       NicknameView()
