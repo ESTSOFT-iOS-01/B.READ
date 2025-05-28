@@ -32,8 +32,7 @@ struct RecordNotesSection: View {
   
   var body: some View {
     LazyVStack {
-      switch cellType {
-      case .memo:
+      if cellType == .memo {
         ForEach(viewModel.state.memos) { memo in
           MemoCell(
             content: memo.content,
@@ -41,14 +40,12 @@ struct RecordNotesSection: View {
             startPage: memo.pages.0,
             endPage: memo.pages.1
           ) {
-            print("메모 메뉴 버튼 터치")
             showMenuActionSheet = true
           }
         } // : ForEach
-      case .quote:
+      } else {
         ForEach(viewModel.state.quotes) { quote in
           QuoteCell(content: quote.content, page: quote.page, colorTone: .soft) {
-            print("문장 메뉴 버튼 터치")
             showMenuActionSheet = true
           }
         } // : ForEach

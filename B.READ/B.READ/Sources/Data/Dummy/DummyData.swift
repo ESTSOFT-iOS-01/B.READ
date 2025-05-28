@@ -210,29 +210,39 @@ enum DummyData {
       isbn: "9788937460586",
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!,
       content: "이것은 테스트를 위한 메모입니다.",
-      pages: (10, 20),
+      pages: (22, 32),
       guides: ["1제안", "2제안"]
     ),
     Memo(
       id: "3",
       isbn: "9788937460586",
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!,
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 3))!,
       content: "이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.",
-      pages: (10, 20),
+      pages: (44, 82),
       guides: ["1제안", "2제안"]
     ),
     Memo(
       id: "4",
       isbn: "9788937460586",
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!,
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
       content: "이것은 테스트를 위한 메모입니다.",
-      pages: (10, 20),
+      pages: (100, 132),
+      guides: ["1제안", "2제안"]
+    ),
+    Memo(
+      id: "5",
+      isbn: "9791194368137",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 1))!,
+      content: "이것은 테스트를 위한 메모입니다.",
+      pages: (99, 111),
       guides: ["1제안", "2제안"]
     )
   ]
   static let dummyQuote: [Quote] = [
-    Quote(id: "1", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 20),
-    Quote(id: "2", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 20),
-    Quote(id: "3", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 20),
+    Quote(id: "1", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 77),
+    Quote(id: "2", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 12),
+    Quote(id: "3", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 35),
+    Quote(id: "4", isbn: "9791194368137", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 123),
+    Quote(id: "5", isbn: "9791158510619", content: "수집된 문장 문장 수집된 문장 수집된 문장 수집된 문장", page: 72),
   ]
 }

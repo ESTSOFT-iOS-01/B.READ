@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)LibraryListView
 struct LibraryListView: View {
   private let records: [LibraryRecordVO]
   @State var selectedRecord: LibraryRecordVO?
@@ -29,6 +30,7 @@ struct LibraryListView: View {
             selectedRecord = record
           }
       } // : ForEach
+      .background(.backgroundDefault)
     } // : List
     .listStyle(.plain)
     .scrollIndicators(.hidden)
@@ -36,4 +38,8 @@ struct LibraryListView: View {
       RecordDetailView(viewModel: .init(recordID: record.id, isbn: record.isbn))
     }
   }
+}
+
+#Preview {
+  LibraryView(viewModel: LibraryViewModel())
 }
