@@ -45,7 +45,7 @@ final class LibraryViewModel: ObservableObject {
       Task { [weak self] in
         guard let self = self else { return }
   
-        await loadRecords()
+        await self.loadRecords()
         await withTaskGroup(of: Void.self) { group in
           group.addTask {
             await self.loadTabs()
@@ -63,7 +63,7 @@ final class LibraryViewModel: ObservableObject {
         guard let self = self else { return }
         
         await self.filterRecords()
-        await sortDisplayRecords()
+        await self.sortDisplayRecords()
       }
     }
   }
