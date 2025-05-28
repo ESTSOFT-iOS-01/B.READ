@@ -9,6 +9,7 @@ import SwiftUI
 
 // MARK: - (S)LibraryListView
 struct LibraryListView: View {
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   private let records: [LibraryRecordVO]
   @State var selectedRecord: LibraryRecordVO?
   
@@ -27,16 +28,13 @@ struct LibraryListView: View {
           .listRowSeparator(.hidden) // separator 제거
           .padding(.top, 8)
           .onTapGesture {
-            selectedRecord = record
+            coordinator.push(.libraryDetail(id: record.id, isbn: record.isbn))
           }
       } // : ForEach
       .background(.backgroundDefault)
     } // : List
     .listStyle(.plain)
     .scrollIndicators(.hidden)
-    .navigationDestination(item: $selectedRecord) { record in
-      RecordDetailView(viewModel: .init(recordID: record.id, isbn: record.isbn))
-    }
   }
 }
 

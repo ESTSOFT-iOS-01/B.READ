@@ -14,6 +14,9 @@ enum MainRoute: Hashable {
   case searchBook(isbn: String)
   case searchRecord(id: String)
   
+  // MARK: - Library
+  case libraryDetail(id: String, isbn: String)
+  
   // MARK: - MyPage
   case insertNickname
   case selectCategory
@@ -33,6 +36,10 @@ extension Coordinator where T == MainRoute {
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
     case .searchRecord(let id):
       BookDetailView(viewModel: BookViewModel(isbn: id))
+    
+      // MARK: - Library
+    case .libraryDetail(let id, let isbn):
+      RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
       
     // MARK: - MyPage Flow
     case .insertNickname:
