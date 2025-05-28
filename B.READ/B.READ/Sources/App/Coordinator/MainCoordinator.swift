@@ -12,7 +12,6 @@ enum MainRoute: Hashable {
   // MARK: - Search
   case barcode
   case searchBook(isbn: String)
-  case searchRecord(id: String)
   
   // MARK: - Library
   case libraryDetail(id: String, isbn: String)
@@ -34,10 +33,8 @@ extension Coordinator where T == MainRoute {
       ScanView(viewModel: ScanViewModel())
     case .searchBook(let isbn):
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
-    case .searchRecord(let id):
-      BookDetailView(viewModel: BookViewModel(isbn: id))
-    
-      // MARK: - Library
+      
+    // MARK: - Library
     case .libraryDetail(let id, let isbn):
       RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
       
