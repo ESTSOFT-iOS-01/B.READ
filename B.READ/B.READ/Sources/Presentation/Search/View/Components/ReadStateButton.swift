@@ -46,6 +46,29 @@ struct ReadStateSelectorView: View {
   }
 }
 
+// MARK: - (S)SelectDateView
+struct SelectDateView: View {
+  var title: String = "시작 날짜"
+  @State var selectedDate: Date = Date()
+  
+  var body: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      Text(title)
+        .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.2)
+        .foregroundStyle(.black)
+      
+      DatePicker(
+        "",
+        selection: $selectedDate,
+        displayedComponents: [.date]
+      )
+      .labelsHidden()
+      .datePickerStyle(.compact)
+    }
+  }
+}
+
 #Preview {
   ReadStateSelectorView()
+  SelectDateView()
 }
