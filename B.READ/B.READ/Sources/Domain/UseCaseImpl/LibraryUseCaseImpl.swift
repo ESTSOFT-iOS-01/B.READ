@@ -87,6 +87,9 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   
   func loadRecordList() async throws -> [(Record, Book)] {
+    // TODO: - Task Group으로 변경 (시간체크 꼭 해보기)
+    // 부모 태스크: 레코드s 정보 패치 -> 자식 태스크 실행 -> (도서, 레코드)s 반환
+    // 자식 태스크: 레코드에 따른 도서 정보 패치
     var cellInfos: [(Record, Book)] = []
     
     // 1. 독서 기록 정보 패치
