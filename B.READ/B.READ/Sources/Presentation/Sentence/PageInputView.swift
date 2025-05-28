@@ -11,7 +11,7 @@ struct PageInputView: View {
   let sentence: String                // 전달받은 문장
   var onSave: (Int) -> Void = { _ in }
   
-  @Environment(\.dismiss) private var dismiss
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @State private var pageText = "0"
   @State private var showInvalidAlert = false
   @FocusState private var isFocused: Bool
@@ -60,15 +60,7 @@ struct PageInputView: View {
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
-    .navigationBarBackButtonHidden(true)
     .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        Button { dismiss() } label: {
-          Image(systemName: "chevron.left")
-            .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
-            .foregroundStyle(.green6)
-        }
-      }
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
           guard let n = pageNumber, (1...999).contains(n) else { //
@@ -76,6 +68,10 @@ struct PageInputView: View {
             return // todo: 추후 함수 처리
           }
           onSave(n)
+          
+          // TODO: 추후에 변경
+          coordinator.pop()
+          coordinator.pop()
         }
         .font(.system(size: 16, weight: .regular))
         .foregroundStyle(.green6)

@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SentenceInputView: View {
-  @Environment(\.dismiss) private var dismiss
+  
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   
   @State private var text = ""
   @State private var goNext = false
@@ -51,18 +52,10 @@ struct SentenceInputView: View {
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
-    .navigationBarBackButtonHidden(true)
     .toolbar {
-      ToolbarItem(placement: .topBarLeading) {
-        Button { dismiss() } label: {
-          Image(systemName: "chevron.left")
-            .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
-            .foregroundStyle(.green6)
-        }
-      }
       ToolbarItem(placement: .topBarTrailing) {
         Button("다음") {
-          goNext = true
+          coordinator.push(.pageInput(sentence: trimmedText))
         }
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
@@ -71,11 +64,6 @@ struct SentenceInputView: View {
       }
     }
     .background(.backgroundDefault)
-    .navigationDestination(isPresented: $goNext) {
-      PageInputView(sentence: trimmedText) { page in
-        dismiss()
-      }
-    }
   }
 }
 
