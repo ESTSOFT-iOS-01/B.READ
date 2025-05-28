@@ -37,7 +37,6 @@ final class SearchViewModel: ObservableObject {
     case onTapClear
     case onSubmitSearch
     case onTapTab(Int)
-    case onTapRecord(String)
     case deleteKeyword(at: Int)
     case deleteAllKeywords
     case selectKeyword(String)
@@ -63,10 +62,7 @@ final class SearchViewModel: ObservableObject {
       }
     case let .onTapTab(index):
       state.selectedTabIndex = index
-      
-    case let .onTapRecord(id):
-      print("기록 \(id) 선택됨")
-      
+   
     case let .deleteKeyword(index):
       guard state.keywordList.indices.contains(index) else { return }
       state.keywordList.remove(at: index)

@@ -21,7 +21,7 @@ struct SearchResultView: View {
   var body: some View {
     VStack(spacing: 2) {
       TopTabBar(tabs: tabs, selectedIndex: $viewModel.state.selectedTabIndex)
-        .frame(height: 33) // TODO : toptabbar 바뀌면 frame 안잡아줘도 되나?
+        .frame(height: 34)
         .padding(.horizontal, 24)
       
       SearchTabContentView(
@@ -69,7 +69,7 @@ struct SearchTabContentView: View {
           layoutPadding: 24,
           listPadding: 16,
           onTap: {
-            coordinator.push(.searchRecord(id: $0.id))
+            coordinator.push(.libraryDetail(id: $0.id, isbn: $0.isbn))
           },
           content: { record in
             RecordSearchCell(data: record)

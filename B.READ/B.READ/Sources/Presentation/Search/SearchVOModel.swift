@@ -53,3 +53,21 @@ enum ReadingState {
   case reading
   case finished
 }
+
+struct BookDetailVO {
+  let title: String
+  let author: String
+  let publishedDate: String
+  let description: String
+  let isbn: String
+  let coverURL: String
+  let publisher: String
+  let pageCount: Int
+  let ratingScore: Double
+  let ratingCount : Int
+  let link: String
+}
+
+extension BookDetailVO: Identifiable {
+  var id: String { isbn }
+}

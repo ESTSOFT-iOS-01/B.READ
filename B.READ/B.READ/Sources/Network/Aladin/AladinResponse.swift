@@ -80,12 +80,14 @@ struct ItemDTO: Decodable {
   let pageCount: Int
   let ratingScore: Double
   let ratingCount : Int
+  let aladinLink : String
   
   enum CodingKeys: String, CodingKey {
     case title, author, description, publisher
     case publishedDate = "pubDate"
     case isbn = "isbn13"
     case coverURL = "cover"
+    case aladinLink = "link"
     case subInfo
   }
   
@@ -108,6 +110,7 @@ struct ItemDTO: Decodable {
     self.description = try container.decode(String.self, forKey: .description)
     self.isbn = try container.decode(String.self, forKey: .isbn)
     self.coverURL = try container.decode(String.self, forKey: .coverURL)
+    self.aladinLink = try container.decode(String.self, forKey: .aladinLink)
     self.publisher = try container.decode(String.self, forKey: .publisher)
     
     let subInfo = try container.nestedContainer(keyedBy: SubInfoKeys.self, forKey: .subInfo)
@@ -131,7 +134,8 @@ extension ItemDTO {
       publisher: publisher,
       pageCount: pageCount,
       ratingScore: ratingScore,
-      ratingCount: ratingCount
+      ratingCount: ratingCount,
+      link: aladinLink
     )
   }
 }

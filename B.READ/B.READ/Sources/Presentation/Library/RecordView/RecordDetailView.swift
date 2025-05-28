@@ -9,6 +9,7 @@ import SwiftUI
 
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @StateObject var viewModel: RecordDetailViewModel
   
   @State var showDeleteAlert: Bool = false
@@ -118,8 +119,8 @@ struct RecordDetailView: View {
       Button("메모 작성") {
         print("메모 작성 선택")
       }
-      Button("메모 작성") {
-        print("문장 수집 선택")
+      Button("문장 작성") {
+        coordinator.push(.sentenceInput)
       }
       Button("취소", role: .cancel) { }
     }

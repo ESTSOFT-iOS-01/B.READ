@@ -63,7 +63,7 @@ struct RecordRepositoryTest {
       try await recordRepository.createRecord(record)
     }
     
-    let fetchRecords = try await recordRepository.fetchRecentReadingRecord(count: 3)
+    let fetchRecords = try await recordRepository.fetchRecentReadingRecord(maxCount: 3)
     #expect(fetchedRecords == fetchRecords)
   }
   

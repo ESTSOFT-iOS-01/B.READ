@@ -43,13 +43,13 @@ actor RecordRepositoryImpl: RecordRepository {
     return data.toEntity()
   }
 
-  func fetchRecentReadingRecord(count: Int) throws -> [Record] {
+  func fetchRecentReadingRecord(maxCount: Int) throws -> [Record] {
     print("Impl: ", #function)
     
     let predicate = #Predicate<RecordDTO> { $0.state == 1 }
     let sort = SortDescriptor(\RecordDTO.updatedAt, order: .reverse)
     var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
-    descriptor.fetchLimit = count
+    descriptor.fetchLimit = maxCount
     
     do {
       let data = try modelContext.fetch(descriptor)

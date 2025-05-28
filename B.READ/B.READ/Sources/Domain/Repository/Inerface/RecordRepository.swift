@@ -29,7 +29,7 @@ protocol RecordRepository {
   /// - Parameter id: 독서 기록의 id
   /// - Returns: Record Entity
   /// - Throws:
-  ///   - `RepositoryError.dataNotFound`: 수정할 독서 기록이 존재하지 않는 경우
+  ///   - `RepositoryError.dataNotFound`: 조회할 독서 기록이 존재하지 않는 경우
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
   func fetchRecord(id: String) async throws -> Record
   
@@ -39,7 +39,7 @@ protocol RecordRepository {
   /// - Returns: [Record Entity]
   /// - Throws:
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
-  func fetchRecentReadingRecord(count: Int) async throws -> [Record]
+  func fetchRecentReadingRecord(maxCount: Int) async throws -> [Record]
   
   /// 특정 Record를 갱신합니다.
   ///
@@ -53,7 +53,7 @@ protocol RecordRepository {
   ///
   /// - Parameter id: 독서 기록의 id
   /// - Throws:
-  ///   - `RepositoryError.dataNotFound`: 삭제할 독서기록이 존재하지 않는 경우
+  ///   - `RepositoryError.dataNotFound`: 삭제할 독서 기록이 존재하지 않는 경우
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
   func deleteRecord(_ id: String) async throws
 }

@@ -23,7 +23,10 @@ final class SentenceViewModel: ObservableObject {
   
   // MARK: - Internal Variables
   private let mode: SentenceInputMode
-  private let quoteUseCase: QuoteUseCase
+  private let quoteUseCase: QuoteUseCase = QuoteUseCaseImpl(
+    quoteRepository: QuoteRepositoryStub(),
+    bookRepository: BookRepositoryStub()
+  )
   
   // MARK: - Actions
   enum Action {
@@ -45,11 +48,9 @@ final class SentenceViewModel: ObservableObject {
   
   // MARK: - Initializer
   init(
-    mode: SentenceInputMode,
-    quoteUseCase: QuoteUseCase
+    mode: SentenceInputMode
   ) {
     self.mode = mode
-    self.quoteUseCase = quoteUseCase
     switch mode {
     case .create:
       self.content = ""

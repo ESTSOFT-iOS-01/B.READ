@@ -12,7 +12,13 @@ enum MainRoute: Hashable {
   // MARK: - Search
   case barcode
   case searchBook(isbn: String)
-  case searchRecord(id: String)
+  
+  // MARK: - Library
+  case libraryDetail(id: String, isbn: String)
+  
+  // MARK: - Sentence
+  case sentenceInput
+  case pageInput(sentence: String)
   
   // MARK: - MyPage
   case insertNickname
@@ -31,9 +37,17 @@ extension Coordinator where T == MainRoute {
       ScanView(viewModel: ScanViewModel())
     case .searchBook(let isbn):
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
-    case .searchRecord(let id):
-      BookDetailView(viewModel: BookViewModel(isbn: id))
       
+    // MARK: - Library
+    case .libraryDetail(let id, let isbn):
+      RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
+      
+    // MARK: - Sentence
+    case .sentenceInput:
+      SentenceInputView()
+    
+    case .pageInput(let sentence):
+      PageInputView()
     // MARK: - MyPage Flow
     case .insertNickname:
       NicknameView()

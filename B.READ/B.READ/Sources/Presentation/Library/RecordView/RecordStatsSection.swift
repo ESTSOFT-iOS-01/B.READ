@@ -40,19 +40,19 @@ struct RecordStatsSection: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       // 기대 지수, 평점
-      VStack(alignment: .leading, spacing: 8) {
-        switch readState {
-        case .toRead:
+      if readState == .toRead {
+        VStack(alignment: .leading, spacing: 8) {
           Text("기대지수")
           ScoreBoardView(heartCount, type: .heart)
-        case .reading:
-          EmptyView()
-        case .completed:
+        }
+        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
+      } else if readState == .completed {
+        VStack(alignment: .leading, spacing: 8) {
           Text("평점")
           ScoreBoardView(starCount, type: .star)
         }
-      } // : Group
-      .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
+        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
+      }
       
       // 독서 기간
       VStack(alignment: .leading, spacing: layoutPadding) {

@@ -49,6 +49,14 @@ enum DummyData {
       publisher: "토네이도",
       publishedAt: Calendar.current.date(from:DateComponents(year: 2022, month: 6, day: 22))!,
       totalPages: 367
+    ),
+    Book(
+      isbn: "9788937460586",
+      name: "싯다르타",
+      author: "헤르만헤세",
+      publisher: "민음사",
+      publishedAt: Calendar.current.date(from: DateComponents(year: 2002, month: 1, day: 20))!,
+      totalPages: 252
     )
   ]
   

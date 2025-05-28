@@ -17,12 +17,15 @@ struct MyPageView: View {
       
       nicknameButton()
       
-      MenuListView(coordinator: coordinator)
+      MenuListView(coordinator: coordinator, viewModel: viewModel)
       
     }
     .padding(.horizontal, 24)
     .frame(maxHeight: .infinity, alignment: .top)
     .background(.backgroundDefault)
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
   }
   
   // MARK: (F)nicknameButton
@@ -32,7 +35,7 @@ struct MyPageView: View {
       coordinator.push(.insertNickname)
     } label: {
       HStack(spacing: 14) {
-        Text("닉네임")
+        Text(viewModel.nicknameText)
           .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.bold, size: 24), lineHeight: 1.45, letterSpacing: 0.02)
         Image(systemName: "chevron.right")
@@ -49,10 +52,11 @@ struct MyPageView: View {
 private struct MenuListView: View {
   
   let coordinator: Coordinator<MainRoute>
+  @ObservedObject var viewModel: SettingViewModel
   
   // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
   enum WeekDay: Int, CaseIterable {
-    case sun = 1
+    case sun = 0
     case mon
     case tue
     case wed
@@ -86,13 +90,13 @@ private struct MenuListView: View {
       
       HStack {
         ForEach(WeekDay.allCases, id: \.self) {
-          streakImage(weekDay: $0)
+          streakImage(weekDay: $0, isCompleted: viewModel.weeklyStreak[$0.rawValue])
         }
       }.padding(.top, menuInnerSpacing)
       
       VStack(alignment: .leading, spacing: menuInnerSpacing) {
         menuTitle(title: "관심 분야", chevronHidden: false)
-        selectedCategories(categories: [.classics, .artCulture])
+        selectedCategories(categories: Array(viewModel.selectedCategories))
       }
       .padding(.top, menuSpacing)
       .onTapGesture {
@@ -167,14 +171,14 @@ private struct MenuListView: View {
   
   // MARK: (F)streakImage
   @ViewBuilder
-  private func streakImage(weekDay: WeekDay) -> some View {
+  private func streakImage(weekDay: WeekDay, isCompleted: Bool) -> some View {
     weekDay.streakImage
       .renderingMode(.template)
       .resizable()
       .aspectRatio(contentMode: .fit)
       .frame(width: 40, height: 40)
       .frame(maxWidth: .infinity)
-      .foregroundStyle(weekDay.rawValue % 2 == 0 ? .gray1 : .gray9)
+      .foregroundStyle(isCompleted ? .gray9 : .gray1)
   }
 }
 

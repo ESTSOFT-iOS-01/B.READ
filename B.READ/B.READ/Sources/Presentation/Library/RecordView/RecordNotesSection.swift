@@ -10,6 +10,8 @@ import SwiftUI
 // MARK: - (S)RecordNotesSection
 struct RecordNotesSection: View {
   
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  
   enum CellType {
     case memo
     case quote
@@ -32,8 +34,7 @@ struct RecordNotesSection: View {
   
   var body: some View {
     LazyVStack {
-      switch cellType {
-      case .memo:
+      if cellType == .memo {
         ForEach(viewModel.state.memos) { memo in
           MemoCell(
             content: memo.content,
@@ -41,14 +42,12 @@ struct RecordNotesSection: View {
             startPage: memo.pages.0,
             endPage: memo.pages.1
           ) {
-            print("메모 메뉴 버튼 터치")
             showMenuActionSheet = true
           }
         } // : ForEach
-      case .quote:
+      } else {
         ForEach(viewModel.state.quotes) { quote in
           QuoteCell(content: quote.content, page: quote.page, colorTone: .soft) {
-            print("문장 메뉴 버튼 터치")
             showMenuActionSheet = true
           }
         } // : ForEach
@@ -73,6 +72,8 @@ struct RecordNotesSection: View {
         print("\(type.name) 수정 선택")
       case .quote:
         print("\(type.name) 수정 선택")
+        // TODO: 수정 버전 페이지로 넘어가기
+        coordinator.push(.sentenceInput)
       }
     }
     
