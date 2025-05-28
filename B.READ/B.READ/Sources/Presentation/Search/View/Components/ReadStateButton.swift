@@ -68,7 +68,23 @@ struct SelectDateView: View {
   }
 }
 
+// MARK: - (S)SelectRateView
+struct SelectRateView: View {
+  @State var rate: Int = 0
+  
+  var body: some View {
+    HStack(alignment: .center, spacing: 8) {
+      ScoreBoardView($rate, type: .star)
+      
+      Text(Double(rate).toStringForOneDecimal)
+        .brStyleFont(.peaceSans(size: 16), lineHeight: 1.2, letterSpacing: 0.02)
+        .foregroundStyle(.orange7)
+    }
+  }
+}
+
 #Preview {
   ReadStateSelectorView()
   SelectDateView()
+  SelectRateView()
 }
