@@ -8,8 +8,10 @@
 import Foundation
 import SwiftUI
 
-enum DummyData {
-  // MARK: - Books Dummy Data
+enum DummyData { }
+
+// MARK: - Book
+extension DummyData {
   static let dummyBooks: [Book] = [
     Book(
       isbn: "9791194368137",
@@ -68,8 +70,10 @@ enum DummyData {
       totalPages: 308
     )
   ]
-  
-  // MARK: - Record Dummy Datas
+}
+
+// MARK: - Record
+extension DummyData {
   static var dummyRecords: [Record] = [
     Record( // 워런 버핏 웨이
       id: UUID().uuidString,
@@ -95,11 +99,11 @@ enum DummyData {
       starCount: 0,
       isFavorite: true,
       period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
-      currentPage: 81,
+      currentPage: 123,
       review: "",
       summaryID: nil,
-      memoIDs: [],
-      quoteIDs: [],
+      memoIDs: ["5", "6"],
+      quoteIDs: ["4", "5"],
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
       updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
           ),
@@ -120,7 +124,7 @@ enum DummyData {
       memoIDs: ["1", "2", "3", "4"],
       quoteIDs: ["1", "2", "3"],
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
           ),
     Record( // 아주 작은 습관들
       id: UUID().uuidString,
@@ -194,13 +198,17 @@ enum DummyData {
       quoteIDs: [],
       createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!,
       updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!
-    )
+          )
   ]
+}
+
+// MARK: - Memo
+extension DummyData {
   static let dummyMemos: [Memo] = [
     Memo(
       id: "1",
       isbn: "9788937460586",
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!,
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (10, 20),
       guides: ["1제안", "2제안"]
@@ -208,7 +216,7 @@ enum DummyData {
     Memo(
       id: "2",
       isbn: "9788937460586",
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 1))!,
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (22, 32),
       guides: ["1제안", "2제안"]
@@ -216,7 +224,7 @@ enum DummyData {
     Memo(
       id: "3",
       isbn: "9788937460586",
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 3))!,
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!,
       content: "이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.",
       pages: (44, 82),
       guides: ["1제안", "2제안"]
@@ -231,18 +239,35 @@ enum DummyData {
     ),
     Memo(
       id: "5",
-      isbn: "9791194368137",
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 2, day: 1))!,
+      isbn: "9791158510619",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (99, 111),
       guides: ["1제안", "2제안"]
+    ),
+    Memo(
+      id: "6",
+      isbn: "9791158510619",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
+      content: "이것은 테스트를 위한 메모입니다.",
+      pages: (12, 25),
+      guides: ["1제안", "2제안"]
     )
   ]
+}
+
+// MARK: - Quote
+extension DummyData {
   static let dummyQuote: [Quote] = [
     Quote(id: "1", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 77),
     Quote(id: "2", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 12),
     Quote(id: "3", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 35),
-    Quote(id: "4", isbn: "9791194368137", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 123),
+    Quote(id: "4", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 123),
     Quote(id: "5", isbn: "9791158510619", content: "수집된 문장 문장 수집된 문장 수집된 문장 수집된 문장", page: 72),
   ]
+}
+
+// MARK: - AI Note
+extension DummyData {
+  
 }
