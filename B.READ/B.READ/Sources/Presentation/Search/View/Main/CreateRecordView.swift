@@ -12,12 +12,14 @@ struct CreateRecordView: View {
   
   @State private var selectedState: ReadingState = .notStart
   @State var heartRate: Int = 0
+  @State var starRate: Int = 0
   
   @State var startDate: Date = Date()
   @State var endDate: Date = Date()
   
   @State var page: String = ""
   @State var isFocused: Bool = false
+  @State var isTextEditorFocused: Bool = false
   @State var reviewText: String = ""
   
   var action = {
@@ -29,59 +31,82 @@ struct CreateRecordView: View {
       VStack(alignment: .leading) {
         ReadStateSelectorView(selectedState: $selectedState)
         
-        switch selectedState {
-        case .notStart:
-          SelectRateView(isStar: false, rate: $heartRate)
-            .padding(.top, 24)
-          
-        case .reading:
-          TextHeaderView(title: "독서 기간")
-            .padding(.top, 24)
-          SelectDateView(selectedDate: $startDate)
-            .padding(.leading, 4)
-            .padding(.top, 12)
-          
-          // 쪽
-          TextHeaderView(title: "독서량")
-            .padding(.top, 24)
-          SelectPageView(page: $page, isFocused: $isFocused, maxPage: maxPage)
-          
-        case .finished:
-          TextHeaderView(title: "독서 기간")
-            .padding(.top, 24)
-          
-          HStack(spacing: 48) {
-            SelectDateView(selectedDate: $startDate)
-            SelectDateView(title: "종료 날짜", selectedDate: $endDate)
-          }
-          .padding(.top, 12)
-          .padding(.leading, 4)
-
-          VStack(alignment: .trailing) {
-            Text("\(reviewText.count)/150자")
-              .font(.caption)
-              .foregroundColor(.gray5)
-            
-            CustomTextEditor(
-              text: $reviewText,
-              placeholder: "짧은 감상평을 남겨보세요(선택)",
-              maxLength: 150
-            )
-            .frame(height: 100)
-            .cornerRadius(8)
-          }
-          .padding()
-          
-        }
+        stateContentView()
+          .padding(.top, 24)
+          .animation(.easeInOut, value: selectedState)
         
         BottomButton(buttonTitle: "저장하기", action: action)
           .padding(.top, 24)
           .padding(.bottom, 40)
           .padding(.horizontal, 2)
       }
+      .frame(maxHeight: .infinity, alignment: .bottom)
       .padding(.horizontal, 24)
     }
+    
+    .contentShape(Rectangle())
+    .onTapGesture {
+      isTextEditorFocused = false
+      isFocused = false
+    }
   }
+  
+  @ViewBuilder
+  private func stateContentView() -> some View {
+    switch selectedState {
+    case .notStart:
+      SelectRateView(isStar: false, rate: $heartRate)
+        .transition(.opacity)
+      
+    case .reading:
+      VStack(alignment: .leading, spacing: 0) {
+        TextHeaderView(title: "독서 기간")
+        SelectDateView(selectedDate: $startDate)
+          .padding(.leading, 4)
+          .padding(.top, 12)
+        
+        // 쪽
+        TextHeaderView(title: "독서량")
+          .padding(.top, 24)
+        SelectPageView(page: $page, isFocused: $isFocused, maxPage: maxPage)
+      }
+      .transition(.opacity)
+
+    case .finished:
+      VStack(alignment: .leading, spacing: 0) {
+        TextHeaderView(title: "독서 기간")
+        
+        HStack(spacing: 48) {
+          SelectDateView(selectedDate: $startDate)
+          SelectDateView(title: "종료 날짜", selectedDate: $endDate)
+        }
+        .padding(.top, 12)
+        .padding(.leading, 4)
+        
+        SelectRateView(rate: $starRate)
+        .padding(.top, 24)
+
+        VStack(alignment: .trailing) {
+          Text("\(reviewText.count)/150자")
+            .brStyleFont(.pretendard(.light, size: 12), lineHeight: 1.2, letterSpacing: -0.02)
+            .foregroundColor(.gray5)
+          
+          CustomTextEditor(
+            text: $reviewText,
+            isFocused: $isTextEditorFocused,
+            placeholder: "짧은 감상평을 남겨보세요(선택)",
+            maxLength: 150
+          )
+          .background(Color.clear.onTapGesture(perform: {
+            isTextEditorFocused = false
+          }))
+          .frame(height: 100, alignment: .center)
+        }
+      }
+      .transition(.opacity)
+    }
+  }
+  
 }
 
 #Preview {

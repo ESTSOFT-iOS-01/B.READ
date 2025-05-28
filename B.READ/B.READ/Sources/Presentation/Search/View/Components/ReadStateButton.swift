@@ -36,7 +36,7 @@ struct ReadStateButton: View {
     Image(state.imageName(isSelected: isSelected))
       .resizable()
       .aspectRatio(contentMode: .fit)
-      .frame(width: 100)
+      .frame(width: 110)
       .contentShape(Rectangle())
       .onTapGesture {
         onTap()

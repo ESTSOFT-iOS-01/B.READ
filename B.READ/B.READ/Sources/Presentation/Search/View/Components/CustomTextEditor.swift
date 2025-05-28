@@ -10,6 +10,8 @@ import SwiftUI
 
 struct CustomTextEditor: UIViewRepresentable {
   @Binding var text: String
+  @Binding var isFocused: Bool
+  
   var placeholder: String
   var font: UIFont = .pretendard(.regular, size: 14)
   var textColor: UIColor = .gray9
@@ -39,6 +41,14 @@ struct CustomTextEditor: UIViewRepresentable {
   }
   
   func updateUIView(_ uiView: UITextView, context: Context) {
+    if isFocused != uiView.isFirstResponder {
+      if isFocused {
+        uiView.becomeFirstResponder()
+      } else {
+        uiView.resignFirstResponder()
+      }
+    }
+    
     if uiView.isFirstResponder {
       if uiView.textColor == placeholderColor {
         uiView.text = ""
@@ -58,11 +68,14 @@ struct CustomTextEditor: UIViewRepresentable {
   }
   
   func makeCoordinator() -> Coordinator {
-    Coordinator(text: $text,
-                placeholder: placeholder,
-                placeholderColor: placeholderColor,
-                textColor: textColor,
-                maxLength: maxLength)
+    Coordinator(
+      text: $text,
+      isFocused: $isFocused,
+      placeholder: placeholder,
+      placeholderColor: placeholderColor,
+      textColor: textColor,
+      maxLength: maxLength
+    )
   }
   
   private func makeTypingAttributes() -> [NSAttributedString.Key: Any] {
@@ -78,13 +91,15 @@ struct CustomTextEditor: UIViewRepresentable {
   
   class Coordinator: NSObject, UITextViewDelegate {
     @Binding var text: String
+    @Binding var isFocused: Bool
     var placeholder: String
     var placeholderColor: UIColor
     var textColor: UIColor
     let maxLength: Int?
     
-    init(text: Binding<String>, placeholder: String, placeholderColor: UIColor, textColor: UIColor, maxLength: Int?) {
+    init(text: Binding<String>, isFocused: Binding<Bool>, placeholder: String, placeholderColor: UIColor, textColor: UIColor, maxLength: Int?) {
       _text = text
+      _isFocused = isFocused
       self.placeholder = placeholder
       self.placeholderColor = placeholderColor
       self.textColor = textColor
@@ -98,6 +113,7 @@ struct CustomTextEditor: UIViewRepresentable {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
+      $isFocused.wrappedValue = true
       if textView.text == placeholder {
         textView.text = nil
         textView.textColor = textColor
@@ -105,6 +121,7 @@ struct CustomTextEditor: UIViewRepresentable {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
+      $isFocused.wrappedValue = false
       if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
         textView.text = placeholder
         textView.textColor = placeholderColor
@@ -118,7 +135,6 @@ struct CustomTextEditor: UIViewRepresentable {
       guard let oldString = textView.text, let newRange = Range(range, in: oldString) else { return true }
       
       let newString = oldString.replacingCharacters(in: newRange, with: inputString).trimmingCharacters(in: .whitespacesAndNewlines)
-      
       
       
       // 비속어 감지도 여기로
