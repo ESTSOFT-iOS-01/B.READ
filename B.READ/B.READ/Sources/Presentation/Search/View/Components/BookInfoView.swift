@@ -50,19 +50,18 @@ struct BookInfoView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: layoutPadding/2) {
       Text(title)
-        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 1.2, letterSpacing: 0.002)
+        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 1.2, letterSpacing: 0.02)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, layoutPadding)
       
       Text(content)
-        .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1.2, letterSpacing: -0.0025)
+        .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1.2, letterSpacing: -0.025)
         .multilineTextAlignment(.leading)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.bottom, layoutPadding)
     }
     .padding(.horizontal, 24)
-    .frame(maxWidth: .infinity)
-    .frame(alignment: .leading)
+    .frame(maxWidth: .infinity, alignment: .leading)
     .background(.white)
   }
 }
@@ -78,11 +77,11 @@ struct BookRateView: View {
     VStack(alignment: .leading, spacing: layoutPadding/2) {
       HStack(spacing: 0) {
         Text("\(title)")
-          .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 1.2, letterSpacing: 0.002)
+          .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 1.2, letterSpacing: 0.02)
           .frame(alignment: .leading)
         
         Text("(\(count)명)")
-          .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1.2, letterSpacing: 0.002)
+          .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1.2, letterSpacing: 0.02)
           .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.top, layoutPadding)
@@ -91,15 +90,14 @@ struct BookRateView: View {
         ScoreBoardView(Int(round(rate/2)), type: .star)
         
         Text(rate.toStringForOneDecimal)
-          .brStyleFont(.peaceSans(size: 16), lineHeight: 1.2, letterSpacing: 0.002)
+          .brStyleFont(.peaceSans(size: 16), lineHeight: 1.2, letterSpacing: 0.02)
           .foregroundStyle(.orange7)
           .frame(maxWidth: .infinity, alignment: .leading)
       }
       .padding(.bottom, layoutPadding)
     }
     .padding(.horizontal, 24)
-    .frame(maxWidth: .infinity)
-    .frame(alignment: .leading)
+    .frame(maxWidth: .infinity, alignment: .leading)
     .background(.white)
   }
 }
@@ -136,8 +134,7 @@ struct BookTitleView: View {
       .padding(.bottom, layoutPadding)
     }
     .padding(.horizontal, 24)
-    .frame(maxWidth: .infinity)
-    .frame(alignment: .leading)
+    .frame(maxWidth: .infinity, alignment: .leading)
     .background(.white)
   }
   
