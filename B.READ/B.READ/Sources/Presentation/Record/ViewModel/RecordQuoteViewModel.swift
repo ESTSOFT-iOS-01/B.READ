@@ -49,7 +49,7 @@ final class RecordQuoteViewModel: ObservableObject {
     case .onSubmit:
       print("검색어: \(state.searchText)")
       
-    case . deleteQuote:
+    case .deleteQuote:
       print("문장 삭제")
     }
   }
