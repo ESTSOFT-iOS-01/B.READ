@@ -9,22 +9,23 @@ import UIKit
 
 extension UINavigationBar {
   static func configureGlobalAppearance() {
-    let appearance = UINavigationBarAppearance()
-    appearance.configureWithOpaqueBackground()
-    appearance.backgroundColor = .backgroundDefault
-    appearance.shadowColor = .clear
-
+    let defaultAppearance = UINavigationBarAppearance()
     let backAppearance = UIBarButtonItemAppearance()
     backAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear]
-    appearance.backButtonAppearance = backAppearance
-
-    let chevronImage = UIImage(systemName: "chevron.left")?
+    defaultAppearance.backButtonAppearance = backAppearance
+    defaultAppearance.titleTextAttributes = [
+      .font: UIFont.pretendard(.light, size: 16),
+      .foregroundColor: UIColor.black
+    ]
+    
+    let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+    let chevronImage = UIImage(systemName: "chevron.backward", withConfiguration: config)?
       .withTintColor(.green6, renderingMode: .alwaysOriginal)
-    appearance.setBackIndicatorImage(chevronImage, transitionMaskImage: chevronImage)
-
+      .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0))
+    defaultAppearance.setBackIndicatorImage(chevronImage, transitionMaskImage: chevronImage)
+    
     let navigationBar = UINavigationBar.appearance()
-    navigationBar.standardAppearance = appearance
-    navigationBar.scrollEdgeAppearance = appearance
-    navigationBar.compactAppearance = appearance
+    navigationBar.standardAppearance = defaultAppearance
+    navigationBar.compactAppearance = defaultAppearance
   }
 }

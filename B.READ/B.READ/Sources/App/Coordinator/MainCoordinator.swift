@@ -20,6 +20,7 @@ enum MainRoute: Hashable {
   case sentenceInput
   case pageInput(sentence: String)
   
+  // MARK: - Memo
   case memo(date: Date, totalPage: Int)
   
   // MARK: - MyPage

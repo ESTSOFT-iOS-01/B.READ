@@ -47,6 +47,7 @@ struct NicknameView: View {
       .frame(maxHeight: .infinity, alignment: .bottom)
     }
     .padding(.horizontal, 26)
+    .background(.backgroundDefault)
     .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
     .onChange(of: viewModel.nicknameText) { oldValue, newValue in
 

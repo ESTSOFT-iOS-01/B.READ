@@ -40,6 +40,7 @@ struct MemoView: View {
     .navigationTitle(targetDate.string(format: .dotSeparatedFull))
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.horizontal, 24)
+    .background(.backgroundDefault)
     .onChange(of: startPage) {
       startPage = formatDigits($1)
     }
