@@ -18,6 +18,7 @@ struct CreateRecordView: View {
   
   @State var page: String = ""
   @State var isFocused: Bool = false
+  @State var reviewText: String = ""
   
   var action = {
     print("저장하기 버튼 눌림")
@@ -55,7 +56,21 @@ struct CreateRecordView: View {
           }
           .padding(.top, 12)
           .padding(.leading, 4)
-          
+
+          VStack(alignment: .trailing) {
+            Text("\(reviewText.count)/150자")
+              .font(.caption)
+              .foregroundColor(.gray5)
+            
+            CustomTextEditor(
+              text: $reviewText,
+              placeholder: "짧은 감상평을 남겨보세요(선택)",
+              maxLength: 150
+            )
+            .frame(height: 100)
+            .cornerRadius(8)
+          }
+          .padding()
           
         }
         

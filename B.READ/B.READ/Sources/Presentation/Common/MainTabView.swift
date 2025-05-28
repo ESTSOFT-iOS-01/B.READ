@@ -45,7 +45,8 @@ struct MainTabView: View {
           }
           .tag(Tab.library)
         
-        RecordView()
+//        RecordView()
+        CreateRecordView()
           .tabItem {
             Image(systemName: "doc.text.magnifyingglass")
             Text("기록")
