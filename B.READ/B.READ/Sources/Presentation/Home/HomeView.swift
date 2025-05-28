@@ -98,7 +98,7 @@ private struct RecentBookSectionView: View {
 
 // MARK: - (S)InfiniteBannerView
 private struct InfiniteBannerView: View {
-  
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   // TODO: 근웅님한테 Cell이 Entity가 넘어가지 않게 해달라고 요청
   let items = [
     LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
@@ -115,6 +115,9 @@ private struct InfiniteBannerView: View {
       ForEach(0..<items.count, id: \.self) { index in
         bannerCell(recordVO: items[index])
           .tag(index)
+          .onTapGesture {
+            coordinator.push(.libraryDetail(id: items[index].id, isbn: items[index].isbn))
+          }
       }
       .onDisappear {
         if currentIndex == -1 {
