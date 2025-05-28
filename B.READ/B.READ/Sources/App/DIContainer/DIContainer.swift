@@ -64,7 +64,13 @@ extension DIContainer {
       for: LibraryUseCase.self
     )
     // TODO: - Memo UseCase
-    // TODO: - Quote UseCase
+    // Quote UseCase
+    self.shared.register(
+      QuoteUseCaseImpl(
+        quoteRepository: quoteRepository,
+        bookRepository: bookRepository),
+      for: QuoteUseCase.self
+    )
     // TODO: - Note UseCase
     // TODO: - Search UseCase
     // TODO: - Recommand UseCase
