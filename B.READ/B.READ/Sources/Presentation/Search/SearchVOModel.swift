@@ -48,10 +48,21 @@ struct RecordVO {
 
 extension RecordVO: Identifiable {}
 
-enum ReadingState {
+enum ReadingState: CaseIterable, Hashable {
   case notStart
   case reading
   case finished
+  
+  func imageName(isSelected: Bool) -> String {
+    switch (self, isSelected) {
+    case (.notStart, false): return "ToReadUnSelected"
+    case (.notStart, true):  return "ToReadSelected"
+    case (.reading, false): return "ReadingUnSelected"
+    case (.reading, true):  return "ReadingSelected"
+    case (.finished, false): return "ReadUnSelected"
+    case (.finished, true):  return "ReadSelected"
+    }
+  }
 }
 
 struct BookDetailVO {
