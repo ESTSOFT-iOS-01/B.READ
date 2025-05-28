@@ -26,59 +26,118 @@ final class RecordQuoteViewModel: ObservableObject {
   private var quoteGroups: [QuoteGroup] = []
   
   // MARK: - Dependency
-  //  @Dependency private var exampleUseCase: ExampleUseCase
+  @Dependency private var quoteUseCase: QuoteUseCase
+  @Dependency private var libraryUseCase: LibraryUseCase
   
   // MARK: - Action
   enum Action {
     case onAppear
     case onSubmit
+    case deleteQuote
   }
   
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      loadQuoteGroups()
-      sortDisplayQuoteGroups()
+      Task { [weak self] in
+        guard let self = self else { return }
+        
+        await self.loadQuoteGroups()
+        await self.sortDisplayQuoteGroups()
+      }
+      
     case .onSubmit:
       print("검색어: \(state.searchText)")
+      
+    case . deleteQuote:
+      print("문장 삭제")
     }
   }
 }
 
 private extension RecordQuoteViewModel {
   /// 문장을 불러와서 뷰에 보여줄 형태로 가공합니다.
-  func loadQuoteGroups() {
-    // TODO: - quoteUseCase.fetchAllQuote()으로 변경
-    let allQuotes = DummyData.dummyQuote
+  func loadQuoteGroups() async {
     
-    let quoteDict = Dictionary(grouping: allQuotes, by: { $0.isbn })
-    quoteGroups = quoteDict.compactMap { isbn, quotes in
-      
-      let quoteVOs = quotes.map { QuoteVO($0) }
-      // TODO: - libraryUseCase.fetchBook(isbn)으로 변경
-      // let book = await libraryUsecase.fetchBook(isbn)
-      // return QuoteGroup(isbn: isbn, bookTitle: book.name, quotes: quoteVOs)
-      if let book = DummyData.dummyBooks.filter({ $0.isbn == isbn }).first {
-        return QuoteGroup(isbn: book.isbn, bookTitle: book.name, quotes: quoteVOs)
-      } else {
-        return nil
-      }
+    // 1. 전체 문장을 가져옴
+    guard let allQuotes = try? await quoteUseCase.fetchAllQuotes() else {
+      print("RepositoryError.fetchError.errorDescription")
+      return
     }
     
-    // TODO: - 검색어 필터 들어가면 필터해주는 곳에서 처리해줌
-    state.displayQuoteGroups = quoteGroups
+    // 2. 문장을 ISBN을 기준으로 나눔
+    let quoteDict = Dictionary(grouping: allQuotes, by: { $0.isbn })
+    
+    let quoteGroups: [QuoteGroup] = await withTaskGroup(of: QuoteGroup?.self) {
+      [weak self] group in
+      guard let self = self else { return [] }
+      
+      // 3. 구분된 책의 문장을 QuoteGroup으로 생성
+      for (isbn, quotes) in quoteDict {
+        group.addTask {
+          do {
+            let bookTitle = try await self.quoteUseCase.loadBookTitle(isbn)
+            let quoteVOs = quotes.map { QuoteVO($0) }
+            return QuoteGroup(isbn: isbn, bookTitle: bookTitle, quotes: quoteVOs)
+          } catch {
+            print("ERROR: QuoteGroup Create Fail")
+            return nil
+          }
+        }
+      }
+      
+      var results: [QuoteGroup] = []
+      
+      for await result in group {
+        if let item = result {
+          results.append(item)
+        }
+      }
+      
+      return results
+    } // : withTaskGroup
+    
+    // 4. 만들어진 QuoteGroup을 반영
+    await MainActor.run {
+      state.displayQuoteGroups = quoteGroups
+    }
   }
   
-  // TODO: - 정렬 버트 만들고 기능 추가 예정
+  // TODO: - 정렬 버튼 만들고 기능 추가 예정
   /// 보여주고자 하는 Quote의 순서를 정렬합니다.
-  func sortDisplayQuoteGroups() {
-    // 1. QuoteGroup을 정렬 - 우선 제목 순
-    // 2. QuoteGroup에 담긴 Quotes를 정렬
+  func sortDisplayQuoteGroups(by: SortState = .older) async {
+    // 1. 태스크 그룹으로 정렬
+    let quoteGroups = await withTaskGroup(of: QuoteGroup.self) { group in
+      
+      // 2. 도서 제목 이름 순으로 정렬을 기준으로 작동
+      let sortedGroup = state.displayQuoteGroups.sorted { $0.bookTitle > $1.bookTitle }
+      
+      // 3. 각 도서별 문장을 비동기로 정렬
+      for groupItem in sortedGroup {
+        group.addTask {
+          // TODO: - 정렬 기준별 구현
+          // 4. 우선 페이지 오름차순으로 정렬
+          let sortedQuotes = groupItem.quotes.sorted { $0.page < $1.page }
+          return QuoteGroup(
+            isbn: groupItem.isbn,
+            bookTitle: groupItem.bookTitle,
+            quotes: sortedQuotes
+          )
+        }
+      }
+      
+      var results: [QuoteGroup] = []
+      // 5. 결과값 저장
+      for await result in group {
+        results.append(result)
+      }
+      
+      return results
+    }
     
-    state.displayQuoteGroups = state.displayQuoteGroups.sorted { $0.bookTitle < $1.bookTitle }
-    
-    for (index, quoteGroup) in state.displayQuoteGroups.enumerated() {
-      state.displayQuoteGroups[index].quotes = quoteGroup.quotes.sorted { $0.page < $1.page }
+    // 6. 뷰에 반영
+    await MainActor.run {
+      state.displayQuoteGroups = quoteGroups
     }
   }
 }
