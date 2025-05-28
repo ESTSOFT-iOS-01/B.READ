@@ -9,9 +9,14 @@ import SwiftUI
 
 struct MemoView: View {
   
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @State private var startPage: String = ""
   @State private var endPage: String = ""
-  @State private var memoText: String = ""
+  @State private var memoText: String = "memo"
+  
+  private var isButtonEnabled: Bool {
+    !startPage.isEmpty && !endPage.isEmpty && !memoText.isEmpty
+  }
   
   let targetDate: Date
   let totalPage: Int
@@ -41,6 +46,20 @@ struct MemoView: View {
     .onChange(of: endPage) {
       endPage = formatDigits($1)
     }
+    .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button {
+          coordinator.pop()
+        } label: {
+          Text("저장")
+            .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.0)
+            .foregroundStyle(.green6)
+            .opacity(isButtonEnabled ? 1 : 0)
+            .disabled(!isButtonEnabled)
+            .animation(.easeInOut(duration: 0.2), value: isButtonEnabled)
+        }
+      }
+    }
   }
   
   private func formatDigits(_ input: String) -> String {
@@ -55,9 +74,18 @@ struct MemoView: View {
   @ViewBuilder
   private func guideSection() -> some View {
     VStack(alignment: .leading, spacing: 8) {
-      Text("빵식이의 가이드")
-        .foregroundStyle(.black)
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
+      HStack {
+        Text("빵식이의 가이드")
+          .foregroundStyle(.black)
+          .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
+          .frame(maxWidth: .infinity, alignment: .leading)
+        
+        Image(systemName: "trash")
+          .resizable()
+          .aspectRatio(contentMode: .fit)
+          .frame(width: 16, height: 16)
+          .foregroundStyle(.gray2)
+      }
       
       HStack(spacing: 40) {
         Image(.happyBread)
@@ -75,7 +103,7 @@ struct MemoView: View {
       .frame(maxWidth: .infinity)
       .background(.green1)
       .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
+    }.padding(.top, 24)
   }
   
   // MARK: (F)pageSection
@@ -112,5 +140,7 @@ struct MemoView: View {
 }
 
 #Preview {
-  MemoView(targetDate: .now, totalPage: 200)
+  NavigationStack {
+    MemoView(targetDate: .now, totalPage: 200)
+  }
 }
