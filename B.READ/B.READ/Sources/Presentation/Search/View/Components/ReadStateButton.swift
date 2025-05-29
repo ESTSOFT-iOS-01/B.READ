@@ -117,9 +117,10 @@ struct SelectRateView: View {
 struct SelectPageView: View {
   @Binding var page: String
   var isFocused: Binding<Bool>? = nil
-  @FocusState private var internalFocus: Bool
-  var onSubmit: () -> Void = { }
   var maxPage: Int
+  var onSubmit: () -> Void = { }
+
+  @FocusState private var internalFocus: Bool
   
   var body: some View {
     HStack(alignment: .center, spacing: 16) {

@@ -50,18 +50,21 @@ final class NewRecordViewModel: ObservableObject {
   ) {
     self.recordVO = recordVO
     self.maxPage = maxPage
-    self.selectedState = .finished
+    self.selectedState = recordVO.state
     self.heartRate = recordVO.heartCount
     self.starRate = recordVO.starCount
     self.startDate = recordVO.period.start ?? Date()
     self.endDate = recordVO.period.end ?? Date()
-//    self.page = recordVO.currentPage
-//    self.reviewText = reviewText
+    self.page = String(recordVO.currentPage)
+    // TODO : LibraryRecordVO에 reviewText 생기면 넣어주기
+    self.reviewText = ""
   }
   
   // MARK: - Action
   enum Action {
     case onSubmit
+    case pageSubmit
+    case releaseEditorFocus
   }
 
   func send(_ action: Action) {
@@ -70,6 +73,12 @@ final class NewRecordViewModel: ObservableObject {
       // usecase의 save함수 부르기
       // 성공하면 dismiss
       // 실패하면 재시도 1회 후, alert로 실패 메세지 띄우기
+      print("저장하기 버튼 눌림")
+    case .pageSubmit:
+      isFocused = false
+    case .releaseEditorFocus:
+      isTextEditorFocused = false
     }
   }
+
 }

@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct BookDetailView: View {
-  @ObservedObject var viewModel: BookViewModel
+  @StateObject var viewModel: BookViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  
+  init(viewModel: BookViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
+  }
   
   var body: some View {
     VStack {

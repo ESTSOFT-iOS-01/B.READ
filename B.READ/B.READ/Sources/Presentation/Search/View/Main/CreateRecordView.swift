@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct CreateRecordView: View {
+  let layoutPadding: CGFloat = 24
+  
   @StateObject var viewModel: NewRecordViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
   
@@ -31,22 +33,24 @@ struct CreateRecordView: View {
           ReadStateSelectorView(selectedState: $viewModel.selectedState)
           
           stateContentView()
-            .padding(.top, 24)
+            .padding(.top, layoutPadding)
           
-          BottomButton(buttonTitle: "저장하기", action: action)
-            .padding(.top, 24)
-            .padding(.horizontal, 2)
+          BottomButton(buttonTitle: "저장하기") {
+            viewModel.send(.onSubmit)
+          }
+          .padding(.top, layoutPadding)
+          .padding(.horizontal, 2)
         }
         .frame(alignment: .bottom)
       }
-//      .animation(.easeOut(duration: 1), value: selectedState)
-      .padding(.horizontal, 24)
-      .padding(.top, 24)
+      //      .animation(.easeOut(duration: 1), value: selectedState)
+      .padding(.horizontal, layoutPadding)
+      .padding(.top, layoutPadding)
       .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
       .clipShape(
         RoundedCorner(radius: 16, corners: [.topLeft, .topRight])
       )
-
+      
     }
     .ignoresSafeArea()
     .contentShape(Rectangle())
@@ -61,15 +65,6 @@ struct CreateRecordView: View {
   private func stateContentView() -> some View {
     let layoutPadding : CGFloat = 24
     
-    let submit: () -> Void  = {
-      print("\(viewModel.page) 페이지 입력됨")
-      viewModel.isFocused = false
-    }
-    
-    let tapGesture: () -> Void  = {
-      viewModel.isTextEditorFocused = false
-    }
-    
     switch viewModel.selectedState {
     case .notStart:
       SelectRateView(isStar: false, rate: $viewModel.heartRate)
@@ -79,16 +74,18 @@ struct CreateRecordView: View {
         // 독서 기간 입력
         TextHeaderView(title: "독서 기간")
         SelectDateView(selectedDate: $viewModel.startDate)
-          .padding(.leading, 4)
-          .padding(.top, 12)
+          .topLeadingPadding()
         
         // 페이지 입력
         TextHeaderView(title: "독서량")
           .padding(.top, layoutPadding)
-        SelectPageView(page: $viewModel.page, isFocused: $viewModel.isFocused, onSubmit: submit, maxPage: viewModel.maxPage)
-          .padding(.leading, 4)
-          .padding(.top, 12)
-        
+        SelectPageView(
+          page: $viewModel.page,
+          isFocused: $viewModel.isFocused,
+          maxPage: viewModel.maxPage) {
+            viewModel.send(.pageSubmit)
+          }
+          .topLeadingPadding()
       }
       
     case .finished:
@@ -99,8 +96,7 @@ struct CreateRecordView: View {
           SelectDateView(selectedDate: $viewModel.startDate)
           SelectDateView(title: "종료 날짜", selectedDate: $viewModel.endDate)
         }
-        .padding(.leading, 4)
-        .padding(.top, 12)
+        .topLeadingPadding()
         
         // 평점 입력
         SelectRateView(rate: $viewModel.starRate)
@@ -110,9 +106,10 @@ struct CreateRecordView: View {
         ReviewInputView(
           reviewText: $viewModel.reviewText,
           isFocused: $viewModel.isTextEditorFocused,
-          tapGesture: tapGesture
-        )
-        .padding(.top, 16)
+          maxLength: 150) {
+            viewModel.send(.releaseEditorFocus)
+          }
+          .padding(.top, 16)
       } // : 내부 뷰 Vstack
     }
   }
@@ -121,12 +118,20 @@ struct CreateRecordView: View {
 
 #Preview {
   Spacer()
-  CreateRecordView(viewModel: NewRecordViewModel())
+  //  CreateRecordView(viewModel: NewRecordViewModel())
 }
 
 struct SizePreferenceKey: PreferenceKey {
   static var defaultValue: CGFloat = 0
   static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
     value = nextValue()
+  }
+}
+
+extension View {
+  func topLeadingPadding() -> some View {
+    self
+      .padding(.leading, 4)
+      .padding(.top, 12)
   }
 }
