@@ -38,6 +38,7 @@
 				Resources/DummyJson/CategoryBest.json,
 				Resources/DummyJson/SearchList.json,
 				Sources/Data/DTOs/Record/BookDTO.swift,
+				Sources/Data/DTOs/Record/MemoDTO.swift,
 				Sources/Data/DTOs/Record/QuoteDTO.swift,
 				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
