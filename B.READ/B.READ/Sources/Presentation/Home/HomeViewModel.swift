@@ -10,7 +10,7 @@ import Foundation
 final class HomeViewModel: ObservableObject {
   
   // MARK: - State
-  @Published var recentRecords: [RecordVO] = []
+  @Published var recentRecords: [LibraryRecordVO] = []
   
   // MARK: - Internal Variable
   private var example: String?
@@ -31,7 +31,7 @@ final class HomeViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      print("onAppear")
+      fetchRecentRecords()
     }
   }
   
@@ -41,7 +41,30 @@ final class HomeViewModel: ObservableObject {
 }
 
 // MARK: - Internal Function
-private extension SettingViewModel {
-  
+private extension HomeViewModel {
+  func fetchRecentRecords() {
+    Task { [weak self] in
+      guard let self else { return }
+      let records = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
+      await MainActor.run {
+        self.recentRecords = records.map { record, book in
+          LibraryRecordVO(
+            id: record.id,
+            isbn: book.isbn,
+            name: book.name,
+            state: record.state,
+            heartCount: record.heartCount,
+            starCount: record.starCount,
+            percent: Int(Double(record.currentPage) / Double(book.totalPages) * 100),
+            memoCount: record.memoIDs.count,
+            quoteCount: record.quoteIDs.count,
+            period: (record.period.startDate, record.period.endDate),
+            isFavorite: record.isFavorite,
+            createdAt: record.createdAt
+          )
+        }
+      }
+    }
+  }
 }
 

@@ -150,7 +150,7 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {
     // 1. 최근 읽은 기록을 최대 maxCount개까지 가져온다
-    let records = try await recordRepository.fetchRecentReadingRecord(maxCount: 3)
+    let records = try await recordRepository.fetchRecentReadingRecord(maxCount: maxCount)
     
     // 2. 중복 제거된 ISBN 목록을 추출한다
     let isbns = Set(records.map { $0.isbn })

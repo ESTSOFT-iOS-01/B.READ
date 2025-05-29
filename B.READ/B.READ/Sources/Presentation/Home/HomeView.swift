@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct HomeView: View {
+  
+  @StateObject private var viewModel = HomeViewModel()
+  
   var body: some View {
     ScrollView {
       BreadGuideView()
       
-      RecentBookSectionView()
+      RecentBookSectionView(viewModel: viewModel)
         .padding(.top, 24)
     }
     .frame(maxWidth: .infinity, alignment: .top)
@@ -63,7 +66,12 @@ private struct BreadGuideView: View {
 // MARK: - (S)RecentBookSectionView
 private struct RecentBookSectionView: View {
   
+  @ObservedObject var viewModel: HomeViewModel
   @State private var currentIndex = 0
+  private let emptyBookPlaceHolder = """
+    아직 읽기 시작한 책이 없네요!
+    하루 한 쪽이라도 읽어보세요
+    """
   
   var body: some View {
     VStack(spacing: 16) {
@@ -73,18 +81,26 @@ private struct RecentBookSectionView: View {
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
           .frame(maxWidth: .infinity, alignment: .leading)
         
-        pageIndicator()
+        if !viewModel.recentRecords.isEmpty { pageIndicator() }
 
       }.padding(.horizontal, 24)
       
-      InfiniteBannerView(currentIndex: $currentIndex)
+      if !viewModel.recentRecords.isEmpty {
+        InfiniteBannerView(viewModel: viewModel, currentIndex: $currentIndex)
+      } else {
+        Text(emptyBookPlaceHolder)
+          .multilineTextAlignment(.center)
+          .foregroundStyle(.black)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.35, letterSpacing: 0.025)
+          .padding(.top, 32)
+      }
     }
   }
   
   // MARK: (F)pageIndicator
   @ViewBuilder
   private func pageIndicator() -> some View {
-    ForEach(0...2, id: \.self) { index in
+    ForEach(0...viewModel.recentRecords.count, id: \.self) { index in
       HStack(spacing: 6) {
         Circle()
           .fill(currentIndex == index ? .green5 : .gray1)
@@ -99,36 +115,43 @@ private struct RecentBookSectionView: View {
 // MARK: - (S)InfiniteBannerView
 private struct InfiniteBannerView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
-  // TODO: 근웅님한테 Cell이 Entity가 넘어가지 않게 해달라고 요청
-  @State var items = [
-    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
-    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now),
-    LibraryRecordVO(id: "", isbn: "", name: "", state: .completed, heartCount: 1, starCount: 1, percent: 20, memoCount: 1, quoteCount: 1, period: (.now, .now), isFavorite: true, createdAt: .now)
-  ]
+  @ObservedObject var viewModel: HomeViewModel
   @Binding var currentIndex: Int
+  private var totalRecordsCount: Int {
+    viewModel.recentRecords.count
+  }
   
   var body: some View {
     TabView(selection: $currentIndex) {
-      bannerCell(recordVO: $items.last!)
-        .tag(-1)
+      if totalRecordsCount > 1 {
+        bannerCell(recordVO: $viewModel.recentRecords[totalRecordsCount])
+          .tag(-1)
+      }
 
-      ForEach($items.indices, id: \.self) { index in
-        bannerCell(recordVO: $items[index])
+      ForEach(viewModel.recentRecords.indices, id: \.self) { index in
+        bannerCell(recordVO: $viewModel.recentRecords[index])
           .tag(index)
           .onTapGesture {
-            coordinator.push(.libraryDetail(id: items[index].id, isbn: items[index].isbn))
+            coordinator.push(
+              .libraryDetail(
+                id: viewModel.recentRecords[index].id,
+                isbn: viewModel.recentRecords[index].isbn
+              )
+            )
           }
       }
       .onDisappear {
         if currentIndex == -1 {
-          currentIndex = items.count - 1
-        } else if currentIndex == items.count {
+          currentIndex = totalRecordsCount - 1
+        } else if currentIndex == totalRecordsCount {
           currentIndex = 0
         }
       }
 
-      bannerCell(recordVO: $items.first!)
-        .tag(items.count)
+      if totalRecordsCount > 1 {
+        bannerCell(recordVO: $viewModel.recentRecords[0])
+          .tag(totalRecordsCount)
+      }
     }
     .frame(height: 114)
     .tabViewStyle(.page(indexDisplayMode: .never))
