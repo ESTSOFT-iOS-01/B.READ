@@ -20,6 +20,9 @@ enum MainRoute: Hashable {
   case sentenceInput
   case pageInput(sentence: String)
   
+  // MARK: - Memo
+  case memo(date: Date, totalPage: Int)
+  
   // MARK: - MyPage
   case insertNickname
   case selectCategory
@@ -46,6 +49,10 @@ extension Coordinator where T == MainRoute {
     case .sentenceInput:
       SentenceInputView()
     
+      // MARK: - Memo
+    case .memo(let date, let page):
+      MemoView(targetDate: date, totalPage: page)
+      
     case .pageInput(let sentence):
       PageInputView(sentence: sentence)
     // MARK: - MyPage Flow
