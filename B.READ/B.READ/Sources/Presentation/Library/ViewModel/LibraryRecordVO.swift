@@ -23,6 +23,7 @@ struct LibraryRecordVO: Identifiable {
   var period: (start: Date?, end: Date?)
   var isFavorite: Bool
   var createdAt: Date
+
 }
 
 extension LibraryRecordVO: Hashable {

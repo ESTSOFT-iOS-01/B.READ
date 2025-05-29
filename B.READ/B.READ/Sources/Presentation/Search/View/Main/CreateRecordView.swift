@@ -8,20 +8,12 @@
 import SwiftUI
 
 struct CreateRecordView: View {
-  var maxPage: Int = 100
+  @StateObject var viewModel: NewRecordViewModel
+  @EnvironmentObject var coordinator: Coordinator<MainRoute>
   
-  @Binding var selectedState: ReadingState
-  
-  @State var heartRate: Int = 0
-  @State var starRate: Int = 0
-  
-  @State var startDate: Date = Date()
-  @State var endDate: Date = Date()
-  
-  @State var page: String = ""
-  @State var isFocused: Bool = false
-  @State var isTextEditorFocused: Bool = false
-  @State var reviewText: String = ""
+  init(viewModel: NewRecordViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
+  }
   
   var action = {
     print("저장하기 버튼 눌림")
@@ -40,7 +32,7 @@ struct CreateRecordView: View {
         }
         
         VStack(alignment: .leading) {
-          ReadStateSelectorView(selectedState: $selectedState)
+          ReadStateSelectorView(selectedState: $viewModel.selectedState)
           
           stateContentView()
             .padding(.top, 24)
@@ -63,8 +55,8 @@ struct CreateRecordView: View {
     .ignoresSafeArea()
     .contentShape(Rectangle())
     .onTapGesture {
-      isTextEditorFocused = false
-      isFocused = false
+      viewModel.isTextEditorFocused = false
+      viewModel.isFocused = false
     }
   }
   
@@ -74,30 +66,30 @@ struct CreateRecordView: View {
     let layoutPadding : CGFloat = 24
     
     let submit: () -> Void  = {
-      print("\(page) 페이지 입력됨")
-      isFocused = false
+      print("\(viewModel.page) 페이지 입력됨")
+      viewModel.isFocused = false
     }
     
     let tapGesture: () -> Void  = {
-      isTextEditorFocused = false
+      viewModel.isTextEditorFocused = false
     }
     
-    switch selectedState {
+    switch viewModel.selectedState {
     case .notStart:
-      SelectRateView(isStar: false, rate: $heartRate)
+      SelectRateView(isStar: false, rate: $viewModel.heartRate)
       
     case .reading:
       VStack(alignment: .leading, spacing: 0) {
         // 독서 기간 입력
         TextHeaderView(title: "독서 기간")
-        SelectDateView(selectedDate: $startDate)
+        SelectDateView(selectedDate: $viewModel.startDate)
           .padding(.leading, 4)
           .padding(.top, 12)
         
         // 페이지 입력
         TextHeaderView(title: "독서량")
           .padding(.top, layoutPadding)
-        SelectPageView(page: $page, isFocused: $isFocused, onSubmit: submit, maxPage: maxPage)
+        SelectPageView(page: $viewModel.page, isFocused: $viewModel.isFocused, onSubmit: submit, maxPage: viewModel.maxPage)
           .padding(.leading, 4)
           .padding(.top, 12)
         
@@ -108,20 +100,20 @@ struct CreateRecordView: View {
         // 독서 기간 입력
         TextHeaderView(title: "독서 기간")
         HStack(spacing: 48) {
-          SelectDateView(selectedDate: $startDate)
-          SelectDateView(title: "종료 날짜", selectedDate: $endDate)
+          SelectDateView(selectedDate: $viewModel.startDate)
+          SelectDateView(title: "종료 날짜", selectedDate: $viewModel.endDate)
         }
         .padding(.leading, 4)
         .padding(.top, 12)
         
         // 평점 입력
-        SelectRateView(rate: $starRate)
+        SelectRateView(rate: $viewModel.starRate)
           .padding(.top, layoutPadding)
         
         // 리뷰 입력
         ReviewInputView(
-          reviewText: $reviewText,
-          isFocused: $isTextEditorFocused,
+          reviewText: $viewModel.reviewText,
+          isFocused: $viewModel.isTextEditorFocused,
           tapGesture: tapGesture
         )
         .padding(.top, 16)
@@ -133,9 +125,7 @@ struct CreateRecordView: View {
 
 #Preview {
   Spacer()
-  CreateRecordView(
-    selectedState: .constant(.notStart)
-  )
+  CreateRecordView(viewModel: NewRecordViewModel())
 }
 
 struct SizePreferenceKey: PreferenceKey {

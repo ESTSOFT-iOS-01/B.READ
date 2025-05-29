@@ -55,9 +55,7 @@ struct BookDetailView: View {
     }
     .background(.backgroundDefault)
     .sheet(isPresented: $viewModel.isPresentingSheet) {
-      CreateRecordView(
-        selectedState: $viewModel.selectedState
-      )
+      CreateRecordView(viewModel: NewRecordViewModel(maxPage: 140))
       .background(.backgroundDefault, ignoresSafeAreaEdges: .bottom)
       .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
       .presentationDragIndicator(.hidden)

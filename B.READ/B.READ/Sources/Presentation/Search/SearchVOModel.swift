@@ -63,6 +63,22 @@ enum ReadingState: CaseIterable, Hashable {
     case (.finished, true):  return "ReadSelected"
     }
   }
+  
+  func toEntity() -> ReadState {
+    switch self {
+    case .notStart: return .toRead
+    case .reading: return .reading
+    case .finished: return .completed
+    }
+  }
+  
+  func fromEntity(_ entity: ReadState) -> ReadingState {
+    switch entity {
+    case .toRead: return .notStart
+    case .reading: return .reading
+    case .completed: return .finished
+    }
+  }
 }
 
 extension ReadingState {
