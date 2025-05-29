@@ -14,15 +14,18 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   //  private let memoRepository: MemoRepository
   private let quoteRepository: QuoteRepository
   //  private let noteRepository: NoteRepository
+  private let bookService: BookService
   
   init(
     bookRepository: BookRepository,
     recordRepository: RecordRepository,
-    quoteRepository: QuoteRepository
+    quoteRepository: QuoteRepository,
+    bookService: BookService
   ) {
     self.bookRepository = bookRepository
     self.recordRepository = recordRepository
     self.quoteRepository = quoteRepository
+    self.bookService = bookService
   }
   
   // TODO: - 도로시
@@ -146,25 +149,51 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {
-    
+    // 1. 최근 읽은 기록을 최대 maxCount개까지 가져온다
     let records = try await recordRepository.fetchRecentReadingRecord(maxCount: 3)
+    
+    // 2. 중복 제거된 ISBN 목록을 추출한다
     let isbns = Set(records.map { $0.isbn })
     
+    // 3. ISBN에 해당하는 책 정보를 미리 조회하여 딕셔너리에 저장한다
     var books: [String: Book] = [:]
     for isbn in isbns {
       let book = try await bookRepository.fetchBook(isbn: isbn)
       books[isbn] = book
     }
     
+    // 4. 레코드와 대응하는 책 정보를 매칭하여 (Record, Book) 튜플을 생성한다
     var pairsItems: [(Record, Book)] = []
     for record in records {
-      guard let book = books[record.isbn] else {
-        // TODO: 해당하는 책정보 없으면 알라딘 API에서 가져오기 -> 위에서도 쓰는 로직이라 extension으로 빼도 좋을듯?
-        throw RepositoryError.dataNotFound
+      if let book = books[record.isbn] {
+        // 4-1. 딕셔너리에 있는 책 정보를 사용
+        pairsItems.append((record, book))
+      } else {
+        // 4-2. 책 정보가 없을 경우 외부 API를 통해 요청하여 가져옴
+        let requestBook = try await requestBookDetail(isbn: record.isbn)
+        pairsItems.append((record, requestBook))
       }
-      pairsItems.append((record, book))
     }
     
+    // 5. 최종적으로 (Record, Book) 쌍을 반환
     return pairsItems
+  }
+}
+
+private extension LibraryUseCaseImpl {
+  func requestBookDetail(isbn: String) async throws -> Book {
+    let bookDetail = try await bookService.fetchBookDetail(isbn: isbn)
+    // NOTE: 생각해보니 DTO -> Entity로 가는 로직이 필요할 것 같네요(Sprint2)
+    let book = Book(
+      isbn: bookDetail.isbn,
+      coverImage: nil, // TODO: 이미지 처리
+      name: bookDetail.title,
+      author: bookDetail.author,
+      publisher: bookDetail.publisher,
+      publishedAt: .now, // TODO: Date 처리
+      totalPages: bookDetail.pageCount
+    )
+    try await bookRepository.createBook(book)
+    return book
   }
 }
