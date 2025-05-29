@@ -60,7 +60,9 @@ extension DIContainer {
       LibraryUseCaseImpl(
         bookRepository: bookRepository,
         recordRepository: recordRepository,
-        quoteRepository: quoteRepository),
+        quoteRepository: quoteRepository,
+        bookService: AladinService()
+      ),
       for: LibraryUseCase.self
     )
     // TODO: - Memo UseCase
