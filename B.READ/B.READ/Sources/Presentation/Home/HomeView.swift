@@ -20,6 +20,9 @@ struct HomeView: View {
     }
     .frame(maxWidth: .infinity, alignment: .top)
     .background(.backgroundDefault)
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
   }
 }
 
@@ -100,7 +103,7 @@ private struct RecentBookSectionView: View {
   // MARK: (F)pageIndicator
   @ViewBuilder
   private func pageIndicator() -> some View {
-    ForEach(0...viewModel.recentRecords.count, id: \.self) { index in
+    ForEach(0...viewModel.recentRecords.count - 1, id: \.self) { index in
       HStack(spacing: 6) {
         Circle()
           .fill(currentIndex == index ? .green5 : .gray1)
@@ -124,7 +127,7 @@ private struct InfiniteBannerView: View {
   var body: some View {
     TabView(selection: $currentIndex) {
       if totalRecordsCount > 1 {
-        bannerCell(recordVO: $viewModel.recentRecords[totalRecordsCount])
+        bannerCell(recordVO: $viewModel.recentRecords[totalRecordsCount - 1])
           .tag(-1)
       }
 
@@ -171,5 +174,14 @@ private struct InfiniteBannerView: View {
 }
 
 #Preview {
-  HomeView()
+  @Previewable @State var isReady = false
+  if isReady {
+    HomeView()
+  } else {
+    Color.white
+      .task {
+        await DIContainer.config()
+        await MainActor.run { isReady = true }
+      }
+  }
 }
