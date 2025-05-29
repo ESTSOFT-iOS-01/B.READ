@@ -146,6 +146,9 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   // TODO: - 몽피
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {
+    
+    
+    
     return []
   }
 }
