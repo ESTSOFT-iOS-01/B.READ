@@ -144,11 +144,27 @@ final class LibraryUseCaseImpl: LibraryUseCase {
     return cellInfos
   }
   
-  // TODO: - 몽피
+  
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {
     
+    let records = try await recordRepository.fetchRecentReadingRecord(maxCount: 3)
+    let isbns = Set(records.map { $0.isbn })
     
+    var books: [String: Book] = [:]
+    for isbn in isbns {
+      let book = try await bookRepository.fetchBook(isbn: isbn)
+      books[isbn] = book
+    }
     
-    return []
+    var pairsItems: [(Record, Book)] = []
+    for record in records {
+      guard let book = books[record.isbn] else {
+        // TODO: 해당하는 책정보 없으면 알라딘 API에서 가져오기 -> 위에서도 쓰는 로직이라 extension으로 빼도 좋을듯?
+        throw RepositoryError.dataNotFound
+      }
+      pairsItems.append((record, book))
+    }
+    
+    return pairsItems
   }
 }
