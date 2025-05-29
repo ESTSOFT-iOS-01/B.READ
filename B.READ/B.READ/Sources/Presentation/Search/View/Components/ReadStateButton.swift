@@ -89,10 +89,8 @@ struct SelectDateView: View {
         displayedComponents: [.date]
       )
       .labelsHidden()
+      .environment(\.locale, Locale(identifier: "ko_KR"))
       .datePickerStyle(.compact)
-    }
-    .onAppear {
-      SelectDateView._printChanges()
     }
   }
 }

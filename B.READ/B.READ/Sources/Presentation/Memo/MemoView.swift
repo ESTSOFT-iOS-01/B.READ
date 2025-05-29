@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MemoView: View {
   
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @State private var startPage: String = ""
   @State private var endPage: String = ""
   @State private var memoText: String = "memo"
