@@ -100,7 +100,7 @@ struct CreateRecordView: View {
       VStack(alignment: .leading, spacing: 0) {
         // 독서 기간 입력
         TextHeaderView(title: "독서 기간")
-        HStack(spacing: 16) {
+        HStack(spacing: 48) {
           SelectDateView(selectedDate: $viewModel.startDate)
           SelectDateView(title: "종료 날짜", selectedDate: $viewModel.endDate)
         }

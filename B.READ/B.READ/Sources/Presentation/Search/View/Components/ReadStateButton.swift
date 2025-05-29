@@ -88,8 +88,9 @@ struct SelectDateView: View {
         selection: $selectedDate,
         displayedComponents: [.date]
       )
+//      .frame(width: 100, alignment: .leading)
       .labelsHidden()
-      .environment(\.locale, Locale(identifier: "ko_KR"))
+      .environment(\.locale, Locale(languageCode: .korean, languageRegion: .southKorea))
       .datePickerStyle(.compact)
     }
   }
