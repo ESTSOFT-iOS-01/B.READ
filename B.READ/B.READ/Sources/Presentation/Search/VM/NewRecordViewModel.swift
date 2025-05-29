@@ -14,8 +14,6 @@ final class NewRecordViewModel: ObservableObject {
   
   var maxPage: Int = 100
   
-  @Binding var selectedState: ReadingState
-  
   @Published var heartRate: Int
   @Published var starRate: Int
   
@@ -32,11 +30,9 @@ final class NewRecordViewModel: ObservableObject {
   /// Search에서 새로운 Record 만드는 경우
   init(
     maxPage: Int,
-    selectedState: Binding<ReadingState>,
   ) {
     self.recordVO = nil
     self.maxPage = maxPage
-    self._selectedState = selectedState
     self.heartRate = 0
     self.starRate = 0
     self.startDate = Date()
@@ -48,12 +44,10 @@ final class NewRecordViewModel: ObservableObject {
   /// Library에서 Record 수정하는 경우
   init(
     recordVO: LibraryRecordVO,
-    selectedState: Binding<ReadingState>,
     maxPage: Int,
   ) {
     self.recordVO = recordVO
     self.maxPage = maxPage
-    self._selectedState = selectedState
     self.heartRate = recordVO.heartCount
     self.starRate = recordVO.starCount
     self.startDate = recordVO.period.start ?? Date()

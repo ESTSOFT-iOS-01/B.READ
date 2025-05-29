@@ -38,7 +38,7 @@ extension Coordinator where R == SheetRoute {
   func buildView(for route: R) -> some View {
     switch route {
     case let .createRecord(state, page, _):
-      CreateRecordView(viewModel: NewRecordViewModel(maxPage: page, selectedState: state))
+      CreateRecordView(state: state, viewModel: NewRecordViewModel(maxPage: page))
     }
   }
 }

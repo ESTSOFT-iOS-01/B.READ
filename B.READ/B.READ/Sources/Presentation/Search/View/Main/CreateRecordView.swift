@@ -7,13 +7,16 @@
 
 import SwiftUI
 
+// MARK: - (S)CreateRecordView
 struct CreateRecordView: View {
-  let layoutPadding: CGFloat = 24
+  private let layoutPadding: CGFloat = 24
   
+  @Binding var selectedState: ReadingState
   @StateObject var viewModel: NewRecordViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  init(viewModel: NewRecordViewModel) {
+  init(state: Binding<ReadingState>, viewModel: NewRecordViewModel) {
+    self._selectedState = state
     self._viewModel = .init(wrappedValue: viewModel)
   }
   
@@ -30,7 +33,11 @@ struct CreateRecordView: View {
         }
         
         VStack(alignment: .leading) {
-          ReadStateSelectorView(selectedState: $viewModel.selectedState)
+          ReadStateSelectorView(selectedState: $selectedState)
+            .onChange(of: selectedState) { _, _ in
+              viewModel.isFocused = false
+              viewModel.isTextEditorFocused = false
+            }
           
           stateContentView()
             .padding(.top, layoutPadding)
@@ -65,9 +72,8 @@ struct CreateRecordView: View {
   // MARK: - (F)stateContentView
   @ViewBuilder
   private func stateContentView() -> some View {
-    let layoutPadding : CGFloat = 24
     
-    switch viewModel.selectedState {
+    switch selectedState {
     case .notStart:
       SelectRateView(isStar: false, rate: $viewModel.heartRate)
       
@@ -120,9 +126,8 @@ struct CreateRecordView: View {
 
 #Preview {
   Spacer()
-  //  CreateRecordView(viewModel: NewRecordViewModel())
+  BookDetailView(viewModel: BookViewModel(isbn: "9791187011590"))
 }
-
 
 extension View {
   func topLeadingPadding() -> some View {

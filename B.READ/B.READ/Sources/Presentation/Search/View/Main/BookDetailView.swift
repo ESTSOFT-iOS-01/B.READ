@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)BookDetailView
 struct BookDetailView: View {
   @StateObject var viewModel: BookViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
