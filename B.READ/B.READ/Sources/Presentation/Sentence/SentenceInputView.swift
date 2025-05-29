@@ -24,9 +24,12 @@ struct SentenceInputView: View {
       ZStack(alignment: .topLeading) {
         TextEditor(text: $viewModel.content)
           .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.4, letterSpacing: -0.0025)
-          .padding(12)
+          .padding(.horizontal, 16)
+          .padding(.vertical, 12)
           .frame(height: 130)
           .background(RoundedRectangle(cornerRadius: 12).fill(Color(.gray0)))
+          .scrollContentBackground(.hidden)
+          .scrollDisabled(false)
           .focused($isEditorFocused)
           .tint(.gray9)
         
@@ -34,12 +37,15 @@ struct SentenceInputView: View {
           Text("여기를 터치해서 문장을 입력할 수 있어요")
             .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .foregroundStyle(.gray2)
-            .padding(12)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
             .allowsHitTesting(false)
         }
       }
     }
-    .padding(24)
+    .frame(maxHeight: .infinity, alignment: .top)
+    .padding(.top, 16)
+    .padding(.horizontal, 24)
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("다음") { coordinator.push(.pageInput(sentence: trimmedContent)) }
@@ -54,5 +60,7 @@ struct SentenceInputView: View {
 }
 
 #Preview {
-  SentenceInputView()
+  NavigationStack {
+     SentenceInputView()
+   }
 }
