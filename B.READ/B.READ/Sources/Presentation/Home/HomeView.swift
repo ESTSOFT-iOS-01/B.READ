@@ -174,14 +174,7 @@ private struct InfiniteBannerView: View {
 }
 
 #Preview {
-  @Previewable @State var isReady = false
-  if isReady {
+  PreviewableContainer {
     HomeView()
-  } else {
-    Color.white
-      .task {
-        await DIContainer.config()
-        await MainActor.run { isReady = true }
-      }
   }
 }
