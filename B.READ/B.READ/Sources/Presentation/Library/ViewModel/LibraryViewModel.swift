@@ -74,21 +74,7 @@ private extension LibraryViewModel {
       self.records = infos.map {
         // TODO: - totalPages -> totalPage 변수명 변경
         // TODO: - coverImageData -> coverImage 필요(강제 언래핑X)
-        LibraryRecordVO(
-          id: $0.record.id,
-          isbn: $0.record.isbn,
-          name: $0.book.name,
-          coverImage: $0.book.coverImage,
-          state: $0.record.state,
-          heartCount: $0.record.heartCount,
-          starCount: $0.record.starCount,
-          percent: Int(Double($0.record.currentPage) / Double($0.book.totalPages) * 100),
-          memoCount: $0.record.memoIDs.count,
-          quoteCount: $0.record.quoteIDs.count,
-          period: ($0.record.period.startDate, $0.record.period.endDate),
-          isFavorite: $0.record.isFavorite,
-          createdAt: $0.record.createdAt
-        )
+        LibraryRecordVO(record: $0.record, book: $0.book)
       }
     } catch {
       self.records = []
@@ -117,11 +103,11 @@ private extension LibraryViewModel {
   func filterRecords() {
     switch state.selectedTab {
     case 1: // 읽은 책
-      state.displayRecords = records.filter { $0.state == .completed }
+      state.displayRecords = records.filter { $0.state == .finished }
     case 2: // 읽는 중
       state.displayRecords = records.filter { $0.state == .reading }
     case 3: // 읽을 책
-      state.displayRecords = records.filter { $0.state == .toRead }
+      state.displayRecords = records.filter { $0.state == .notStart }
     case 4: // 즐겨 찾기
       state.displayRecords = records.filter { $0.isFavorite }
     default : // 전체
