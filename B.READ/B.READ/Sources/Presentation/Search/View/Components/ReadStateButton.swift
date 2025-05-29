@@ -59,9 +59,7 @@ struct ReadStateSelectorView: View {
             state: state,
             isSelected: selectedState == state,
             onTap: {
-              withAnimation(.easeInOut(duration: 0.2)) {
-                selectedState = state
-              }
+              selectedState = state
             }
           )
         }

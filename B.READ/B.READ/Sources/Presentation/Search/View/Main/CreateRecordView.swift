@@ -10,7 +10,8 @@ import SwiftUI
 struct CreateRecordView: View {
   var maxPage: Int = 100
   
-  @State private var selectedState: ReadingState = .notStart
+  @Binding var selectedState: ReadingState
+  
   @State var heartRate: Int = 0
   @State var starRate: Int = 0
   
@@ -28,21 +29,38 @@ struct CreateRecordView: View {
   
   var body: some View {
     Group {
-      VStack(alignment: .leading) {
-        ReadStateSelectorView(selectedState: $selectedState)
+      ZStack(alignment: .topTrailing) {
+        Button {
+          print("창 닫기")
+        } label: {
+          Image(systemName: SearchConstants.Icon.close)
+            .font(.system(size: 18, weight: .light))
+            .foregroundColor(.brown8)
+            .padding(.bottom, 16)
+        }
         
-        stateContentView()
-          .padding(.top, 24)
-          .animation(.easeInOut, value: selectedState)
-        
-        BottomButton(buttonTitle: "저장하기", action: action)
-          .padding(.top, 24)
-          .padding(.bottom, 40)
-          .padding(.horizontal, 2)
+        VStack(alignment: .leading) {
+          ReadStateSelectorView(selectedState: $selectedState)
+          
+          stateContentView()
+            .padding(.top, 24)
+          
+          BottomButton(buttonTitle: "저장하기", action: action)
+            .padding(.top, 24)
+            .padding(.horizontal, 2)
+        }
+        .frame(alignment: .bottom)
       }
-      .frame(maxHeight: .infinity, alignment: .bottom)
+//      .animation(.easeOut(duration: 1), value: selectedState)
       .padding(.horizontal, 24)
+      .padding(.top, 24)
+      .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+      .clipShape(
+        RoundedCorner(radius: 16, corners: [.topLeft, .topRight])
+      )
+
     }
+    .ignoresSafeArea()
     .contentShape(Rectangle())
     .onTapGesture {
       isTextEditorFocused = false
@@ -67,7 +85,6 @@ struct CreateRecordView: View {
     switch selectedState {
     case .notStart:
       SelectRateView(isStar: false, rate: $heartRate)
-        .transition(.opacity)
       
     case .reading:
       VStack(alignment: .leading, spacing: 0) {
@@ -81,12 +98,11 @@ struct CreateRecordView: View {
         TextHeaderView(title: "독서량")
           .padding(.top, layoutPadding)
         SelectPageView(page: $page, isFocused: $isFocused, onSubmit: submit, maxPage: maxPage)
-        .padding(.leading, 4)
-        .padding(.top, 12)
+          .padding(.leading, 4)
+          .padding(.top, 12)
         
       }
-      .transition(.opacity)
-
+      
     case .finished:
       VStack(alignment: .leading, spacing: 0) {
         // 독서 기간 입력
@@ -100,7 +116,7 @@ struct CreateRecordView: View {
         
         // 평점 입력
         SelectRateView(rate: $starRate)
-        .padding(.top, layoutPadding)
+          .padding(.top, layoutPadding)
         
         // 리뷰 입력
         ReviewInputView(
@@ -110,12 +126,21 @@ struct CreateRecordView: View {
         )
         .padding(.top, 16)
       } // : 내부 뷰 Vstack
-      .transition(.opacity)
     }
   }
   
 }
 
 #Preview {
-  CreateRecordView()
+  Spacer()
+  CreateRecordView(
+    selectedState: .constant(.notStart)
+  )
+}
+
+struct SizePreferenceKey: PreferenceKey {
+  static var defaultValue: CGFloat = 0
+  static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+    value = nextValue()
+  }
 }

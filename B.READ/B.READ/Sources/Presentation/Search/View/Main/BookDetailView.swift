@@ -37,7 +37,7 @@ struct BookDetailView: View {
             LinkView()
           }
           .padding(.bottom, 40)
-            
+          
         }
       }
       .scrollIndicators(.hidden)
@@ -45,7 +45,7 @@ struct BookDetailView: View {
       BottomButton(
         buttonTitle: "내 책빵에 저장하기",
         action: {
-          print("저장 버튼 눌림")
+          viewModel.isPresentingSheet = true
         }
       )
       .padding(.horizontal, 30)
@@ -54,6 +54,14 @@ struct BookDetailView: View {
       
     }
     .background(.backgroundDefault)
+    .sheet(isPresented: $viewModel.isPresentingSheet) {
+      CreateRecordView(
+        selectedState: $viewModel.selectedState
+      )
+      .background(.backgroundDefault, ignoresSafeAreaEdges: .bottom)
+      .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
+      .presentationDragIndicator(.hidden)
+    }
   }
 }
 

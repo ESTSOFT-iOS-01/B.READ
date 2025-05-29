@@ -13,7 +13,9 @@ final class BookViewModel: ObservableObject {
   
   @Published var text: String = "BookDetailView입니다. 아직 아무것도 없습니다."
   @Published var bookVO: BookDetailVO
-  
+  @Published var isPresentingSheet: Bool = false
+  @Published var selectedState: ReadingState = .notStart
+
   init(isbn: String) {
     self.isbn = isbn
     
@@ -31,8 +33,6 @@ final class BookViewModel: ObservableObject {
       link: "https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=98710881&amp;partner=openAPI&amp;start=api"
     )
   }
-  
-  
   
 }
 

@@ -65,6 +65,17 @@ enum ReadingState: CaseIterable, Hashable {
   }
 }
 
+extension ReadingState {
+  var preferredHeight: CGFloat {
+    switch self {
+    case .notStart: return 332
+    case .reading:  return 511
+    case .finished: return 588
+    }
+  }
+}
+
+
 struct BookDetailVO {
   let title: String
   let author: String
