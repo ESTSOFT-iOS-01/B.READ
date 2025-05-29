@@ -10,6 +10,7 @@ import SwiftUI
 @MainActor
 final class Coordinator<T: Hashable>: ObservableObject {
   @Published var paths: [T] = []
+  @Published var sheet: T? = nil
   
   init(initial: T? = nil) {
     if let initial = initial {
@@ -19,6 +20,7 @@ final class Coordinator<T: Hashable>: ObservableObject {
     }
   }
   
+  // MARK: - Navigation Push/Pop
   func push(_ path: T) {
     guard paths.last != path else { return }
     print("Before push: \(paths)")
@@ -42,6 +44,15 @@ final class Coordinator<T: Hashable>: ObservableObject {
   func pop(to: T) {
     guard let index = paths.firstIndex(of: to) else { return }
     paths = Array(paths.prefix(upTo: index + 1))
+  }
+  
+  // MARK: - Sheet Present/Dismiss
+  func presentSheet(_ path: T) {
+    sheet = path
+  }
+  
+  func dismissSheet() {
+    sheet = nil
   }
 
 }
