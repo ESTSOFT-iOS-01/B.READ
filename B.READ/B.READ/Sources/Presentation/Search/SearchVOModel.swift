@@ -48,8 +48,8 @@ struct RecordVO {
 
 extension RecordVO: Identifiable {}
 
-enum ReadingState: CaseIterable, Hashable {
-  case notStart
+enum ReadingState: Int, CaseIterable, Hashable {
+  case notStart = 0
   case reading
   case finished
   
