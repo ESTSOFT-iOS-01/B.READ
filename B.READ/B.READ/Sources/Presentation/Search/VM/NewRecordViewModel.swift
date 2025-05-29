@@ -23,10 +23,11 @@ final class NewRecordViewModel: ObservableObject {
   @Published var endDate: Date
   
   @Published var page: String
-  @Published var isFocused: Bool
-  @Published var isTextEditorFocused: Bool
+  @Published var isFocused: Bool = false
+  @Published var isTextEditorFocused: Bool = false
   @Published var reviewText: String
   
+  /// Search에서 새로운 Record 만드는 경우
   init(
     maxPage: Int,
     selectedState: ReadingState = .notStart,
@@ -39,37 +40,36 @@ final class NewRecordViewModel: ObservableObject {
     self.startDate = Date()
     self.endDate = Date()
     self.page = ""
-    self.isFocused = false
-    self.isTextEditorFocused = false
     self.reviewText = ""
   }
   
+  /// Library에서 Record 수정하는 경우
   init(
     recordVO: LibraryRecordVO,
     maxPage: Int,
-    selectedState: ReadingState,
-    heartRate: Int,
-    starRate: Int,
-    startDate: Date,
-    endDate: Date,
-    page: String,
-    isFocused: Bool,
-    isTextEditorFocused: Bool,
-    reviewText: String
   ) {
     self.recordVO = recordVO
     self.maxPage = maxPage
-    self.selectedState = 
-    self.heartRate = heartRate
-    self.starRate = starRate
-    self.startDate = startDate
-    self.endDate = endDate
-    self.page = page
-    self.isFocused = isFocused
-    self.isTextEditorFocused = isTextEditorFocused
-    self.reviewText = reviewText
+    self.selectedState = .finished
+    self.heartRate = recordVO.heartCount
+    self.starRate = recordVO.starCount
+    self.startDate = recordVO.period.start ?? Date()
+    self.endDate = recordVO.period.end ?? Date()
+//    self.page = recordVO.currentPage
+//    self.reviewText = reviewText
   }
   
+  // MARK: - Action
+  enum Action {
+    case onSubmit
+  }
 
-  
+  func send(_ action: Action) {
+    switch action {
+    case .onSubmit:
+      // usecase의 save함수 부르기
+      // 성공하면 dismiss
+      // 실패하면 재시도 1회 후, alert로 실패 메세지 띄우기
+    }
+  }
 }

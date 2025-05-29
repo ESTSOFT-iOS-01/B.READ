@@ -15,10 +15,6 @@ struct CreateRecordView: View {
     self._viewModel = .init(wrappedValue: viewModel)
   }
   
-  var action = {
-    print("저장하기 버튼 눌림")
-  }
-  
   var body: some View {
     Group {
       ZStack(alignment: .topTrailing) {
