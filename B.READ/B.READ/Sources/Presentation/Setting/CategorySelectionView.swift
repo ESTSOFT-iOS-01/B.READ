@@ -40,6 +40,7 @@ struct CategorySelectionView: View {
       
     }
     .padding(.horizontal, 24)
+    .background(.backgroundDefault)
     .onChange(of: viewModel.isSaveComplete) {
       if didInitialSetup {
         mainCoordinator.pop()

@@ -26,8 +26,8 @@ struct RecordStatsView: View {
       case .finished: // 평점
         PropertyView(LibraryConstants.Icon.star, "\(record.starCount)")
       }
-      PropertyView(LibraryConstants.Icon.memo, "\(record.starCount)", .count) // 메모
-      PropertyView(LibraryConstants.Icon.quote, "\(record.starCount)", .count) // 문장
+      PropertyView(LibraryConstants.Icon.memo, "\(record.memoCount)", .count) // 메모
+      PropertyView(LibraryConstants.Icon.quote, "\(record.quoteCount)", .count) // 문장
     } // : HStack
     .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
   }

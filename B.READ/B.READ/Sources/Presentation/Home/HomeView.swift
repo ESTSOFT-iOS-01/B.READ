@@ -100,7 +100,7 @@ private struct RecentBookSectionView: View {
 private struct InfiniteBannerView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   // TODO: 근웅님한테 Cell이 Entity가 넘어가지 않게 해달라고 요청
-  let items = [
+  @State var items = [
     LibraryRecordVO(
       id: "",
       isbn: "",
@@ -149,11 +149,11 @@ private struct InfiniteBannerView: View {
   
   var body: some View {
     TabView(selection: $currentIndex) {
-      bannerCell(recordVO: items.last!)
+      bannerCell(recordVO: $items.last!)
         .tag(-1)
 
-      ForEach(0..<items.count, id: \.self) { index in
-        bannerCell(recordVO: items[index])
+      ForEach($items.indices, id: \.self) { index in
+        bannerCell(recordVO: $items[index])
           .tag(index)
           .onTapGesture {
             coordinator.push(.libraryDetail(id: items[index].id, isbn: items[index].isbn))
@@ -167,7 +167,7 @@ private struct InfiniteBannerView: View {
         }
       }
 
-      bannerCell(recordVO: items.first!)
+      bannerCell(recordVO: $items.first!)
         .tag(items.count)
     }
     .frame(height: 114)
@@ -179,7 +179,7 @@ private struct InfiniteBannerView: View {
   
   // MARK: (F)bannerCell
   @ViewBuilder
-  private func bannerCell(recordVO: LibraryRecordVO) -> some View {
+  private func bannerCell(recordVO: Binding<LibraryRecordVO>) -> some View {
     LibraryListCell(record: recordVO)
       .background(.green1.opacity(0.6))
       .cornerRadius(16)

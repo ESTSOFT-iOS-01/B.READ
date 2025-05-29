@@ -29,13 +29,9 @@ final class LibraryViewModel: ObservableObject {
   // MARK: - Internal Variable
   private var records: [LibraryRecordVO] = [] // DB에서 가져온 전체 독서기록
   
-  // TODO: - 유스케이스로 빠질 예정
-  private let bookRepo: BookRepository = BookRepositoryStub()
-  private let recordRepo: RecordRepository = RecordRepositoryStub()
-  
-  
   // MARK: - Dependency
-//  @Dependency private var exampleUseCase: ExampleUseCase
+  @Dependency
+  private var libraryUseCase: LibraryUseCase
   
   // MARK: - Action
   enum Action {
@@ -46,19 +42,29 @@ final class LibraryViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      Task {
-        await loadRecords()
-        await MainActor.run {
-          // TODO: - load / filter, sort 로 구분해서 Task 생성(Task Group)
-          loadTabs()
-          filterRecords()
-          sortDisplayRecords()
+      Task { [weak self] in
+        guard let self = self else { return }
+  
+        await self.loadRecords()
+        await withTaskGroup(of: Void.self) { group in
+          group.addTask {
+            await self.loadTabs()
+          }
+          
+          group.addTask {
+            await self.filterRecords()
+            await self.sortDisplayRecords()
+          }
         }
       }
+      
     case .selectTab:
-      filterRecords()
-      sortDisplayRecords()
-      return
+      Task { [weak self] in
+        guard let self = self else { return }
+        
+        await self.filterRecords()
+        await self.sortDisplayRecords()
+      }
     }
   }
 }
@@ -70,7 +76,7 @@ private extension LibraryViewModel {
   /// 독서 기록 정보를 불러옴
   func loadRecords() async {
     do {
-      let infos: [(record: Record, book: Book)] = try await self.fetchRecordCellInfo()
+      let infos: [(record: Record, book: Book)] = try await libraryUseCase.loadRecordList()
       self.records = infos.map {
         // TODO: - totalPages -> totalPage 변수명 변경
         // TODO: - coverImageData -> coverImage 필요(강제 언래핑X)
@@ -82,7 +88,7 @@ private extension LibraryViewModel {
   }
   
   /// 탭에 해당하는 독서 기록 개수를 불러옴 - 독서 기록에 종속해서 변하기 때문에 ViewModel에서 처리
-  func loadTabs() {
+  func loadTabs() async {
     var count: [Int] = [records.count, 0, 0, 0, 0]
     
     for record in self.records {
@@ -90,62 +96,52 @@ private extension LibraryViewModel {
       count[record.state.rawValue + 1] += 1 // 독서 상태에 따른 개수
     }
     
-    self.state.tabs = [
+    let tabs = [
       TabItem(title: "전체(\(count[0]))"),
       TabItem(title: "읽은 책(\(count[3]))"),
       TabItem(title: "읽는 중(\(count[2]))"),
       TabItem(title: "읽을 책(\(count[1]))"),
       TabItem(title: "즐겨찾기(\(count[4]))")
     ]
+    
+    await MainActor.run {
+      self.state.tabs = tabs
+    }
   }
   
   /// 선택된 탭에 따른 리스트에 보여줄 독서기록 필터
-  func filterRecords() {
+  func filterRecords() async {
+    let filterRecord: [LibraryRecordVO]
     switch state.selectedTab {
     case 1: // 읽은 책
-      state.displayRecords = records.filter { $0.state == .finished }
+      filterRecord = records.filter { $0.state == .finished }
     case 2: // 읽는 중
-      state.displayRecords = records.filter { $0.state == .reading }
+      filterRecord = records.filter { $0.state == .reading }
     case 3: // 읽을 책
-      state.displayRecords = records.filter { $0.state == .notStart }
+      filterRecord = records.filter { $0.state == .notStart }
     case 4: // 즐겨 찾기
-      state.displayRecords = records.filter { $0.isFavorite }
+      filterRecord = records.filter { $0.isFavorite }
     default : // 전체
-      state.displayRecords = records
+      filterRecord = records
+    }
+    await MainActor.run {
+      self.state.displayRecords = filterRecord
     }
   }
   
   // TODO: - (2)displayRecords를 정렬 내용 추가
-  private func sortDisplayRecords(by: SortState = .recent) {
+  private func sortDisplayRecords(by: SortState = .recent) async {
     // 정렬 기준에 따라서 displayRecords를 정렬
+    let sortedRecords: [LibraryRecordVO]
     switch by {
     case .recent:
-      state.displayRecords = state.displayRecords.sorted { $0.createdAt > $1.createdAt }
+      sortedRecords = state.displayRecords.sorted { $0.createdAt > $1.createdAt }
     case .older:
-      state.displayRecords = state.displayRecords.sorted { $0.createdAt < $1.createdAt }
+      sortedRecords = state.displayRecords.sorted { $0.createdAt < $1.createdAt }
     }
-  }
-}
-
-// MARK: - (F)LibraryViewModel
-// TODO: - 유스케이스로 빠질 함수들
-private extension LibraryViewModel {
-  // TODO: - Task Group으로 변경 (시간체크 꼭 해보기)
-  // 부모 태스크: 레코드s 정보 패치 -> 자식 태스크 실행 -> (도서, 레코드)s 반환
-  // 자식 태스크: 레코드에 따른 도서 정보 패치
-  /// 독서 기록 셀에서 필요한 정보를 가져옴
-  func fetchRecordCellInfo() async throws -> [(Record, Book)] {
-    var cellInfos: [(Record, Book)] = []
     
-    // 1. 독서 기록 정보 패치
-    let records = try await recordRepo.fetchAllRecord()
-    
-    // 2. 독서 기록에 대한 도서 정보 패치
-    for record in records {
-      let book = try await bookRepo.fetchBook(isbn: record.isbn)
-      // 정보를 infos에 저장
-      cellInfos.append((record, book))
+    await MainActor.run {
+      self.state.displayRecords = sortedRecords
     }
-    return cellInfos
   }
 }
