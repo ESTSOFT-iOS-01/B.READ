@@ -40,7 +40,7 @@ enum AladinRouter: RequestConvertible {
   
   // MARK: - QueryItems
   private var queryItems: [URLQueryItem]? {
-    var queryItems: [URLQueryItem] = [
+    let queryItems: [URLQueryItem] = [
       URLQueryItem(name: "ttbkey", value: AladinAPI.ttbKey),
       URLQueryItem(name: "output", value: "JS"),
       URLQueryItem(name: "Version", value: "20131101"),
@@ -48,13 +48,13 @@ enum AladinRouter: RequestConvertible {
     
     switch self {
     case .getBookList(let query):
-      var bookListQueryItems = queryItems + [
+      let bookListQueryItems = queryItems + [
         URLQueryItem(name: "Query", value: query)
       ]
       return bookListQueryItems
       
     case .getBook(let isbn):
-      var bookQueryItems = queryItems + [
+      let bookQueryItems = queryItems + [
         URLQueryItem(name: "ItemIdType", value: "ISBN"),
         URLQueryItem(name: "ItemId", value: isbn),
         URLQueryItem(name: "OptResult", value: "ratingInfo")
@@ -62,7 +62,7 @@ enum AladinRouter: RequestConvertible {
       return bookQueryItems
       
     case .getBestSellerList(let categoryID):
-      var bestSellerQueryItems = queryItems + [
+      let bestSellerQueryItems = queryItems + [
         URLQueryItem(name: "QueryType", value: "Bestseller"),
         URLQueryItem(name: "SearchTarget", value: "Book"),
         URLQueryItem(name: "CategoryId", value: "\(categoryID)")

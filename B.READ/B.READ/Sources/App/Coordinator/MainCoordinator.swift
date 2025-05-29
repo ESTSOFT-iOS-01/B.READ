@@ -23,11 +23,25 @@ enum MainRoute: Hashable {
   // MARK: - MyPage
   case insertNickname
   case selectCategory
-  
-  // MARK: - Sheet
-  case createRecord()
 }
 
+enum SheetRoute: Identifiable {
+  case createRecord(state: Binding<ReadingState>, page: Int, height: CGFloat)
+  
+  var id: String {
+    String(describing: self)
+  }
+}
+
+extension Coordinator where R == SheetRoute {
+  @ViewBuilder
+  func buildView(for route: R) -> some View {
+    switch route {
+    case let .createRecord(state, page, _):
+      CreateRecordView(viewModel: NewRecordViewModel(maxPage: page, selectedState: state))
+    }
+  }
+}
 
 extension Coordinator where T == MainRoute {
   
@@ -56,11 +70,6 @@ extension Coordinator where T == MainRoute {
       NicknameView()
     case .selectCategory:
       CategorySelectionView()
-      
-      
-      // MARK: - Sheet
-    case .createRecord(let state, let page):
-      CreateRecordView(selectedState: state)
     }
   }
 }

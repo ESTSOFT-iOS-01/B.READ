@@ -11,7 +11,7 @@ struct CreateRecordView: View {
   let layoutPadding: CGFloat = 24
   
   @StateObject var viewModel: NewRecordViewModel
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   init(viewModel: NewRecordViewModel) {
     self._viewModel = .init(wrappedValue: viewModel)
@@ -21,7 +21,7 @@ struct CreateRecordView: View {
     Group {
       ZStack(alignment: .topTrailing) {
         Button {
-          print("창 닫기")
+          coordinator.dismissSheet()
         } label: {
           Image(systemName: SearchConstants.Icon.close)
             .font(.system(size: 18, weight: .light))
@@ -37,6 +37,8 @@ struct CreateRecordView: View {
           
           BottomButton(buttonTitle: "저장하기") {
             viewModel.send(.onSubmit)
+            // TODO : callback함수로 부모뷰에 영향끼치는 flag 하나 넘겨줘야한다.
+            if viewModel.isSuccess { coordinator.dismissSheet() }
           }
           .padding(.top, layoutPadding)
           .padding(.horizontal, 2)
@@ -121,12 +123,6 @@ struct CreateRecordView: View {
   //  CreateRecordView(viewModel: NewRecordViewModel())
 }
 
-struct SizePreferenceKey: PreferenceKey {
-  static var defaultValue: CGFloat = 0
-  static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-    value = nextValue()
-  }
-}
 
 extension View {
   func topLeadingPadding() -> some View {

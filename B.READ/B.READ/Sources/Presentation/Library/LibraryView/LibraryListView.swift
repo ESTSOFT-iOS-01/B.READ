@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)LibraryListView
 struct LibraryListView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   private let records: [LibraryRecordVO]
   @State var selectedRecord: LibraryRecordVO?
   

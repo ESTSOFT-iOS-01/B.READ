@@ -8,9 +8,9 @@
 import SwiftUI
 
 @MainActor
-final class Coordinator<T: Hashable>: ObservableObject {
+final class Coordinator<T: Hashable, R: Identifiable>: ObservableObject {
   @Published var paths: [T] = []
-  @Published var sheet: T? = nil
+  @Published var sheet: R? = nil
   
   init(initial: T? = nil) {
     if let initial = initial {
@@ -47,7 +47,7 @@ final class Coordinator<T: Hashable>: ObservableObject {
   }
   
   // MARK: - Sheet Present/Dismiss
-  func presentSheet(_ path: T) {
+  func presentSheet(_ path: R) {
     sheet = path
   }
   

@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)SearchView
 struct SearchView: View {
   @StateObject var viewModel: SearchViewModel
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24

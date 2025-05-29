@@ -13,7 +13,6 @@ final class BookViewModel: ObservableObject {
   
   @Published var text: String = "BookDetailView입니다. 아직 아무것도 없습니다."
   @Published var bookVO: BookDetailVO
-  @Published var isPresentingSheet: Bool = false
   @Published var selectedState: ReadingState = .notStart
 
   init(isbn: String) {

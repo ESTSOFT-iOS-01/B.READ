@@ -10,7 +10,7 @@ import SwiftUI
 
 struct RootViewSwitcher: View {
   @State private var isReady = false
-  @State private var coordinator = Coordinator<OnboardingRoute>()
+  @State private var coordinator = Coordinator<OnboardingRoute, SheetRoute>()
   @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
   
   init() {

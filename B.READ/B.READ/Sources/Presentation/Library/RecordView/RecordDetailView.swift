@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: RecordDetailViewModel
   
   @State var showDeleteAlert: Bool = false

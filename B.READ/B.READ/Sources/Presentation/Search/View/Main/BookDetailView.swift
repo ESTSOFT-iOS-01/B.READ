@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BookDetailView: View {
   @StateObject var viewModel: BookViewModel
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   init(viewModel: BookViewModel) {
     self._viewModel = .init(wrappedValue: viewModel)
@@ -49,7 +49,14 @@ struct BookDetailView: View {
       BottomButton(
         buttonTitle: "내 책빵에 저장하기",
         action: {
-          viewModel.isPresentingSheet = true
+          coordinator
+            .presentSheet(
+              .createRecord(
+                state: $viewModel.selectedState,
+                page: viewModel.bookVO.pageCount,
+                height: viewModel.selectedState.preferredHeight
+              )
+            )
         }
       )
       .padding(.horizontal, 30)
@@ -58,12 +65,11 @@ struct BookDetailView: View {
       
     }
     .background(.backgroundDefault)
-    .sheet(isPresented: $viewModel.isPresentingSheet) {
-      CreateRecordView(viewModel: NewRecordViewModel(maxPage: 140))
-      .background(.backgroundDefault, ignoresSafeAreaEdges: .bottom)
-      .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
-      .presentationDragIndicator(.hidden)
-    }
+    .sheet(item: $coordinator.sheet, content: { route in
+      coordinator.buildView(for: route)
+        .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
+        .presentationDragIndicator(.hidden)
+    })
   }
 }
 

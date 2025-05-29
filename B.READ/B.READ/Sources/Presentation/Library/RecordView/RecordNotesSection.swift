@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - (S)RecordNotesSection
 struct RecordNotesSection: View {
   
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   enum CellType {
     case memo
