@@ -28,6 +28,23 @@ enum MainRoute: Hashable {
   case selectCategory
 }
 
+enum SheetRoute: Identifiable {
+  case createRecord(state: Binding<ReadingState>, page: Int)
+  
+  var id: String {
+    String(describing: self)
+  }
+}
+
+extension Coordinator where R == SheetRoute {
+  @ViewBuilder
+  func buildView(for route: R) -> some View {
+    switch route {
+    case let .createRecord(state, page):
+      CreateRecordView(state: state, viewModel: NewRecordViewModel(maxPage: page))
+    }
+  }
+}
 
 extension Coordinator where T == MainRoute {
   
@@ -35,17 +52,17 @@ extension Coordinator where T == MainRoute {
   func buildView(for route: T) -> some View {
     switch route {
       
-    // MARK: - Search Flow
+      // MARK: - Search Flow
     case .barcode:
       ScanView(viewModel: ScanViewModel())
     case .searchBook(let isbn):
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
       
-    // MARK: - Library
+      // MARK: - Library
     case .libraryDetail(let id, let isbn):
       RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
       
-    // MARK: - Sentence
+      // MARK: - Sentence
     case .sentenceInput:
       SentenceInputView()
     
@@ -55,7 +72,7 @@ extension Coordinator where T == MainRoute {
       
     case .pageInput(let sentence):
       PageInputView(sentence: sentence)
-    // MARK: - MyPage Flow
+      // MARK: - MyPage Flow
     case .insertNickname:
       NicknameView()
     case .selectCategory:

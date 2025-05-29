@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MyPageView: View {
   
-  @EnvironmentObject private var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject private var viewModel = SettingViewModel()
   
   var body: some View {
@@ -51,7 +51,7 @@ struct MyPageView: View {
 // MARK: - (S)MenuListView
 private struct MenuListView: View {
   
-  let coordinator: Coordinator<MainRoute>
+  let coordinator: Coordinator<MainRoute, SheetRoute>
   @ObservedObject var viewModel: SettingViewModel
   
   // TODO: Entity로 빼고 이미지는 Ext에서 처리할지 고민
@@ -186,5 +186,5 @@ private struct MenuListView: View {
 
 #Preview {
   MyPageView()
-    .environmentObject(Coordinator<MainRoute>())
+    .environmentObject(Coordinator<MainRoute, SheetRoute>())
 }

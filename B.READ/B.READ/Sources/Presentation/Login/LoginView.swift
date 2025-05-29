@@ -9,7 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
   
-  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute, SheetRoute>
   
   let subtitle: String = """
   책과 함께한 순간들을

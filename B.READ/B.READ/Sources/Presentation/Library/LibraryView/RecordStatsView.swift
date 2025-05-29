@@ -19,11 +19,11 @@ struct RecordStatsView: View {
   var body: some View {
     HStack(spacing: 12) {
       switch record.state {
-      case .toRead: // 기대지수
+      case .notStart: // 기대지수
         PropertyView(LibraryConstants.Icon.heart, "\(record.heartCount)")
       case .reading: // 독서진행률
         PropertyView(LibraryConstants.Icon.progress, "\(record.percent)", .percent)
-      case .completed: // 평점
+      case .finished: // 평점
         PropertyView(LibraryConstants.Icon.star, "\(record.starCount)")
       }
       PropertyView(LibraryConstants.Icon.memo, "\(record.memoCount)", .count) // 메모

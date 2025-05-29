@@ -117,7 +117,7 @@ private struct RecentBookSectionView: View {
 
 // MARK: - (S)InfiniteBannerView
 private struct InfiniteBannerView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @ObservedObject var viewModel: HomeViewModel
   @Binding var currentIndex: Int
   private var totalRecordsCount: Int {

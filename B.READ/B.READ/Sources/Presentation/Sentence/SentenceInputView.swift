@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SentenceInputView: View {
   
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   @State private var text = ""
   @State private var goNext = false

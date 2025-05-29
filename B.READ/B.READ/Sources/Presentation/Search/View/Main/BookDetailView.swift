@@ -7,9 +7,14 @@
 
 import SwiftUI
 
+// MARK: - (S)BookDetailView
 struct BookDetailView: View {
-  @ObservedObject var viewModel: BookViewModel
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @StateObject var viewModel: BookViewModel
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  
+  init(viewModel: BookViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
+  }
   
   var body: some View {
     VStack {
@@ -37,7 +42,7 @@ struct BookDetailView: View {
             LinkView()
           }
           .padding(.bottom, 40)
-            
+          
         }
       }
       .scrollIndicators(.hidden)
@@ -45,7 +50,13 @@ struct BookDetailView: View {
       BottomButton(
         buttonTitle: "내 책빵에 저장하기",
         action: {
-          print("저장 버튼 눌림")
+          coordinator
+            .presentSheet(
+              .createRecord(
+                state: $viewModel.selectedState,
+                page: viewModel.bookVO.pageCount
+              )
+            )
         }
       )
       .padding(.horizontal, 30)
@@ -54,6 +65,11 @@ struct BookDetailView: View {
       
     }
     .background(.backgroundDefault)
+    .sheet(item: $coordinator.sheet, content: { route in
+      coordinator.buildView(for: route)
+        .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
+        .presentationDragIndicator(.hidden)
+    })
   }
 }
 

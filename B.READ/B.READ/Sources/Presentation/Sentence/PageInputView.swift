@@ -11,7 +11,7 @@ struct PageInputView: View {
   let sentence: String                // 전달받은 문장
   var onSave: (Int) -> Void = { _ in }
   
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @State private var pageText = "0"
   @State private var showInvalidAlert = false
   @FocusState private var isFocused: Bool
