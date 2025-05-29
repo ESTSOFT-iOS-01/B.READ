@@ -13,23 +13,10 @@ struct PageInputView: View {
   @FocusState private var isFocused: Bool
   @State private var showInvalidAlert = false
   
-  private var pageBinding: Binding<String> {
-    Binding(
-      get: { viewModel.pageText },
-      set: { newValue in
-        // 필터링 로직 재사용
-        let digits = newValue.filter(\.isNumber)
-        if viewModel.pageText == "0", let last = digits.last {
-          viewModel.pageText = String(last)
-        } else {
-          let trimmed = digits.drop { $0 == "0" }.map(String.init).joined()
-          viewModel.pageText = trimmed.isEmpty ? "0" : trimmed
-        }
-      }
-    )
+  private var isValidPage: Bool? {
+    guard let limit = viewModel.maxPage else { return nil }   // 아직 로딩 전
+    return viewModel.page.map { (1...limit).contains($0) }
   }
-  
-  private var pageNumber: Int? { Int(viewModel.pageText) }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -37,13 +24,20 @@ struct PageInputView: View {
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
       
       HStack(spacing: 0) {
-        RoundedTextField(
-          type: .pages,
-          placeholder: "0",
-          text: pageBinding,
-          isValid: pageNumber.map { (1...999).contains($0) } ?? (viewModel.pageText.isEmpty ? nil : false)
-        )
+        TextField("0",
+                  value: $viewModel.page,
+                  format: .number)
+        .keyboardType(.numberPad)
         .focused($isFocused)
+        .frame(height: 44)
+        .overlay(
+          RoundedRectangle(cornerRadius: 8)
+            .strokeBorder(
+              isValidPage == nil ? .gray0 :
+                (isValidPage! ? Color.green6 : Color.red),
+              lineWidth: 1
+            )
+        )
         
         Text("쪽")
           .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2, letterSpacing: 0)
@@ -66,13 +60,13 @@ struct PageInputView: View {
       .frame(height: 134)
       .padding(.top, 24)
     }
+    .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
-    .frame(maxHeight: .infinity, alignment: .top)
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
-          guard let n = pageNumber, (1...999).contains(n) else {
+          guard let n = viewModel.page, (1...999).contains(n) else {
             showInvalidAlert = true
             return
           }
@@ -86,7 +80,7 @@ struct PageInputView: View {
     }
     .alert("저장 실패", isPresented: $showInvalidAlert) {
       Button("확인", role: .cancel) {
-        viewModel.pageText = ""
+        viewModel.page = 0      // 빈칸으로 리셋
         isFocused = true
       }
     } message: {
@@ -101,3 +95,8 @@ struct PageInputView: View {
   }
 }
 
+#Preview {
+  NavigationStack {
+    PageInputView()
+  }
+}

@@ -11,9 +11,17 @@ struct SentenceInputView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
   @FocusState private var isEditorFocused: Bool
+  let isbn: String
   
   private var trimmedContent: String {
     viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+  
+  init(isbn: String) {
+    self.isbn = isbn
+    _viewModel = StateObject(
+      wrappedValue: SentenceViewModel(mode: .create(isbn: isbn))
+    )
   }
   
   var body: some View {
@@ -60,7 +68,10 @@ struct SentenceInputView: View {
 }
 
 #Preview {
+  let dummy = Coordinator<MainRoute>()
+
   NavigationStack {
-     SentenceInputView()
-   }
+    SentenceInputView(isbn: "9781234567890")
+  }
+  .environmentObject(dummy)           
 }
