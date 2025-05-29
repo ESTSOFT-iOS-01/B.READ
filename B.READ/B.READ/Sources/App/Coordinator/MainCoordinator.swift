@@ -29,7 +29,7 @@ enum MainRoute: Hashable {
 }
 
 enum SheetRoute: Identifiable {
-  case createRecord(state: Binding<ReadingState>, page: Int, height: CGFloat)
+  case createRecord(state: Binding<ReadingState>, page: Int)
   
   var id: String {
     String(describing: self)
@@ -40,7 +40,7 @@ extension Coordinator where R == SheetRoute {
   @ViewBuilder
   func buildView(for route: R) -> some View {
     switch route {
-    case let .createRecord(state, page, _):
+    case let .createRecord(state, page):
       CreateRecordView(state: state, viewModel: NewRecordViewModel(maxPage: page))
     }
   }

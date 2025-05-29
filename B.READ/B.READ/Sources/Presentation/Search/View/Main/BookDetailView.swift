@@ -54,8 +54,7 @@ struct BookDetailView: View {
             .presentSheet(
               .createRecord(
                 state: $viewModel.selectedState,
-                page: viewModel.bookVO.pageCount,
-                height: viewModel.selectedState.preferredHeight
+                page: viewModel.bookVO.pageCount
               )
             )
         }
