@@ -66,9 +66,6 @@ struct ReadStateSelectorView: View {
         }
       }
     }
-    .onAppear{
-      ReadStateSelectorView._printChanges()
-    }
   }
 }
 
@@ -115,9 +112,6 @@ struct SelectRateView: View {
           .padding(.trailing, 2)
       } // : inner Hstack
     } // : outer Hstack
-    .onAppear {
-      SelectRateView._printChanges()
-    }
   }
 }
 
@@ -153,9 +147,6 @@ struct SelectPageView: View {
       Text("쪽")
         .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
         .foregroundStyle(.black)
-    }
-    .onAppear {
-      SelectPageView._printChanges()
     }
   }
 }
