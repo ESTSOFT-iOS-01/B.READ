@@ -43,7 +43,6 @@ struct CreateRecordView: View {
       .frame(maxHeight: .infinity, alignment: .bottom)
       .padding(.horizontal, 24)
     }
-    
     .contentShape(Rectangle())
     .onTapGesture {
       isTextEditorFocused = false
@@ -51,8 +50,20 @@ struct CreateRecordView: View {
     }
   }
   
+  // MARK: - (F)stateContentView
   @ViewBuilder
   private func stateContentView() -> some View {
+    let layoutPadding : CGFloat = 24
+    
+    let submit: () -> Void  = {
+      print("\(page) 페이지 입력됨")
+      isFocused = false
+    }
+    
+    let tapGesture: () -> Void  = {
+      isTextEditorFocused = false
+    }
+    
     switch selectedState {
     case .notStart:
       SelectRateView(isStar: false, rate: $heartRate)
@@ -60,49 +71,45 @@ struct CreateRecordView: View {
       
     case .reading:
       VStack(alignment: .leading, spacing: 0) {
+        // 독서 기간 입력
         TextHeaderView(title: "독서 기간")
         SelectDateView(selectedDate: $startDate)
           .padding(.leading, 4)
           .padding(.top, 12)
         
-        // 쪽
+        // 페이지 입력
         TextHeaderView(title: "독서량")
-          .padding(.top, 24)
-        SelectPageView(page: $page, isFocused: $isFocused, maxPage: maxPage)
+          .padding(.top, layoutPadding)
+        SelectPageView(page: $page, isFocused: $isFocused, onSubmit: submit, maxPage: maxPage)
+        .padding(.leading, 4)
+        .padding(.top, 12)
+        
       }
       .transition(.opacity)
 
     case .finished:
       VStack(alignment: .leading, spacing: 0) {
+        // 독서 기간 입력
         TextHeaderView(title: "독서 기간")
-        
         HStack(spacing: 48) {
           SelectDateView(selectedDate: $startDate)
           SelectDateView(title: "종료 날짜", selectedDate: $endDate)
         }
-        .padding(.top, 12)
         .padding(.leading, 4)
+        .padding(.top, 12)
         
+        // 평점 입력
         SelectRateView(rate: $starRate)
-        .padding(.top, 24)
-
-        VStack(alignment: .trailing) {
-          Text("\(reviewText.count)/150자")
-            .brStyleFont(.pretendard(.light, size: 12), lineHeight: 1.2, letterSpacing: -0.02)
-            .foregroundColor(.gray5)
-          
-          CustomTextEditor(
-            text: $reviewText,
-            isFocused: $isTextEditorFocused,
-            placeholder: "짧은 감상평을 남겨보세요(선택)",
-            maxLength: 150
-          )
-          .background(Color.clear.onTapGesture(perform: {
-            isTextEditorFocused = false
-          }))
-          .frame(height: 100, alignment: .center)
-        }
-      }
+        .padding(.top, layoutPadding)
+        
+        // 리뷰 입력
+        ReviewInputView(
+          reviewText: $reviewText,
+          isFocused: $isTextEditorFocused,
+          tapGesture: tapGesture
+        )
+        .padding(.top, 16)
+      } // : 내부 뷰 Vstack
       .transition(.opacity)
     }
   }

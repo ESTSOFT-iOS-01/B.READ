@@ -108,6 +108,8 @@ struct SelectRateView: View {
         Text(Double(rate).toStringForOneDecimal)
           .brStyleFont(.peaceSans(size: 16), lineHeight: 1.2, letterSpacing: 0.02)
           .foregroundStyle(.orange7)
+          .frame(minWidth: 40)
+          .padding(.trailing, 2)
       } // : inner Hstack
     } // : outer Hstack
   }
@@ -117,7 +119,8 @@ struct SelectRateView: View {
 struct SelectPageView: View {
   @Binding var page: String
   var isFocused: Binding<Bool>? = nil
-  @FocusState private var isFocus: Bool
+  @FocusState private var internalFocus: Bool
+  var onSubmit: () -> Void = { }
   var maxPage: Int
   
   var body: some View {
@@ -129,11 +132,46 @@ struct SelectPageView: View {
         isValid: true
       )
       .frame(width: 256)
-      .focused($isFocus)
+      .focused($internalFocus)
+      .onChange(of: isFocused?.wrappedValue) { _, new in
+        if let new = new {
+          internalFocus = new
+        }
+      }
+      .onSubmit {
+        isFocused?.wrappedValue = false
+        onSubmit()
+      }
       
       Text("쪽")
         .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
         .foregroundStyle(.black)
+    }
+  }
+}
+
+// MARK: - (S)ReviewInputView
+struct ReviewInputView: View {
+  @Binding var reviewText: String
+  @Binding var isFocused: Bool
+  var maxLength: Int = 150
+  var tapGesture: () -> Void
+  let placeholderText = "짧은 감상평을 남겨보세요(선택)"
+
+  var body: some View {
+    VStack(alignment: .trailing, spacing: 4) {
+      Text("\(reviewText.count)/\(maxLength)자")
+        .brStyleFont(.pretendard(.light, size: 12), lineHeight: 1.2, letterSpacing: -0.02)
+        .foregroundColor(.gray5)
+      
+      CustomTextEditor(
+        text: $reviewText,
+        isFocused: $isFocused,
+        placeholder: placeholderText,
+        maxLength: maxLength
+      )
+      .background(Color.clear.onTapGesture(perform: tapGesture))
+      .frame(height: 100, alignment: .center)
     }
   }
 }
