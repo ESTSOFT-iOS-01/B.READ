@@ -8,10 +8,22 @@
 import SwiftUI
 
 struct PageInputView: View {
+  let isbn: String
+  let sentence: String
+  
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
   @FocusState private var isFocused: Bool
   @State private var showInvalidAlert = false
+  
+  init(isbn: String, sentence: String) {
+    self.isbn = isbn
+    self.sentence = sentence
+    _viewModel = StateObject(
+      wrappedValue: SentenceViewModel(mode: .create(isbn: isbn))
+    )
+    _viewModel.wrappedValue.content = sentence
+  }
   
   private var isValidPage: Bool? {
     guard let limit = viewModel.maxPage else { return nil }   // 아직 로딩 전
@@ -27,6 +39,8 @@ struct PageInputView: View {
         TextField("0",
                   value: $viewModel.page,
                   format: .number)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .keyboardType(.numberPad)
         .focused($isFocused)
         .frame(height: 44)
@@ -38,6 +52,11 @@ struct PageInputView: View {
               lineWidth: 1
             )
         )
+        .onAppear {
+          if viewModel.content.isEmpty {      // 중복 주입 방지
+            viewModel.content = sentence
+          }
+        }
         
         Text("쪽")
           .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2, letterSpacing: 0)
@@ -97,6 +116,6 @@ struct PageInputView: View {
 
 #Preview {
   NavigationStack {
-    PageInputView()
+    PageInputView(isbn: "9781234567890", sentence: "")
   }
 }

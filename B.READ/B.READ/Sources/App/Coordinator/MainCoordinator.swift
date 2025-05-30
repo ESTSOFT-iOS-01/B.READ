@@ -17,8 +17,8 @@ enum MainRoute: Hashable {
   case libraryDetail(id: String, isbn: String)
   
   // MARK: - Sentence
-  case sentenceInput
-  case pageInput(sentence: String)
+  case sentenceInput(isbn: String)
+  case pageInput(isbn: String, sentence: String)
   
   // MARK: - MyPage
   case insertNickname
@@ -32,23 +32,24 @@ extension Coordinator where T == MainRoute {
   func buildView(for route: T) -> some View {
     switch route {
       
-    // MARK: - Search Flow
+      // MARK: - Search Flow
     case .barcode:
       ScanView(viewModel: ScanViewModel())
     case .searchBook(let isbn):
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
       
-    // MARK: - Library
+      // MARK: - Library
     case .libraryDetail(let id, let isbn):
       RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
       
-    // MARK: - Sentence
-    case .sentenceInput:
-      SentenceInputView()
-    
-    case .pageInput(let sentence):
-      PageInputView()
-    // MARK: - MyPage Flow
+      // MARK: - Sentence
+    case .sentenceInput(let isbn):
+      SentenceInputView(isbn: isbn)
+      
+    case .pageInput(let isbn, let sentence):
+      PageInputView(isbn: isbn, sentence: sentence)
+      
+      // MARK: - MyPage Flow
     case .insertNickname:
       NicknameView()
     case .selectCategory:

@@ -73,7 +73,7 @@ struct RecordNotesSection: View {
       case .quote:
         print("\(type.name) 수정 선택")
         // TODO: 수정 버전 페이지로 넘어가기
-        coordinator.push(.sentenceInput)
+        coordinator.push(.sentenceInput(isbn: viewModel.state.info?.record.isbn ?? ""))
       }
     }
     

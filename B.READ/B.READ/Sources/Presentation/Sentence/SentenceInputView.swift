@@ -56,11 +56,13 @@ struct SentenceInputView: View {
     .padding(.horizontal, 24)
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
-        Button("다음") { coordinator.push(.pageInput(sentence: trimmedContent)) }
-          .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
-          .foregroundStyle(.green6)
-          .disabled(trimmedContent.isEmpty)
-          .opacity(trimmedContent.isEmpty ? 0 : 1)
+        Button("다음") {
+          coordinator.push(.pageInput(isbn: isbn, sentence: trimmedContent))
+        }
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
+        .foregroundStyle(.green6)
+        .disabled(trimmedContent.isEmpty)
+        .opacity(trimmedContent.isEmpty ? 0 : 1)
       }
     }
     .background(Color.backgroundDefault)
@@ -69,7 +71,7 @@ struct SentenceInputView: View {
 
 #Preview {
   let dummy = Coordinator<MainRoute>()
-
+  
   NavigationStack {
     SentenceInputView(isbn: "9781234567890")
   }
