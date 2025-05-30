@@ -25,7 +25,8 @@ struct LibraryUseCaseTest {
     libraryUseCase = LibraryUseCaseImpl(
       bookRepository: bookRepository,
       recordRepository: recordRepository,
-      quoteRepository: quoteRepository
+      quoteRepository: quoteRepository,
+      bookService: AladinService()
     )
   }
   

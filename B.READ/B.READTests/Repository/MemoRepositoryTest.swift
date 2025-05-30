@@ -28,7 +28,7 @@ struct MemoRepositoryTest {
     #expect(fetchedMemo == DummyData.memo)
   }
   
-  @Test("UserInfo Create Error Test - Data Already Exists")
+  @Test("Memo Create Error Test - Data Already Exists")
   func createUserInfoDataAlreadyExist() async throws {
 //    try await userInfoRepository.createUserInfo(DummyData.userInfo)
 //

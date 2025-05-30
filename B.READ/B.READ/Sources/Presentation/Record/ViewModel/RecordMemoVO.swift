@@ -38,7 +38,7 @@ struct MemoVO: Identifiable {
       createdAt: memo.createdAt,
       content: memo.content,
       pages: memo.pages,
-      guides: memo.guides
+      guides: memo.guides.map { $0.content }
     )
   }
 }

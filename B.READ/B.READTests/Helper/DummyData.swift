@@ -38,7 +38,7 @@ enum DummyData {
     createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
     content: "example 메모 입니다.",
     pages: (1, 132),
-    guides: ["example 1 가이드 입니다", "example 2 가이드 입니다", "example 3 가이드 입니다"]
+    guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
   )
 
   // MARK: - Books Dummy sData
