@@ -13,9 +13,9 @@ struct MemoRepositoryTest {
   private let memoRepository: MemoRepository
   
   init() {
-    memoRepository = MemoRepositoryStub()
-//    let storage = SwiftDataTestStorage()
-//    memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
+//    memoRepository = MemoRepositoryStub()
+    let storage = SwiftDataTestStorage()
+    memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
   }
   
 

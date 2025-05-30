@@ -12,6 +12,7 @@ import SwiftData
 final class MemoDTO {
   @Attribute(.unique)
   var id: String
+  
   var isbn: String
   var createdAt: Date
   var content: String
@@ -24,15 +25,16 @@ final class MemoDTO {
     isbn: String,
     createdAt: Date,
     content: String,
-    pages: (Int, Int),
+    startPage: Int,
+    endPage: Int,
     guides: [GuideDTO]
   ) {
     self.id = id
     self.isbn = isbn
     self.createdAt = createdAt
     self.content = content
-    self.startPage = pages.0
-    self.endPage = pages.0
+    self.startPage = startPage
+    self.endPage = endPage
     self.guides = guides
   }
   
@@ -42,7 +44,8 @@ final class MemoDTO {
       isbn: data.isbn,
       createdAt: data.createdAt,
       content: data.content,
-      pages: data.pages,
+      startPage: data.pages.0,
+      endPage: data.pages.1,
       guides: data.guides.map { GuideDTO($0) }
     )
   }

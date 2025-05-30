@@ -10,7 +10,7 @@ import SwiftData
 
 @ModelActor
 actor MemoRepositoryImpl: MemoRepository {
-  func createMemo(_ memo: Memo) async throws {
+  func createMemo(_ memo: Memo) throws {
     print("Impl: ", #function)
     
     if let _ = try findMemo(id: memo.id) {
@@ -23,7 +23,7 @@ actor MemoRepositoryImpl: MemoRepository {
     try modelContext.save()
   }
   
-  func fetchMemo(id: String) async throws -> Memo {
+  func fetchMemo(id: String) throws -> Memo {
     print("Impl: ", #function)
     
     guard let data = try findMemo(id: id) else {
@@ -33,7 +33,7 @@ actor MemoRepositoryImpl: MemoRepository {
     return data.toEntity()
   }
   
-  func fetchAllMemos() async throws -> [Memo] {
+  func fetchAllMemos() throws -> [Memo] {
     print("Impl: ", #function)
     
     let sort = SortDescriptor(\MemoDTO.createdAt, order: .reverse)
@@ -47,7 +47,7 @@ actor MemoRepositoryImpl: MemoRepository {
     }
   }
   
-  func fetchAllMemos(isbn: String) async throws -> [Memo] {
+  func fetchAllMemos(isbn: String) throws -> [Memo] {
     print("Impl: ", #function)
     
     let predicate = #Predicate<MemoDTO> { $0.isbn == isbn }
@@ -62,7 +62,7 @@ actor MemoRepositoryImpl: MemoRepository {
     }
   }
   
-  func fetchAllMemos(containg text: String) async throws -> [Memo] {
+  func fetchAllMemos(containg text: String) throws -> [Memo] {
     print("Impl: ", #function)
     
     // String.localizedStandardContains?
@@ -79,12 +79,14 @@ actor MemoRepositoryImpl: MemoRepository {
     }
   }
   
-  func updateMemo(_ memo: Memo) async throws {
+  func updateMemo(_ memo: Memo) throws {
     print("Impl: ", #function)
     
     guard let data = try findMemo(id: memo.id) else {
       throw RepositoryError.dataNotFound
     }
+    
+    data.guides.forEach { modelContext.delete($0) }
     
     data.isbn = memo.isbn
     data.createdAt = memo.createdAt
@@ -96,7 +98,7 @@ actor MemoRepositoryImpl: MemoRepository {
     try modelContext.save()
   }
   
-  func deleteMemo(id: String) async throws {
+  func deleteMemo(id: String) throws {
     print("Impl: ", #function)
     
     guard let data = try findMemo(id: id) else {
