@@ -39,7 +39,7 @@ final class SearchUseCaseImpl: SearchUseCase {
         group.addTask {
           let book = try await self.bookRepository.fetchBook(isbn: record.isbn)
           
-          if book.name.localizedCaseInsensitiveContains(query) {
+          if book.name.localizedStandardContains(query) {
             return (record, book)
           } else {
             return nil
