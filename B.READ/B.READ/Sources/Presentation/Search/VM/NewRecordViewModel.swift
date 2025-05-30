@@ -29,7 +29,7 @@ final class NewRecordViewModel: ObservableObject {
   
   /// Search에서 새로운 Record 만드는 경우
   init(
-    maxPage: Int,
+    maxPage: Int
   ) {
     self.recordVO = nil
     self.maxPage = maxPage
@@ -44,7 +44,7 @@ final class NewRecordViewModel: ObservableObject {
   /// Library에서 Record 수정하는 경우
   init(
     recordVO: LibraryRecordVO,
-    maxPage: Int,
+    maxPage: Int
   ) {
     self.recordVO = recordVO
     self.maxPage = maxPage

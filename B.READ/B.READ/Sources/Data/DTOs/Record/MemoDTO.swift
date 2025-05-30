@@ -17,7 +17,7 @@ final class MemoDTO {
   var content: String
   var startPage: Int
   var endPage: Int
-  var guides: [String]
+  var guides: [GuideDTO]
   
   init(
     id: String,
@@ -25,7 +25,7 @@ final class MemoDTO {
     createdAt: Date,
     content: String,
     pages: (Int, Int),
-    guides: [String]
+    guides: [GuideDTO]
   ) {
     self.id = id
     self.isbn = isbn
@@ -43,7 +43,7 @@ final class MemoDTO {
       createdAt: data.createdAt,
       content: data.content,
       pages: data.pages,
-      guides: data.guides
+      guides: data.guides.map { GuideDTO($0) }
     )
   }
 }
@@ -56,7 +56,7 @@ extension MemoDTO {
       createdAt: self.createdAt,
       content: self.content,
       pages: (self.startPage, self.endPage),
-      guides: self.guides
+      guides: self.guides.map { $0.toEntity() }
     )
   }
 }
