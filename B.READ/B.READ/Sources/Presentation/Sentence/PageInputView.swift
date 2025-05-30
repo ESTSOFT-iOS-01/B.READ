@@ -16,6 +16,20 @@ struct PageInputView: View {
   @FocusState private var isFocused: Bool
   @State private var showInvalidAlert = false
   
+  private var pageTextBinding: Binding<String> {
+    Binding(
+      get: { viewModel.page.map(String.init) ?? "" },
+      set: { newValue in
+        viewModel.page = Int(newValue)
+      }
+    )
+  }
+  
+  private var isValidPage: Bool? {
+    guard let limit = viewModel.maxPage else { return nil }
+    return viewModel.page.map { (1...limit).contains($0) }
+  }
+  
   init(isbn: String, sentence: String) {
     self.isbn = isbn
     self.sentence = sentence
@@ -24,11 +38,7 @@ struct PageInputView: View {
     )
     _viewModel.wrappedValue.content = sentence
   }
-  
-  private var isValidPage: Bool? {
-    guard let limit = viewModel.maxPage else { return nil }   // 아직 로딩 전
-    return viewModel.page.map { (1...limit).contains($0) }
-  }
+
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -36,27 +46,13 @@ struct PageInputView: View {
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
       
       HStack(spacing: 0) {
-        TextField("0",
-                  value: $viewModel.page,
-                  format: .number)
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .keyboardType(.numberPad)
-        .focused($isFocused)
-        .frame(height: 44)
-        .overlay(
-          RoundedRectangle(cornerRadius: 8)
-            .strokeBorder(
-              isValidPage == nil ? .gray0 :
-                (isValidPage! ? Color.green6 : Color.red),
-              lineWidth: 1
-            )
-        )
-        .onAppear {
-          if viewModel.content.isEmpty {      // 중복 주입 방지
-            viewModel.content = sentence
-          }
-        }
+        RoundedTextField(
+            type: .pages,
+            placeholder: "0",
+            text: pageTextBinding,
+            isValid: isValidPage
+          )
+          .focused($isFocused)
         
         Text("쪽")
           .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2, letterSpacing: 0)
