@@ -60,6 +60,7 @@
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Repository/Stubs/BookRepositoryStub.swift,
+				Sources/Domain/Repository/Stubs/MemoRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/QuoteRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/RecordRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
