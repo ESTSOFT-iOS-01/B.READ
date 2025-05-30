@@ -22,11 +22,11 @@ enum AladinRouter: RequestConvertible {
   private var path: String {
     switch self {
     case .getBookList(_):
-      "/ItemSearch.aspx?"
+      "/ItemSearch.aspx"
     case .getBook(_):
-      "/ItemLookUp.aspx?"
+      "/ItemLookUp.aspx"
     case .getBestSellerList(_):
-      "/ItemList.aspx?"
+      "/ItemList.aspx"
     }
   }
   
@@ -79,6 +79,8 @@ enum AladinRouter: RequestConvertible {
     )!
     components.queryItems = queryItems
     
+    print("[📡 Aladin URL]:", components.url?.absoluteString ?? "❌ URL 생성 실패")
+
     var request = URLRequest(url: components.url!)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.method = method
