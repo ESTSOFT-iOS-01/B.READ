@@ -22,105 +22,111 @@ struct MemoRepositoryTest {
   @Test("Memo Create Test")
   func createMemo() async throws {
     
-    try await memoRepository.createMemo(DummyData.memo)
-    let fetchedMemo = try await memoRepository.fetchMemo(id: DummyData.memo.id)
+    try await memoRepository.createMemo(DummyData.memos.first!)
+    let fetchedMemo = try await memoRepository.fetchMemo(id: DummyData.memos.first!.id)
     
-    #expect(fetchedMemo == DummyData.memo)
+    #expect(fetchedMemo == DummyData.memos.first!)
   }
   
   @Test("Memo Create Error Test - Data Already Exists")
-  func createUserInfoDataAlreadyExist() async throws {
-//    try await userInfoRepository.createUserInfo(DummyData.userInfo)
-//
-//    await #expect(throws: RepositoryError.dataAlreadyExist, performing: {
-//      try await userInfoRepository.createUserInfo(DummyData.userInfo)
-//    })
+  func createMemoInfoDataAlreadyExist() async throws {
+    try await memoRepository.createMemo(DummyData.memos.first!)
+
+    await #expect(throws: RepositoryError.dataAlreadyExist, performing: {
+      try await memoRepository.createMemo(DummyData.memos.first!)
+    })
   }
   
-  @Test("UserInfo Fetch Error Test - Data Not Found")
-  func fetchUserInfoDataNotFound() async throws {
-//    await #expect(throws: RepositoryError.dataNotFound, performing: {
-//      _ = try await userInfoRepository.fetchUserInfo()
-//    })
+  @Test("Memo Fetch Error Test - Data Not Found")
+  func fetchMemoDataNotFound() async throws {
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      _ = try await memoRepository.fetchMemo(id: "no exist id")
+    })
   }
   
-  @Test("UserInfo All Update Test")
+  @Test("Memo Fetch All Test")
+  func fetchAllMemos() async throws {
+    for memo in DummyData.memos {
+      try await memoRepository.createMemo(memo)
+    }
+    
+    let fetchedMemos = try await memoRepository.fetchAllMemos()
+    #expect(DummyData.memos == fetchedMemos)
+  }
+  
+  @Test("Memo Fetch All (isbn) Test")
+  func fetchAllMemosIsbn() async throws {
+    for memo in DummyData.memos {
+      try await memoRepository.createMemo(memo)
+    }
+    
+    let fetchedMemos = try await memoRepository.fetchAllMemos()
+    #expect(DummyData.memos == fetchedMemos)
+  }
+  
+  @Test("Memo Fetch All (Contain) Test")
+  func fetchAllMemosContain() async throws {
+    for memo in DummyData.memos {
+      try await memoRepository.createMemo(memo)
+    }
+    
+    // NOTICE: example은 모든 샘플 데이터(메모)에 포함되는 키워드 입니다~
+    let fetchedMemos = try await memoRepository.fetchAllMemos(containg: "example")
+    #expect(DummyData.memos == fetchedMemos)
+  }
+  
+  @Test("Memo All Update Test")
   func updateAllUserInfo() async throws {
     
-//    try await userInfoRepository.createUserInfo(DummyData.userInfo)
-//    
-//    let updatedUserInfo = UserInfo(
-//      nickname: "업데이트 데이타 ㅋ",
-//      categories: [Category(id: 999, name: "테스트")],
-//      recentKeywords: [],
-//      generateCount: 7,
-//      lastStreakUpdatedAt: Date(),
-//      streak: []
-//    )
-//
-//    try await userInfoRepository.updateUserInfo(updatedUserInfo)
-//
-//    let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
-    //#expect(fetchedUserInfo == updatedUserInfo)
-  }
-  
-  @Test("UserInfo Partial Update Test - streak")
-  func updatePartialUserInfoStreak() async throws {
+    try await memoRepository.createMemo(DummyData.memos.first!)
     
-//    try await userInfoRepository.createUserInfo(DummyData.userInfo)
-//    
-//    var updatedUserInfo = DummyData.userInfo
-//    updatedUserInfo.streak = updatedUserInfo.streak.map {
-//        DailyStatus(weekday: $0.weekday, isCompleted: false)
-//    }
-//
-//    try await userInfoRepository.updateUserInfo(updatedUserInfo)
-//
-//    let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
-    //#expect(fetchedUserInfo == updatedUserInfo)
+    let updatedMemo = Memo(
+      id: DummyData.memos.first!.id,
+      isbn: "Updated ISBN",
+      createdAt: .now,
+      content: "Updated Content",
+      pages: (1, 999),
+      guides: [Guide(date: .now, content: "Updated Content")]
+    )
+
+    try await memoRepository.updateMemo(updatedMemo)
+
+    let fetchedMemo = try await memoRepository.fetchMemo(id: DummyData.memos.first!.id)
+    #expect(fetchedMemo == updatedMemo)
   }
   
-  @Test("UserInfo Partial Update Test - Keywords")
-  func updatePartialUserInfoKeyword() async throws {
-    
-//    try await userInfoRepository.createUserInfo(DummyData.userInfo)
-//    
-//    var updatedUserInfo = DummyData.userInfo
-//    updatedUserInfo.recentKeywords = [
-//      Keyword(date: Date().addingTimeInterval(-86400 * 4), value: "싯다르타"),
-//      Keyword(date: Date().addingTimeInterval(-86400 * 3), value: "데미안")
-//    ]
-//
-//    try await userInfoRepository.updateUserInfo(updatedUserInfo)
-//
-//    let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
-    //#expect(fetchedUserInfo == updatedUserInfo)
-  }
   
-  @Test("UserInfo Update Error Test - Data Not Found")
+  @Test("Memo Update Error Test - Data Not Found")
   func updateUserInfoDataNotFound() async throws {
-//    let nonExistentUser = DummyData.userInfo
-//
-//    await #expect(throws: RepositoryError.dataNotFound, performing: {
-//      try await userInfoRepository.updateUserInfo(nonExistentUser)
-//    })
+    let dummyMemo = Memo(
+      id: DummyData.memos.first!.id,
+      isbn: "ISBN",
+      createdAt: .now,
+      content: "Content",
+      pages: (1, 999),
+      guides: [Guide(date: .now, content: "Content")]
+    )
+
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      try await memoRepository.updateMemo(dummyMemo)
+    })
   }
   
-  @Test("UserInfo Delete Test")
-  func deleteUserInfo() async throws {
+  @Test("Memo Delete Test")
+  func deleteMemo() async throws {
     
-//    try await userInfoRepository.createUserInfo(DummyData.userInfo)
-//    try await userInfoRepository.deleteUserInfo()
-//    
-//    await #expect(throws: RepositoryError.dataNotFound, performing: {
-//      _ = try await userInfoRepository.fetchUserInfo()
-//    })
+    try await memoRepository.createMemo(DummyData.memos.first!)
+    try await memoRepository.deleteMemo(id: DummyData.memos.first!.id)
+    
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      _ = try await memoRepository.fetchMemo(id: DummyData.memos.first!.id)
+    })
   }
   
-  @Test("UserInfo Delete Error Test - Data Not Found")
-  func deleteUserInfoDataNotFound() async throws {
-//    await #expect(throws: RepositoryError.dataNotFound, performing: {
-//      try await userInfoRepository.deleteUserInfo()
-//    })
+  @Test("Memo Delete Error Test - Data Not Found")
+  func deleteMemoDataNotFound() async throws {
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      try await memoRepository.deleteMemo(id: DummyData.memos.first!.id)
+    })
   }
 }

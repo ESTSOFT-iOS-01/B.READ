@@ -32,14 +32,24 @@ enum DummyData {
     page: 8
   )
   
-  static var memo = Memo(
-    id: "testID",
-    isbn: "testISBN",
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
-    content: "example 메모 입니다.",
-    pages: (1, 132),
-    guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-  )
+  static var memos = [
+    Memo(
+      id: "testID-1",
+      isbn: "testISBN1",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
+      content: "example 메모 입니다.1",
+      pages: (1, 132),
+      guides: [Guide(date: .now, content: "exmaple1-1"), Guide(date: .now, content: "exmaple1-2"), Guide(date: .now, content: "exmaple1-3")]
+    ),
+    Memo(
+      id: "testID-2",
+      isbn: "testISBN2",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
+      content: "example 메모 입니다.2",
+      pages: (1, 132),
+      guides: [Guide(date: .now, content: "exmaple2-1"), Guide(date: .now, content: "exmaple2-2"), Guide(date: .now, content: "exmaple2-3")]
+    )
+  ]
 
   // MARK: - Books Dummy sData
   static var books: [Book] = [
