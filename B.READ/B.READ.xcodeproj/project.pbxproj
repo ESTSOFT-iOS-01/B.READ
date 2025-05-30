@@ -47,6 +47,7 @@
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Impls/BookRepositoryImpl.swift,
+				Sources/Data/Impls/MemoRepositoryImpl.swift,
 				Sources/Data/Impls/QuoteRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
