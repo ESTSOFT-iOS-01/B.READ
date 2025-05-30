@@ -65,6 +65,7 @@
 				Sources/Domain/Service/Interface/BookService.swift,
 				Sources/Domain/Service/Stub/AIServiceStub.swift,
 				Sources/Domain/UseCase/ProfileUseCase.swift,
+				Sources/Domain/UseCase/SearchUseCase.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
 				Sources/Network/Aladin/AladinAPI.swift,
 				Sources/Network/Aladin/AladinError.swift,
