@@ -55,6 +55,7 @@
 				Sources/Domain/Entity/UserInfo.swift,
 				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/BookRepository.swift,
+				Sources/Domain/Repository/Inerface/MemoRepository.swift,
 				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
