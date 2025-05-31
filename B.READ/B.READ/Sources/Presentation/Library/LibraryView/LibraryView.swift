@@ -83,6 +83,7 @@ struct LibraryView: View {
           .padding(.trailing, 48)
           .padding(.top, 90)
           .onChange(of: selectedOption) {
+            // TODO: - 내부 구현 필요
             viewModel.state.displayRecords = [RecordCellVO(
               record: DummyData.dummyRecords[0],
               book: DummyData.dummyBooks[0])]
