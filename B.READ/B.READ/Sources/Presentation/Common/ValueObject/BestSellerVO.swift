@@ -15,3 +15,9 @@ struct BestSellerVO: Identifiable {
   let author: String
   let imageURL: String
 }
+
+
+struct BestSellerListVO {
+  let categoryName: String
+  let bestSellers: [BestSellerVO]
+}

@@ -66,11 +66,12 @@ struct RecommandCell: View {
       .padding(.horizontal, 16)
       .padding(.bottom, 24)
     }
-    .background(.backgroundDefault)
+    .background(.white)
     .clipShape(
       RoundedRectangle(cornerRadius: 10)
     )
-    .shadow(color: .gray2.opacity(0.25), radius: 25, x: 0, y: 2)
+//    .shadow(color: .gray2.opacity(0.25), radius: 25, x: 0, y: 2)
+    .padding(.leading, 24)
   }
 }
 
