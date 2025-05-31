@@ -20,14 +20,14 @@ struct RecordStatsView: View {
     HStack(spacing: 12) {
       switch record.readingState {
       case .notStart: // 기대지수
-        PropertyView(LibraryConstants.Icon.heart, record.heart.toString)
+        PropertyView(SFSymbol.heart.name, record.heart.toString)
       case .reading: // 독서진행률
-        PropertyView(LibraryConstants.Icon.progress, record.progress.toString, .percent)
+        PropertyView(SFSymbol.timer.name, record.progress.toString, .percent)
       case .finished: // 평점
-        PropertyView(LibraryConstants.Icon.star, record.star.toString)
+        PropertyView(SFSymbol.star.name, record.star.toString)
       }
-      PropertyView(LibraryConstants.Icon.memo, "\(record.memoCount)", .count) // 메모
-      PropertyView(LibraryConstants.Icon.quote, "\(record.quoteCount)", .count) // 문장
+      PropertyView(SFSymbol.memo.name, "\(record.memoCount)", .count) // 메모
+      PropertyView(SFSymbol.bubble.name, "\(record.quoteCount)", .count) // 문장
     } // : HStack
     .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
   }

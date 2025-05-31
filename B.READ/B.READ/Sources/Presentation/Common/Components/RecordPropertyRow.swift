@@ -15,14 +15,14 @@ struct RecordPropertyRow: View {
     HStack(spacing: 12) {
       switch data.readingState {
       case .notStart:
-        PropertyView(SearchConstants.Icon.heart, data.heart.toString)
+      PropertyView(SFSymbol.heart.name, data.heart.toString)
       case .reading:
-        PropertyView(SearchConstants.Icon.progress, data.progress.toString, .percent)
+        PropertyView(SFSymbol.timer.name, data.progress.toString, .percent)
       case .finished:
-        PropertyView(SearchConstants.Icon.star, data.star.toString)
+        PropertyView(SFSymbol.star.name, data.star.toString)
       }
-      PropertyView(SearchConstants.Icon.memo, data.memoCount.toString, .count)
-      PropertyView(SearchConstants.Icon.quote, data.quoteCount.toString, .count)
+      PropertyView(SFSymbol.memo.name, data.memoCount.toString, .count)
+      PropertyView(SFSymbol.bubble.name, data.quoteCount.toString, .count)
     }
   }
 }

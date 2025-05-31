@@ -50,7 +50,7 @@ struct LibraryListCell: View {
       .padding(.trailing, record.isFavorite ? 2 : 40)
       
       if record.isFavorite {
-        Image(systemName: LibraryConstants.Icon.favoriteON)
+        Image(systemName: SFSymbol.bookMarkFill.name)
           .resizable()
           .foregroundStyle(.green4)
           .frame(width: 14, height: 28)
