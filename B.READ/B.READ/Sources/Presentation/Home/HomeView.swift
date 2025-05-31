@@ -12,11 +12,19 @@ struct HomeView: View {
   @StateObject private var viewModel = HomeViewModel()
   
   var body: some View {
-    ScrollView {
+    ScrollView(showsIndicators: false) {
       BreadGuideView()
+        .padding(.top, 24)
       
       RecentBookSectionView(viewModel: viewModel)
         .padding(.top, 24)
+      
+      if viewModel.bestSellerList.count > 1 {
+        RecommandSectionView(bookList: viewModel.bestSellerList[0])
+          .padding(.top, 24)
+
+        RecommandSectionView(bookList: viewModel.bestSellerList[1])
+      }
     }
     .frame(maxWidth: .infinity, alignment: .top)
     .background(.backgroundDefault)
@@ -74,6 +82,7 @@ private struct RecentBookSectionView: View {
   private let emptyBookPlaceHolder = """
     아직 읽기 시작한 책이 없네요!
     하루 한 쪽이라도 읽어보세요
+    
     """
   
   var body: some View {
@@ -113,7 +122,6 @@ private struct RecentBookSectionView: View {
     }
   }
 }
-
 
 // MARK: - (S)InfiniteBannerView
 private struct InfiniteBannerView: View {
@@ -170,6 +178,30 @@ private struct InfiniteBannerView: View {
       .background(.green1.opacity(0.6))
       .cornerRadius(16)
       .padding(.horizontal, 24)
+  }
+}
+
+// MARK: - (S)RecommandSectionView
+private struct RecommandSectionView: View {
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  let bookList: BestSellerListVO
+  
+  var body: some View {
+    VStack(alignment: .leading, spacing: 16) {
+      RecommandHeaderView(categoryName: bookList.categoryName)
+        .padding(.leading, 24)
+      
+      ScrollView(.horizontal, showsIndicators: false) {
+        LazyHStack(spacing: 0) {
+          ForEach(bookList.bestSellers, id: \.id) { item in
+            RecommandCell(bestSellerVO: item, onTap: {
+              coordinator.push(.searchBook(isbn: item.isbn))
+            })
+          }
+        }
+      }
+    }
+    .padding(.bottom, 24)
   }
 }
 

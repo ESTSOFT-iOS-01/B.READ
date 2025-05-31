@@ -26,7 +26,7 @@ struct MainTabView: View {
   var body: some View {
     CoordinatorContainer {
       TabView(selection: $selectedTab) {
-        
+
         HomeView()
           .tabItem {
             Image(systemName: SFSymbol.house.name)
