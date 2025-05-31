@@ -8,20 +8,19 @@
 import Foundation
 import UIKit
 
-/// 이미지 URL 문자열을 `Data`로 변환하는 중 발생할 수 있는 에러 유형.
-enum ImageConversionError: Error {
-  case invalidURL
-  case downloadFailed
-  case imageConversionFailed
-}
-
-/// 이미지 URL 문자열을 비동기적으로 `Data`로 변환하는 유틸리티 클래스입니다.
-class ImageConverter {
-  /// 이미지 URL 문자열을 `Data`로 변환합니다.
+enum ImageConverter {
+  /// 이미지 URL 문자열을 `Data`로 변환하는 중 발생할 수 있는 에러 유형.
+  enum ImageConversionError: Error {
+    case invalidURL
+    case downloadFailed
+    case imageConversionFailed
+  }
+  
+  /// 이미지 URL 문자열을 JPEG `Data`로 변환합니다.
   ///
-  /// - Parameter urlString: 이미지가 위치한 URL 문자열입니다.
-  /// - Returns: JPEG 형식으로 인코딩된 이미지 `Data`.
-  /// - Throws: `ImageConversionError` 중 하나의 오류가 발생할 수 있습니다.
+  /// - Parameter urlString: 이미지 URL 문자열
+  /// - Returns: 압축된 JPEG 이미지 데이터
+  /// - Throws: URL이 유효하지 않거나 이미지 변환 실패 시 오류를 발생시킵니다.
   static func convertImageURLToData(_ urlString: String) async throws -> Data {
     guard let url = URL(string: urlString) else {
       throw ImageConversionError.invalidURL
@@ -30,7 +29,7 @@ class ImageConverter {
     let (data, _) = try await URLSession.shared.data(from: url)
     
     guard let image = UIImage(data: data),
-          let imageData = image.jpegData(compressionQuality: 0.2) else {
+          let imageData = image.jpegData(compressionQuality: 0.5) else {
       throw ImageConversionError.imageConversionFailed
     }
     
@@ -38,13 +37,18 @@ class ImageConverter {
   }
 }
 
-// Usage Example
+
+// 사용 예시
 //Task {
 //    do {
-//        let imageData = try await ImageConverter.convertImageURLToData("https://example.com/image.png")
+//        let imageData = try await ImageConverter.convertImageURLToData("https://image.aladin.co.kr/product/9871/8/cover500/k042535550_2.jpg")
 //        print("Image data size: \(imageData.count) bytes")
-//        // 여기서 SwiftData 등에 저장 가능
+//        
+//        // 예: SwiftData 모델 등에 저장 가능
+//        // book.coverImageData = imageData
+//
 //    } catch {
-//        print("Error: \(error)")
+//        print("이미지 변환 실패: \(error.localizedDescription)")
 //    }
 //}
+
