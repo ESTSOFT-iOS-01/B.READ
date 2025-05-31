@@ -18,6 +18,8 @@ final class MemoDTO {
   var content: String
   var startPage: Int
   var endPage: Int
+  
+  @Relationship(deleteRule: .cascade)
   var guides: [GuideDTO]
   
   init(
