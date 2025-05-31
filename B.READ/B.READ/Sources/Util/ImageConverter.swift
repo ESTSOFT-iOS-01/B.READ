@@ -30,7 +30,7 @@ class ImageConverter {
     let (data, _) = try await URLSession.shared.data(from: url)
     
     guard let image = UIImage(data: data),
-          let imageData = image.jpegData(compressionQuality: 0.5) else {
+          let imageData = image.jpegData(compressionQuality: 0.2) else {
       throw ImageConversionError.imageConversionFailed
     }
     
