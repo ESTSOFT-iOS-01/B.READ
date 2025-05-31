@@ -68,6 +68,7 @@
 				Sources/Domain/UseCase/LibraryUseCase.swift,
 				Sources/Domain/UseCase/ProfileUseCase.swift,
 				Sources/Domain/UseCase/QuoteUseCase.swift,
+				Sources/Domain/UseCase/RecommandUseCase.swift,
 				Sources/Domain/UseCase/SearchUseCase.swift,
 				Sources/Domain/UseCaseImpl/LibraryUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
