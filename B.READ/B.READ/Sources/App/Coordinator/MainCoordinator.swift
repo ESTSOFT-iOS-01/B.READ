@@ -60,6 +60,17 @@ extension Coordinator where T == MainRoute {
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
     case .goToWebView(let url):
       WebView(url: url)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+          ToolbarItem(placement: .topBarTrailing) {
+            Button {
+              self.pop()
+            } label: {
+              Image(systemName: SFSymbol.xmark.name)
+                .foregroundStyle(.green6)
+            }
+          }
+        }
       
       // MARK: - Library
     case .libraryDetail(let id, let isbn):
