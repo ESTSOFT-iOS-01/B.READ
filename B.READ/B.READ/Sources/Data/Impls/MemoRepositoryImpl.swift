@@ -65,8 +65,9 @@ actor MemoRepositoryImpl: MemoRepository {
   func fetchAllMemos(containg text: String) throws -> [Memo] {
     print("Impl: ", #function)
     
-    // String.localizedStandardContains?
+    // String.localizedStandardContains 이란?
     // 대소문자와 발음 구별 기호를 구분하지 않고 locale을 인식하여 검색을 수행하여 문자열에 주어진 문자열이 포함되어 있는지 여부
+    // 사용자 친화적인 검색 로직
     let predicate = #Predicate<MemoDTO> { $0.content.localizedStandardContains(text) }
     let sort = SortDescriptor(\MemoDTO.createdAt, order: .reverse)
     let descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])

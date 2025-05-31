@@ -72,6 +72,7 @@
 				Sources/Domain/Service/Interface/BookService.swift,
 				Sources/Domain/Service/Stub/AIServiceStub.swift,
 				Sources/Domain/UseCase/LibraryUseCase.swift,
+				Sources/Domain/UseCase/MemoUseCase.swift,
 				Sources/Domain/UseCase/ProfileUseCase.swift,
 				Sources/Domain/UseCase/QuoteUseCase.swift,
 				Sources/Domain/UseCaseImpl/LibraryUseCaseImpl.swift,
