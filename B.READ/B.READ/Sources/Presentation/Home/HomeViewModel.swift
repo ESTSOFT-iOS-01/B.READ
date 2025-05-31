@@ -33,7 +33,7 @@ final class HomeViewModel: ObservableObject {
   }
   
   deinit {
-    print("HomeViewModel 소멸")
+    // print("HomeViewModel 소멸")
   }
 }
 
