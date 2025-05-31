@@ -28,5 +28,19 @@ protocol MemoUseCase {
   /// - Parameter isbn: 메모가 속한 책의 ISBN 번호
   /// - Returns: JSON 형식의 질문 배열 문자열 예: `["질문1", "질문2", "질문3"]`
   /// - Throws: `RepositoryError.dataNotFound`, `AIServiceError`, 등 조회 및 요청 오류
-  func generateGuide(isbn: String) async throws -> String
+  func generateGuide(isbn: String) async throws -> [Guide]
 }
+
+enum MemoUseCaseError {
+  case parsingError
+}
+
+extension MemoUseCaseError: LocalizedError {
+  var errorDescription: String? {
+    switch self {
+    case .parsingError:
+      "Parsing error"
+    }
+  }
+}
+

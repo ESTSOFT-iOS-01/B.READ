@@ -31,7 +31,7 @@ final class MemoUseCaseImpl: MemoUseCase {
     return try await memoRepository.fetchMemo(id: id)
   }
   
-  func generateGuide(isbn: String) async throws -> String {
+  func generateGuide(isbn: String) async throws -> [Guide] {
     
     let book = try await bookRepository.fetchBook(isbn: isbn)
     let prefixPrompt = """
@@ -40,6 +40,7 @@ final class MemoUseCaseImpl: MemoUseCase {
 
     - 질문은 구체적이고, 사용자의 생각을 확장시킬 수 있어야 해.
     - 반드시 JSON 배열 형식으로 출력해줘. 예: ["질문1", "질문2", "질문3"]
+    - 코드 블록에 넣지는 말아줘
     """
     
     let memos = try await memoRepository.fetchAllMemos(isbn: isbn)
@@ -47,8 +48,27 @@ final class MemoUseCaseImpl: MemoUseCase {
     
     let suffixPrompt = "이 정보를 바탕으로 사용자가 더 깊게 생각할 수 있는 질문 3개를 만들어줘."
     
-    return try await aiService.request(prompt: prefixPrompt + middlePrompt + suffixPrompt)
+    var jsonString = try await aiService.request(prompt: prefixPrompt + middlePrompt + suffixPrompt)
+    
+    var attempt = 0
+    while attempt < 2 {
+      do {
+        let data = Data(jsonString.utf8)
+        let contents = try JSONDecoder().decode([String].self, from: data)
+        
+        return contents.map { Guide(date: .now, content: $0) }
+      } catch {
+        attempt += 1
+        let retryPrompt = """
+        파싱 형태가 잘못되었어.
+        반드시 JSON 배열 형식으로 출력해줘. 예: ["질문1", "질문2", "질문3"]
+        그리고 코드 블록에 넣지는 말아줘
+        """
+        jsonString = try await aiService.request(prompt: retryPrompt)
+      }
+    }
+    
+    throw MemoUseCaseError.parsingError
   }
-  
   
 }

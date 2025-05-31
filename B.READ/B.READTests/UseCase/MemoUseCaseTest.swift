@@ -52,8 +52,8 @@ struct MemoUseCaseTest {
   @Test("Guide Generate Test")
   func generateGuideTest() async throws {
     try await bookRepository.createBook(DummyData.books.first!)
-    let response = try await memoUseCase.generateGuide(isbn: DummyData.books.first!.isbn)
-    print(response)
+    let guides = try await memoUseCase.generateGuide(isbn: DummyData.books.first!.isbn)
+    print(guides)
   }
   
 }
