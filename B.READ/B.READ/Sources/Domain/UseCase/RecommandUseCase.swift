@@ -18,5 +18,5 @@ protocol RecommandUseCase {
   ///   - `AladinError.serverError`: API가 에러 응답을 반환한 경우
   ///   - `AladinError.decodingError`: 응답 디코딩 실패 시
   ///   - `URLError`: 네트워크 연결 문제 발생 시
-  func requestBestSeller(in category: Int) -> [BestSeller]
+  func requestBestSeller(in category: Int) async throws -> [BestSeller]
 }

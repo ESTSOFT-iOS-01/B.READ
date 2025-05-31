@@ -73,6 +73,7 @@
 				Sources/Domain/UseCaseImpl/LibraryUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/QuoteUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/RecommandUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/SearchUseCaseImpl.swift,
 				Sources/Network/Aladin/AladinAPI.swift,
 				Sources/Network/Aladin/AladinError.swift,
