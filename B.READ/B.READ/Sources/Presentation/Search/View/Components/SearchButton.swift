@@ -13,8 +13,8 @@ enum SearchButtonStyle {
   
   var iconName: String {
     switch self {
-    case .barcode: return SearchConstants.Icon.barcode
-    case .close: return SearchConstants.Icon.close
+    case .barcode: return SFSymbol.barcode.name
+    case .close: return SFSymbol.xmark.name
     }
   }
   

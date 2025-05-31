@@ -38,7 +38,7 @@ struct MyPageView: View {
         Text(viewModel.nicknameText)
           .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.bold, size: 24), lineHeight: 1.45, letterSpacing: 0.02)
-        Image(systemName: "chevron.right")
+        Image(systemName: SFSymbol.chevronRight.name)
           .resizable()
           .aspectRatio(contentMode: .fit)
           .frame(width: 6)
@@ -144,7 +144,7 @@ private struct MenuListView: View {
         }
       }
       
-      Image(systemName: "chevron.right")
+      Image(systemName: SFSymbol.chevronRight.name)
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 6)

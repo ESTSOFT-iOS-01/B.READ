@@ -15,8 +15,8 @@ struct LibraryView: View {
     
     var image: Image {
       switch self {
-      case .list: Image(systemName: LibraryConstants.Icon.grid)
-      case .grid: Image(systemName: LibraryConstants.Icon.list)
+      case .list: Image(systemName: SFSymbol.grid.name)
+      case .grid: Image(systemName: SFSymbol.list.name)
       }
     }
   }
@@ -99,7 +99,7 @@ struct LibraryView: View {
       HStack(spacing: 4) {
         Text("최신 순")
           .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
-        Image(systemName: LibraryConstants.Icon.menuOn)
+        Image(systemName: SFSymbol.chevronCompactDown.name)
       } // : HStack
     }
   }
