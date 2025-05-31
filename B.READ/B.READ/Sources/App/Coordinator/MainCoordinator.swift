@@ -20,11 +20,31 @@ enum MainRoute: Hashable {
   case sentenceInput(mode: SentenceInputMode)
   case pageInput(mode: SentenceInputMode, sentence: String)
   
+  // MARK: - Memo
+  case memo(date: Date, totalPage: Int)
+  
   // MARK: - MyPage
   case insertNickname
   case selectCategory
 }
 
+enum SheetRoute: Identifiable {
+  case createRecord(state: Binding<ReadingState>, page: Int)
+  
+  var id: String {
+    String(describing: self)
+  }
+}
+
+extension Coordinator where R == SheetRoute {
+  @ViewBuilder
+  func buildView(for route: R) -> some View {
+    switch route {
+    case let .createRecord(state, page):
+      CreateRecordView(state: state, viewModel: NewRecordViewModel(maxPage: page))
+    }
+  }
+}
 
 extension Coordinator where T == MainRoute {
   
@@ -48,7 +68,11 @@ extension Coordinator where T == MainRoute {
 
     case .pageInput(let mode, let sentence):
         PageInputView(mode: mode, sentence: sentence)
-      
+    
+      // MARK: - Memo
+    case .memo(let date, let page):
+      MemoView(targetDate: date, totalPage: page)
+
       // MARK: - MyPage Flow
     case .insertNickname:
       NicknameView()

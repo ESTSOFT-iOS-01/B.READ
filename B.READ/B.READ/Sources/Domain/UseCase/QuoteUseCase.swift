@@ -80,6 +80,15 @@ protocol QuoteUseCase {
   ///   - `RepositoryError.dataNotFound`: 해당 ISBN에 대한 도서 정보가 존재하지 않는 경우
   ///   - `RepositoryError.fetchError`: 저장소 조회 중 오류가 발생한 경우
   func pageCount(forISBN isbn: String) async throws -> Int
+  
+  /// ISBN 값을 가지고 도서 제목을 조회합니다.
+  ///
+  /// - Parameter isbn: 조회할 도서의 ISBN
+  /// - Returns: 조회한 도서의 제목
+  /// - Throws:
+  ///   - `RepositoryError.dataNotFound`: 조회한 도서 정보가 존재하지 않는경우
+  ///   - `RepositoryError.fetchError`: 도서 정보 조회 과정에서 저장소 조회 중 에러가 발생한 경우
+  func loadBookTitle(_ isbn: String) async throws -> String
 }
 
 /// `QuoteUseCase` 수행 중 발생할 수 있는 비즈니스 검증 오류를 정의합니다.

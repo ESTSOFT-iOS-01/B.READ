@@ -47,6 +47,7 @@
 				Sources/Data/Impls/BookRepositoryImpl.swift,
 				Sources/Data/Impls/QuoteRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
+				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
 				Sources/Domain/Entity/BookServiceEntity.swift,
 				Sources/Domain/Entity/Quote.swift,
@@ -64,8 +65,14 @@
 				Sources/Domain/Service/Interface/AIService.swift,
 				Sources/Domain/Service/Interface/BookService.swift,
 				Sources/Domain/Service/Stub/AIServiceStub.swift,
+				Sources/Domain/UseCase/LibraryUseCase.swift,
 				Sources/Domain/UseCase/ProfileUseCase.swift,
+				Sources/Domain/UseCase/QuoteUseCase.swift,
+				Sources/Domain/UseCase/SearchUseCase.swift,
+				Sources/Domain/UseCaseImpl/LibraryUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/QuoteUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/SearchUseCaseImpl.swift,
 				Sources/Network/Aladin/AladinAPI.swift,
 				Sources/Network/Aladin/AladinError.swift,
 				Sources/Network/Aladin/AladinResponse.swift,
@@ -401,7 +408,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = C5K6DF875Z;
+				DEVELOPMENT_TEAM = 83K577A944;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
@@ -437,7 +444,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = C5K6DF875Z;
+				DEVELOPMENT_TEAM = 83K577A944;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";

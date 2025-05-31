@@ -10,7 +10,11 @@ import SwiftUI
 // MARK: - (S)ScanView
 struct ScanView: View {
   @StateObject var viewModel: ScanViewModel
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  
+  init(viewModel: ScanViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
+  }
 
   var body: some View {
     VStack {

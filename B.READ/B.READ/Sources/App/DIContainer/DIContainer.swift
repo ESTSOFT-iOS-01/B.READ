@@ -42,10 +42,39 @@ class Dependency<T> {
 extension DIContainer {
   static func config() async {
     let storage = SwiftDataStorage()
+    
+    // MARK: - Repository 생성
     let userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
+    let bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
+    let recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
+    let quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
+    
+    // MARK: - UseCase 생성 및 등록
+    // Profile UseCase
     self.shared.register(
       ProfileUseCaseImpl(userInfoRepository: userInfoRepository),
       for: ProfileUseCase.self
     )
+    // Library UseCase
+    self.shared.register(
+      LibraryUseCaseImpl(
+        bookRepository: bookRepository,
+        recordRepository: recordRepository,
+        quoteRepository: quoteRepository,
+        bookService: AladinService()
+      ),
+      for: LibraryUseCase.self
+    )
+    // TODO: - Memo UseCase
+    // Quote UseCase
+    self.shared.register(
+      QuoteUseCaseImpl(
+        quoteRepository: quoteRepository,
+        bookRepository: bookRepository),
+      for: QuoteUseCase.self
+    )
+    // TODO: - Note UseCase
+    // TODO: - Search UseCase
+    // TODO: - Recommand UseCase
   }
 }

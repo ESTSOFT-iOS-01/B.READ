@@ -15,8 +15,8 @@ final class RecordDetailViewModel: ObservableObject {
   // MARK: - State
   struct RecordDetailState {
     var info: (record: Record, book: Book)? = nil
-    var memos: [Memo] = []
-    var quotes: [Quote] = []
+    var memos: [MemoVO] = []
+    var quotes: [QuoteVO] = []
     var selectedTab: Int = 0
     var selectedQuote: Quote? = nil
   }
@@ -32,12 +32,9 @@ final class RecordDetailViewModel: ObservableObject {
     self.isbn = isbn
   }
   
-  // TODO: - 유스케이스로 빠질 예정
-  private let bookRepo: BookRepository = BookRepositoryStub()
-  private let recordRepo: RecordRepositoryStub = RecordRepositoryStub()
-  
   // MARK: - Dependency
-  //  @Dependency private var exampleUseCase: ExampleUseCase
+  @Dependency private var libraryUseCase: LibraryUseCase
+  @Dependency private var quoteUseCase: QuoteUseCase
   
   // MARK: - Action
   enum Action {
@@ -49,18 +46,34 @@ final class RecordDetailViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      Task {
-        await loadInfo(id: recordID, isbn: isbn)
-        await loadMemos()
-        await loadQuote()
+      Task { [weak self] in
+        guard let self = self else { return }
+        
+        await self.loadInfo(id: recordID, isbn: isbn)
+        await withTaskGroup(of: Void.self) { group in
+          group.addTask {
+            await self.loadMemos()
+          }
+          
+          group.addTask {
+            await self.loadQuote()
+            await self.sortQuotes()
+          }
+        }
       }
+      
     case .onTapFavorite:
-      Task {
-        await toggleIsFavorite()
+      Task { [weak self] in
+        guard let self = self else { return }
+        
+        await self.toggleIsFavorite()
       }
+      
     case .onTapDelete:
-      Task {
-        await deleteRecord()
+      Task { [weak self] in
+        guard let self = self else { return }
+        
+        await self.deleteRecord()
       }
     }
   }
@@ -72,11 +85,10 @@ final class RecordDetailViewModel: ObservableObject {
 private extension RecordDetailViewModel {
   
   /// 독서 기록 조회에서 필요한 정보를 불러옴
-  @MainActor
   func loadInfo(id: String, isbn: String) async {
     do {
-      let info: (Record, Book) = try await self.fetchRecordInfo(id: recordID, isbn: isbn)
-      self.state.info = info
+      let info: (Record, Book) = try await libraryUseCase.loadRecord(recordID)
+      await MainActor.run { self.state.info = info }
     } catch {
       print(error.localizedDescription)
     }
@@ -95,10 +107,9 @@ private extension RecordDetailViewModel {
     }
     // 확인한 정보를 업데이트
     do {
-      try await self.updateRecordInfo(record: record)
+      try await libraryUseCase.editRecord(record)
     } catch {
-      print(RepositoryError.dataNotFound.errorDescription!)
-      // 업데이트를 하는데 정보가 없다? -> 새로 생성
+      print(error.localizedDescription)
     }
   }
   
@@ -110,52 +121,73 @@ private extension RecordDetailViewModel {
     }
     // 확인한 정보를 삭제
     do {
-      try await self.deleteRecordInfo(id: record.id)
+      try await libraryUseCase.deleteRecord(record)
     } catch {
-      
+      print(error.localizedDescription)
     }
   }
   
   @MainActor
+  /// 메모를 받아옴
   func loadMemos() {
     self.state.memos = DummyData.dummyMemos.filter {
-      if let info = state.info { return info.record.memoIDs.contains($0.id) }
+      if let info = state.info {
+        return info.record.memoIDs.contains($0.id)
+      }
       return false
-    }
+    }.map { MemoVO($0) }
   }
   
-  @MainActor
-  func loadQuote() {
-    self.state.quotes = DummyData.dummyQuote.filter {
-      if let info = state.info { return info.record.memoIDs.contains($0.id) }
-      return false
+  /// 문장을 받아옴
+  func loadQuote() async {
+    // 1. record가 없으면 quote도 없음
+    guard let quoteIDs = self.state.info?.record.quoteIDs else {
+      print("ViewModelError.dataNotFound")
+      return
     }
-  }
-}
-
-// MARK: - (F)LibraryViewModel
-// TODO: - 유스케이스로 빠질 함수들
-private extension RecordDetailViewModel {
-  
-  /// 독서 기록 조회에서 필요한 정보(책, 독서 기록)를 가져옴
-  func fetchRecordInfo(id: String, isbn: String) async throws -> (Record, Book) {
-    let record = try await recordRepo.fetchRecord(id: recordID)
-    let book = try await bookRepo.fetchBook(isbn: isbn)
     
-    return (record, book)
+    // 2. quoteIDs를 가지고 quote를 받아옴
+    let quoteInfos: [QuoteVO] = await withTaskGroup(of: QuoteVO?.self) { group in
+      for quoteID in quoteIDs {
+        // 그룹에 각 비동기 Task를 추가
+        group.addTask {
+          do {
+            let quote = try await self.quoteUseCase.fetchQuote(id: quoteID)
+            return QuoteVO(quote)
+          } catch {
+            return nil
+          }
+        }
+      }
+      
+      var results: [QuoteVO] = []
+      
+      for await result in group {
+        if let quote = result {
+          results.append(quote)
+        }
+      }
+      return results
+    }
+    
+    await MainActor.run {
+      self.state.quotes = quoteInfos
+    }
   }
   
-  /// 독서 기록 조회에서 수정된 사항을 업데이트
-  func updateRecordInfo(record: Record) async throws {
-    try await recordRepo.updateRecord(record)
-  }
-  
-  /// 독서 기록을 삭제
-  func deleteRecordInfo(id: String) async throws {
-    // 1. 독서 기록을 삭제
-    try await recordRepo.deleteRecord(id)
-    // 2. 독서 기록이 가지고 있는 메모 삭제
-    // 3. 독서 기록이 가지고 있는 문장 삭제
-    // 4. 독서 기록이 가지고 있는 요약노트 삭제
+  // TODO: - (2)Quotes 정렬 내용 추가
+  func sortQuotes(by: SortState = .recent) async {
+    // 정렬 기준에 따라서 displayRecords를 정렬
+    let sortedQuotes: [QuoteVO]
+    switch by {
+    case .recent:
+      sortedQuotes = state.quotes.sorted { $0.page > $1.page }
+    case .older:
+      sortedQuotes = state.quotes.sorted { $0.page < $1.page }
+    }
+    
+    await MainActor.run {
+      self.state.quotes = sortedQuotes
+    }
   }
 }

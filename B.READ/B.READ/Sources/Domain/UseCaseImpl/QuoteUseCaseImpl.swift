@@ -64,7 +64,11 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     let book = try await bookRepository.fetchBook(isbn: isbn)
     return book.totalPages
   }
-  
+
+  // TODO: - 조회한 도서가 없을 경우 알라딘 검색 후 도서 저장 -> 도서 제목 반환
+  func loadBookTitle(_ isbn: String) async throws -> String {
+    return try await bookRepository.fetchBook(isbn: isbn).name
+  }
 }
 
 extension QuoteUseCaseImpl {

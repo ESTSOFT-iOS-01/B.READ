@@ -81,7 +81,7 @@ struct LibraryView: View {
       } else {
         switch recordPresentType {
         case .list:
-          LibraryListView(records: viewModel.state.displayRecords)
+          LibraryListView(records: $viewModel.state.displayRecords)
         case .grid:
           LibraryGridView()
         }

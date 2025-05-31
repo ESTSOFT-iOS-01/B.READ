@@ -10,7 +10,7 @@ import SwiftUI
 struct SentenceInputView: View {
   let mode: SentenceInputMode
   
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
   @FocusState private var isEditorFocused: Bool
   

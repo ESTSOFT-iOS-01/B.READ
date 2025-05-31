@@ -9,19 +9,14 @@ import SwiftUI
 
 // MARK: - (S)LibraryListView
 struct LibraryListView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
-  private let records: [LibraryRecordVO]
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @Binding var records: [LibraryRecordVO]
   @State var selectedRecord: LibraryRecordVO?
-  
-  init(records: [LibraryRecordVO], selectedRecord: LibraryRecordVO? = nil) {
-    self.records = records
-    self.selectedRecord = selectedRecord
-  }
   
   var body: some View {
     List {
-      ForEach(records) { record in
-        LibraryListCell(record: record)
+      ForEach($records) { $record in
+        LibraryListCell(record: $record)
           .background(.green1.opacity(0.6))
           .cornerRadius(16)
           .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거

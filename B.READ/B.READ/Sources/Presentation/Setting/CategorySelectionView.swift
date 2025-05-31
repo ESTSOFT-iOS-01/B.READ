@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CategorySelectionView: View {
   
-  @EnvironmentObject var mainCoordinator: Coordinator<MainRoute>
+  @EnvironmentObject var mainCoordinator: Coordinator<MainRoute, SheetRoute>
   @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
   @StateObject private var viewModel = SettingViewModel()
   @State private var selectedCategories: Set<CategoryType> = []
@@ -40,6 +40,7 @@ struct CategorySelectionView: View {
       
     }
     .padding(.horizontal, 24)
+    .background(.backgroundDefault)
     .onChange(of: viewModel.isSaveComplete) {
       if didInitialSetup {
         mainCoordinator.pop()

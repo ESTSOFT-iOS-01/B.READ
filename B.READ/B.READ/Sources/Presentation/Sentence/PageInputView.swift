@@ -10,9 +10,10 @@ import SwiftUI
 struct PageInputView: View {
   let mode: SentenceInputMode
   let sentence: String
-  
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
-  @StateObject var viewModel: SentenceViewModel
+
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @State private var pageText = "0"
+  @State private var showInvalidAlert = false
   @FocusState private var isFocused: Bool
   @State private var showInvalidAlert = false
   

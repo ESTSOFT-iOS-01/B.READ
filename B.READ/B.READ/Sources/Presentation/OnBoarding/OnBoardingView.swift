@@ -10,7 +10,7 @@ import SwiftUI
 
 struct OnBoardingView: View {
   
-  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute>
+  @EnvironmentObject var coordinator: Coordinator<OnboardingRoute, SheetRoute>
   @State private var currentStep: OnboardingStep = .guide
   
   var body: some View {

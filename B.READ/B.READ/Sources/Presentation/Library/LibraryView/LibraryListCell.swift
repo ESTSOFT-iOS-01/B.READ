@@ -10,12 +10,8 @@ import SwiftUI
 // MARK: - (S)LibraryListCell
 struct LibraryListCell: View {
   
-  private let record: LibraryRecordVO
+  @Binding var record: LibraryRecordVO
   private let layoutPadding: CGFloat = 24
-  
-  init(record: LibraryRecordVO) {
-    self.record = record
-  }
   
   var body: some View {
     HStack(alignment: .top, spacing: 0) {
@@ -81,14 +77,15 @@ struct LibraryListCell: View {
 }
 
 #Preview {
-  let record = LibraryRecordVO(
+  @Previewable @State var record = LibraryRecordVO(
     id: "123",
     isbn: "9788937460586",
     name: "싯다르타",
     coverImage: nil,
-    state: .completed,
+    state: .finished,
     heartCount: 0,
     starCount: 4,
+    currentPage: 252,
     percent: 100,
     memoCount: 4,
     quoteCount: 3,
@@ -99,5 +96,5 @@ struct LibraryListCell: View {
     isFavorite: false,
     createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
   )
-  LibraryListCell(record: record)
+  LibraryListCell(record: $record)
 }

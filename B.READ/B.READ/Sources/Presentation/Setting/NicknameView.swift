@@ -9,8 +9,8 @@ import SwiftUI
 
 struct NicknameView: View {
   @AppStorage("didInitialSetup") private var didInitialSetup: Bool = false
-  @EnvironmentObject var onBoardingCoordinator: Coordinator<OnboardingRoute>
-  @EnvironmentObject var mainCoordinator: Coordinator<MainRoute>
+  @EnvironmentObject var onBoardingCoordinator: Coordinator<OnboardingRoute, SheetRoute>
+  @EnvironmentObject var mainCoordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject private var viewModel = SettingViewModel()
   @FocusState private var isFocused: Bool
   @State private var isValid = true
@@ -47,6 +47,7 @@ struct NicknameView: View {
       .frame(maxHeight: .infinity, alignment: .bottom)
     }
     .padding(.horizontal, 26)
+    .background(.backgroundDefault)
     .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
     .onChange(of: viewModel.nicknameText) { oldValue, newValue in
 

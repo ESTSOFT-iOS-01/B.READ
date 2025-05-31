@@ -9,12 +9,11 @@ import SwiftUI
 
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute>
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: RecordDetailViewModel
   
   @State var showDeleteAlert: Bool = false
   @State var showRecordMenuActionSheet: Bool = false
-  @Environment(\.dismiss) var dismiss
   
   private let layoutPadding: CGFloat = 24
   private let floatingButtonPadding: CGFloat = 32
@@ -83,21 +82,11 @@ struct RecordDetailView: View {
       .padding(.bottom, floatingButtonPadding)
     }
     .background(.backgroundDefault)
-    .navigationBarBackButtonHidden(true) // 기본 뒤로가기 버튼 숨김
     .onAppear {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
     } // : onAppear
     .toolbar {
-      // 뒤로가기 버튼
-      ToolbarItem(placement: .topBarLeading) {
-        Button {
-          dismiss()
-        } label: {
-          Image(systemName: LibraryConstants.Icon.back)
-            .foregroundColor(.green6)
-        }
-      }
       // 즐겨찾기, 삭제 버튼
       ToolbarItem(placement: .topBarTrailing) {
         topBarTrailingButton()
@@ -106,7 +95,7 @@ struct RecordDetailView: View {
     .alert("독서 기록 삭제", isPresented: $showDeleteAlert) {
       Button("삭제", role: .destructive) {
         viewModel.send(.onTapDelete)
-        dismiss()
+        coordinator.pop()
       }
       Button("취소", role: .cancel) { }
     } message: {
@@ -117,7 +106,7 @@ struct RecordDetailView: View {
         print("독서 기록 수정 선택")
       }
       Button("메모 작성") {
-        print("메모 작성 선택")
+        coordinator.push(.memo(date: .now, totalPage: viewModel.state.info?.book.totalPages ?? 0))
       }
       Button("문장 작성") {
         coordinator.push(.sentenceInput(mode: .create(isbn: viewModel.state.info?.record.isbn ?? "")))
