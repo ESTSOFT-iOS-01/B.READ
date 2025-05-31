@@ -55,7 +55,7 @@ struct PageInputView: View {
         .focused($isFocused)
         
         Text("쪽")
-          .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2, letterSpacing: 0)
+          .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
           .padding(.leading, 16)
       }
       
