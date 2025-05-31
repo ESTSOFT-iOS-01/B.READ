@@ -36,8 +36,7 @@ actor MemoRepositoryImpl: MemoRepository {
   func fetchAllMemos() throws -> [Memo] {
     print("Impl: ", #function)
     
-    let sort = SortDescriptor(\MemoDTO.createdAt, order: .reverse)
-    let descriptor = FetchDescriptor<MemoDTO>(sortBy: [sort])
+    let descriptor = FetchDescriptor<MemoDTO>()
     
     do {
       let data = try modelContext.fetch(descriptor)
@@ -51,8 +50,7 @@ actor MemoRepositoryImpl: MemoRepository {
     print("Impl: ", #function)
     
     let predicate = #Predicate<MemoDTO> { $0.isbn == isbn }
-    let sort = SortDescriptor(\MemoDTO.createdAt, order: .reverse)
-    let descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
+    let descriptor = FetchDescriptor(predicate: predicate)
     
     do {
       let data = try modelContext.fetch(descriptor)

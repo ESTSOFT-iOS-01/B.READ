@@ -44,7 +44,7 @@ private extension HomeViewModel {
       guard let self else { return }
       let records = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
       await MainActor.run {
-        self.recentRecords = records.map { LibraryRecordVO(record: $0, book: $1) }
+        self.recentRecords = records.map { RecordCellVO(record: $0, book: $1) }
       }
     }
   }
