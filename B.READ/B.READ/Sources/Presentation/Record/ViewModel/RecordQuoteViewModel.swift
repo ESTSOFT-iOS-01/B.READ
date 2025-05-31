@@ -141,10 +141,3 @@ private extension RecordQuoteViewModel {
     }
   }
 }
-
-// 공통 상태로 뺄지 각 뷰 마다 만들지는 고민
-// MARK: - (E)SortState
-enum SortState {
-  case recent
-  case older
-}

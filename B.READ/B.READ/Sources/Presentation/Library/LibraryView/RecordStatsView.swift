@@ -10,21 +10,21 @@ import SwiftUI
 // MARK: - (S)RecordStatsView
 struct RecordStatsView: View {
   
-  private let record: LibraryRecordVO
+  private let record: RecordCellVO
   
-  init(record: LibraryRecordVO) {
+  init(record: RecordCellVO) {
     self.record = record
   }
   
   var body: some View {
     HStack(spacing: 12) {
-      switch record.state {
+      switch record.readingState {
       case .notStart: // 기대지수
-        PropertyView(SFSymbol.heart.name, "\(record.heartCount)")
+        PropertyView(SFSymbol.heart.name, record.heart.toString)
       case .reading: // 독서진행률
-        PropertyView(SFSymbol.timer.name, "\(record.percent)", .percent)
+        PropertyView(SFSymbol.timer.name, record.progress.toString, .percent)
       case .finished: // 평점
-        PropertyView(SFSymbol.star.name, "\(record.starCount)")
+        PropertyView(SFSymbol.star.name, record.star.toString)
       }
       PropertyView(SFSymbol.memo.name, "\(record.memoCount)", .count) // 메모
       PropertyView(SFSymbol.bubble.name, "\(record.quoteCount)", .count) // 문장
