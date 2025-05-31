@@ -38,6 +38,4 @@ struct QuoteVO: Identifiable, Hashable {
 
     return true
   }
-  
 }
-
