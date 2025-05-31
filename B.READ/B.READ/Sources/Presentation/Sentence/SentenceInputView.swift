@@ -74,7 +74,7 @@ struct SentenceInputView: View {
 }
 
 #Preview {
-  let dummy = Coordinator<MainRoute>()
+  let dummy = Coordinator<MainRoute, SheetRoute>()
   
   NavigationStack {
     SentenceInputView(mode: .create(isbn: "9781234567890"))

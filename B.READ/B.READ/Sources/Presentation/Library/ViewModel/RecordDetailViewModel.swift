@@ -18,7 +18,7 @@ final class RecordDetailViewModel: ObservableObject {
     var memos: [MemoVO] = []
     var quotes: [QuoteVO] = []
     var selectedTab: Int = 0
-    var selectedQuote: Quote? = nil
+    var selectedQuote: QuoteVO? = nil
   }
   
   @Published var state: RecordDetailState = .init()

@@ -74,8 +74,8 @@ struct RecordNotesSection: View {
       case .quote:
         print("\(type.name) 수정 선택")
         // TODO: 문장넘겨주기
-        if let quote = viewModel.state.selectedQuote {
-          coordinator.push(.sentenceInput(mode: .edit(quote: quote)))
+        if let quote = viewModel.state.selectedQuote, let isbn = viewModel.state.info?.record.isbn {
+          coordinator.push(.sentenceInput(mode: .edit(isbn: isbn, quote: quote)))
         } else {
           print("선택된 문장이 없습니다.")
         }

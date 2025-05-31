@@ -10,35 +10,25 @@ import SwiftUI
 struct PageInputView: View {
   let mode: SentenceInputMode
   let sentence: String
-
+  
+  @State private var pageText: String = "0"
+  @StateObject private var viewModel: SentenceViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @State private var pageText = "0"
   @State private var showInvalidAlert = false
   @FocusState private var isFocused: Bool
-  @State private var showInvalidAlert = false
-  
-  private var isValidPage: Bool? {
-    guard let limit = viewModel.maxPage else { return nil }
-    return viewModel.page.map { (1...limit).contains($0) }
-  }
   
   init(mode: SentenceInputMode, sentence: String) {
     self.mode = mode
     self.sentence = sentence
     _viewModel = StateObject(wrappedValue: SentenceViewModel(mode: mode))
-    _viewModel.wrappedValue.content = sentence
   }
   
   
   var body: some View {
-    var pageTextBinding: Binding<String> {
-      Binding(
-        get: { viewModel.page.map(String.init) ?? "" },
-        set: { newValue in
-          viewModel.page = Int(newValue)
-        }
-      )
-    }
+    let isValidPage: Bool? = {
+      guard let limit = viewModel.maxPage else { return nil }
+      return Int(pageText).map { (1...limit).contains($0) }
+    }()
     
     VStack(alignment: .leading, spacing: 8) {
       Text("페이지를 입력해 주세요")
@@ -47,7 +37,7 @@ struct PageInputView: View {
         RoundedTextField(
           type: .pages,
           placeholder: "0",
-          text: pageTextBinding,
+          text: $pageText,
           isValid: isValidPage
         )
         .focused($isFocused)
@@ -76,6 +66,9 @@ struct PageInputView: View {
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
+    .onChange(of: pageText) {
+      viewModel.page = Int($0)
+    }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
@@ -97,7 +90,8 @@ struct PageInputView: View {
     }
     .alert("저장 실패", isPresented: $showInvalidAlert) {
       Button("확인", role: .cancel) {
-        viewModel.page = 0      // 빈칸으로 리셋
+        viewModel.page = nil
+        pageText = ""
         isFocused = true
       }
     } message: {
@@ -108,6 +102,14 @@ struct PageInputView: View {
     .task {
       await Task.yield()
       isFocused = true
+    }
+    .onAppear {
+      if viewModel.content.isEmpty {
+        viewModel.content = sentence
+      }
+      if pageText.isEmpty {
+        pageText = viewModel.page.map(String.init) ?? ""
+      }
     }
   }
 }

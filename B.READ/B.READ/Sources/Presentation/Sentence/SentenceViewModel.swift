@@ -10,7 +10,7 @@ import Foundation
 /// 새 문장 작성(create) 혹은 기존 문장 수정(edit) 모드 구분
 enum SentenceInputMode: Hashable {
   case create(isbn: String)
-  case edit(quote: Quote)
+  case edit(isbn: String, quote: QuoteVO)
 }
 
 @MainActor
@@ -55,13 +55,13 @@ final class SentenceViewModel: ObservableObject {
     switch mode {
     case .create(let isbn):
       self.content = ""
-      self.page = 0
+      self.page = nil
       Task { await loadMaxPage(isbn) }
       
-    case .edit(let quote):
+    case .edit(let isbn, let quote):
       self.content = quote.content
       self.page = quote.page
-      Task { await loadMaxPage(quote.isbn) }
+      Task { await loadMaxPage(isbn) }
     }
   }
 }
@@ -86,15 +86,18 @@ private extension SentenceViewModel {
       // 3) 로컬 범위 검증 (1…maxPage)
       if let limit = maxPage, !(1...limit).contains(page) {
         await MainActor.run { self.errorMessage = "페이지는 1-\(limit) 사이여야 합니다." }
-        return                                   // 서버/저장소 호출 전 즉시 종료
+        return
       }
       
-      // 4) 최종 범위 검증 (UseCase로 double-check)
+      // 4) ISBN 결정 + 최종 범위 검증
       let isbn: String
       switch mode {
-      case .create(let bookISBN): isbn = bookISBN
-      case .edit(let existing): isbn = existing.isbn
+      case .create(let bookISBN):
+        isbn = bookISBN
+      case .edit(let bookISBN, _):
+        isbn = bookISBN
       }
+      
       do {
         try await quoteUseCase.validatePage(page, forISBN: isbn)
       } catch {
@@ -102,13 +105,19 @@ private extension SentenceViewModel {
         return
       }
       
-      // 5) ID 결정 및 DTO 생성
+      // 5) ID 결정 및 모델 생성
       let id: String
       switch mode {
-      case .create: id = UUID().uuidString
-      case .edit(let existing): id = existing.id
+      case .create:
+        id = UUID().uuidString
+      case .edit(_, let quote):
+        id = quote.id
       }
-      let model = Quote(id: id, isbn: isbn, content: trimmed, page: page)
+      
+      let model = Quote(id: id,
+                        isbn: isbn,
+                        content: trimmed,
+                        page: page)
       
       // 6) 제출 상태 갱신
       await MainActor.run {

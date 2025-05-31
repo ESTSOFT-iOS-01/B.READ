@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct QuoteVO: Identifiable {
+struct QuoteVO: Identifiable, Equatable, Hashable {
   let id: String
   let content: String
   let page: Int
