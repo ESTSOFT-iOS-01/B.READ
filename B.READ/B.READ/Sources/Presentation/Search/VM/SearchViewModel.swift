@@ -15,7 +15,7 @@ final class SearchViewModel: ObservableObject {
     var bestBookList: [BestSellerVO] = []
     var keywordList: [String] = []
     var bookResults: [BookVO] = []
-    var recordResults: [RecordVO] = []
+    var recordResults: [RecordCellVO] = []
     var selectedTabIndex: Int = 0
     var isSearchSubmitted: Bool = false
     var isSearchFocused: Bool = false
@@ -81,13 +81,14 @@ final class SearchViewModel: ObservableObject {
 private extension SearchViewModel {
   func loadDummyData() {
     state.bestBookList = (1...10).map {
-      BestSellerVO(isbn: "1234567890\($0)", title: "베스트셀러 \($0)")
+      BestSellerVO(id: UUID().uuidString, isbn: "1234567890\($0)", title: "베스트셀러 \($0)")
     }
     
     state.keywordList = ["데미안", "코딩테스트", "미씽"]
     
     state.bookResults = (1...10).map {
       BookVO(
+        id: UUID().uuidString,
         isbn: "1234567890\($0)",
         coverImage: Image(.exampleBook),
         title: "데미안 \($0)",
@@ -96,12 +97,52 @@ private extension SearchViewModel {
         publishedDate: Date()
       )
     }
-    
-    state.recordResults = [
-      RecordVO(isbn: "123", coverImage: Image(.exampleBook), id: "1", title: "데미안", state: .notStart),
-      RecordVO(isbn: "124", coverImage: Image(.exampleBook), id: "2", title: "데미안", state: .reading, startDate: Date()),
-      RecordVO(isbn: "125", coverImage: Image(.exampleBook), id: "3", title: "데미안", state: .finished, startDate: Date(), endDate: Date())
-    ]
+    let notStartdata = RecordCellVO(
+      id: DummyData.dummyRecords[0].id,
+      isbn: DummyData.dummyRecords[0].isbn,
+      title: DummyData.dummyBooks[0].name,
+      coverImage: Image(.exampleBook),
+      readingState: ReadingState.fromEntity(DummyData.dummyRecords[0].state),
+      heart: DummyData.dummyRecords[0].heartCount,
+      progress: 0,
+      star: DummyData.dummyRecords[0].starCount,
+      memoCount: DummyData.dummyRecords[0].memoIDs.count,
+      quoteCount: DummyData.dummyRecords[0].quoteIDs.count,
+      period: DummyData.dummyRecords[0].period,
+      isFavorite: DummyData.dummyRecords[0].isFavorite,
+      createdAt: DummyData.dummyRecords[0].createdAt
+    )
+    let readingdata = RecordCellVO(
+      id: DummyData.dummyRecords[1].id,
+      isbn: DummyData.dummyRecords[1].isbn,
+      title: DummyData.dummyBooks[1].name,
+      coverImage: Image(.exampleBook),
+      readingState: ReadingState.fromEntity(DummyData.dummyRecords[1].state),
+      heart: DummyData.dummyRecords[1].heartCount,
+      progress: 65,
+      star: DummyData.dummyRecords[1].starCount,
+      memoCount: DummyData.dummyRecords[1].memoIDs.count,
+      quoteCount: DummyData.dummyRecords[1].quoteIDs.count,
+      period: DummyData.dummyRecords[1].period,
+      isFavorite: DummyData.dummyRecords[1].isFavorite,
+      createdAt: DummyData.dummyRecords[1].createdAt
+    )
+    let finisheddata = RecordCellVO(
+      id: DummyData.dummyRecords[2].id,
+      isbn: DummyData.dummyRecords[2].isbn,
+      title: DummyData.dummyBooks[2].name,
+      coverImage: Image(.exampleBook),
+      readingState: ReadingState.fromEntity(DummyData.dummyRecords[2].state),
+      heart: DummyData.dummyRecords[2].heartCount,
+      progress: 65,
+      star: DummyData.dummyRecords[2].starCount,
+      memoCount: DummyData.dummyRecords[2].memoIDs.count,
+      quoteCount: DummyData.dummyRecords[2].quoteIDs.count,
+      period: DummyData.dummyRecords[2].period,
+      isFavorite: DummyData.dummyRecords[2].isFavorite,
+      createdAt: DummyData.dummyRecords[2].createdAt
+    )
+    state.recordResults = [notStartdata, readingdata, finisheddata]
   }
   
   func appendKeyword(_ keyword: String) {

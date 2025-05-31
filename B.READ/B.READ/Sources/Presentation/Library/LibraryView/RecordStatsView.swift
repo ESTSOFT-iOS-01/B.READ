@@ -10,24 +10,24 @@ import SwiftUI
 // MARK: - (S)RecordStatsView
 struct RecordStatsView: View {
   
-  private let record: LibraryRecordVO
+  private let record: RecordCellVO
   
-  init(record: LibraryRecordVO) {
+  init(record: RecordCellVO) {
     self.record = record
   }
   
   var body: some View {
     HStack(spacing: 12) {
-      switch record.state {
+      switch record.readingState {
       case .notStart: // 기대지수
-        PropertyView(LibraryConstants.Icon.heart, "\(record.heartCount)")
+        PropertyView(SFSymbol.heart.name, record.heart.toString)
       case .reading: // 독서진행률
-        PropertyView(LibraryConstants.Icon.progress, "\(record.percent)", .percent)
+        PropertyView(SFSymbol.timer.name, record.progress.toString, .percent)
       case .finished: // 평점
-        PropertyView(LibraryConstants.Icon.star, "\(record.starCount)")
+        PropertyView(SFSymbol.star.name, record.star.toString)
       }
-      PropertyView(LibraryConstants.Icon.memo, "\(record.memoCount)", .count) // 메모
-      PropertyView(LibraryConstants.Icon.quote, "\(record.quoteCount)", .count) // 문장
+      PropertyView(SFSymbol.memo.name, "\(record.memoCount)", .count) // 메모
+      PropertyView(SFSymbol.bubble.name, "\(record.quoteCount)", .count) // 문장
     } // : HStack
     .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
   }

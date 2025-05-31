@@ -29,32 +29,35 @@ struct MainTabView: View {
         
         HomeView()
           .tabItem {
-            Image(systemName: "house.fill")
+            Image(systemName: SFSymbol.house.name)
             Text("홈")
           }
           .tag(Tab.home)
         
         SearchView(viewModel: SearchViewModel())
-          .tabItem { Label("검색", systemImage: "magnifyingglass") }
+          .tabItem {
+            Image(systemName: SFSymbol.magnify.name)
+            Text("검색")
+          }
           .tag(Tab.search)
         
         LibraryView(viewModel: LibraryViewModel())
           .tabItem {
-            Image(systemName: "books.vertical.fill")
+            Image(systemName: SFSymbol.library.name)
             Text("책빵")
           }
           .tag(Tab.library)
         
         RecordView()
           .tabItem {
-            Image(systemName: "doc.text.magnifyingglass")
+            Image(systemName: SFSymbol.record.name)
             Text("기록")
           }
           .tag(Tab.record)
         
         MyPageView()
           .tabItem {
-            Image(systemName: "person.fill")
+            Image(systemName: SFSymbol.myPage.name)
             Text("마이")
           }
           .tag(Tab.mypage)

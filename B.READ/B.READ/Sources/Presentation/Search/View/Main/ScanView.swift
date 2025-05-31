@@ -38,7 +38,7 @@ struct ScanView: View {
           .frame(alignment: .center)
           .padding(.top, 4)
         
-        Image(SearchConstants.Image.isbnEx)
+        Image(.ISBN)
           .resizable()
           .aspectRatio(contentMode: .fit)
           .frame(width: 200, alignment: .center)

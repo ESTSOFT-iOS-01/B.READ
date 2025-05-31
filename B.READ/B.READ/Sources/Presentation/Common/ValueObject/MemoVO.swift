@@ -1,5 +1,5 @@
 //
-//  RecordMemoVO.swift
+//  MemoVO.swift
 //  B.READ
 //
 //  Created by 심근웅 on 5/26/25.
@@ -7,6 +7,15 @@
 
 import Foundation
 
+// MARK: - (S)MemoGroup
+struct MemoGroup: Identifiable {
+  let id = UUID()
+  let isbn: String
+  let bookTitle: String
+  var memos: [MemoVO]
+}
+
+// MARK: - (S)MemoVO
 struct MemoVO: Identifiable {
   let id: String
   let isbn: String
@@ -38,14 +47,7 @@ struct MemoVO: Identifiable {
       createdAt: memo.createdAt,
       content: memo.content,
       pages: memo.pages,
-      guides: memo.guides
+      guides: memo.guides.map { $0.content }
     )
   }
-}
-
-struct MemoGroup: Identifiable {
-  let id = UUID()
-  let isbn: String
-  let bookTitle: String
-  var memos: [MemoVO]
 }

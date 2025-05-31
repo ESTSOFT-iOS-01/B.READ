@@ -1,5 +1,5 @@
 //
-//  RecordQuoteVO.swift
+//  QuoteVO.swift
 //  B.READ
 //
 //  Created by 심근웅 on 5/27/25.
@@ -7,7 +7,16 @@
 
 import Foundation
 
-struct QuoteVO: Identifiable, Equatable, Hashable {
+// MARK: - (S)QuoteGroup
+struct QuoteGroup: Identifiable {
+  let id = UUID()
+  let isbn: String
+  let bookTitle: String
+  var quotes: [QuoteVO]
+}
+
+// MARK: - (S)QuoteVO
+struct QuoteVO: Identifiable {
   let id: String
   let content: String
   let page: Int
@@ -23,11 +32,4 @@ struct QuoteVO: Identifiable, Equatable, Hashable {
     self.content = quote.content
     self.page = quote.page
   }
-}
-
-struct QuoteGroup: Identifiable {
-  let id = UUID()
-  let isbn: String
-  let bookTitle: String
-  var quotes: [QuoteVO]
 }

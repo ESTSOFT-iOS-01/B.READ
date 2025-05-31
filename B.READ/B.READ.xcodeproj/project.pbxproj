@@ -38,6 +38,8 @@
 				Resources/DummyJson/CategoryBest.json,
 				Resources/DummyJson/SearchList.json,
 				Sources/Data/DTOs/Record/BookDTO.swift,
+				Sources/Data/DTOs/Record/GuideDTO.swift,
+				Sources/Data/DTOs/Record/MemoDTO.swift,
 				Sources/Data/DTOs/Record/QuoteDTO.swift,
 				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
@@ -45,20 +47,24 @@
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
 				Sources/Data/Impls/BookRepositoryImpl.swift,
+				Sources/Data/Impls/MemoRepositoryImpl.swift,
 				Sources/Data/Impls/QuoteRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
 				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
 				Sources/Domain/Entity/BookServiceEntity.swift,
+				Sources/Domain/Entity/Memo.swift,
 				Sources/Domain/Entity/Quote.swift,
 				Sources/Domain/Entity/Record.swift,
 				Sources/Domain/Entity/UserInfo.swift,
 				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/BookRepository.swift,
+				Sources/Domain/Repository/Inerface/MemoRepository.swift,
 				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Repository/Stubs/BookRepositoryStub.swift,
+				Sources/Domain/Repository/Stubs/MemoRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/QuoteRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/RecordRepositoryStub.swift,
 				Sources/Domain/Repository/Stubs/UserInfoRepositoryStub.swift,
@@ -66,12 +72,16 @@
 				Sources/Domain/Service/Interface/BookService.swift,
 				Sources/Domain/Service/Stub/AIServiceStub.swift,
 				Sources/Domain/UseCase/LibraryUseCase.swift,
+				Sources/Domain/UseCase/MemoUseCase.swift,
 				Sources/Domain/UseCase/ProfileUseCase.swift,
 				Sources/Domain/UseCase/QuoteUseCase.swift,
+				Sources/Domain/UseCase/RecommandUseCase.swift,
 				Sources/Domain/UseCase/SearchUseCase.swift,
 				Sources/Domain/UseCaseImpl/LibraryUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/MemoUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/QuoteUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/RecommandUseCaseImpl.swift,
 				Sources/Domain/UseCaseImpl/SearchUseCaseImpl.swift,
 				Sources/Network/Aladin/AladinAPI.swift,
 				Sources/Network/Aladin/AladinError.swift,
@@ -408,7 +418,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = 83K577A944;
+				DEVELOPMENT_TEAM = C5K6DF875Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
@@ -444,7 +454,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = 83K577A944;
+				DEVELOPMENT_TEAM = C5K6DF875Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";

@@ -14,7 +14,8 @@ final class SwiftDataStorage {
       UserInfoDTO.self,
       RecordDTO.self,
       BookDTO.self,
-      QuoteDTO.self
+      QuoteDTO.self,
+      MemoDTO.self
     ])
     let configuration = ModelConfiguration(
       isStoredInMemoryOnly: false
