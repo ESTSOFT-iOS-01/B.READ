@@ -22,9 +22,9 @@ struct LibraryView: View {
   }
   
   @StateObject var viewModel: LibraryViewModel
+  @State var selectedOption: SortOption = .recent
+  @State var showSortMenu: Bool = false
   @State var recordPresentType: RecordPresentType = .list
-  @State var selectedRecord: Record? = nil
-
   
   private let layoutPadding: CGFloat = 16
   
@@ -36,72 +36,72 @@ struct LibraryView: View {
   }
   
   var body: some View {
-    VStack(alignment: .trailing, spacing: 0) {
-      // 상단 탭바
-      ScrollView(.horizontal, showsIndicators: false) {
-        TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
-          .frame(width: 450, height: 34)
-          .onChange(of: viewModel.state.selectedTab) {
-            viewModel.send(.selectTab)
+    ZStack {
+      // 메뉴가 열려있을때만 등장 - 불투명 배경, 터치 시 메뉴 닫음
+      
+      VStack(alignment: .trailing, spacing: 0) {
+        // 상단 탭바
+        ScrollView(.horizontal, showsIndicators: false) {
+          TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
+            .frame(width: 450, height: 34)
+            .onChange(of: viewModel.state.selectedTab) {
+              viewModel.send(.selectTab)
+            }
+        }
+        
+        HStack(spacing: 8) {
+          // 정렬 버튼
+          SortMenuButton(isOpened: $showSortMenu, selectedOption: $selectedOption)
+          
+          // 리스트, 그리드 선택 버튼
+          Button {
+            recordPresentType = (recordPresentType == .list ? .grid : .list)
+          } label: {
+            recordPresentType.image
           }
-      }
-      
-      HStack(spacing: 8) {
-        // 정렬 버튼
-        sortButton
-        // 리스트, 그리드 선택 버튼
-        Button {
-          recordPresentType = (recordPresentType == .list ? .grid : .list)
-        } label: {
-          recordPresentType.image
-        }
-        .frame(width: 24, height: 24)
-      } // : HStack
-      .foregroundStyle(.gray2)
+          .frame(width: 24, height: 24)
+        } // : HStack
+        .foregroundStyle(.gray2)
+        .padding(.top, layoutPadding)
+        
+        ZStack(alignment: .topTrailing) {
+          // 독서기록 목록 뷰
+          if viewModel.state.displayRecords.isEmpty {
+            Text("독서 기록이 없습니다.")
+              .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
+          } else if recordPresentType == .list {
+            LibraryListView(records: $viewModel.state.displayRecords)
+          } else {
+            LibraryGridView()
+          }
+          
+          // 정렬 메뉴
+          if showSortMenu {
+            SortMenu(type: .library, isOpened: $showSortMenu, selectedOption: $selectedOption)
+              .padding(.trailing, 24)
+              .zIndex(1)
+          }
+        } // : ZStack
+      } // : VStack
       .padding(.top, layoutPadding)
-      
-      // 독서기록 목록 뷰
-      recordView
-    } // : VStack
-    .padding(.top, layoutPadding)
-    .padding(.horizontal, 24)
-    .onAppear {
-      viewModel.send(.onAppear)
-    }
-    .background(.backgroundDefault)
-  }
-  
-  // MARK: - (S)recordView
-  // TODO: - (2)그리드 뷰 추가
-  private var recordView: some View {
-    Group {
-      if viewModel.state.displayRecords.isEmpty {
-        Text("독서 기록이 없습니다.")
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-      } else {
-        switch recordPresentType {
-        case .list:
-          LibraryListView(records: $viewModel.state.displayRecords)
-        case .grid:
-          LibraryGridView()
-        }
+      .padding(.horizontal, 24)
+      .onAppear {
+        viewModel.send(.onAppear)
       }
-    } // : Group
-  }
-  
-  // MARK: - (S)sortButton
-  // TODO: - (2)정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
-  // 예시) sortButton(type: .record)
-  private var sortButton: some View {
-    Button {
-      print("정렬 버튼 클릭")
-    } label: {
-      HStack(spacing: 4) {
-        Text("최신 순")
-          .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
-        Image(systemName: LibraryConstants.Icon.menuOn)
-      } // : HStack
-    }
+      .background(.backgroundDefault)
+      
+      if showSortMenu {
+        Color.black.opacity(0.2)
+          .ignoresSafeArea()
+          .onTapGesture {
+            withAnimation {
+              showSortMenu = false
+            }
+          }
+          .zIndex(1)
+      }
+    } // : ZStack
   }
 }
 

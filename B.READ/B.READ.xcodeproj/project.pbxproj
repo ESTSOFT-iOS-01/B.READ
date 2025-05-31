@@ -44,7 +44,6 @@
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
 				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
-				Sources/Data/Impls/BookRepositoryImpl.swift,
 				Sources/Data/Impls/QuoteRepositoryImpl.swift,
 				Sources/Data/Impls/RecordRepositoryImpl.swift,
 				Sources/Domain/Entity/Book.swift,
@@ -401,7 +400,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = 83K577A944;
+				DEVELOPMENT_TEAM = C5K6DF875Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
@@ -437,7 +436,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = 83K577A944;
+				DEVELOPMENT_TEAM = C5K6DF875Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
