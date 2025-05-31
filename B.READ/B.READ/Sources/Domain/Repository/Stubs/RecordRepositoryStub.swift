@@ -10,7 +10,7 @@ import Foundation
 actor RecordRepositoryStub: RecordRepository {
   
   private var storedRecords: [Record] = []
-//  private var storedRecords: [Record] = DummyData.dummyRecords
+  //private var storedRecords: [Record] = DummyData.records
   
   func createRecord(_ record: Record) throws {
     print("Stub: ", #function)
