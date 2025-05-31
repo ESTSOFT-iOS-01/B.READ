@@ -95,7 +95,7 @@ struct RecentSearchCell: View {
         .padding(.leading, layoutPadding)
       
       Button(action: onDelete) {
-        Image(systemName: SearchConstants.Icon.close)
+        Image(systemName: SFSymbol.xmark.name)
           .font(.system(size: 12, weight: .light))
           .foregroundColor(.gray5)
       }
