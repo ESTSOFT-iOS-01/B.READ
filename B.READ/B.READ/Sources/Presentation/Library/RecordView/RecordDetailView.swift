@@ -120,7 +120,7 @@ struct RecordDetailView: View {
         print("메모 작성 선택")
       }
       Button("문장 작성") {
-        coordinator.push(.sentenceInput(isbn: viewModel.state.info?.record.isbn ?? ""))
+        coordinator.push(.sentenceInput(mode: .create(isbn: viewModel.state.info?.record.isbn ?? "")))
       }
       Button("취소", role: .cancel) { }
     }

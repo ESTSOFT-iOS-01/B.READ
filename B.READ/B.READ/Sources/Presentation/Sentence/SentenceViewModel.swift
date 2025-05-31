@@ -8,7 +8,7 @@
 import Foundation
 
 /// 새 문장 작성(create) 혹은 기존 문장 수정(edit) 모드 구분
-enum SentenceInputMode {
+enum SentenceInputMode: Hashable {
   case create(isbn: String)
   case edit(quote: Quote)
 }

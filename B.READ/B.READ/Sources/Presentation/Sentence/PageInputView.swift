@@ -8,25 +8,23 @@
 import SwiftUI
 
 struct PageInputView: View {
+  let mode: SentenceInputMode
+  let sentence: String
+  
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @StateObject var viewModel: SentenceViewModel
   @FocusState private var isFocused: Bool
   @State private var showInvalidAlert = false
-  
-  let isbn: String
-  let sentence: String
   
   private var isValidPage: Bool? {
     guard let limit = viewModel.maxPage else { return nil }
     return viewModel.page.map { (1...limit).contains($0) }
   }
   
-  init(isbn: String, sentence: String) {
-    self.isbn = isbn
+  init(mode: SentenceInputMode, sentence: String) {
+    self.mode = mode
     self.sentence = sentence
-    _viewModel = StateObject(
-      wrappedValue: SentenceViewModel(mode: .create(isbn: isbn))
-    )
+    _viewModel = StateObject(wrappedValue: SentenceViewModel(mode: mode))
     _viewModel.wrappedValue.content = sentence
   }
   
@@ -44,7 +42,6 @@ struct PageInputView: View {
     VStack(alignment: .leading, spacing: 8) {
       Text("페이지를 입력해 주세요")
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
-      
       HStack(spacing: 0) {
         RoundedTextField(
           type: .pages,
@@ -116,6 +113,6 @@ struct PageInputView: View {
 
 #Preview {
   NavigationStack {
-    PageInputView(isbn: "9781234567890", sentence: "")
+    PageInputView(mode: .create(isbn: "9781234567890"), sentence: "")
   }
 }

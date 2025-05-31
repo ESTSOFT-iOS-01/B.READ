@@ -8,19 +8,20 @@
 import SwiftUI
 
 struct SentenceInputView: View {
+  let mode: SentenceInputMode
+  
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
   @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
   @FocusState private var isEditorFocused: Bool
-  let isbn: String
   
   private var trimmedContent: String {
     viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines)
   }
   
-  init(isbn: String) {
-    self.isbn = isbn
+  init(mode: SentenceInputMode) {
+    self.mode = mode
     _viewModel = StateObject(
-      wrappedValue: SentenceViewModel(mode: .create(isbn: isbn))
+      wrappedValue: SentenceViewModel(mode: mode)
     )
   }
   
@@ -57,8 +58,11 @@ struct SentenceInputView: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("다음") {
-          coordinator.push(.pageInput(isbn: isbn, sentence: trimmedContent))
-        }
+                 coordinator.push(
+                   .pageInput(mode: mode,
+                              sentence: trimmedContent)
+                 )
+               }
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
         .disabled(trimmedContent.isEmpty)
@@ -73,7 +77,7 @@ struct SentenceInputView: View {
   let dummy = Coordinator<MainRoute>()
   
   NavigationStack {
-    SentenceInputView(isbn: "9781234567890")
+    SentenceInputView(mode: .create(isbn: "9781234567890"))
   }
   .environmentObject(dummy)           
 }
