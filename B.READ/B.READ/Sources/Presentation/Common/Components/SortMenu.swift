@@ -75,7 +75,7 @@ struct SortMenu: View {
         ForEach(SortOption.sortMenus(type: type)) { option in
           Button {
             selectedOption = option
-            withAnimation { isOpened.toggle() }
+            DispatchQueue.main.async { isOpened.toggle() }
           } label: {
             Text(option.rawValue)
               .foregroundStyle(selectedOption == option ? .black : .gray2)

@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)LibraryView
 struct LibraryView: View {
-  enum RecordPresentType {
+  enum DisplayMode {
     case list
     case grid
     
@@ -21,24 +21,16 @@ struct LibraryView: View {
     }
   }
   
-  @StateObject var viewModel: LibraryViewModel
-  @State var selectedOption: SortOption = .recent
+  @StateObject var viewModel = LibraryViewModel()
   @State var showSortMenu: Bool = false
-  @State var recordPresentType: RecordPresentType = .list
+  @State var displayMode: DisplayMode = .list
+  
+  @State var selectedOption: SortOption = .recent
   
   private let layoutPadding: CGFloat = 16
   
-  // MARK: - Init
-  // TODO: - 외부 주입을 할지도 몰라서 init으로 해둠
-  // -> 외부 주입이 필요없으면 viewModel = LibraryViewModel()로 변경
-  init(viewModel: @autoclosure @escaping () -> LibraryViewModel) {
-    self._viewModel = .init(wrappedValue: viewModel())
-  }
-  
   var body: some View {
-    ZStack {
-      // 메뉴가 열려있을때만 등장 - 불투명 배경, 터치 시 메뉴 닫음
-      
+    ZStack(alignment: .topTrailing) {
       VStack(alignment: .trailing, spacing: 0) {
         // 상단 탭바
         ScrollView(.horizontal, showsIndicators: false) {
@@ -47,7 +39,7 @@ struct LibraryView: View {
             .onChange(of: viewModel.state.selectedTab) {
               viewModel.send(.selectTab)
             }
-        }
+        } // : ScrollView
         
         HStack(spacing: 8) {
           // 정렬 버튼
@@ -55,53 +47,53 @@ struct LibraryView: View {
           
           // 리스트, 그리드 선택 버튼
           Button {
-            recordPresentType = (recordPresentType == .list ? .grid : .list)
+            displayMode = (displayMode == .list ? .grid : .list)
           } label: {
-            recordPresentType.image
+            displayMode.image
           }
           .frame(width: 24, height: 24)
         } // : HStack
         .foregroundStyle(.gray2)
         .padding(.top, layoutPadding)
         
-        ZStack(alignment: .topTrailing) {
-          // 독서기록 목록 뷰
-          if viewModel.state.displayRecords.isEmpty {
-            Text("독서 기록이 없습니다.")
-              .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
-              .frame(maxWidth: .infinity, maxHeight: .infinity)
-          } else if recordPresentType == .list {
-            LibraryListView(records: $viewModel.state.displayRecords)
-          } else {
-            LibraryGridView()
-          }
-          
-          // 정렬 메뉴
-          if showSortMenu {
-            SortMenu(type: .library, isOpened: $showSortMenu, selectedOption: $selectedOption)
-              .padding(.trailing, 24)
-              .zIndex(1)
-          }
-        } // : ZStack
-      } // : VStack
+        // 독서기록 목록 뷰
+        if viewModel.state.displayRecords.isEmpty {
+          Text("독서 기록이 없습니다.")
+            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if displayMode == .list {
+          LibraryListView(records: $viewModel.state.displayRecords)
+        } else {
+          LibraryGridView()
+        }
+      } // : VStack - 책빵 화면
       .padding(.top, layoutPadding)
       .padding(.horizontal, 24)
-      .onAppear {
-        viewModel.send(.onAppear)
-      }
-      .background(.backgroundDefault)
       
       if showSortMenu {
+        // 메뉴 바깥의 화면 - 터치 시 정렬 메뉴 닫음
         Color.black.opacity(0.2)
           .ignoresSafeArea()
           .onTapGesture {
-            withAnimation {
-              showSortMenu = false
-            }
+            showSortMenu = false
           }
-          .zIndex(1)
+        
+        // 정렬 메뉴
+        SortMenu(type: .library, isOpened: $showSortMenu, selectedOption: $selectedOption)
+          .padding(.trailing, 48)
+          .padding(.top, 90)
+          .onChange(of: selectedOption) {
+            viewModel.state.displayRecords = [RecordCellVO(
+              record: DummyData.dummyRecords[0],
+              book: DummyData.dummyBooks[0])]
+          }
+        
       }
     } // : ZStack
+    .background(.backgroundDefault)
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
   }
 }
 

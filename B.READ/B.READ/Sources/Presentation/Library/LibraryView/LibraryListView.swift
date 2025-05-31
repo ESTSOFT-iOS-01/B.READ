@@ -14,21 +14,18 @@ struct LibraryListView: View {
   @State var selectedRecord: RecordCellVO?
   
   var body: some View {
-    List {
-      ForEach($records) { $record in
-        LibraryListCell(record: $record)
-          .background(.green1.opacity(0.6))
-          .cornerRadius(16)
-          .listRowInsets(EdgeInsets()) // 셀 안쪽 패딩 제거
-          .listRowSeparator(.hidden) // separator 제거
-          .padding(.top, 8)
-          .onTapGesture {
-            coordinator.push(.libraryDetail(id: record.id, isbn: record.isbn))
-          }
-      } // : ForEach
-      .background(.backgroundDefault)
-    } // : List
-    .listStyle(.plain)
+    ScrollView {
+      LazyVStack(alignment: .leading, spacing: 8) {
+        ForEach($records) { $record in
+          LibraryListCell(record: $record)
+            .background(.green1.opacity(0.6))
+            .cornerRadius(16)
+            .onTapGesture {
+              coordinator.push(.libraryDetail(id: record.id, isbn: record.isbn))
+            }
+        }
+      }
+    } // : ScrollView
     .scrollIndicators(.hidden)
   }
 }
