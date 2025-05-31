@@ -18,3 +18,5 @@ struct Quote: Identifiable, Equatable, Hashable {
   var content: String
   var page: Int
 }
+
+
