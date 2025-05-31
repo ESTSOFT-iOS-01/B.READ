@@ -10,7 +10,7 @@ import Foundation
 final class HomeViewModel: ObservableObject {
   
   // MARK: - State
-  @Published var recentRecords: [LibraryRecordVO] = []
+  @Published var recentRecords: [RecordCellVO] = []
   
   // MARK: - Internal Variable
   private var example: String?

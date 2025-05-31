@@ -1,5 +1,5 @@
 //
-//  LibraryConstant.swift
+//  SortState.swift
 //  B.READ
 //
 //  Created by 심근웅 on 5/19/25.
@@ -23,11 +23,4 @@ struct LibraryConstants {
     public static let menuOn = "chevron.compact.down"
     public static let back = "chevron.left"
   }
-}
-
-// 공통 상태로 뺄지 각 뷰 마다 만들지는 고민
-// MARK: - (E)SortState
-enum SortState {
-  case recent
-  case older
 }

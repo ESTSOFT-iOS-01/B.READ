@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 final class NewRecordViewModel: ObservableObject {
-  var recordVO: LibraryRecordVO?
+  var recordVO: RecordDetailVO?
   
   var maxPage: Int = 100
   
@@ -29,7 +29,7 @@ final class NewRecordViewModel: ObservableObject {
   
   /// Search에서 새로운 Record 만드는 경우
   init(
-    maxPage: Int,
+    maxPage: Int
   ) {
     self.recordVO = nil
     self.maxPage = maxPage
@@ -43,15 +43,15 @@ final class NewRecordViewModel: ObservableObject {
   
   /// Library에서 Record 수정하는 경우
   init(
-    recordVO: LibraryRecordVO,
-    maxPage: Int,
+    recordVO: RecordDetailVO,
+    maxPage: Int
   ) {
     self.recordVO = recordVO
     self.maxPage = maxPage
-    self.heartRate = recordVO.heartCount
-    self.starRate = recordVO.starCount
-    self.startDate = recordVO.period.start ?? Date()
-    self.endDate = recordVO.period.end ?? Date()
+    self.heartRate = recordVO.heart
+    self.starRate = recordVO.star
+    self.startDate = recordVO.period.startDate ?? Date()
+    self.endDate = recordVO.period.endDate ?? Date()
     self.page = String(recordVO.currentPage)
     // TODO : LibraryRecordVO에 reviewText 생기면 넣어주기
     self.reviewText = ""

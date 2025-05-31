@@ -165,7 +165,7 @@ private struct InfiniteBannerView: View {
   
   // MARK: (F)bannerCell
   @ViewBuilder
-  private func bannerCell(recordVO: Binding<LibraryRecordVO>) -> some View {
+  private func bannerCell(recordVO: Binding<RecordCellVO>) -> some View {
     LibraryListCell(record: recordVO)
       .background(.green1.opacity(0.6))
       .cornerRadius(16)

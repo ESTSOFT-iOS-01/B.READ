@@ -21,13 +21,13 @@ final class LibraryViewModel: ObservableObject {
       TabItem(title: "읽을 책(0)"),
       TabItem(title: "즐겨찾기(0)")
     ]
-    var displayRecords: [LibraryRecordVO] = []
+    var displayRecords: [RecordCellVO] = []
     var selectedTab: Int = 0
   }
   @Published var state: LibraryViewState = .init()
   
   // MARK: - Internal Variable
-  private var records: [LibraryRecordVO] = [] // DB에서 가져온 전체 독서기록
+  private var records: [RecordCellVO] = [] // DB에서 가져온 전체 독서기록
   
   // MARK: - Dependency
   @Dependency
@@ -80,7 +80,7 @@ private extension LibraryViewModel {
       self.records = infos.map {
         // TODO: - totalPages -> totalPage 변수명 변경
         // TODO: - coverImageData -> coverImage 필요(강제 언래핑X)
-        LibraryRecordVO(record: $0.record, book: $0.book)
+        RecordCellVO(record: $0.record, book: $0.book)
       }
     } catch {
       self.records = []
@@ -93,7 +93,7 @@ private extension LibraryViewModel {
     
     for record in self.records {
       if record.isFavorite { count[4] += 1 } // 즐겨찾기 개수
-      count[record.state.rawValue + 1] += 1 // 독서 상태에 따른 개수
+      count[record.readingState.rawValue + 1] += 1 // 독서 상태에 따른 개수
     }
     
     let tabs = [
@@ -111,14 +111,14 @@ private extension LibraryViewModel {
   
   /// 선택된 탭에 따른 리스트에 보여줄 독서기록 필터
   func filterRecords() async {
-    let filterRecord: [LibraryRecordVO]
+    let filterRecord: [RecordCellVO]
     switch state.selectedTab {
     case 1: // 읽은 책
-      filterRecord = records.filter { $0.state == .finished }
+      filterRecord = records.filter { $0.readingState == .finished }
     case 2: // 읽는 중
-      filterRecord = records.filter { $0.state == .reading }
+      filterRecord = records.filter { $0.readingState == .reading }
     case 3: // 읽을 책
-      filterRecord = records.filter { $0.state == .notStart }
+      filterRecord = records.filter { $0.readingState == .notStart }
     case 4: // 즐겨 찾기
       filterRecord = records.filter { $0.isFavorite }
     default : // 전체
@@ -132,7 +132,7 @@ private extension LibraryViewModel {
   // TODO: - (2)displayRecords를 정렬 내용 추가
   private func sortDisplayRecords(by: SortState = .recent) async {
     // 정렬 기준에 따라서 displayRecords를 정렬
-    let sortedRecords: [LibraryRecordVO]
+    let sortedRecords: [RecordCellVO]
     switch by {
     case .recent:
       sortedRecords = state.displayRecords.sorted { $0.createdAt > $1.createdAt }
