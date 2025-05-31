@@ -20,7 +20,10 @@ struct BookDetailView: View {
     VStack {
       ScrollView {
         VStack(alignment: .center, spacing: 16) {
-          LargeImageView(imageURL: ImageURLConverter.highQualityURL(from: viewModel.bookVO.coverURL))
+          LargeImageView(
+            imageURL: ImageURLConverter.highQualityURL(from: viewModel.bookVO.coverURL),
+            frameSize: (190, 290)
+          )
             .padding(.bottom, 24)
           
           BookTitleView(

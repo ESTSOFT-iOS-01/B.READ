@@ -81,9 +81,16 @@ final class SearchViewModel: ObservableObject {
 private extension SearchViewModel {
   func loadDummyData() {
     state.bestBookList = (1...10).map {
-      BestSellerVO(id: UUID().uuidString, isbn: "1234567890\($0)", title: "베스트셀러 \($0)")
+      BestSellerVO(
+        id: UUID().uuidString,
+        rank: $0,
+        isbn: "1234567890\($0)",
+        title: "베스트셀러 \($0)",
+        author: "작가 \($0)",
+        imageURL: "https://image.aladin.co.kr/product/36101/66/coversum/893643974x_2.jpg"
+      )
     }
-    
+
     state.keywordList = ["데미안", "코딩테스트", "미씽"]
     
     state.bookResults = (1...10).map {
