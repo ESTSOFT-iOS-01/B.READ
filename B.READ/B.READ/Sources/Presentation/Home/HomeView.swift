@@ -12,10 +12,6 @@ struct HomeView: View {
   @StateObject private var viewModel = HomeViewModel()
   
   var body: some View {
-    Text("로고")
-      .background(.backgroundDefault)
-      .frame(width: 200, height: 44)
-    
     ScrollView(showsIndicators: false) {
       BreadGuideView()
         .padding(.top, 24)
@@ -198,7 +194,9 @@ private struct RecommandSectionView: View {
       ScrollView(.horizontal, showsIndicators: false) {
         LazyHStack(spacing: 0) {
           ForEach(bookList.bestSellers, id: \.id) { item in
-            RecommandCell(bestSellerVO: item)
+            RecommandCell(bestSellerVO: item, onTap: {
+              coordinator.push(.searchBook(isbn: item.isbn))
+            })
           }
         }
       }

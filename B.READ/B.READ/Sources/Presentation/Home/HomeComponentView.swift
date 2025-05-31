@@ -32,6 +32,7 @@ struct RecommandHeaderView: View {
 // MARK: - (S)RecommandCell
 struct RecommandCell: View {
   var bestSellerVO : BestSellerVO
+  var onTap: () -> Void
   
   var body: some View {
     VStack(alignment: .center, spacing: 16) {
@@ -72,6 +73,7 @@ struct RecommandCell: View {
     )
 //    .shadow(color: .gray2.opacity(0.25), radius: 25, x: 0, y: 2)
     .padding(.leading, 24)
+    .onTapGesture(perform: onTap)
   }
 }
 
@@ -88,7 +90,7 @@ struct RecommandCell: View {
         title: "빛과 실 - 2024 노벨문학상 수상 강연문 수록, 2024 노벨문학상 수상작가",
         author: "한강 (지은이)",
         imageURL: "https://image.aladin.co.kr/product/36101/66/coversum/893643974x_2.jpg"
-      )
+      ), onTap: {}
     )
     
     RecommandCell(
@@ -99,7 +101,7 @@ struct RecommandCell: View {
         title: "빛과 실 - 2024 노벨문학상 수상 강연문 수록, 2024 노벨문학상 수상작가",
         author: "한강 (지은이)",
         imageURL: "https://image.aladin.co.kr/product/36101/66/coversum/893643974x_2.jpg"
-      )
+      ), onTap: {}
     )
   }
 }
