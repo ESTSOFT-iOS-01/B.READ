@@ -25,9 +25,16 @@ struct PageInputView: View {
   
   
   var body: some View {
-    let isValidPage: Bool? = {
-      guard let limit = viewModel.maxPage else { return nil }
-      return Int(pageText).map { (1...limit).contains($0) }
+    let isValidPage: Bool = {
+      guard let limit = viewModel.maxPage else {
+        return false
+      }
+      
+      guard let number = Int(pageText) else {
+        return false
+      }
+      
+      return (1...limit).contains(number)
     }()
     
     VStack(alignment: .leading, spacing: 8) {
@@ -66,17 +73,17 @@ struct PageInputView: View {
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
-    .onChange(of: pageText) {
-      viewModel.page = Int($0)
-    }
+    .onChange(of: pageText, { oldValue, newValue in
+      viewModel.page = Int(newValue)
+    })
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
-          guard
-            let pageNumber   = viewModel.page,
-            let isPageValid  = isValidPage,
-            isPageValid
-          else {
+          guard viewModel.page != nil else {
+            showInvalidAlert = true
+            return
+          }
+          guard isValidPage else {
             showInvalidAlert = true
             return
           }

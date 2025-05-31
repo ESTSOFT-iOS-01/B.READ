@@ -13,7 +13,6 @@ import Foundation
 /// - content : 내용
 /// - page : 문장 수집 페이지
 struct Quote: Identifiable, Equatable, Hashable {
-
   let id: String
   let isbn: String
   var content: String

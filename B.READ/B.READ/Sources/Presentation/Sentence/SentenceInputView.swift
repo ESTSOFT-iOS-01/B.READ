@@ -13,6 +13,7 @@ struct SentenceInputView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
   @FocusState private var isEditorFocused: Bool
+  @State private var showPageAlert = false
   
   private var trimmedContent: String {
     viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -58,18 +59,39 @@ struct SentenceInputView: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("다음") {
-                 coordinator.push(
-                   .pageInput(mode: mode,
-                              sentence: trimmedContent)
-                 )
-               }
+          guard viewModel.maxPage != nil else {
+            showPageAlert = true
+            return
+          }
+          
+          coordinator.push(
+            .pageInput(mode: mode,
+                       sentence: trimmedContent)
+          )
+        }
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
         .disabled(trimmedContent.isEmpty)
         .opacity(trimmedContent.isEmpty ? 0 : 1)
       }
     }
+    .alert("페이지 정보를 불러오는 중입니다",
+           isPresented: $showPageAlert) {
+      Button("확인", role: .cancel) { }
+    } message: {
+      Text("잠시 후 다시 시도해 주세요.")
+    }
     .background(Color.backgroundDefault)
+    .onTapGesture {
+      self.hideKeyboard()
+    }
+  }
+}
+
+extension View {
+  func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                    to: nil, from: nil, for: nil)
   }
 }
 
@@ -79,5 +101,5 @@ struct SentenceInputView: View {
   NavigationStack {
     SentenceInputView(mode: .create(isbn: "9781234567890"))
   }
-  .environmentObject(dummy)           
+  .environmentObject(dummy)
 }
