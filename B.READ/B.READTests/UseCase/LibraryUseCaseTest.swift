@@ -26,7 +26,7 @@ struct LibraryUseCaseTest {
       bookRepository: bookRepository,
       recordRepository: recordRepository,
       quoteRepository: quoteRepository,
-      bookService: AladinService()
+      bookService: AladinService(client: MockNetworkClient(nextMockFileName: "SearchList"))
     )
   }
   

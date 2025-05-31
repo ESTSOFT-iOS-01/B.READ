@@ -26,7 +26,7 @@ struct CreateRecordView: View {
         Button {
           coordinator.dismissSheet()
         } label: {
-          Image(systemName: SearchConstants.Icon.close)
+          Image(systemName: SFSymbol.xmark.name)
             .font(.system(size: 18, weight: .light))
             .foregroundColor(.brown8)
             .padding(.bottom, 16)

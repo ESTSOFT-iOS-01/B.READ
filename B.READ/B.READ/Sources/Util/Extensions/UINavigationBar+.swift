@@ -19,7 +19,7 @@ extension UINavigationBar {
     ]
     
     let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .light)
-    let chevronImage = UIImage(systemName: "chevron.backward", withConfiguration: config)?
+    let chevronImage = UIImage(systemName: SFSymbol.chevronLeft.name, withConfiguration: config)?
       .withTintColor(.green6, renderingMode: .alwaysOriginal)
       .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -8, bottom: 0, right: 0))
     defaultAppearance.setBackIndicatorImage(chevronImage, transitionMaskImage: chevronImage)

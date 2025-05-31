@@ -58,7 +58,7 @@ private struct BreadGuideView: View {
     HStack(spacing: 3) {
       Text("자세히 보기")
         .brStyleFont(.pretendard(.regular, size: 10), lineHeight: 1.3, letterSpacing: 0.02)
-      Image(systemName: "chevron.right")
+      Image(systemName: SFSymbol.chevronRight.name)
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 7, height: 7)

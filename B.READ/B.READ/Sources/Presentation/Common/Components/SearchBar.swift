@@ -47,7 +47,7 @@ struct SearchBar: View {
   
   var body: some View {
     HStack(spacing: 10) {
-      Image(systemName: SearchConstants.Icon.search)
+      Image(systemName: SFSymbol.magnify.name)
         .font(.system(size: style.iconSize, weight: style.iconWeight))
         .foregroundStyle(.gray2)
         .padding(.leading, layoutPadding)
