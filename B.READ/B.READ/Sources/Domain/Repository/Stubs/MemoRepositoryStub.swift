@@ -32,7 +32,7 @@ actor MemoRepositoryStub: MemoRepository {
     return memos.filter { $0.isbn == isbn }
   }
 
-  func fetchAllMemos(containg text: String) async throws -> [Memo] {
+  func fetchAllMemos(containing text: String) async throws -> [Memo] {
     return memos.filter { $0.content.localizedCaseInsensitiveContains(text) }
   }
 

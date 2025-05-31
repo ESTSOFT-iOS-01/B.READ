@@ -60,7 +60,7 @@ actor MemoRepositoryImpl: MemoRepository {
     }
   }
   
-  func fetchAllMemos(containg text: String) throws -> [Memo] {
+  func fetchAllMemos(containing text: String) throws -> [Memo] {
     print("Impl: ", #function)
     
     // String.localizedStandardContains 이란?

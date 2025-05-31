@@ -47,7 +47,7 @@ protocol MemoRepository {
   /// - Returns: `content`에 해당 텍스트를 포함한 Memo Entity 리스트
   /// - Throws:
   ///   - `RepositoryError.fetchError`: 조회 중 에러가 발생한 경우
-  func fetchAllMemos(containg text: String) async throws -> [Memo]
+  func fetchAllMemos(containing text: String) async throws -> [Memo]
   
   /// Memo를 수정합니다.
   ///
