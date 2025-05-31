@@ -21,7 +21,7 @@ enum MainRoute: Hashable {
   case pageInput(sentence: String)
   
   // MARK: - Memo
-  case memo(date: Date, totalPage: Int)
+  case memo(id: String, totalPage: Int)
   
   // MARK: - MyPage
   case insertNickname
@@ -67,8 +67,8 @@ extension Coordinator where T == MainRoute {
       SentenceInputView()
     
       // MARK: - Memo
-    case .memo(let date, let page):
-      MemoView(targetDate: date, totalPage: page)
+    case .memo(let id, let page):
+      MemoView(viewModel: MemoViewModel(id: id), totalPage: page)
       
     case .pageInput(let sentence):
       PageInputView(sentence: sentence)

@@ -10,16 +10,21 @@ import SwiftUI
 struct MemoView: View {
   
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @StateObject private var viewModel: MemoViewModel
   @State private var startPage: String = ""
   @State private var endPage: String = ""
   @State private var memoText: String = "memo"
   
+  private let totalPage: Int
+  
+  init(viewModel: MemoViewModel, totalPage: Int) {
+    self._viewModel = .init(wrappedValue: viewModel)
+    self.totalPage = totalPage
+  }
+  
   private var isButtonEnabled: Bool {
     !startPage.isEmpty && !endPage.isEmpty && !memoText.isEmpty
   }
-  
-  let targetDate: Date
-  let totalPage: Int
   
   private let guideText = """
   여기를 터치해서
@@ -37,7 +42,7 @@ struct MemoView: View {
       memoSection()
       
     }
-    .navigationTitle(targetDate.string(format: .dotSeparatedFull))
+    .navigationTitle(viewModel.createAt.string(format: .dotSeparatedFull))
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.horizontal, 24)
     .background(.backgroundDefault)
@@ -141,7 +146,7 @@ struct MemoView: View {
 }
 
 #Preview {
-  NavigationStack {
-    MemoView(targetDate: .now, totalPage: 200)
+  PreviewableContainer {
+    MemoView(viewModel: MemoViewModel(id: "exampleId"), totalPage: 300)
   }
 }

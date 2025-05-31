@@ -10,6 +10,7 @@ import Foundation
 final class MemoViewModel: ObservableObject {
   
   // MARK: - State
+  @Published var createAt: Date = Date()
   @Published var content: String = ""
   @Published var startPage: Int = 0
   @Published var endPage: Int = 0
@@ -19,8 +20,8 @@ final class MemoViewModel: ObservableObject {
   @Dependency
   private var memoUseCase: MemoUseCase
   
-  init() {
-    fetchCurrentMemo()
+  init(id: String) {
+    fetchMemo(id: id)
   }
   
   // MARK: - Action
@@ -41,7 +42,23 @@ final class MemoViewModel: ObservableObject {
 
 // MARK: - Internal Function
 private extension MemoViewModel {
-  func fetchCurrentMemo() {
-    
+  func fetchMemo(id: String) {
+    Task { [weak self] in
+      guard let self else { return }
+      do {
+        let memo = try await memoUseCase.fetchMemo(id: id)
+        await MainActor.run {
+          self.createAt = memo.createdAt
+          self.content = memo.content
+          self.startPage = memo.pages.0
+          self.endPage = memo.pages.1
+          self.guides = memo.guides.map { $0.content }
+        }
+      } catch RepositoryError.dataNotFound {
+        return
+      } catch {
+        print(error)
+      }
+    }
   }
 }

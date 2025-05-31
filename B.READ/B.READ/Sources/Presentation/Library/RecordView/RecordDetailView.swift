@@ -106,7 +106,7 @@ struct RecordDetailView: View {
         print("독서 기록 수정 선택")
       }
       Button("메모 작성") {
-        coordinator.push(.memo(date: .now, totalPage: viewModel.state.info?.book.totalPages ?? 0))
+        
       }
       Button("문장 작성") {
         coordinator.push(.sentenceInput)
