@@ -20,5 +20,10 @@ struct Memo: Identifiable {
   var createdAt: Date
   var content: String
   var pages: (Int, Int)
-  var guides: [String]
+  var guides: [Guide]
+}
+
+struct Guide {
+  let date: Date
+  var content: String
 }

@@ -15,8 +15,8 @@ struct LibraryView: View {
     
     var image: Image {
       switch self {
-      case .list: Image(systemName: LibraryConstants.Icon.grid)
-      case .grid: Image(systemName: LibraryConstants.Icon.list)
+      case .list: Image(systemName: SFSymbol.grid.name)
+      case .grid: Image(systemName: SFSymbol.list.name)
       }
     }
   }

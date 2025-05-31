@@ -44,7 +44,7 @@ struct RecordQuoteView: View {
     } label: {
       HStack {
         Text("최신 순")
-        Image(systemName: LibraryConstants.Icon.menuOn)
+        Image(systemName: SFSymbol.chevronCompactDown.name)
           .resizable()
           .frame(width: 8, height: 3)
       } // : HStack

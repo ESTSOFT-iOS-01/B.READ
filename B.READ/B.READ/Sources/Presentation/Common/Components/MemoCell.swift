@@ -62,7 +62,7 @@ struct MemoCell: View {
     Button {
       action?()
     } label: {
-      Image(systemName: "ellipsis")
+      Image(systemName: SFSymbol.ellipsis.name)
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 16, height: 16)
