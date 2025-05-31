@@ -17,8 +17,8 @@ final class BookViewModel: ObservableObject {
 
   init(isbn: String) {
     self.isbn = isbn
-    
     self.bookVO = BookDetailVO(
+      id: UUID().uuidString,
       title: "데미안 (오리지널 초판본 표지디자인) - 최신 원전 완역본",
       author: "헤르만 헤세 (지은이), 이미영 (옮긴이), 김선형 (해설)",
       publishedDate: "2017-01-01",

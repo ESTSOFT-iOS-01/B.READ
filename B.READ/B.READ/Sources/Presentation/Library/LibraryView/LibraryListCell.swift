@@ -10,15 +10,15 @@ import SwiftUI
 // MARK: - (S)LibraryListCell
 struct LibraryListCell: View {
   
-  @Binding var record: LibraryRecordVO
+  @Binding var record: RecordCellVO
   private let layoutPadding: CGFloat = 24
   
   var body: some View {
     HStack(alignment: .top, spacing: 0) {
       // TODO: - (DB연결 후)Book 표지가 들어갈 자리
       Group {
-        if let imageData = record.coverImage, let image = UIImage(data: imageData) {
-          Image(uiImage: image)
+        if let coverImage = record.coverImage {
+          coverImage
             .resizable()
         } else {
           // TODO: - 사진이 없을때, 들어갈 이미지 or 도형 추가
@@ -31,7 +31,7 @@ struct LibraryListCell: View {
       
       VStack(alignment: .leading, spacing: 6) {
         // 도서 제목
-        Text(record.name)
+        Text(record.title)
           .lineLimit(2)
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
         
@@ -65,9 +65,9 @@ struct LibraryListCell: View {
   
   // MARK: - (F)periodView
   @ViewBuilder
-  private func periodView(_ period: (start: Date?, end: Date?)) -> some View {
-    if let start = period.start?.string(format: .dotSeparated) {
-      if let end = record.period.end?.string(format: .dotSeparated) {
+  private func periodView(_ period: (startDate: Date?, endDate: Date?)) -> some View {
+    if let start = period.startDate?.string(format: .dotSeparated) {
+      if let end = period.endDate?.string(format: .dotSeparated) {
         Text("\(start) ~ \(end)")
       } else {
         Text("\(start) ~")
@@ -77,24 +77,9 @@ struct LibraryListCell: View {
 }
 
 #Preview {
-  @Previewable @State var record = LibraryRecordVO(
-    id: "123",
-    isbn: "9788937460586",
-    name: "싯다르타",
-    coverImage: nil,
-    state: .finished,
-    heartCount: 0,
-    starCount: 4,
-    currentPage: 252,
-    percent: 100,
-    memoCount: 4,
-    quoteCount: 3,
-    period: (
-      Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
-      Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
-    ),
-    isFavorite: false,
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!
+  @Previewable @State var record = RecordCellVO(
+    record: DummyData.dummyRecords[2],
+    book: DummyData.dummyBooks[2]
   )
   LibraryListCell(record: $record)
 }
