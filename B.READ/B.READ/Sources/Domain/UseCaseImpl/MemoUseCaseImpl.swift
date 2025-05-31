@@ -31,6 +31,10 @@ final class MemoUseCaseImpl: MemoUseCase {
     return try await memoRepository.fetchMemo(id: id)
   }
   
+  func deleteMemo(id: String) async throws {
+    return try await memoRepository.deleteMemo(id: id)
+  }
+  
   func generateGuide(isbn: String) async throws -> [Guide] {
     
     let book = try await bookRepository.fetchBook(isbn: isbn)

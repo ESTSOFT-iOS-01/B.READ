@@ -48,6 +48,15 @@ struct MemoUseCaseTest {
     #expect(fetchedMemo == updatedMemo)
   }
   
+  @Test("Memo delete Test")
+  func deleteMemoTestUpdate() async throws {
+    try await memoUseCase.saveMemo(DummyData.memos.first!)
+    
+    try await memoUseCase.deleteMemo(id: DummyData.memos.first!.id)
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      try await memoUseCase.deleteMemo(id: DummyData.memos.first!.id)
+    })
+  }
   
   @Test("Guide Generate Test")
   func generateGuideTest() async throws {

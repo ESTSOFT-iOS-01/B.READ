@@ -22,6 +22,13 @@ protocol MemoUseCase {
   /// - Throws: `RepositoryError.dataNotFound`, 조회 실패 시 오류 발생
   func fetchMemo(id: String) async throws -> Memo
   
+  /// ID를 통해 특정 메모를 삭제합니다.
+  ///
+  /// - Parameter id: 삭제할 메모의 고유 식별자
+  /// - Returns: 해당 ID에 해당하는 `Memo` 객체
+  /// - Throws: `RepositoryError.dataNotFound`, 조회 실패 시 오류 발생
+  func deleteMemo(id: String) async throws
+  
   /// AI에게 메모 기반 질문 생성을 요청합니다.
   /// 동일 ISBN을 가지는 메모 내용을 기반으로 질문 3개를 생성합니다.
   ///

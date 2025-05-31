@@ -105,6 +105,7 @@ actor MemoRepositoryImpl: MemoRepository {
     }
     
     modelContext.delete(data)
+    try modelContext.save()
   }
 }
 
