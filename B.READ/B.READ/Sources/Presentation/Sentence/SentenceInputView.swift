@@ -27,11 +27,11 @@ struct SentenceInputView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       Text("기록할 문장을 작성해주세요")
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.4, letterSpacing: -0.0025)
+        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.4, letterSpacing: -0.025)
       
       ZStack(alignment: .topLeading) {
         TextEditor(text: $viewModel.content)
-          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.4, letterSpacing: -0.0025)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.4, letterSpacing: -0.025)
           .padding(.horizontal, 16)
           .padding(.vertical, 12)
           .frame(height: 130)

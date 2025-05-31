@@ -38,7 +38,7 @@ struct PageInputView: View {
     )
     _viewModel.wrappedValue.content = sentence
   }
-
+  
   
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
@@ -47,12 +47,12 @@ struct PageInputView: View {
       
       HStack(spacing: 0) {
         RoundedTextField(
-            type: .pages,
-            placeholder: "0",
-            text: pageTextBinding,
-            isValid: isValidPage
-          )
-          .focused($isFocused)
+          type: .pages,
+          placeholder: "0",
+          text: pageTextBinding,
+          isValid: isValidPage
+        )
+        .focused($isFocused)
         
         Text("쪽")
           .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2, letterSpacing: 0)
@@ -65,7 +65,7 @@ struct PageInputView: View {
         
         ScrollView(.vertical, showsIndicators: true) {
           Text(viewModel.content)
-            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.0025)
+            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -81,7 +81,11 @@ struct PageInputView: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
-          guard let n = viewModel.page, (1...999).contains(n) else {
+          guard
+            let pageNumber   = viewModel.page,
+            let isPageValid  = isValidPage,
+            isPageValid
+          else {
             showInvalidAlert = true
             return
           }
