@@ -19,6 +19,8 @@ actor BookRepositoryImpl: BookRepository {
     
     let model = BookDTO(book)
     modelContext.insert(model)
+    
+    try modelContext.save()
   }
 
   func fetchBook(isbn: String) throws -> Book {
