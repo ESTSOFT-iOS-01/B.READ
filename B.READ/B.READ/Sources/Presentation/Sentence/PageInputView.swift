@@ -8,22 +8,13 @@
 import SwiftUI
 
 struct PageInputView: View {
-  let isbn: String
-  let sentence: String
-  
   @EnvironmentObject var coordinator: Coordinator<MainRoute>
-  @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
+  @StateObject var viewModel: SentenceViewModel
   @FocusState private var isFocused: Bool
   @State private var showInvalidAlert = false
   
-  private var pageTextBinding: Binding<String> {
-    Binding(
-      get: { viewModel.page.map(String.init) ?? "" },
-      set: { newValue in
-        viewModel.page = Int(newValue)
-      }
-    )
-  }
+  let isbn: String
+  let sentence: String
   
   private var isValidPage: Bool? {
     guard let limit = viewModel.maxPage else { return nil }
@@ -41,6 +32,15 @@ struct PageInputView: View {
   
   
   var body: some View {
+    var pageTextBinding: Binding<String> {
+      Binding(
+        get: { viewModel.page.map(String.init) ?? "" },
+        set: { newValue in
+          viewModel.page = Int(newValue)
+        }
+      )
+    }
+    
     VStack(alignment: .leading, spacing: 8) {
       Text("페이지를 입력해 주세요")
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
