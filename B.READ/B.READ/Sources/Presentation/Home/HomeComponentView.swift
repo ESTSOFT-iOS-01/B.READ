@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct HomeComponentView: View {
+struct RecommandCell: View {
+  var bestSellerVO : BestSellerVO
   var body: some View {
     Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
   }
@@ -35,7 +36,6 @@ struct RecommandHeaderView: View {
 }
 
 #Preview {
-//  HomeComponentView()
   RecommandHeaderView(categoryName: "인문학")
   RecommandHeaderView(categoryName: "경제경영")
   

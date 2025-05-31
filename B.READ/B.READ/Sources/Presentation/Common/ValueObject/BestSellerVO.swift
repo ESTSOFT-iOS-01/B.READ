@@ -11,4 +11,6 @@ struct BestSellerVO: Identifiable {
   let id: String
   let isbn: String
   let title: String
+  let author: String
+  let imageURL: String
 }
