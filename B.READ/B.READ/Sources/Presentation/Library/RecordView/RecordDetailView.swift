@@ -109,7 +109,7 @@ struct RecordDetailView: View {
         coordinator.push(.memo(date: .now, totalPage: viewModel.state.info?.book.totalPages ?? 0))
       }
       Button("문장 작성") {
-        coordinator.push(.sentenceInput)
+        coordinator.push(.sentenceInput(mode: .create(isbn: viewModel.state.info?.record.isbn ?? "")))
       }
       Button("취소", role: .cancel) { }
     }

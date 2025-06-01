@@ -9,7 +9,7 @@
 final class QuoteUseCaseImpl: QuoteUseCase {
   private let quoteRepository: QuoteRepository
   private let bookRepository: BookRepository
-
+  
   /// 생성자
   /// - Parameters:
   ///   - quoteRepo: 문장 저장소 구현체
@@ -18,7 +18,7 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     self.quoteRepository = quoteRepository
     self.bookRepository = bookRepository
   }
-
+  
   func addQuote(_ quote: Quote) async throws {
     // 빈 내용 검증
     let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -30,7 +30,7 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     // 저장 수행
     try await quoteRepository.createQuote(quote)
   }
-
+  
   func updateQuote(_ quote: Quote) async throws {
     // 빈 내용 검증
     let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -42,22 +42,27 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     // 업데이트 수행
     try await quoteRepository.updateQuote(quote)
   }
-
+  
   func removeQuote(id: String) async throws {
     // 삭제 수행
     try await quoteRepository.deleteQuote(id: id)
   }
-
+  
   func fetchQuote(id: String) async throws -> Quote {
     return try await quoteRepository.fetchQuote(id: id)
   }
-
+  
   func fetchQuotes(isbn: String) async throws -> [Quote] {
     return try await quoteRepository.fetchQuotes(isbn: isbn)
   }
-
+  
   func fetchAllQuotes() async throws -> [Quote] {
     return try await quoteRepository.fetchAllQuotes()
+  }
+  
+  func pageCount(forISBN isbn: String) async throws -> Int {
+    let book = try await bookRepository.fetchBook(isbn: isbn)
+    return book.totalPages
   }
 
   // TODO: - 조회한 도서가 없을 경우 알라딘 검색 후 도서 저장 -> 도서 제목 반환

@@ -8,36 +8,49 @@
 import SwiftUI
 
 struct PageInputView: View {
-  let sentence: String                // 전달받은 문장
-  var onSave: (Int) -> Void = { _ in }
+  let mode: SentenceInputMode
+  let sentence: String
   
+  @State private var pageText: String = "0"
+  @StateObject private var viewModel: SentenceViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @State private var pageText = "0"
   @State private var showInvalidAlert = false
   @FocusState private var isFocused: Bool
   
-  private var pageNumber: Int? { Int(pageText) }
+  init(mode: SentenceInputMode, sentence: String) {
+    self.mode = mode
+    self.sentence = sentence
+    _viewModel = StateObject(wrappedValue: SentenceViewModel(mode: mode))
+  }
+  
   
   var body: some View {
+    let isValidPage: Bool = {
+      guard let limit = viewModel.maxPage else {
+        return false
+      }
+      
+      guard let number = Int(pageText) else {
+        return false
+      }
+      
+      return (1...limit).contains(number)
+    }()
+    
     VStack(alignment: .leading, spacing: 8) {
       Text("페이지를 입력해 주세요")
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
-      
-      // 숫자 입력 필드
       HStack(spacing: 0) {
         RoundedTextField(
           type: .pages,
           placeholder: "0",
           text: $pageText,
-          isValid: Int(pageText).map { (1...999).contains($0) } ?? (pageText.isEmpty ? nil : false)
+          isValid: isValidPage
         )
         .focused($isFocused)
-        .onChange(of: pageText) { old, new in
-          pageText = filteredPage(old: old, new: new)
-        }
         
         Text("쪽")
-          .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2, letterSpacing: 0)
+          .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
           .padding(.leading, 16)
       }
       
@@ -46,8 +59,8 @@ struct PageInputView: View {
           .fill(.green1)
         
         ScrollView(.vertical, showsIndicators: true) {
-          Text(sentence)
-            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.0025)
+          Text(viewModel.content)
+            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -60,57 +73,56 @@ struct PageInputView: View {
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
+    .onChange(of: pageText, { oldValue, newValue in
+      viewModel.page = Int(newValue)
+    })
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
-          guard let n = pageNumber, (1...999).contains(n) else { //
-            showInvalidAlert = true //
-            return // todo: 추후 함수 처리
+          guard viewModel.page != nil else {
+            showInvalidAlert = true
+            return
           }
-          onSave(n)
-          
-          // TODO: 추후에 변경
+          guard isValidPage else {
+            showInvalidAlert = true
+            return
+          }
+          viewModel.send(.submit)
           coordinator.pop()
           coordinator.pop()
         }
-        .font(.system(size: 16, weight: .regular))
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
       }
     }
     .alert("저장 실패", isPresented: $showInvalidAlert) {
       Button("확인", role: .cancel) {
-        resultInput()
+        viewModel.page = nil
+        pageText = ""
+        isFocused = true
       }
     } message: {
       Text("올바른 페이지 번호가 아닙니다.")
     }
     .animation(.easeInOut(duration: 0.2), value: showInvalidAlert)
-    .background(.backgroundDefault)
+    .background(Color.backgroundDefault)
     .task {
       await Task.yield()
       isFocused = true
     }
-  }
-  
-  private func filteredPage(old: String, new: String) -> String {
-    let digits = new.filter(\.isNumber)
-    
-    if old == "0", let first = digits.last {
-      return String(first)
+    .onAppear {
+      if viewModel.content.isEmpty {
+        viewModel.content = sentence
+      }
+      if pageText.isEmpty {
+        pageText = viewModel.page.map(String.init) ?? ""
+      }
     }
-    let trimmed = digits.drop { $0 == "0" }.map(String.init).joined()
-    return trimmed.isEmpty ? "0" : trimmed
-  }
-  
-  private func resultInput() {
-    pageText = ""
-    isFocused = true
   }
 }
 
-
 #Preview {
   NavigationStack {
-    PageInputView(sentence: "미리보기 문장입니다.") { print("page:", $0) }
+    PageInputView(mode: .create(isbn: "9781234567890"), sentence: "")
   }
 }

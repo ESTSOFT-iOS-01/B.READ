@@ -8,38 +8,42 @@
 import SwiftUI
 
 struct SentenceInputView: View {
+  let mode: SentenceInputMode
   
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  
-  @State private var text = ""
-  @State private var goNext = false
+  @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
   @FocusState private var isEditorFocused: Bool
+  @State private var showPageAlert = false
   
-  private var trimmedText: String {
-    text.trimmingCharacters(in: .whitespacesAndNewlines)
+  private var trimmedContent: String {
+    viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+  
+  init(mode: SentenceInputMode) {
+    self.mode = mode
+    _viewModel = StateObject(
+      wrappedValue: SentenceViewModel(mode: mode)
+    )
   }
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
+    VStack(alignment: .leading, spacing: 16) {
       Text("기록할 문장을 작성해주세요")
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.4, letterSpacing: -0.0025)
+        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.4, letterSpacing: -0.025)
       
       ZStack(alignment: .topLeading) {
-        TextEditor(text: $text)
-          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.4, letterSpacing: -0.0025)
+        TextEditor(text: $viewModel.content)
+          .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.4, letterSpacing: -0.025)
           .padding(.horizontal, 16)
           .padding(.vertical, 12)
-          .frame(height: 130)     // 고정 높이
-          .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-              .fill(Color(.gray0))
-          )
+          .frame(height: 130)
+          .background(RoundedRectangle(cornerRadius: 12).fill(Color(.gray0)))
           .scrollContentBackground(.hidden)
           .scrollDisabled(false)
           .focused($isEditorFocused)
           .tint(.gray9)
         
-        if text.isEmpty && !isEditorFocused {
+        if viewModel.content.isEmpty && !isEditorFocused {
           Text("여기를 터치해서 문장을 입력할 수 있어요")
             .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .foregroundStyle(.gray2)
@@ -55,20 +59,47 @@ struct SentenceInputView: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("다음") {
-          coordinator.push(.pageInput(sentence: trimmedText))
+          guard viewModel.maxPage != nil else {
+            showPageAlert = true
+            return
+          }
+          
+          coordinator.push(
+            .pageInput(mode: mode,
+                       sentence: trimmedContent)
+          )
         }
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
-        .disabled(trimmedText.isEmpty)
-        .opacity(trimmedText.isEmpty ? 0 : 1)
+        .disabled(trimmedContent.isEmpty)
+        .opacity(trimmedContent.isEmpty ? 0 : 1)
       }
     }
-    .background(.backgroundDefault)
+    .alert("페이지 정보를 불러오는 중입니다",
+           isPresented: $showPageAlert) {
+      Button("확인", role: .cancel) { }
+    } message: {
+      Text("잠시 후 다시 시도해 주세요.")
+    }
+    .background(Color.backgroundDefault)
+    .onTapGesture {
+      self.hideKeyboard()
+    }
+  }
+}
+
+extension View {
+  func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                    to: nil, from: nil, for: nil)
   }
 }
 
 #Preview {
+  let dummy = Coordinator<MainRoute, SheetRoute>()
+  
   NavigationStack {
-    SentenceInputView()
+    SentenceInputView(mode: .create(isbn: "9781234567890"))
   }
+  .environmentObject(dummy)
 }

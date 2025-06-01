@@ -63,7 +63,16 @@ struct RoundedTextField: View {
   
   private func filterDigits() {
     let digits = text.filter(\.isNumber)
-    if digits != text { text = digits }
+
+    guard type == .pages else {
+      if digits != text { text = digits }
+      return
+    }
+
+    let trimmed = digits.drop { $0 == "0" }
+    let normalized = trimmed.isEmpty ? "0" : String(trimmed)
+
+    if normalized != text { text = normalized }
   }
 }
 

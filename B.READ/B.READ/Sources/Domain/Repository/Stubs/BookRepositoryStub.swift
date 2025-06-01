@@ -9,8 +9,8 @@ import Foundation
 
 actor BookRepositoryStub: BookRepository {
   
-  private var storedBook: [Book] = []
-//  private var storedBook: [Book] = DummyData.dummyBooks
+  //private var storedBook: [Book] = []
+  private var storedBook: [Book] = DummyData.dummyBooks
   
   func createBook(_ book: Book) throws {
     print("Stub: ", #function)

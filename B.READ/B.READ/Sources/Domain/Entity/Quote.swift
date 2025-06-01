@@ -12,10 +12,11 @@ import Foundation
 /// - isbn : 문장 수집이 작성될 책의 ISBN
 /// - content : 내용
 /// - page : 문장 수집 페이지
-struct Quote: Identifiable, Equatable {
-
+struct Quote: Identifiable, Equatable, Hashable {
   let id: String
   let isbn: String
   var content: String
   var page: Int
 }
+
+
