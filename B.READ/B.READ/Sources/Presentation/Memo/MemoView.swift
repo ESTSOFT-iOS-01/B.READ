@@ -13,7 +13,8 @@ struct MemoView: View {
   @StateObject private var viewModel: MemoViewModel
   @State private var startPage: String = ""
   @State private var endPage: String = ""
-  @State private var memoText: String = "memo"
+  @State private var memoText: String = ""
+  @State private var textEditorFocused: Bool = false
   
   private let totalPage: Int
   
@@ -68,6 +69,7 @@ struct MemoView: View {
     }
   }
   
+  // 숫자 외에 텍스트 필터링 및 0 못오게
   private func formatDigits(_ input: String) -> String {
     let filtered = input.filter { $0.isNumber }
     if filtered.hasPrefix("0"), filtered.count >= 1 {
@@ -140,7 +142,13 @@ struct MemoView: View {
         .foregroundStyle(.black)
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
       
-     // TODO: 텍스트 에디터 들어오면 넣기
+      CustomTextEditor(
+        text: $memoText,
+        isFocused: $textEditorFocused,
+        placeholder: "여기를 터치해서 문장을 입력할 수 있어요"
+      )
+      .frame(height: 200)
+      .tint(.gray9)
     }
   }
 }

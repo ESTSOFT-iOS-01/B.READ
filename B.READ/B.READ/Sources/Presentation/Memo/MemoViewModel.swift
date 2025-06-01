@@ -16,11 +16,16 @@ final class MemoViewModel: ObservableObject {
   @Published var endPage: Int = 0
   @Published var guides: [String] = []
   
+  // MARK: - Internal Variable
+  private var id: String?
+  
   // MARK: - Dependency
   @Dependency
   private var memoUseCase: MemoUseCase
   
-  init(id: String) {
+  init(id: String?) {
+    guard let id else { return }
+    self.id = id
     fetchMemo(id: id)
   }
   
@@ -54,8 +59,6 @@ private extension MemoViewModel {
           self.endPage = memo.pages.1
           self.guides = memo.guides.map { $0.content }
         }
-      } catch RepositoryError.dataNotFound {
-        return
       } catch {
         print(error)
       }

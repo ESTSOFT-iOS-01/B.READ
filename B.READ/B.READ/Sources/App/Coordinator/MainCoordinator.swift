@@ -21,7 +21,7 @@ enum MainRoute: Hashable {
   case pageInput(sentence: String)
   
   // MARK: - Memo
-  case memo(id: String, totalPage: Int)
+  case memo(id: String? = nil, totalPage: Int)
   
   // MARK: - MyPage
   case insertNickname
