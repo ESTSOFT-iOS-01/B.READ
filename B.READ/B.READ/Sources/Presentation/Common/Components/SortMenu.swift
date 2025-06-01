@@ -75,6 +75,7 @@ struct SortMenu: View {
         ForEach(SortOption.sortMenus(type: type)) { option in
           Button {
             selectedOption = option
+//              isOpened.toggle()
             DispatchQueue.main.async { isOpened.toggle() }
           } label: {
             Text(option.rawValue)
