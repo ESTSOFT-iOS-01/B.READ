@@ -41,7 +41,7 @@ struct MainTabView: View {
           }
           .tag(Tab.search)
         
-        LibraryView(viewModel: LibraryViewModel())
+        LibraryView()
           .tabItem {
             Image(systemName: SFSymbol.library.name)
             Text("책빵")

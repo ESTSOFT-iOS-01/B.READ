@@ -30,8 +30,8 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   // TODO: - 도로시
   func saveRecord(record: Record, book: Book) async throws {
-    try await bookRepository.createBook(book)
     try await recordRepository.createRecord(record)
+    try await bookRepository.createBook(book)
   }
   
   
