@@ -11,10 +11,9 @@ struct MemoView: View {
   
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject private var viewModel: MemoViewModel
-  @State private var startPage: String = ""
-  @State private var endPage: String = ""
-  @State private var memoText: String = ""
   @State private var textEditorFocused: Bool = false
+  @State private var showGuideAlert = false
+  @State private var showErrorAlert = false
   
   private let totalPage: Int
   
@@ -24,7 +23,7 @@ struct MemoView: View {
   }
   
   private var isButtonEnabled: Bool {
-    !startPage.isEmpty && !endPage.isEmpty && !memoText.isEmpty
+    !viewModel.startPage.isEmpty && !viewModel.endPage.isEmpty && !viewModel.content.isEmpty
   }
   
   private let guideText = """
@@ -47,11 +46,11 @@ struct MemoView: View {
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.horizontal, 24)
     .background(.backgroundDefault)
-    .onChange(of: startPage) {
-      startPage = formatDigits($1)
+    .onChange(of: viewModel.startPage) {
+      viewModel.startPage = formatDigits($1)
     }
-    .onChange(of: endPage) {
-      endPage = formatDigits($1)
+    .onChange(of: viewModel.endPage) {
+      viewModel.endPage = formatDigits($1)
     }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
@@ -66,6 +65,12 @@ struct MemoView: View {
             .animation(.easeInOut(duration: 0.2), value: isButtonEnabled)
         }
       }
+    }
+    .alert("가이드를 삭제하시겠습니까?", isPresented: $showGuideAlert) {
+      Button("취소", role: .cancel) { }
+      Button("삭제", role: .destructive) { viewModel.send(.deleteGuides) }
+    } message: {
+      Text("빵식이의 가이드를 삭제하시겠습니까?\n(다시 생성되지 않습니다)")
     }
   }
   
@@ -88,11 +93,16 @@ struct MemoView: View {
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
           .frame(maxWidth: .infinity, alignment: .leading)
         
-        Image(systemName: "trash")
-          .resizable()
-          .aspectRatio(contentMode: .fit)
-          .frame(width: 16, height: 16)
-          .foregroundStyle(.gray2)
+        if !viewModel.guides.isEmpty {
+          Image(systemName: "trash")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 16, height: 16)
+            .foregroundStyle(.gray2)
+            .onTapGesture {
+              showGuideAlert = true
+            }
+        }
       }
       
       HStack(spacing: 40) {
@@ -123,11 +133,11 @@ struct MemoView: View {
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
       
       HStack {
-        RoundedTextField(type: .pages, placeholder: "0", text: $startPage, isValid: true)
+        RoundedTextField(type: .pages, placeholder: "0", text: $viewModel.startPage)
         
         Text("~")
         
-        RoundedTextField(type: .pages, placeholder: "0", text: $endPage, isValid: true)
+        RoundedTextField(type: .pages, placeholder: "0", text: $viewModel.endPage)
         
         Text("쪽")
       }.padding(.trailing, 52)
@@ -143,7 +153,7 @@ struct MemoView: View {
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
       
       CustomTextEditor(
-        text: $memoText,
+        text: $viewModel.content,
         isFocused: $textEditorFocused,
         placeholder: "여기를 터치해서 문장을 입력할 수 있어요"
       )

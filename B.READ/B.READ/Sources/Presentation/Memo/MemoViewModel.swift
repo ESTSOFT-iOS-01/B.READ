@@ -12,8 +12,8 @@ final class MemoViewModel: ObservableObject {
   // MARK: - State
   @Published var createAt: Date = Date()
   @Published var content: String = ""
-  @Published var startPage: Int = 0
-  @Published var endPage: Int = 0
+  @Published var startPage: String = ""
+  @Published var endPage: String = ""
   @Published var guides: [String] = []
   
   // MARK: - Internal Variable
@@ -33,6 +33,7 @@ final class MemoViewModel: ObservableObject {
   enum Action {
     case saveMemo
     case generateGuides
+    case deleteGuides
   }
   
   func send(_ action: Action) {
@@ -41,6 +42,8 @@ final class MemoViewModel: ObservableObject {
       print("saveMemo")
     case .generateGuides:
       print("generateGuides")
+    case .deleteGuides:
+      print("deleteGuides")
     }
   }
 }
@@ -55,8 +58,8 @@ private extension MemoViewModel {
         await MainActor.run {
           self.createAt = memo.createdAt
           self.content = memo.content
-          self.startPage = memo.pages.0
-          self.endPage = memo.pages.1
+          self.startPage = memo.pages.0.toString
+          self.endPage = memo.pages.1.toString
           self.guides = memo.guides.map { $0.content }
         }
       } catch {
