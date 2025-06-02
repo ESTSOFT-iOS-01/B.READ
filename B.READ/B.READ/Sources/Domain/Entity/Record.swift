@@ -32,9 +32,9 @@ struct Record: Identifiable {
   var period: (startDate: Date?, endDate: Date?)
   var currentPage: Int
   var review: String
-  var summaryID: String?
-  var memoIDs: [String]
-  var quoteIDs: [String]
+  var summary: AlanSummary?
+  var memos: [Memo]
+  var quotes: [Quote]
   var createdAt: Date
   var updatedAt: Date
 }

@@ -83,8 +83,8 @@ struct RecordSearchCell: View {
     heart: DummyData.dummyRecords[0].heartCount,
     progress: 0,
     star: DummyData.dummyRecords[0].starCount,
-    memoCount: DummyData.dummyRecords[0].memoIDs.count,
-    quoteCount: DummyData.dummyRecords[0].quoteIDs.count,
+    memoCount: DummyData.dummyRecords[0].memos.count,
+    quoteCount: DummyData.dummyRecords[0].quotes.count,
     period: DummyData.dummyRecords[0].period,
     isFavorite: DummyData.dummyRecords[0].isFavorite,
     createdAt: DummyData.dummyRecords[0].createdAt
@@ -98,8 +98,8 @@ struct RecordSearchCell: View {
     heart: DummyData.dummyRecords[1].heartCount,
     progress: 65,
     star: DummyData.dummyRecords[1].starCount,
-    memoCount: DummyData.dummyRecords[1].memoIDs.count,
-    quoteCount: DummyData.dummyRecords[1].quoteIDs.count,
+    memoCount: DummyData.dummyRecords[1].memos.count,
+    quoteCount: DummyData.dummyRecords[1].quotes.count,
     period: DummyData.dummyRecords[1].period,
     isFavorite: DummyData.dummyRecords[1].isFavorite,
     createdAt: DummyData.dummyRecords[1].createdAt
@@ -113,8 +113,8 @@ struct RecordSearchCell: View {
     heart: DummyData.dummyRecords[2].heartCount,
     progress: 65,
     star: DummyData.dummyRecords[2].starCount,
-    memoCount: DummyData.dummyRecords[2].memoIDs.count,
-    quoteCount: DummyData.dummyRecords[2].quoteIDs.count,
+    memoCount: DummyData.dummyRecords[2].memos.count,
+    quoteCount: DummyData.dummyRecords[2].quotes.count,
     period: DummyData.dummyRecords[2].period,
     isFavorite: DummyData.dummyRecords[2].isFavorite,
     createdAt: DummyData.dummyRecords[2].createdAt

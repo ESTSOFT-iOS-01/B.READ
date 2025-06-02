@@ -17,8 +17,10 @@ actor RecordRepositoryImpl: RecordRepository {
       throw RepositoryError.dataAlreadyExist
     }
     
-    let model = RecordDTO(record)
+    let model = RecordDTO.createDTO(record)
     modelContext.insert(model)
+    
+    try modelContext.save()
   }
 
   func fetchAllRecord() throws -> [Record] {
@@ -66,21 +68,25 @@ actor RecordRepositoryImpl: RecordRepository {
       throw RepositoryError.dataNotFound
     }
     
+    let newValue = RecordDTO.createDTO(record)
+    
     // 빠진 값없이 저장해야 업데이트 반영됨
-    data.isbn = record.isbn
-    data.state = record.state.rawValue
-    data.heartCount = record.heartCount
-    data.starCount = record.starCount
-    data.isFavorite = record.isFavorite
-    data.startDate = record.period.startDate
-    data.endDate = record.period.endDate
-    data.currentPage = record.currentPage
-    data.review = record.review
-    data.summaryID = record.summaryID
-    data.memoIDs = record.memoIDs
-    data.quoteIDs = record.quoteIDs
-    data.createdAt = record.createdAt
-    data.updatedAt = record.updatedAt
+    data.isbn = newValue.isbn
+    data.state = newValue.state
+    data.heartCount = newValue.heartCount
+    data.starCount = newValue.starCount
+    data.isFavorite = newValue.isFavorite
+    data.startDate = newValue.startDate
+    data.endDate = newValue.endDate
+    data.currentPage = newValue.currentPage
+    data.review = newValue.review
+    data.summary = newValue.summary
+    data.memos = newValue.memos
+    data.quotes = newValue.quotes
+    data.createdAt = newValue.createdAt
+    data.updatedAt = newValue.updatedAt
+    
+    try modelContext.save()
   }
 
   func deleteRecord(_ id: String) throws {
@@ -91,6 +97,8 @@ actor RecordRepositoryImpl: RecordRepository {
     }
     
     modelContext.delete(data)
+    
+    try modelContext.save()
   }
 }
 

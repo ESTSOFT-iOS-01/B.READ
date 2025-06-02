@@ -21,11 +21,17 @@ final class RecordDTO {
   var endDate: Date?
   var currentPage: Int
   var review: String
-  var summaryID: String?
-  var memoIDs: [String]
-  var quoteIDs: [String]
   var createdAt: Date
   var updatedAt: Date
+  
+  @Relationship(deleteRule: .cascade, inverse: \SummaryDTO.record)
+  var summary: SummaryDTO?
+  
+  @Relationship(deleteRule: .cascade, inverse: \MemoDTO.record)
+  var memos: [MemoDTO]
+  
+  @Relationship(deleteRule: .cascade, inverse: \QuoteDTO.record)
+  var quotes: [QuoteDTO]
   
   init(
     id: String,
@@ -37,9 +43,9 @@ final class RecordDTO {
     period: (startDate: Date?, endDate: Date?) = (nil, nil),
     currentPage: Int,
     review: String,
-    summaryID: String? = nil,
-    memoIDs: [String],
-    quoteIDs: [String],
+    summary: SummaryDTO? = nil,
+    memos: [MemoDTO],
+    quotes: [QuoteDTO],
     createdAt: Date,
     updatedAt: Date
   ) {
@@ -53,9 +59,9 @@ final class RecordDTO {
     self.endDate = period.endDate
     self.currentPage = currentPage
     self.review = review
-    self.summaryID = summaryID
-    self.memoIDs = memoIDs
-    self.quoteIDs = quoteIDs
+    self.summary = summary
+    self.memos = memos
+    self.quotes = quotes
     self.createdAt = createdAt
     self.updatedAt = updatedAt
   }
@@ -71,12 +77,22 @@ final class RecordDTO {
       period: data.period,
       currentPage: data.currentPage,
       review: data.review,
-      summaryID: data.summaryID,
-      memoIDs: data.memoIDs,
-      quoteIDs: data.quoteIDs,
+      summary: nil,
+      memos: [],
+      quotes: [],
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     )
+  }
+  
+  static func createDTO(_ entity: Record) -> RecordDTO {
+    let dto = RecordDTO(entity)
+    
+    dto.summary = entity.summary.map { SummaryDTO($0, record: dto) }
+    dto.memos = entity.memos.map { MemoDTO($0, record: dto) }
+    dto.quotes = entity.quotes.map{ QuoteDTO($0, record: dto) }
+    
+    return dto
   }
 }
 
@@ -92,9 +108,9 @@ extension RecordDTO {
       period: (self.startDate, self.endDate),
       currentPage: self.currentPage,
       review: self.review,
-      summaryID: self.summaryID,
-      memoIDs: self.memoIDs,
-      quoteIDs: self.quoteIDs,
+      summary: self.summary?.toEntity(),
+      memos: self.memos.map { $0.toEntity() },
+      quotes: self.quotes.map { $0.toEntity() },
       createdAt: self.createdAt,
       updatedAt: self.updatedAt
     )

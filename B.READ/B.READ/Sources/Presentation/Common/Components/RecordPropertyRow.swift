@@ -38,8 +38,8 @@ struct RecordPropertyRow: View {
     heart: DummyData.dummyRecords[0].heartCount,
     progress: 0,
     star: DummyData.dummyRecords[0].starCount,
-    memoCount: DummyData.dummyRecords[0].memoIDs.count,
-    quoteCount: DummyData.dummyRecords[0].quoteIDs.count,
+    memoCount: DummyData.dummyRecords[0].memos.count,
+    quoteCount: DummyData.dummyRecords[0].quotes.count,
     period: DummyData.dummyRecords[0].period,
     isFavorite: DummyData.dummyRecords[0].isFavorite,
     createdAt: DummyData.dummyRecords[0].createdAt
