@@ -74,9 +74,6 @@ extension DummyData {
 
 // MARK: - Record
 extension DummyData {
-  static func createDummyRecords() -> [Record] {
-    return dummyRecords
-  }
   static var dummyRecords: [Record] = [
     Record( // 워런 버핏 웨이
       id: UUID().uuidString,
@@ -206,48 +203,48 @@ extension DummyData {
 }
 
 // MARK: - Memo
-//extension DummyData {
-//  static let dummyMemos: [Memo] = [
-//    Memo(
-//      id: "1",
-//      isbn: "9788937460586",
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
-//      content: "이것은 테스트를 위한 메모입니다.",
-//      pages: (10, 20),
-//      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-//    ),
-//    Memo(
-//      id: "2",
-//      isbn: "9788937460586",
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
-//      content: "이것은 테스트를 위한 메모입니다.",
-//      pages: (22, 32),
-//      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-//    ),
-//    Memo(
-//      id: "3",
-//      isbn: "9788937460586",
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!,
-//      content: "이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.",
-//      pages: (44, 82),
-//      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-//    ),
-//    Memo(
-//      id: "4",
-//      isbn: "9788937460586",
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-//      content: "이것은 테스트를 위한 메모입니다.",
-//      pages: (100, 132),
-//      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-//    ),
-//    Memo(
-//      id: "5",
-//      isbn: "9791158510619",
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
-//      content: "이것은 테스트를 위한 메모입니다.",
-//      pages: (99, 111),
-//      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-//    ),
+extension DummyData {
+  static let dummyMemos: [Memo] = [
+    Memo(
+      id: "1",
+      isbn: "9788937460586",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
+      content: "이것은 테스트를 위한 메모입니다.",
+      pages: (10, 20),
+      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+    ),
+    Memo(
+      id: "2",
+      isbn: "9788937460586",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
+      content: "이것은 테스트를 위한 메모입니다.",
+      pages: (22, 32),
+      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+    ),
+    Memo(
+      id: "3",
+      isbn: "9788937460586",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!,
+      content: "이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.",
+      pages: (44, 82),
+      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+    ),
+    Memo(
+      id: "4",
+      isbn: "9788937460586",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
+      content: "이것은 테스트를 위한 메모입니다.",
+      pages: (100, 132),
+      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+    ),
+    Memo(
+      id: "5",
+      isbn: "9788937460586",
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
+      content: "이것은 테스트를 위한 메모입니다.",
+      pages: (99, 111),
+      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+    ),
 //    Memo(
 //      id: "6",
 //      isbn: "9791158510619",
@@ -256,8 +253,8 @@ extension DummyData {
 //      pages: (12, 25),
 //      guides:[Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
 //    )
-//  ]
-//}
+  ]
+}
 
 // MARK: - Quote
 extension DummyData {

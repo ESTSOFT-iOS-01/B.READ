@@ -17,7 +17,7 @@ actor RecordRepositoryImpl: RecordRepository {
       throw RepositoryError.dataAlreadyExist
     }
     
-    let model = RecordDTO.createDTO(record)
+    let model = RecordDTO(record)
     modelContext.insert(model)
     
     try modelContext.save()
@@ -68,7 +68,7 @@ actor RecordRepositoryImpl: RecordRepository {
       throw RepositoryError.dataNotFound
     }
     
-    let newValue = RecordDTO.createDTO(record)
+    let newValue = RecordDTO(record)
     
     // 빠진 값없이 저장해야 업데이트 반영됨
     data.isbn = newValue.isbn

@@ -15,8 +15,8 @@ actor QuoteRepositoryImpl: QuoteRepository {
     if let _ = try findQuote(id: quote.id) {
       throw RepositoryError.dataAlreadyExist
     }
-    let recordDTO = RecordDTO.createDTO(record)
-    let dto = QuoteDTO(quote, record: recordDTO)
+    
+    let dto = QuoteDTO(quote, record: RecordDTO(record))
     modelContext.insert(dto)
     
     try modelContext.save()

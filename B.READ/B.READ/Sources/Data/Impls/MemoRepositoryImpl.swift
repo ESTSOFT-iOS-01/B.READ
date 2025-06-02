@@ -17,9 +17,7 @@ actor MemoRepositoryImpl: MemoRepository {
       throw RepositoryError.dataAlreadyExist
     }
     
-    let recordDTO = RecordDTO.createDTO(record)
-    
-    let model = MemoDTO(memo, record: recordDTO)
+    let model = MemoDTO(memo, record: RecordDTO(record))
     modelContext.insert(model)
     
     try modelContext.save()

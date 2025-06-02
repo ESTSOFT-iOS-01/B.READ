@@ -27,9 +27,6 @@ final class DummyService {
       }
     }
     // 2. 문장 더미 정보 저장
-    
-    
-    
     for quote in DummyData.dummyQuote {
       for record in DummyData.dummyRecords {
         if record.isbn == quote.isbn {
@@ -40,6 +37,7 @@ final class DummyService {
     }
     
     // 3. 메모 더미 정보 저장
+    
     
   }
 }

@@ -83,16 +83,10 @@ final class RecordDTO {
       createdAt: data.createdAt,
       updatedAt: data.updatedAt
     )
-  }
-  
-  static func createDTO(_ entity: Record) -> RecordDTO {
-    let dto = RecordDTO(entity)
     
-    dto.summary = entity.summary.map { SummaryDTO($0, record: dto) }
-    dto.memos = entity.memos.map { MemoDTO($0, record: dto) }
-    dto.quotes = entity.quotes.map{ QuoteDTO($0, record: dto) }
-    
-    return dto
+    self.summary = data.summary.map { SummaryDTO($0, record: self) }
+    self.memos = data.memos.map{ MemoDTO($0, record: self) }
+    self.quotes = data.quotes.map { QuoteDTO($0, record: self) }
   }
 }
 
