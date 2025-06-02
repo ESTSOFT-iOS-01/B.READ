@@ -15,11 +15,6 @@ struct MemoView: View {
   @State private var showGuideAlert = false
   @State private var showErrorAlert = false
   
-  @FocusState private var focusedField: Field?
-  enum Field: Hashable {
-    case startPage, endPage, memo
-  }
-  
   private let totalPage: Int
   
   init(viewModel: MemoViewModel, totalPage: Int) {
@@ -88,9 +83,6 @@ struct MemoView: View {
       }
     }
     .background(.backgroundDefault)
-    .onTapGesture {
-      focusedField = nil
-    }
   }
   // 숫자 외에 텍스트 필터링 및 0 못오게
   private func formatDigits(_ input: String) -> String {
@@ -111,12 +103,10 @@ struct MemoView: View {
       
       HStack {
         RoundedTextField(type: .pages, placeholder: "0", text: $viewModel.startPage)
-          .focused($focusedField, equals: .startPage)
         
         Text("~")
         
         RoundedTextField(type: .pages, placeholder: "0", text: $viewModel.endPage)
-          .focused($focusedField, equals: .endPage)
         
         Text("쪽")
       }.padding(.trailing, 52)
@@ -137,7 +127,6 @@ struct MemoView: View {
         placeholder: "여기를 터치해서 문장을 입력할 수 있어요"
       )
       .padding(.bottom, 16)
-      .focused($focusedField, equals: .memo)
       .frame(height: 200)
       .tint(.gray9)
     }
