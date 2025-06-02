@@ -18,6 +18,8 @@ actor QuoteRepositoryImpl: QuoteRepository {
     let recordDTO = RecordDTO.createDTO(record)
     let dto = QuoteDTO(quote, record: recordDTO)
     modelContext.insert(dto)
+    
+    try modelContext.save()
   }
   
   func updateQuote(_ quote: Quote) throws {

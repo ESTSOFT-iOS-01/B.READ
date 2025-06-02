@@ -71,61 +71,64 @@ extension DummyData {
     )
   ]
 }
-//
-//// MARK: - Record
-//extension DummyData {
-//  static var dummyRecords: [Record] = [
-//    Record( // 워런 버핏 웨이
-//      id: UUID().uuidString,
-//      isbn: "9791194368137",
-//      state: .toRead,
-//      heartCount: 3,
-//      starCount: 0,
-//      isFavorite: false,
-//      period: (nil, nil),
-//      currentPage: 0,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
-//          ),
-//    Record( // 타이탄의 도구들
-//      id: UUID().uuidString,
-//      isbn: "9791158510619",
-//      state: .reading,
-//      heartCount: 0,
-//      starCount: 0,
-//      isFavorite: true,
-//      period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
-//      currentPage: 123,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: ["5", "6"],
-//      quoteIDs: ["4", "5"],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
-//          ),
-//    Record( // 싯다르타
-//      id: UUID().uuidString,
-//      isbn: "9788937460586",
-//      state: .completed,
-//      heartCount: 0,
-//      starCount: 4,
-//      isFavorite: false,
-//      period: (
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
-//      ),
-//      currentPage: 252,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: ["1", "2", "3", "4"],
-//      quoteIDs: ["1", "2", "3"],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
-//          ),
+
+// MARK: - Record
+extension DummyData {
+  static func createDummyRecords() -> [Record] {
+    return dummyRecords
+  }
+  static var dummyRecords: [Record] = [
+    Record( // 워런 버핏 웨이
+      id: UUID().uuidString,
+      isbn: "9791194368137",
+      state: .toRead,
+      heartCount: 3,
+      starCount: 0,
+      isFavorite: false,
+      period: (nil, nil),
+      currentPage: 0,
+      review: "",
+      summary: nil,
+      memos: [],
+      quotes: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
+          ),
+    Record( // 타이탄의 도구들
+      id: UUID().uuidString,
+      isbn: "9791158510619",
+      state: .reading,
+      heartCount: 0,
+      starCount: 0,
+      isFavorite: true,
+      period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
+      currentPage: 123,
+      review: "",
+      summary: nil,
+      memos: [],
+      quotes: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
+          ),
+    Record( // 싯다르타
+      id: UUID().uuidString,
+      isbn: "9788937460586",
+      state: .completed,
+      heartCount: 0,
+      starCount: 4,
+      isFavorite: false,
+      period: (
+        Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
+        Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
+      ),
+      currentPage: 252,
+      review: "",
+      summary: nil,
+      memos: [],
+      quotes: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
+          ),
 //    Record( // 아주 작은 습관들
 //      id: UUID().uuidString,
 //      isbn: "9791162540640",
@@ -202,7 +205,7 @@ extension DummyData {
   ]
 }
 
-//// MARK: - Memo
+// MARK: - Memo
 //extension DummyData {
 //  static let dummyMemos: [Memo] = [
 //    Memo(
@@ -255,17 +258,17 @@ extension DummyData {
 //    )
 //  ]
 //}
-//
-//// MARK: - Quote
-//extension DummyData {
-//  static let dummyQuote: [Quote] = [
-//    Quote(id: "1", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 77),
-//    Quote(id: "2", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 12),
-//    Quote(id: "3", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 35),
-//    Quote(id: "4", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 123),
-//    Quote(id: "5", isbn: "9791158510619", content: "수집된 문장 문장 수집된 문장 수집된 문장 수집된 문장", page: 72),
-//  ]
-//}
+
+// MARK: - Quote
+extension DummyData {
+  static let dummyQuote: [Quote] = [
+    Quote(id: "1", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 77),
+    Quote(id: "2", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 12),
+    Quote(id: "3", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 35),
+    Quote(id: "4", isbn: "9788937460586", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 123),
+    Quote(id: "5", isbn: "9788937460586", content: "수집된 문장 문장 수집된 문장 수집된 문장 수집된 문장", page: 72),
+  ]
+}
 //
 //// MARK: - AI Note
 //extension DummyData {
