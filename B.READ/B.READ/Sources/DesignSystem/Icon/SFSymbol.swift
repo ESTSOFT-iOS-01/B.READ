@@ -25,6 +25,7 @@ enum SFSymbol {
   case list
   case grid
   case ellipsis
+  case trash
   case chevronCompactDown
   case chevronLeft
   case chevronRight
@@ -65,6 +66,8 @@ enum SFSymbol {
       "square.grid.2x2.fill"
     case .ellipsis:
       "ellipsis"
+    case .trash:
+      "trash"
     case .chevronCompactDown:
       "chevron.compact.down"
     case .chevronLeft:
