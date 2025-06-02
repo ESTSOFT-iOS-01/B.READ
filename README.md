@@ -1,1 +1,167 @@
+<div align=center>
+
 # B.READ
+### **야외 운동 시 위치 기반으로 경로를 기록하고, 그 순간을 이미지로 남기는 러닝 기록 서비스**
+
+사용자의 야외 운동 데이터를 기반으로 거리, 걸음 수를 측정하고 경로를 시각적으로 표현해줍니다. 나아가, 이 기록을 바탕으로 무빙트랙 영상을 확인하고 트랙 이미지를 자동 생성해 누구나 쉽게 공유하고 재미를 느낄 수 있는 서비스입니다.
+
+[📑 RunLog FigJam 📑]()
+
+[📑 RunLog 발표자료 📑]()
+
+## 🍎 Developers
+<img width="160px" src="https://avatars.githubusercontent.com/u/68256612?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/80318425?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/132960058?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/55975937?v=4"/> |
+|:-----:|:-----:|:-----:|:-----:|
+|[신승재](https://github.com/Monfi98) | [김도연](https://github.com/doyeonk429) | [도민준](https://github.com/aado97) | [심근웅](https://github.com/GeunwoongSim) |
+|팀장 👑|팀원 👨🏻‍💻|팀원 👨🏻‍💻|팀원 👨🏻‍💻|
+|`온보딩`</br>`홈`</br>`메모`</br>`마이페이지` | `검색` </br> `추천` | `문장 수집` </br> | `책빵` </br> |
+</div>
+<br/>
+
+## 🎥 주요 기능 시연 영상
+<table>
+  <tr>
+    <td align="center">온보딩</td>
+    <td align="center">홈</td>
+    <td align="center">검색</td>
+    <td align="center">책빵</td>
+    <td align="center">기록</td>
+    <td align="center">마이페이지</td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/user-attachments/assets/5595f660-f1fd-4a3d-a8d6-d2daf4f32fb7" width="200">
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/f6ad80b8-7ebf-419c-a204-a95dfdd3dc56" width="240">
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/01aa60b9-a5b8-49ae-bffa-b9d52cce129e" width="240">
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/26e4ce1e-9913-4db9-8a35-bfffabea2573" width="240">
+    </td>
+  </tr>
+</table>
+
+## 🛠️ Development Environment 🛠️
+![iOS](https://img.shields.io/badge/iOS-000000?style=for-the-badge&logo=ios&logoColor=white)
+![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
+
+## 🥞 Stacks 🥞
+### Tech Stack
+<img src="https://github.com/user-attachments/assets/d69d6c63-662a-4781-8f79-c25b6b3a1844" width="50"> <img src="https://github.com/user-attachments/assets/d7d1746b-b996-44e0-95e7-dad3d4eb10b3" width="50"> <img src="https://github.com/user-attachments/assets/b939216b-81c6-4fb2-98c4-55835898a116" width="50"> <img src="https://github.com/user-attachments/assets/36967f6a-4960-4919-8bcf-11a59f117641" width="50"> <img src="https://github.com/user-attachments/assets/ff75aee9-c30c-4fc0-967d-b20d38b73a2e" width="50"> <img src="https://github.com/user-attachments/assets/1015396c-3bb4-4709-b718-d2a228b0b51a" width="50"> <img src="https://github.com/user-attachments/assets/689a08fc-91cd-4586-8a4d-dba8f830662c" width="50"> <img src="https://github.com/user-attachments/assets/622d907e-a121-40f3-894f-06f98b980c07" width="50">
+### Library & API
+<img src="https://github.com/user-attachments/assets/d377643f-3a73-4316-b84c-78a61c8d762d" width="50"> <img src="https://github.com/user-attachments/assets/da6785ff-6bba-4913-8fd4-7a984aaa5da1" width="50"> <img src="https://github.com/user-attachments/assets/30f4eabb-a01a-4284-b158-03e339c9fff3" width="50"> <img src="https://github.com/user-attachments/assets/fececa85-34ff-460b-961e-9e42931c45fd" width="50"> <img src="https://github.com/user-attachments/assets/8a1f2364-ff23-4e94-bba5-3f92a155f1e5" width="50">
+### Tools
+<img src="https://img.shields.io/badge/-Github-181717?style=flat&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/-figma-5856D6?style=flat&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/-Notion-000000?style=flat&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Discord-5865F2?style=flat&logo=Discord&logoColor=white">
+
+
+## ✏️ Project Design ✏️
+![프로젝트 아키텍쳐](https://github.com/user-attachments/assets/56edce6a-8ff1-4fdf-83f5-5cb8029031f5)
+
+## 💻 Convention 💻
+
+## 🌲 Branch Convention 🌲
+1. **기본 브랜치 설정**
+- main : 배포 가능한 안정적인 코드가 유지되는 브랜치
+- develop: 기본 브랜치로, 기능을 개발하는 브랜치
+
+2. **작업 순서**
+   1. 작업할 이슈 작성
+   2. 적합한 Assignees, Label, Project, Milestone 할당
+   3. **자동 생성 브랜치에서 작업 수행**
+   4. **원격 저장소에 작업 브랜치 푸시**
+   5. **Pull Request 생성**
+   - `develop` 브랜치 대상으로 Pull Request 생성
+   - 리뷰어의 리뷰를 받은 후 PR을 승인 받고 `develop` 브랜치에 자동 병합
+
+
+## 🧑‍💻 Code Convention 🧑‍💻
+- 자체 Coding Convention
+
+**네이밍 규칙**
+
+- **변수/상수**: 카멜케이스 (예: `userName`)
+- **클래스/구조체**: 파스칼케이스 (예: `UserProfile`)
+- **함수/메서드**: 동사로 시작하며 카멜케이스 (예: `fetchData()`)
+
+ **코드 스타일**
+
+- **명시적 타입 선언**: 가능하면 타입 명시 (예: `var name : String = “name”`)
+- **옵셔널 처리**: `guard`나 `if let`을 사용하여 안전하게 언래핑
+- **함수 파라미터**: 간결하고 직관적인 이름 사용
+---
+## 💬 Issue Convention 💬
+> 모든 이슈에 대한 템플릿
+```
+## 💡 Issue
+<!-- 이슈에 대해 간단하게 설명해 주세요 -->
+
+## 🔥 Tasks
+<!-- 해야 할 작업들을 나열해 주세요 -->
+```
+---
+## 🫷 PR Convention 🫸
+```markdown
+<!-- PR 제목 컨벤션: [이슈 라벨] 작업한 내용 요약 -->
+
+## 💡 PR 유형
+<!-- 해당하는 유형에 "x"를 입력하세요. -->
+- [ ] Feature: 기능 추가
+- [ ] Hotfix: 작은 버그 수정
+- [ ] Bugfix: 큰 버그 수정
+- [ ] Refactor: 코드 개선
+- [ ] Chore: 환경 설정
+
+## ✏️ 변경 사항
+<!-- 이 PR에서 작업한 내용을 간단히 요약해주세요. -->
+
+## 🚨 관련 이슈
+<!-- 관련된 이슈 번호를 적어주세요. 여러 개인 경우 쉼표로 구분하세요. -->
+- close #
+
+## 🧪 테스트
+<!-- 이 PR에서 테스트한 내용을 설명해주세요. -->
+- [ ] 목표한 구현 정상 동작 확인
+
+## 🎨 스크린샷
+<!-- UI 변경사항이 있는 경우 스크린샷을 첨부해주세요. -->
+<!-- img src "이부분에 gif파일 넣어주세요" -->
+|기능|스크린샷|
+|:--:|:--:|
+|GIF|<img src = "" width ="250">|
+
+## ✅ 체크리스트
+<!-- 꼭 모두 체크하고 PR을 생성해주세요. -->
+- [ ] 코드/커밋이 정해진 컨벤션을 잘 따르고 있나요?
+- [ ] PR의 Assignees와 Reviewers를 설정했나요?
+- [ ] 불필요한 코드가 없고, 정상적으로 동작하는지 확인했나요?
+- [ ] 관련 이슈 번호를 작성했나요?
+
+## 🔥 추가 설명
+<!-- 리뷰어가 알아야 할 추가적인 정보가 있다면 여기에 적어주세요. -->
+<!-- 코드 리뷰를 받고 싶은 코드나, 설명하고 싶은 코드가 있다면 적어주세요. -->
+```
+---
+## 🙏 Commit Convention 🙏
+
+- `feature` : 새로운 기능이 추가되는 경우
+- `docs` :  문서에 변경 사항이 있는 경우
+- `refactor` : 코드 리팩토링하는 경우 (기능 변경 없이 구조 개선)
+
+```swift
+// Format
+[#Issue Number]: [Description]
+
+// Example
+[feature]: 로그인 기능 구현
+```
+---
+## 📁 Foldering Convention 📁
+```markdown
+
+```
+
+## 🔥 Trouble Shooting 🔥
+- 여기에 링크 달기
