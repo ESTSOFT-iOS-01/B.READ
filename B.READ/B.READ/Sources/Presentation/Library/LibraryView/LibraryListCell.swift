@@ -75,11 +75,11 @@ struct LibraryListCell: View {
     }
   }
 }
-
-#Preview {
-  @Previewable @State var record = RecordCellVO(
-    record: DummyData.dummyRecords[2],
-    book: DummyData.dummyBooks[2]
-  )
-  LibraryListCell(record: $record)
-}
+//
+//#Preview {
+//  @Previewable @State var record = RecordCellVO(
+//    record: DummyData.dummyRecords[2],
+//    book: DummyData.dummyBooks[2]
+//  )
+//  LibraryListCell(record: $record)
+//}

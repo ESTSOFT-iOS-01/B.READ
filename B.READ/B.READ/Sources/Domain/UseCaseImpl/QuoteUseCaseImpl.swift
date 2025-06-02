@@ -19,7 +19,7 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     self.bookRepository = bookRepository
   }
   
-  func addQuote(_ quote: Quote) async throws {
+  func addQuote(_ quote: Quote, in record: Record) async throws {
     // 빈 내용 검증
     let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !content.isEmpty else {
@@ -28,7 +28,7 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     // 페이지 범위 검증
     try await validatePage(quote.page, forISBN: quote.isbn)
     // 저장 수행
-    try await quoteRepository.createQuote(quote)
+    try await quoteRepository.createQuote(quote, in: record)
   }
   
   func updateQuote(_ quote: Quote) async throws {

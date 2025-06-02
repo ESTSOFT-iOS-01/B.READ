@@ -15,7 +15,7 @@ protocol QuoteRepository {
   /// - Throws:
   ///   - `RepositoryError.dataAlreadyExist`: 동일한 ID의 데이터가 이미 존재하는 경우
   ///   - `RepositoryError.fetchError`: 내부 확인 과정에서 오류가 발생한 경우
-  func createQuote(_ quote: Quote) async throws
+  func createQuote(_ quote: Quote, in record: Record) async throws
   
   /// 기존 Quote를 갱신합니다.
   ///

@@ -15,21 +15,21 @@ final class DummyService {
   @Dependency private var quoteUseCase: QuoteUseCase
   
   func setDummy() async {
-    // 1. 독서 기록, 도서 더미정보 저장
-    for record in DummyData.dummyRecords {
-      if let book = DummyData.dummyBooks.filter({ $0.isbn == record.isbn }).first {
-        do {
-          try await libUseCase.saveRecord(record: record, book: book)
-        } catch {
-          print(error.localizedDescription)
-        }
-        
-      }
-    }
-    // 2. 문장 더미 정보 저장
-    for quote in DummyData.dummyQuote {
-      try? await quoteUseCase.addQuote(quote)
-    }
+//    // 1. 독서 기록, 도서 더미정보 저장
+//    for record in DummyData.dummyRecords {
+//      if let book = DummyData.dummyBooks.filter({ $0.isbn == record.isbn }).first {
+//        do {
+//          try await libUseCase.saveRecord(record: record, book: book)
+//        } catch {
+//          print(error.localizedDescription)
+//        }
+//        
+//      }
+//    }
+//    // 2. 문장 더미 정보 저장
+//    for quote in DummyData.dummyQuote {
+//      try? await quoteUseCase.addQuote(quote)
+//    }
     
     // 3. 메모 더미 정보 저장
     

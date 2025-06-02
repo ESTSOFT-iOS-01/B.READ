@@ -10,7 +10,7 @@ import Foundation
 actor MemoRepositoryStub: MemoRepository {
   private var memos: [Memo] = []
 
-  func createMemo(_ memo: Memo) async throws {
+  func createMemo(_ memo: Memo, in record: Record) async throws {
     if memos.contains(where: { $0.id == memo.id }) {
       throw RepositoryError.dataAlreadyExist
     }
