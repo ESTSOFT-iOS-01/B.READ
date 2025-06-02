@@ -1,3 +1,4 @@
+
 //
 //  SwiftDataTestStorage.swift
 //  B.READTests
@@ -6,6 +7,9 @@
 //
 
 import Foundation
+import Testing
+
+@testable import B_READ
 import SwiftData
 
 final class SwiftDataTestStorage {

@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+@testable import B_READ
+
 struct SearchUseCaseTest {
   private let searchUseCase: SearchUseCase
   private let recordRepository: RecordRepository

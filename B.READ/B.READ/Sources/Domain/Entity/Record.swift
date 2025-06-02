@@ -37,6 +37,38 @@ struct Record: Identifiable {
   var quotes: [Quote]
   var createdAt: Date
   var updatedAt: Date
+  
+  init(
+    id: String,
+    isbn: String,
+    state: ReadState,
+    heartCount: Int,
+    starCount: Int,
+    isFavorite: Bool,
+    period: (startDate: Date?, endDate: Date?),
+    currentPage: Int,
+    review: String,
+    summary: AlanSummary? = nil,
+    memos: [Memo],
+    quotes: [Quote],
+    createdAt: Date,
+    updatedAt: Date
+  ) {
+    self.id = id
+    self.isbn = isbn
+    self.state = state
+    self.heartCount = heartCount
+    self.starCount = starCount
+    self.isFavorite = isFavorite
+    self.period = period
+    self.currentPage = currentPage
+    self.review = review
+    self.summary = summary
+    self.memos = memos
+    self.quotes = quotes
+    self.createdAt = createdAt
+    self.updatedAt = updatedAt
+  }
 }
 
 extension Record: Hashable {

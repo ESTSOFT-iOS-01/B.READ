@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+@testable import B_READ
+
 struct RecordRepositoryTest {
   
   private let recordRepository: RecordRepository
@@ -83,8 +85,8 @@ struct RecordRepositoryTest {
       period: basicRecord.period,
       currentPage: basicRecord.currentPage,
       review: basicRecord.review,
-      memoIDs: basicRecord.memoIDs,
-      quoteIDs: basicRecord.quoteIDs,
+      memos: basicRecord.memos,
+      quotes: basicRecord.quotes,
       createdAt: basicRecord.createdAt,
       updatedAt: basicRecord.updatedAt
     )

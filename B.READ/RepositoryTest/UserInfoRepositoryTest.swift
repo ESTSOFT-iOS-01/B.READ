@@ -1,5 +1,5 @@
 //
-//  UserInfoRepositoryTests.swift
+//  UserInfoRepositoryTest.swift
 //  B.READTests
 //
 //  Created by 신승재 on 5/17/25.
@@ -8,7 +8,9 @@
 import Foundation
 import Testing
 
-struct UserInfoRepositoryTests {
+@testable import B_READ
+
+struct UserInfoRepositoryTest {
   
   private let userInfoRepository: UserInfoRepository
   

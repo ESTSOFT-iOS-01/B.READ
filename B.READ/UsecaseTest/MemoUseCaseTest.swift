@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+@testable import B_READ
+
 struct MemoUseCaseTest {
 
   let memoUseCase: MemoUseCase
