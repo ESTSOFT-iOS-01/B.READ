@@ -10,10 +10,10 @@ import SwiftUI
 // MARK: - (S)RecordStatsView
 struct RecordStatsView: View {
   
-  private let record: RecordCellVO
+  @Binding private var record: RecordCellVO
   
-  init(record: RecordCellVO) {
-    self.record = record
+  init(record: Binding<RecordCellVO>) {
+    self._record = record
   }
   
   var body: some View {

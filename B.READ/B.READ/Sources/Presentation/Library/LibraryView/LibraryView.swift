@@ -77,18 +77,17 @@ struct LibraryView: View {
           .onTapGesture {
             showSortMenu = false
           }
-        
-        // 정렬 메뉴
-        SortMenu(
-          type: .library,
-          isOpened: $showSortMenu,
-          selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-        )
-        .padding(.trailing, 48)
-        .padding(.top, 90)
-        .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
-          viewModel.send(.selectSort)
-        }
+      }
+      // 정렬 메뉴
+      SortMenu(
+        type: .library,
+        isOpened: $showSortMenu,
+        selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+      )
+      .padding(.trailing, 48)
+      .padding(.top, 90)
+      .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
+        viewModel.send(.selectSort)
       }
     } // : ZStack
     .background(.backgroundDefault)

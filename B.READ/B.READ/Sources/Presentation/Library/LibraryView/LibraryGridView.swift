@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - (S)LibraryGridView
+// TODO: - [시르] 그리드 뷰 구현
 struct LibraryGridView: View {
   var body: some View {
     Text("Hello Grid View!")

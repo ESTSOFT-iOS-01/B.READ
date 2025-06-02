@@ -69,7 +69,7 @@ struct SearchTabContentView: View {
           layoutPadding: 24,
           listPadding: 16,
           onTap: {
-            coordinator.push(.libraryDetail(id: $0.id, isbn: $0.isbn))
+            coordinator.push(.libraryDetail(id: $0.id))
           },
           content: { record in
             RecordSearchCell(data: record)
