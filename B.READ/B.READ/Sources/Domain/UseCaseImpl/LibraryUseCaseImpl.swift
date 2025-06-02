@@ -53,48 +53,6 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   
   func deleteRecord(_ record: Record) async throws {
-    try await withThrowingTaskGroup(of: Void.self) {
-      [weak self] group in
-      guard let self = self else { return }
-      
-      // 1. 요약노트 삭제
-      
-      if let noteID = record.summaryID {
-        group.addTask {
-//          do {
-//            try await noteRepository.deleteNote(id: noteID)
-//          } catch {
-//            print("ERROR: Note Delete Fail")
-//          }
-        }
-      }
-      
-      // 2. 문장 삭제
-      for quoteID in record.quoteIDs {
-        group.addTask {
-          do {
-            try await self.quoteRepository.deleteQuote(id: quoteID)
-          } catch {
-            print("ERROR: Quote Delete Fail")
-          }
-        }
-      }
-      
-      // 3. 메모 삭제
-      for memoID in record.memoIDs {
-        group.addTask {
-//          do {
-//            try await memoRepository.deleteMemo(id: memoID)
-//          } catch {
-//            print("ERROR: Memo Delete Fail")
-//          }
-        }
-      }
-      
-      // group의 작업이 종료 되길 기다림
-      for try await _ in group { }
-    }
-    // 4. 독서 기록 삭제
     try await recordRepository.deleteRecord(record.id)
   }
   

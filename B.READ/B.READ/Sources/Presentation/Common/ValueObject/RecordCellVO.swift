@@ -71,8 +71,8 @@ struct RecordCellVO: Identifiable {
     self.heart = record.heartCount
     self.progress = Int(record.currentPage / book.totalPages)
     self.star = record.starCount
-    self.memoCount = record.memoIDs.count
-    self.quoteCount = record.quoteIDs.count
+    self.memoCount = record.memos.count
+    self.quoteCount = record.quotes.count
     self.period = record.period
     self.isFavorite = record.isFavorite
     self.createdAt = record.createdAt

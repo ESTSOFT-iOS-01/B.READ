@@ -11,11 +11,13 @@ protocol MemoRepository {
   
   /// Memo를 생성합니다.
   ///
-  /// - Parameter memo: Memo Entity
+  /// - Parameter
+  ///   - `memo` : Memo Entity
+  ///   - `record` : memo가 저장될 독서 기록
   /// - Throws:
   ///   - `RepositoryError.dataAlreadyExist`: 동일한 ID의 메모가 이미 존재하는 경우
   ///   - `RepositoryError.fetchError`: 기존 데이터 조회 중 에러가 발생한 경우
-  func createMemo(_ memo: Memo) async throws
+  func createMemo(_ memo: Memo, in record: Record) async throws
   
   /// 특정 ID에 해당하는 Memo를 조회합니다.
   ///

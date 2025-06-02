@@ -22,6 +22,8 @@ final class MemoDTO {
   @Relationship(deleteRule: .cascade)
   var guides: [GuideDTO]
   
+  var record: RecordDTO
+  
   init(
     id: String,
     isbn: String,
@@ -29,7 +31,8 @@ final class MemoDTO {
     content: String,
     startPage: Int,
     endPage: Int,
-    guides: [GuideDTO]
+    guides: [GuideDTO],
+    record: RecordDTO
   ) {
     self.id = id
     self.isbn = isbn
@@ -38,9 +41,10 @@ final class MemoDTO {
     self.startPage = startPage
     self.endPage = endPage
     self.guides = guides
+    self.record = record
   }
   
-  convenience init(_ data: Memo) {
+  convenience init(_ data: Memo, record: RecordDTO) {
     self.init(
       id: data.id,
       isbn: data.isbn,
@@ -48,7 +52,8 @@ final class MemoDTO {
       content: data.content,
       startPage: data.pages.0,
       endPage: data.pages.1,
-      guides: data.guides.map { GuideDTO($0) }
+      guides: data.guides.map { GuideDTO($0) },
+      record: record
     )
   }
 }

@@ -23,7 +23,7 @@ final class MemoUseCaseImpl: MemoUseCase {
     do {
       try await memoRepository.updateMemo(memo)
     } catch RepositoryError.dataNotFound {
-      try await memoRepository.createMemo(memo)
+//      try await memoRepository.createMemo(memo)
     }
   }
   

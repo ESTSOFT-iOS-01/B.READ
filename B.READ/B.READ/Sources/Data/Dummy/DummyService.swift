@@ -28,10 +28,16 @@ final class DummyService {
     }
     // 2. 문장 더미 정보 저장
     for quote in DummyData.dummyQuote {
-      try? await quoteUseCase.addQuote(quote)
+      for record in DummyData.dummyRecords {
+        if record.isbn == quote.isbn {
+          try? await quoteUseCase.addQuote(quote, in: record)
+          break
+        }
+      }
     }
     
     // 3. 메모 더미 정보 저장
+    
     
   }
 }

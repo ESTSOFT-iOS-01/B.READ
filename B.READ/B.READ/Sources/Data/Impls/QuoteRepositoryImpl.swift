@@ -10,25 +10,28 @@ import SwiftData
 
 @ModelActor
 actor QuoteRepositoryImpl: QuoteRepository {
-  func createQuote(_ quote: Quote) throws {
-      print("Impl: \(#function)")
-      if let _ = try findQuote(id: quote.id) {
-        throw RepositoryError.dataAlreadyExist
-      }
-      let dto = QuoteDTO(quote)
-      modelContext.insert(dto)
+  func createQuote(_ quote: Quote, in record: Record) throws {
+    print("Impl: \(#function)")
+    if let _ = try findQuote(id: quote.id) {
+      throw RepositoryError.dataAlreadyExist
     }
-
+    
+    let dto = QuoteDTO(quote, record: RecordDTO(record))
+    modelContext.insert(dto)
+    
+    try modelContext.save()
+  }
+  
   func updateQuote(_ quote: Quote) throws {
-      print("Impl: \(#function)")
-      guard let dto = try findQuote(id: quote.id) else {
-        throw RepositoryError.dataNotFound
-      }
-      dto.isbn = quote.isbn
-      dto.content = quote.content
-      dto.page = quote.page
+    print("Impl: \(#function)")
+    guard let dto = try findQuote(id: quote.id) else {
+      throw RepositoryError.dataNotFound
     }
-
+    dto.isbn = quote.isbn
+    dto.content = quote.content
+    dto.page = quote.page
+  }
+  
   func deleteQuote(id: String) throws {
     print("Impl: \(#function)")
     guard let dto = try findQuote(id: id) else {
@@ -52,12 +55,12 @@ actor QuoteRepositoryImpl: QuoteRepository {
   }
   
   func fetchQuote(id: String) throws -> Quote {
-     print("Impl: \(#function)")
-     guard let dto = try findQuote(id: id) else {
-       throw RepositoryError.dataNotFound
-     }
-     return dto.toEntity()
-   }
+    print("Impl: \(#function)")
+    guard let dto = try findQuote(id: id) else {
+      throw RepositoryError.dataNotFound
+    }
+    return dto.toEntity()
+  }
   
   func fetchAllQuotes() throws -> [Quote] {
     print("Impl: \(#function)")
