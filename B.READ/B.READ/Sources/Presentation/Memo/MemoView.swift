@@ -155,7 +155,7 @@ private struct GuideSectionView: View {
           .frame(maxWidth: .infinity, alignment: .leading)
         
         if viewModel.guideStatus == .complete {
-          Image(systemName: "trash")
+          Image(systemName: SFSymbol.trash.name)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 16, height: 16)
