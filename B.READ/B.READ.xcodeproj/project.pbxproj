@@ -21,6 +21,13 @@
 			remoteGlobalIDString = 35C171DF2DCB34320049724A;
 			remoteInfo = B.READ;
 		};
+		16BE952C2DED72FC006FFD00 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35C171D82DCB34320049724A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 35C171DF2DCB34320049724A;
+			remoteInfo = B.READ;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,6 +46,7 @@
 /* Begin PBXFileReference section */
 		16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RepositoryTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16BE93202DED713E006FFD00 /* ServiceTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ServiceTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		16BE95282DED72FB006FFD00 /* UsecaseTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UsecaseTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C171E02DCB34320049724A /* B.READ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = B.READ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -81,7 +89,14 @@
 		16BE95112DED7174006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Sources/Domain/Dummy/DummyData.swift,
+				Sources/Domain/Entity/AlanSummary.swift,
+				Sources/Domain/Entity/Book.swift,
 				Sources/Domain/Entity/BookServiceEntity.swift,
+				Sources/Domain/Entity/Memo.swift,
+				Sources/Domain/Entity/Quote.swift,
+				Sources/Domain/Entity/Record.swift,
+				Sources/Domain/Entity/UserInfo.swift,
 				Sources/Domain/Service/Interface/AIService.swift,
 				Sources/Domain/Service/Interface/BookService.swift,
 				Sources/Network/Aladin/AladinAPI.swift,
@@ -103,6 +118,66 @@
 			);
 			target = 16BE931F2DED713E006FFD00 /* ServiceTest */;
 		};
+		16BE95412DED731A006FFD00 /* Exceptions for "B.READ" folder in "UsecaseTest" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Sources/Data/DTOs/Record/BookDTO.swift,
+				Sources/Data/DTOs/Record/GuideDTO.swift,
+				Sources/Data/DTOs/Record/MemoDTO.swift,
+				Sources/Data/DTOs/Record/QuoteDTO.swift,
+				Sources/Data/DTOs/Record/RecordDTO.swift,
+				Sources/Data/DTOs/Record/SummaryDTO.swift,
+				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
+				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
+				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
+				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
+				Sources/Data/Impls/BookRepositoryImpl.swift,
+				Sources/Data/Impls/MemoRepositoryImpl.swift,
+				Sources/Data/Impls/QuoteRepositoryImpl.swift,
+				Sources/Data/Impls/RecordRepositoryImpl.swift,
+				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
+				Sources/Domain/Dummy/DummyData.swift,
+				Sources/Domain/Entity/AlanSummary.swift,
+				Sources/Domain/Entity/Book.swift,
+				Sources/Domain/Entity/BookServiceEntity.swift,
+				Sources/Domain/Entity/Memo.swift,
+				Sources/Domain/Entity/Quote.swift,
+				Sources/Domain/Entity/Record.swift,
+				Sources/Domain/Entity/UserInfo.swift,
+				Sources/Domain/Repository/Error/RepositoryError.swift,
+				Sources/Domain/Repository/Inerface/BookRepository.swift,
+				Sources/Domain/Repository/Inerface/MemoRepository.swift,
+				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
+				Sources/Domain/Repository/Inerface/RecordRepository.swift,
+				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
+				Sources/Domain/Service/Interface/AIService.swift,
+				Sources/Domain/Service/Interface/BookService.swift,
+				Sources/Domain/UseCase/LibraryUseCase.swift,
+				Sources/Domain/UseCase/MemoUseCase.swift,
+				Sources/Domain/UseCase/ProfileUseCase.swift,
+				Sources/Domain/UseCase/QuoteUseCase.swift,
+				Sources/Domain/UseCase/RecommandUseCase.swift,
+				Sources/Domain/UseCase/SearchUseCase.swift,
+				Sources/Domain/UseCaseImpl/LibraryUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/MemoUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/ProfileUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/QuoteUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/RecommandUseCaseImpl.swift,
+				Sources/Domain/UseCaseImpl/SearchUseCaseImpl.swift,
+				Sources/Network/Aladin/AladinAPI.swift,
+				Sources/Network/Aladin/AladinError.swift,
+				Sources/Network/Aladin/AladinResponse.swift,
+				Sources/Network/Aladin/AladinRouter.swift,
+				Sources/Network/Aladin/AladinService.swift,
+				Sources/Network/Aladin/MockNetworkClient.swift,
+				Sources/Network/NetworkClient/GlobalAlias.swift,
+				Sources/Network/NetworkClient/HTTPMethod.swift,
+				Sources/Network/NetworkClient/NetworkClient.swift,
+				Sources/Network/NetworkClient/RequestConvertible.swift,
+				"Sources/Util/Extensions/Bundle+.swift",
+			);
+			target = 16BE95272DED72FB006FFD00 /* UsecaseTest */;
+		};
 		35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -119,14 +194,14 @@
 			path = RepositoryTest;
 			sourceTree = "<group>";
 		};
-		16BE8C7F2DED5466006FFD00 /* UsecaseTest */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UsecaseTest;
-			sourceTree = "<group>";
-		};
 		16BE93212DED713E006FFD00 /* ServiceTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ServiceTest;
+			sourceTree = "<group>";
+		};
+		16BE95292DED72FC006FFD00 /* UsecaseTest */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = UsecaseTest;
 			sourceTree = "<group>";
 		};
 		35C171E22DCB34320049724A /* B.READ */ = {
@@ -135,6 +210,7 @@
 				35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */,
 				16BE8C9B2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "RepositoryTest" target */,
 				16BE95112DED7174006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */,
+				16BE95412DED731A006FFD00 /* Exceptions for "B.READ" folder in "UsecaseTest" target */,
 			);
 			path = B.READ;
 			sourceTree = "<group>";
@@ -156,6 +232,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16BE95252DED72FB006FFD00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		35C171DD2DCB34320049724A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -171,8 +254,8 @@
 			children = (
 				35C171E22DCB34320049724A /* B.READ */,
 				16BE8C6A2DED50C0006FFD00 /* RepositoryTest */,
-				16BE8C7F2DED5466006FFD00 /* UsecaseTest */,
 				16BE93212DED713E006FFD00 /* ServiceTest */,
+				16BE95292DED72FC006FFD00 /* UsecaseTest */,
 				35C171E12DCB34320049724A /* Products */,
 			);
 			indentWidth = 2;
@@ -185,6 +268,7 @@
 				35C171E02DCB34320049724A /* B.READ.app */,
 				16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */,
 				16BE93202DED713E006FFD00 /* ServiceTest.xctest */,
+				16BE95282DED72FB006FFD00 /* UsecaseTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -238,6 +322,29 @@
 			productReference = 16BE93202DED713E006FFD00 /* ServiceTest.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		16BE95272DED72FB006FFD00 /* UsecaseTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16BE952E2DED72FC006FFD00 /* Build configuration list for PBXNativeTarget "UsecaseTest" */;
+			buildPhases = (
+				16BE95242DED72FB006FFD00 /* Sources */,
+				16BE95252DED72FB006FFD00 /* Frameworks */,
+				16BE95262DED72FB006FFD00 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16BE952D2DED72FC006FFD00 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				16BE95292DED72FC006FFD00 /* UsecaseTest */,
+			);
+			name = UsecaseTest;
+			packageProductDependencies = (
+			);
+			productName = UsecaseTest;
+			productReference = 16BE95282DED72FB006FFD00 /* UsecaseTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		35C171DF2DCB34320049724A /* B.READ */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 35C171EE2DCB34330049724A /* Build configuration list for PBXNativeTarget "B.READ" */;
@@ -279,6 +386,10 @@
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 35C171DF2DCB34320049724A;
 					};
+					16BE95272DED72FB006FFD00 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 35C171DF2DCB34320049724A;
+					};
 					35C171DF2DCB34320049724A = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -301,6 +412,7 @@
 				35C171DF2DCB34320049724A /* B.READ */,
 				16BE8C682DED50C0006FFD00 /* RepositoryTest */,
 				16BE931F2DED713E006FFD00 /* ServiceTest */,
+				16BE95272DED72FB006FFD00 /* UsecaseTest */,
 			);
 		};
 /* End PBXProject section */
@@ -314,6 +426,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		16BE931E2DED713E006FFD00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16BE95262DED72FB006FFD00 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -344,6 +463,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16BE95242DED72FB006FFD00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		35C171DC2DCB34320049724A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -363,6 +489,11 @@
 			isa = PBXTargetDependency;
 			target = 35C171DF2DCB34320049724A /* B.READ */;
 			targetProxy = 16BE93242DED713F006FFD00 /* PBXContainerItemProxy */;
+		};
+		16BE952D2DED72FC006FFD00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 35C171DF2DCB34320049724A /* B.READ */;
+			targetProxy = 16BE952C2DED72FC006FFD00 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -441,6 +572,44 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.ServiceTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
+			};
+			name = Release;
+		};
+		16BE952F2DED72FC006FFD00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83K577A944;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.UsecaseTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
+			};
+			name = Debug;
+		};
+		16BE95302DED72FC006FFD00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83K577A944;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.UsecaseTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -665,6 +834,15 @@
 			buildConfigurations = (
 				16BE93262DED713F006FFD00 /* Debug */,
 				16BE93272DED713F006FFD00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16BE952E2DED72FC006FFD00 /* Build configuration list for PBXNativeTarget "UsecaseTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16BE952F2DED72FC006FFD00 /* Debug */,
+				16BE95302DED72FC006FFD00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
