@@ -14,6 +14,13 @@
 			remoteGlobalIDString = 35C171DF2DCB34320049724A;
 			remoteInfo = B.READ;
 		};
+		16BE93242DED713F006FFD00 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 35C171D82DCB34320049724A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 35C171DF2DCB34320049724A;
+			remoteInfo = B.READ;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RepositoryTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		16BE93202DED713E006FFD00 /* ServiceTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ServiceTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C171E02DCB34320049724A /* B.READ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = B.READ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -70,6 +78,31 @@
 			);
 			target = 16BE8C682DED50C0006FFD00 /* RepositoryTest */;
 		};
+		16BE95112DED7174006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Sources/Domain/Entity/BookServiceEntity.swift,
+				Sources/Domain/Service/Interface/AIService.swift,
+				Sources/Domain/Service/Interface/BookService.swift,
+				Sources/Network/Aladin/AladinAPI.swift,
+				Sources/Network/Aladin/AladinError.swift,
+				Sources/Network/Aladin/AladinResponse.swift,
+				Sources/Network/Aladin/AladinRouter.swift,
+				Sources/Network/Aladin/AladinService.swift,
+				Sources/Network/Aladin/MockNetworkClient.swift,
+				Sources/Network/Alan/AlanAPI.swift,
+				Sources/Network/Alan/AlanError.swift,
+				Sources/Network/Alan/AlanRouter.swift,
+				Sources/Network/Alan/AlanService.swift,
+				Sources/Network/Alan/ResponseModel.swift,
+				Sources/Network/NetworkClient/GlobalAlias.swift,
+				Sources/Network/NetworkClient/HTTPMethod.swift,
+				Sources/Network/NetworkClient/NetworkClient.swift,
+				Sources/Network/NetworkClient/RequestConvertible.swift,
+				"Sources/Util/Extensions/Bundle+.swift",
+			);
+			target = 16BE931F2DED713E006FFD00 /* ServiceTest */;
+		};
 		35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -91,7 +124,7 @@
 			path = UsecaseTest;
 			sourceTree = "<group>";
 		};
-		16BE8C8E2DED54CA006FFD00 /* ServiceTest */ = {
+		16BE93212DED713E006FFD00 /* ServiceTest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = ServiceTest;
 			sourceTree = "<group>";
@@ -101,6 +134,7 @@
 			exceptions = (
 				35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */,
 				16BE8C9B2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "RepositoryTest" target */,
+				16BE95112DED7174006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */,
 			);
 			path = B.READ;
 			sourceTree = "<group>";
@@ -109,6 +143,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		16BE8C662DED50C0006FFD00 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16BE931D2DED713E006FFD00 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -131,7 +172,7 @@
 				35C171E22DCB34320049724A /* B.READ */,
 				16BE8C6A2DED50C0006FFD00 /* RepositoryTest */,
 				16BE8C7F2DED5466006FFD00 /* UsecaseTest */,
-				16BE8C8E2DED54CA006FFD00 /* ServiceTest */,
+				16BE93212DED713E006FFD00 /* ServiceTest */,
 				35C171E12DCB34320049724A /* Products */,
 			);
 			indentWidth = 2;
@@ -143,6 +184,7 @@
 			children = (
 				35C171E02DCB34320049724A /* B.READ.app */,
 				16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */,
+				16BE93202DED713E006FFD00 /* ServiceTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,6 +213,29 @@
 			);
 			productName = RepositoryTest;
 			productReference = 16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		16BE931F2DED713E006FFD00 /* ServiceTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 16BE93282DED713F006FFD00 /* Build configuration list for PBXNativeTarget "ServiceTest" */;
+			buildPhases = (
+				16BE931C2DED713E006FFD00 /* Sources */,
+				16BE931D2DED713E006FFD00 /* Frameworks */,
+				16BE931E2DED713E006FFD00 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16BE93252DED713F006FFD00 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				16BE93212DED713E006FFD00 /* ServiceTest */,
+			);
+			name = ServiceTest;
+			packageProductDependencies = (
+			);
+			productName = ServiceTest;
+			productReference = 16BE93202DED713E006FFD00 /* ServiceTest.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		35C171DF2DCB34320049724A /* B.READ */ = {
@@ -210,6 +275,10 @@
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 35C171DF2DCB34320049724A;
 					};
+					16BE931F2DED713E006FFD00 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 35C171DF2DCB34320049724A;
+					};
 					35C171DF2DCB34320049724A = {
 						CreatedOnToolsVersion = 16.0;
 					};
@@ -231,12 +300,20 @@
 			targets = (
 				35C171DF2DCB34320049724A /* B.READ */,
 				16BE8C682DED50C0006FFD00 /* RepositoryTest */,
+				16BE931F2DED713E006FFD00 /* ServiceTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		16BE8C672DED50C0006FFD00 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		16BE931E2DED713E006FFD00 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -260,6 +337,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		16BE931C2DED713E006FFD00 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		35C171DC2DCB34320049724A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -274,6 +358,11 @@
 			isa = PBXTargetDependency;
 			target = 35C171DF2DCB34320049724A /* B.READ */;
 			targetProxy = 16BE8C6D2DED50C0006FFD00 /* PBXContainerItemProxy */;
+		};
+		16BE93252DED713F006FFD00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 35C171DF2DCB34320049724A /* B.READ */;
+			targetProxy = 16BE93242DED713F006FFD00 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -314,6 +403,44 @@
 				MARKETING_VERSION = 1.0;
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.RepositoryTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
+			};
+			name = Release;
+		};
+		16BE93262DED713F006FFD00 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83K577A944;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.ServiceTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
+			};
+			name = Debug;
+		};
+		16BE93272DED713F006FFD00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 83K577A944;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.ServiceTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -529,6 +656,15 @@
 			buildConfigurations = (
 				16BE8C702DED50C0006FFD00 /* Debug */,
 				16BE8C712DED50C0006FFD00 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		16BE93282DED713F006FFD00 /* Build configuration list for PBXNativeTarget "ServiceTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				16BE93262DED713F006FFD00 /* Debug */,
+				16BE93272DED713F006FFD00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
