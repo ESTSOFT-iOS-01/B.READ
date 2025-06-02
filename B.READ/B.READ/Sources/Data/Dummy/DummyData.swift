@@ -74,6 +74,10 @@ extension DummyData {
 
 // MARK: - Record
 extension DummyData {
+  static func createDummyRecords() -> [Record] {
+    return dummyRecords
+  }
+  
   static var dummyRecords: [Record] = [
     Record( // 워런 버핏 웨이
       id: UUID().uuidString,
@@ -101,7 +105,6 @@ extension DummyData {
       period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
       currentPage: 123,
       review: "",
-      summary: nil,
       memos: [],
       quotes: [],
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
@@ -120,12 +123,11 @@ extension DummyData {
       ),
       currentPage: 252,
       review: "",
-      summary: nil,
       memos: [],
       quotes: [],
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
       updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
-          ),
+    )
 //    Record( // 아주 작은 습관들
 //      id: UUID().uuidString,
 //      isbn: "9791162540640",
