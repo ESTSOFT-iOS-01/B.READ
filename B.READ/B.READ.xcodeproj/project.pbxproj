@@ -113,8 +113,6 @@
 				Sources/Domain/Entity/Quote.swift,
 				Sources/Domain/Entity/Record.swift,
 				Sources/Domain/Entity/UserInfo.swift,
-				Sources/Domain/Service/Interface/AIService.swift,
-				Sources/Domain/Service/Interface/BookService.swift,
 				Sources/Domain/Repository/Error/RepositoryError.swift,
 				Sources/Domain/Repository/Inerface/BookRepository.swift,
 				Sources/Domain/Repository/Inerface/MemoRepository.swift,
