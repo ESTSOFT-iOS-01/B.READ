@@ -10,7 +10,7 @@ import Foundation
 actor QuoteRepositoryStub: QuoteRepository {
   private var storedQuotes: [Quote] = []
 
-  func createQuote(_ quote: Quote) throws {
+  func createQuote(_ quote: Quote, in record: Record) throws {
     guard !storedQuotes.contains(where: { $0.id == quote.id }) else {
       throw RepositoryError.dataAlreadyExist
     }

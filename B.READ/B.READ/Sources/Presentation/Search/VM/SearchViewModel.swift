@@ -81,9 +81,16 @@ final class SearchViewModel: ObservableObject {
 private extension SearchViewModel {
   func loadDummyData() {
     state.bestBookList = (1...10).map {
-      BestSellerVO(id: UUID().uuidString, isbn: "1234567890\($0)", title: "베스트셀러 \($0)")
+      BestSellerVO(
+        id: UUID().uuidString,
+        rank: $0,
+        isbn: "1234567890\($0)",
+        title: "베스트셀러 \($0)",
+        author: "작가 \($0)",
+        imageURL: "https://image.aladin.co.kr/product/36101/66/coversum/893643974x_2.jpg"
+      )
     }
-    
+
     state.keywordList = ["데미안", "코딩테스트", "미씽"]
     
     state.bookResults = (1...10).map {
@@ -106,8 +113,8 @@ private extension SearchViewModel {
       heart: DummyData.dummyRecords[0].heartCount,
       progress: 0,
       star: DummyData.dummyRecords[0].starCount,
-      memoCount: DummyData.dummyRecords[0].memoIDs.count,
-      quoteCount: DummyData.dummyRecords[0].quoteIDs.count,
+      memoCount: DummyData.dummyRecords[0].memos.count,
+      quoteCount: DummyData.dummyRecords[0].quotes.count,
       period: DummyData.dummyRecords[0].period,
       isFavorite: DummyData.dummyRecords[0].isFavorite,
       createdAt: DummyData.dummyRecords[0].createdAt
@@ -121,8 +128,8 @@ private extension SearchViewModel {
       heart: DummyData.dummyRecords[1].heartCount,
       progress: 65,
       star: DummyData.dummyRecords[1].starCount,
-      memoCount: DummyData.dummyRecords[1].memoIDs.count,
-      quoteCount: DummyData.dummyRecords[1].quoteIDs.count,
+      memoCount: DummyData.dummyRecords[1].memos.count,
+      quoteCount: DummyData.dummyRecords[1].quotes.count,
       period: DummyData.dummyRecords[1].period,
       isFavorite: DummyData.dummyRecords[1].isFavorite,
       createdAt: DummyData.dummyRecords[1].createdAt
@@ -136,8 +143,8 @@ private extension SearchViewModel {
       heart: DummyData.dummyRecords[2].heartCount,
       progress: 65,
       star: DummyData.dummyRecords[2].starCount,
-      memoCount: DummyData.dummyRecords[2].memoIDs.count,
-      quoteCount: DummyData.dummyRecords[2].quoteIDs.count,
+      memoCount: DummyData.dummyRecords[2].memos.count,
+      quoteCount: DummyData.dummyRecords[2].quotes.count,
       period: DummyData.dummyRecords[2].period,
       isFavorite: DummyData.dummyRecords[2].isFavorite,
       createdAt: DummyData.dummyRecords[2].createdAt

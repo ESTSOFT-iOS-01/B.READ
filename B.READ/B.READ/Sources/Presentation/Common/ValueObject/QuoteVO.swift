@@ -16,7 +16,7 @@ struct QuoteGroup: Identifiable {
 }
 
 // MARK: - (S)QuoteVO
-struct QuoteVO: Identifiable {
+struct QuoteVO: Identifiable, Hashable {
   let id: String
   let content: String
   let page: Int
@@ -31,5 +31,11 @@ struct QuoteVO: Identifiable {
     self.id = quote.id
     self.content = quote.content
     self.page = quote.page
+  }
+  
+  static func == (lhs: QuoteVO, rhs: QuoteVO) -> Bool {
+    if lhs.id != rhs.id { return false }
+
+    return true
   }
 }

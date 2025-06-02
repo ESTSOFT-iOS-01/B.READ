@@ -111,7 +111,7 @@ struct RecordDetailView: View {
         }
       }
       Button("문장 작성") {
-        coordinator.push(.sentenceInput)
+        coordinator.push(.sentenceInput(mode: .create(isbn: viewModel.state.info?.record.isbn ?? "")))
       }
       Button("취소", role: .cancel) { }
     }
@@ -142,10 +142,10 @@ struct RecordDetailView: View {
     .foregroundColor(.green6)
   }
 }
-
-#Preview {
-  RecordDetailView(viewModel: .init(
-    recordID: DummyData.dummyRecords[2].id,
-    isbn: DummyData.dummyRecords[2].isbn
-  ))
-}
+//
+//#Preview {
+//  RecordDetailView(viewModel: .init(
+//    recordID: DummyData.dummyRecords[2].id,
+//    isbn: DummyData.dummyRecords[2].isbn
+//  ))
+//}

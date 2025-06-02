@@ -10,14 +10,14 @@ import SwiftData
 
 @ModelActor
 actor MemoRepositoryImpl: MemoRepository {
-  func createMemo(_ memo: Memo) throws {
+  func createMemo(_ memo: Memo, in record: Record) throws {
     print("Impl: ", #function)
     
     if let _ = try findMemo(id: memo.id) {
       throw RepositoryError.dataAlreadyExist
     }
     
-    let model = MemoDTO(memo)
+    let model = MemoDTO(memo, record: RecordDTO(record))
     modelContext.insert(model)
     
     try modelContext.save()

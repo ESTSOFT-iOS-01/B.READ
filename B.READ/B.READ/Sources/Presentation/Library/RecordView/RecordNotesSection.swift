@@ -49,6 +49,7 @@ struct RecordNotesSection: View {
         ForEach(viewModel.state.quotes) { quote in
           QuoteCell(content: quote.content, page: quote.page, colorTone: .soft) {
             showMenuActionSheet = true
+            viewModel.state.selectedQuote = quote
           }
         } // : ForEach
       }
@@ -72,8 +73,12 @@ struct RecordNotesSection: View {
         print("\(type.name) 수정 선택")
       case .quote:
         print("\(type.name) 수정 선택")
-        // TODO: 수정 버전 페이지로 넘어가기
-        coordinator.push(.sentenceInput)
+        // TODO: 문장넘겨주기
+        if let quote = viewModel.state.selectedQuote, let isbn = viewModel.state.info?.record.isbn {
+          coordinator.push(.sentenceInput(mode: .edit(isbn: isbn, quote: quote)))
+        } else {
+          print("선택된 문장이 없습니다.")
+        }
       }
     }
     
@@ -89,10 +94,10 @@ struct RecordNotesSection: View {
     Button("취소", role: .cancel) { }
   }
 }
-
-#Preview {
-  RecordDetailView(viewModel: .init(
-    recordID: DummyData.dummyRecords[2].id,
-    isbn: DummyData.dummyRecords[2].isbn
-  ))
-}
+//
+//#Preview {
+//  RecordDetailView(viewModel: .init(
+//    recordID: DummyData.dummyRecords[2].id,
+//    isbn: DummyData.dummyRecords[2].isbn
+//  ))
+//}

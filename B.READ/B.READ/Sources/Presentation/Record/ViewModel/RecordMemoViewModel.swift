@@ -49,22 +49,22 @@ final class RecordMemoViewModel: ObservableObject {
 private extension RecordMemoViewModel {
   /// 메모를 불러와서 뷰에 보여줄 형태로 가공합니다.
   func loadMemoGroups() {
-    // TODO: - memoUseCase.fetchAllMemo()으로 변경
-    let allMemos = DummyData.dummyMemos
-    
-    let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
-    memoGroups = memoDict.compactMap { isbn, memos in
-      
-      let memoVOs = memos.map { MemoVO($0) }
-      // TODO: - libraryUseCase.fetchBook(isbn)으로 변경
-      // let book = await libraryUsecase.fetchBook(isbn)
-      // return MemoGroup(isbn: isbn, bookTitle: book.name, memos: memoVOs)
-      if let book = DummyData.dummyBooks.filter({ $0.isbn == isbn }).first {
-        return MemoGroup(isbn: book.isbn, bookTitle: book.name, memos: memoVOs)
-      } else {
-        return nil
-      }
-    }
+//    // TODO: - memoUseCase.fetchAllMemo()으로 변경
+//    let allMemos = DummyData.dummyMemos
+//    
+//    let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
+//    memoGroups = memoDict.compactMap { isbn, memos in
+//      
+//      let memoVOs = memos.map { MemoVO($0) }
+//      // TODO: - libraryUseCase.fetchBook(isbn)으로 변경
+//      // let book = await libraryUsecase.fetchBook(isbn)
+//      // return MemoGroup(isbn: isbn, bookTitle: book.name, memos: memoVOs)
+//      if let book = DummyData.dummyBooks.filter({ $0.isbn == isbn }).first {
+//        return MemoGroup(isbn: book.isbn, bookTitle: book.name, memos: memoVOs)
+//      } else {
+//        return nil
+//      }
+//    }
     
     // TODO: - 검색어 필터 들어가면 필터해주는 곳에서 처리해줌
     state.displayMemoGroups = memoGroups

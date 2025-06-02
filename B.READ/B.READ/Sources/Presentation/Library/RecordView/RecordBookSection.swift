@@ -47,10 +47,10 @@ struct RecordBookSection: View {
     } // : VStack
   }
 }
-
-#Preview {
-  RecordDetailView(viewModel: .init(
-    recordID: DummyData.dummyRecords[2].id,
-    isbn: DummyData.dummyRecords[2].isbn
-  ))
-}
+//
+//#Preview {
+//  RecordDetailView(viewModel: .init(
+//    recordID: DummyData.dummyRecords[2].id,
+//    isbn: DummyData.dummyRecords[2].isbn
+//  ))
+//}

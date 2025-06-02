@@ -26,7 +26,7 @@ struct MainTabView: View {
   var body: some View {
     CoordinatorContainer {
       TabView(selection: $selectedTab) {
-        
+
         HomeView()
           .tabItem {
             Image(systemName: SFSymbol.house.name)
@@ -41,7 +41,7 @@ struct MainTabView: View {
           }
           .tag(Tab.search)
         
-        LibraryView(viewModel: LibraryViewModel())
+        LibraryView()
           .tabItem {
             Image(systemName: SFSymbol.library.name)
             Text("책빵")

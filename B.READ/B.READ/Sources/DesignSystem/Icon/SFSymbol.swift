@@ -44,7 +44,7 @@ enum SFSymbol {
     case .barcode:
       "barcode.viewfinder"
     case .xmark:
-      "barcode.viewfinder"
+      "xmark"
     case .heart:
       "heart.fill"
     case .star:

@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)LibraryView
 struct LibraryView: View {
-  enum RecordPresentType {
+  enum DisplayMode {
     case list
     case grid
     
@@ -21,86 +21,79 @@ struct LibraryView: View {
     }
   }
   
-  @StateObject var viewModel: LibraryViewModel
-  @State var recordPresentType: RecordPresentType = .list
-  @State var selectedRecord: Record? = nil
-
+  @StateObject var viewModel = LibraryViewModel()
+  @State var showSortMenu: Bool = false
+  @State var displayMode: DisplayMode = .list
+  
+  @State var selectedOption: SortOption = .recent
   
   private let layoutPadding: CGFloat = 16
   
-  // MARK: - Init
-  // TODO: - 외부 주입을 할지도 몰라서 init으로 해둠
-  // -> 외부 주입이 필요없으면 viewModel = LibraryViewModel()로 변경
-  init(viewModel: @autoclosure @escaping () -> LibraryViewModel) {
-    self._viewModel = .init(wrappedValue: viewModel())
-  }
-  
   var body: some View {
-    VStack(alignment: .trailing, spacing: 0) {
-      // 상단 탭바
-      ScrollView(.horizontal, showsIndicators: false) {
-        TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
-          .frame(width: 450, height: 34)
-          .onChange(of: viewModel.state.selectedTab) {
-            viewModel.send(.selectTab)
+    ZStack(alignment: .topTrailing) {
+      VStack(alignment: .trailing, spacing: 0) {
+        // 상단 탭바
+        ScrollView(.horizontal, showsIndicators: false) {
+          TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
+            .frame(width: 450, height: 34)
+            .onChange(of: viewModel.state.selectedTab) {
+              viewModel.send(.selectTab)
+            }
+        } // : ScrollView
+        
+        HStack(spacing: 8) {
+          // 정렬 버튼
+          SortMenuButton(isOpened: $showSortMenu, selectedOption: $selectedOption)
+          
+          // 리스트, 그리드 선택 버튼
+          Button {
+            displayMode = (displayMode == .list ? .grid : .list)
+          } label: {
+            displayMode.image
           }
-      }
-      
-      HStack(spacing: 8) {
-        // 정렬 버튼
-        sortButton
-        // 리스트, 그리드 선택 버튼
-        Button {
-          recordPresentType = (recordPresentType == .list ? .grid : .list)
-        } label: {
-          recordPresentType.image
-        }
-        .frame(width: 24, height: 24)
-      } // : HStack
-      .foregroundStyle(.gray2)
-      .padding(.top, layoutPadding)
-      
-      // 독서기록 목록 뷰
-      recordView
-    } // : VStack
-    .padding(.top, layoutPadding)
-    .padding(.horizontal, 24)
-    .onAppear {
-      viewModel.send(.onAppear)
-    }
-    .background(.backgroundDefault)
-  }
-  
-  // MARK: - (S)recordView
-  // TODO: - (2)그리드 뷰 추가
-  private var recordView: some View {
-    Group {
-      if viewModel.state.displayRecords.isEmpty {
-        Text("독서 기록이 없습니다.")
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-      } else {
-        switch recordPresentType {
-        case .list:
+          .frame(width: 24, height: 24)
+        } // : HStack
+        .foregroundStyle(.gray2)
+        .padding(.top, layoutPadding)
+        
+        // 독서기록 목록 뷰
+        if viewModel.state.displayRecords.isEmpty {
+          Text("독서 기록이 없습니다.")
+            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        } else if displayMode == .list {
           LibraryListView(records: $viewModel.state.displayRecords)
-        case .grid:
+        } else {
           LibraryGridView()
         }
+      } // : VStack - 책빵 화면
+      .padding(.top, layoutPadding)
+      .padding(.horizontal, 24)
+      
+      if showSortMenu {
+        // 메뉴 바깥의 화면 - 터치 시 정렬 메뉴 닫음
+        Color.black.opacity(0.2)
+          .ignoresSafeArea()
+          .onTapGesture {
+            showSortMenu = false
+          }
+        
+//        // 정렬 메뉴
+//        SortMenu(type: .library, isOpened: $showSortMenu, selectedOption: $selectedOption)
+//          .padding(.trailing, 48)
+//          .padding(.top, 90)
+//          .onChange(of: selectedOption) {
+//            // TODO: - 내부 구현 필요
+//            viewModel.state.displayRecords = [RecordCellVO(
+//              record: DummyData.dummyRecords[0],
+//              book: DummyData.dummyBooks[0])]
+//          }
+//        
       }
-    } // : Group
-  }
-  
-  // MARK: - (S)sortButton
-  // TODO: - (2)정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
-  // 예시) sortButton(type: .record)
-  private var sortButton: some View {
-    Button {
-      print("정렬 버튼 클릭")
-    } label: {
-      HStack(spacing: 4) {
-        Text("최신 순")
-          .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
-        Image(systemName: SFSymbol.chevronCompactDown.name)
-      } // : HStack
+    } // : ZStack
+    .background(.backgroundDefault)
+    .onAppear {
+      viewModel.send(.onAppear)
     }
   }
 }

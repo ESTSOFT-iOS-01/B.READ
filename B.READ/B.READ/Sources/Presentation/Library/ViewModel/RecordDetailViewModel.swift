@@ -18,6 +18,7 @@ final class RecordDetailViewModel: ObservableObject {
     var memos: [MemoVO] = []
     var quotes: [QuoteVO] = []
     var selectedTab: Int = 0
+    var selectedQuote: QuoteVO? = nil
   }
   
   @Published var state: RecordDetailState = .init()
@@ -129,49 +130,48 @@ private extension RecordDetailViewModel {
   @MainActor
   /// 메모를 받아옴
   func loadMemos() {
-    self.state.memos = DummyData.dummyMemos.filter {
-      if let info = state.info {
-        return info.record.memoIDs.contains($0.id)
-      }
-      return false
-    }.map { MemoVO($0) }
+   
   }
   
   /// 문장을 받아옴
   func loadQuote() async {
     // 1. record가 없으면 quote도 없음
-    guard let quoteIDs = self.state.info?.record.quoteIDs else {
-      print("ViewModelError.dataNotFound")
-      return
-    }
     
-    // 2. quoteIDs를 가지고 quote를 받아옴
-    let quoteInfos: [QuoteVO] = await withTaskGroup(of: QuoteVO?.self) { group in
-      for quoteID in quoteIDs {
-        // 그룹에 각 비동기 Task를 추가
-        group.addTask {
-          do {
-            let quote = try await self.quoteUseCase.fetchQuote(id: quoteID)
-            return QuoteVO(quote)
-          } catch {
-            return nil
-          }
-        }
-      }
-      
-      var results: [QuoteVO] = []
-      
-      for await result in group {
-        if let quote = result {
-          results.append(quote)
-        }
-      }
-      return results
-    }
-    
-    await MainActor.run {
-      self.state.quotes = quoteInfos
-    }
+//    
+//    
+//    self.state.info?.record.quotes
+//    guard let quoteIDs = self.state.info?.record.quoteIDs else {
+//      print("ViewModelError.dataNotFound")
+//      return
+//    }
+//    
+//    // 2. quoteIDs를 가지고 quote를 받아옴
+//    let quoteInfos: [QuoteVO] = await withTaskGroup(of: QuoteVO?.self) { group in
+//      for quoteID in quoteIDs {
+//        // 그룹에 각 비동기 Task를 추가
+//        group.addTask {
+//          do {
+//            let quote = try await self.quoteUseCase.fetchQuote(id: quoteID)
+//            return QuoteVO(quote)
+//          } catch {
+//            return nil
+//          }
+//        }
+//      }
+//      
+//      var results: [QuoteVO] = []
+//      
+//      for await result in group {
+//        if let quote = result {
+//          results.append(quote)
+//        }
+//      }
+//      return results
+//    }
+//    
+//    await MainActor.run {
+//      self.state.quotes = quoteInfos
+//    }
   }
   
   // TODO: - (2)Quotes 정렬 내용 추가

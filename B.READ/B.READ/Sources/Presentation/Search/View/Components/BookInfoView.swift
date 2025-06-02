@@ -10,28 +10,29 @@ import SwiftUI
 // MARK: - (S)LargeImageView
 struct LargeImageView: View {
   let imageURL: String
+  let frameSize: (CGFloat, CGFloat)
   
   var body: some View {
     AsyncImage(url: URL(string: imageURL)) { phase in
       switch phase {
       case .empty:
         ProgressView()
-          .frame(width: 190, height: 290)
+          .frame(width: frameSize.0, height: frameSize.1)
         
       case .success(let image):
         image
           .resizable()
           .aspectRatio(contentMode: .fit)
-          .frame(width: 190, height: 290)
+          .frame(width: frameSize.0, height: frameSize.1)
           .clipped()
-          .shadow(color: .black.opacity(0.25), radius: 25, x: 0, y: 2)
+          .shadow(color: .gray2.opacity(0.25), radius: 25, x: 0, y: 2)
         
       case .failure(_):
         // TODO : 기본이미지 넣기
         Image(systemName: "photo")
           .resizable()
           .scaledToFit()
-          .frame(width: 190, height: 290)
+          .frame(width: frameSize.0, height: frameSize.1)
           .foregroundStyle(.brown5)
         
       @unknown default:
@@ -156,7 +157,14 @@ struct LinkView: View {
 
 #Preview {
   ScrollView {
-    LargeImageView(imageURL: ImageURLConverter.highQualityURL(from: "https://image.aladin.co.kr/product/36292/22/coversum/8932043566_1.jpg"))
+//    LargeImageView(
+//      imageURL: ImageURLConverter
+//        .highQualityURL(
+//          from: "https://image.aladin.co.kr/product/36292/22/coversum/8932043566_1.jpg"
+//        ),
+//      frameSize: (190, 290)
+//    )
+    
     Spacer(minLength: 40)
     BookTitleView(title: "데미안", author: "레프 니콜라예비치 톨스토이 (Lev Nikolayevich Tolstoy), 알렉산드르 세르게예비치 푸쉬킨 (Aleksandr Sergeyevich Pushkin)", publisher: "민음사", page: 234, date: "2009. 01. 02")
     

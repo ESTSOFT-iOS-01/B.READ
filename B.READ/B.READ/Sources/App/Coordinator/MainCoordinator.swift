@@ -12,13 +12,14 @@ enum MainRoute: Hashable {
   // MARK: - Search
   case barcode
   case searchBook(isbn: String)
+  case goToWebView(url: URL)
   
   // MARK: - Library
   case libraryDetail(id: String, isbn: String)
   
   // MARK: - Sentence
-  case sentenceInput
-  case pageInput(sentence: String)
+  case sentenceInput(mode: SentenceInputMode)
+  case pageInput(mode: SentenceInputMode, sentence: String)
   
   // MARK: - Memo
   case memo(id: String? = nil, totalPage: Int)
@@ -57,24 +58,39 @@ extension Coordinator where T == MainRoute {
       ScanView(viewModel: ScanViewModel())
     case .searchBook(let isbn):
       BookDetailView(viewModel: BookViewModel(isbn: isbn))
+    case .goToWebView(let url):
+      WebView(url: url)
+        .navigationBarBackButtonHidden()
+        .toolbar {
+          ToolbarItem(placement: .topBarTrailing) {
+            Button {
+              self.pop()
+            } label: {
+              Image(systemName: SFSymbol.xmark.name)
+                .foregroundStyle(.green6)
+            }
+          }
+        }
       
       // MARK: - Library
     case .libraryDetail(let id, let isbn):
       RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
       
       // MARK: - Sentence
-    case .sentenceInput:
-      SentenceInputView()
+    case .sentenceInput(let mode):
+        SentenceInputView(mode: mode)
+
+    case .pageInput(let mode, let sentence):
+        PageInputView(mode: mode, sentence: sentence)
     
       // MARK: - Memo
     case .memo(let id, let page):
       MemoView(viewModel: MemoViewModel(id: id), totalPage: page)
       
-    case .pageInput(let sentence):
-      PageInputView(sentence: sentence)
       // MARK: - MyPage Flow
     case .insertNickname:
       NicknameView()
+      
     case .selectCategory:
       CategorySelectionView()
     }

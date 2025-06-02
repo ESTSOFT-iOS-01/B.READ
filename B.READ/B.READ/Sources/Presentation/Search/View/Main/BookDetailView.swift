@@ -20,7 +20,10 @@ struct BookDetailView: View {
     VStack {
       ScrollView {
         VStack(alignment: .center, spacing: 16) {
-          LargeImageView(imageURL: ImageURLConverter.highQualityURL(from: viewModel.bookVO.coverURL))
+          LargeImageView(
+            imageURL: ImageURLConverter.highQualityURL(from: viewModel.bookVO.coverURL),
+            frameSize: (190, 290)
+          )
             .padding(.bottom, 24)
           
           BookTitleView(
@@ -37,7 +40,7 @@ struct BookDetailView: View {
           BookInfoView(title: "상세 정보", content: viewModel.bookVO.description)
           
           Button {
-            print("\(viewModel.bookVO.link)로 이동")
+            coordinator.push(.goToWebView(url: URL(string: viewModel.bookVO.link)!))
           } label: {
             LinkView()
           }
