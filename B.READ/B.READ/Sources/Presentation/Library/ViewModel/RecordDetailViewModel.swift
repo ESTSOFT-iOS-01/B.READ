@@ -175,18 +175,18 @@ private extension RecordDetailViewModel {
   }
   
   // TODO: - (2)Quotes 정렬 내용 추가
-  func sortQuotes(by: SortState = .recent) async {
+  func sortQuotes(by: SortOption = .recent) async {
     // 정렬 기준에 따라서 displayRecords를 정렬
-    let sortedQuotes: [QuoteVO]
-    switch by {
-    case .recent:
-      sortedQuotes = state.quotes.sorted { $0.page > $1.page }
-    case .older:
-      sortedQuotes = state.quotes.sorted { $0.page < $1.page }
-    }
-    
-    await MainActor.run {
-      self.state.quotes = sortedQuotes
-    }
+//    let sortedQuotes: [QuoteVO]
+//    switch by {
+//    case .recent:
+//      sortedQuotes = state.quotes.sorted { $0.page > $1.page }
+//    case .older:
+//      sortedQuotes = state.quotes.sorted { $0.page < $1.page }
+//    }
+//    
+//    await MainActor.run {
+//      self.state.quotes = sortedQuotes
+//    }
   }
 }
