@@ -35,6 +35,7 @@ final class LibraryUseCaseImpl: LibraryUseCase {
       // 이미 존재하면 무시
       print("이미 존재하는 책입니다.")
     }
+    
     try await recordRepository.createRecord(record)
   }
   

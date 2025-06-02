@@ -159,7 +159,7 @@ private extension SentenceViewModel {
         switch mode {
         case .create:
           print("[ℹ️] QuoteUseCase.addQuote 호출 시도")
-//          try await quoteUseCase.addQuote(model)
+          try await quoteUseCase.addQuote(model)
           print("[✅] addQuote 성공")
           await print(try quoteUseCase.fetchAllQuotes())
         case .edit:
