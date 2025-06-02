@@ -10,6 +10,7 @@ import SwiftData
 
 @ModelActor
 actor RecordRepositoryImpl: RecordRepository {
+  
   func createRecord(_ record: Record) throws {
     print("Impl: ", #function)
     
@@ -22,7 +23,16 @@ actor RecordRepositoryImpl: RecordRepository {
     
     try modelContext.save()
   }
-
+  
+  func fetchRecord(id: String) throws -> Record {
+    print("Impl: ", #function)
+    
+    guard let data = try findRecord(id: id) else {
+      throw RepositoryError.dataNotFound
+    }
+    return data.toEntity()
+  }
+  
   func fetchAllRecord() throws -> [Record] {
     print("Impl: ", #function)
     
@@ -36,15 +46,6 @@ actor RecordRepositoryImpl: RecordRepository {
     }
   }
   
-  func fetchRecord(id: String) throws -> Record {
-    print("Impl: ", #function)
-    
-    guard let data = try findRecord(id: id) else {
-      throw RepositoryError.dataNotFound
-    }
-    return data.toEntity()
-  }
-
   func fetchRecentReadingRecord(maxCount: Int) throws -> [Record] {
     print("Impl: ", #function)
     
@@ -60,35 +61,7 @@ actor RecordRepositoryImpl: RecordRepository {
       throw RepositoryError.fetchError
     }
   }
-
-  func updateRecord(_ record: Record) throws {
-    print("Impl: ", #function)
-    
-    guard let data = try findRecord(id: record.id) else {
-      throw RepositoryError.dataNotFound
-    }
-    
-    let newValue = RecordDTO(record)
-    
-    // 빠진 값없이 저장해야 업데이트 반영됨
-    data.isbn = newValue.isbn
-    data.state = newValue.state
-    data.heartCount = newValue.heartCount
-    data.starCount = newValue.starCount
-    data.isFavorite = newValue.isFavorite
-    data.startDate = newValue.startDate
-    data.endDate = newValue.endDate
-    data.currentPage = newValue.currentPage
-    data.review = newValue.review
-    data.summary = newValue.summary
-    data.memos = newValue.memos
-    data.quotes = newValue.quotes
-    data.createdAt = newValue.createdAt
-    data.updatedAt = newValue.updatedAt
-    
-    try modelContext.save()
-  }
-
+  
   func deleteRecord(_ id: String) throws {
     print("Impl: ", #function)
     
@@ -97,6 +70,28 @@ actor RecordRepositoryImpl: RecordRepository {
     }
     
     modelContext.delete(data)
+    
+    try modelContext.save()
+  }
+  
+  func updateRecord(_ record: Record) throws {
+    print("Impl: ", #function)
+    
+    guard let oldValue = try findRecord(id: record.id) else {
+      throw RepositoryError.dataNotFound
+    }
+    
+    let newValue = RecordDTO(record)
+    
+    oldValue.state = newValue.state
+    oldValue.heartCount = newValue.heartCount
+    oldValue.starCount = newValue.starCount
+    oldValue.isFavorite = newValue.isFavorite
+    oldValue.startDate = newValue.startDate
+    oldValue.endDate = newValue.endDate
+    oldValue.currentPage = newValue.currentPage
+    oldValue.review = newValue.review
+    oldValue.updatedAt = newValue.updatedAt
     
     try modelContext.save()
   }
