@@ -48,8 +48,8 @@ struct MemoView: View {
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button {
-            let isValidPage = (viewModel.startPage <= viewModel.endPage) && (Int(viewModel.endPage) ?? 0 <= totalPage)
-            if isValidPage {
+            if let start = Int(viewModel.startPage),
+               let end = Int(viewModel.endPage), start <= end, end <= totalPage {
               viewModel.send(.saveMemo)
             } else {
               showErrorAlert = true
