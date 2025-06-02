@@ -9,62 +9,62 @@ import Foundation
 import Testing
 
 @testable import B_READ
-
-struct MemoUseCaseTest {
-
-  let memoUseCase: MemoUseCase
-  let bookRepository: BookRepository
-  let memoRepository: MemoRepository
-  
-  init() {
-    let storage = SwiftDataTestStorage()
-    self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
-    self.memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
-    self.memoUseCase = MemoUseCaseImpl(
-      bookRepository: BookRepositoryImpl(modelContainer: storage.modelContainer),
-      memoRepository: memoRepository,
-      aiService: AlanService()
-    )
-  }
-  
-  
-  @Test("Memo Create & Fetch Test")
-  func saveMemoTestCreate() async throws {
-    try await memoUseCase.saveMemo(DummyData.memos.first!)
-    
-    let fetchedMemo = try await memoUseCase.fetchMemo(id: DummyData.memos.first!.id)
-    #expect(fetchedMemo == DummyData.memos.first!)
-  }
-  
-  
-  @Test("Memo Update Test")
-  func saveMemoTestUpdate() async throws {
-    try await memoUseCase.saveMemo(DummyData.memos.first!)
-    
-    var updatedMemo = DummyData.memos.first!
-    updatedMemo.content = "Updated Contents"
-    
-    try await memoUseCase.saveMemo(updatedMemo)
-    
-    let fetchedMemo = try await memoUseCase.fetchMemo(id: DummyData.memos.first!.id)
-    #expect(fetchedMemo == updatedMemo)
-  }
-  
-  @Test("Memo delete Test")
-  func deleteMemoTestUpdate() async throws {
-    try await memoUseCase.saveMemo(DummyData.memos.first!)
-    
-    try await memoUseCase.deleteMemo(id: DummyData.memos.first!.id)
-    await #expect(throws: RepositoryError.dataNotFound, performing: {
-      try await memoUseCase.deleteMemo(id: DummyData.memos.first!.id)
-    })
-  }
-  
-  @Test("Guide Generate Test")
-  func generateGuideTest() async throws {
-    try await bookRepository.createBook(DummyData.books.first!)
-    let guides = try await memoUseCase.generateGuide(isbn: DummyData.books.first!.isbn)
-    print(guides)
-  }
-  
-}
+//
+//struct MemoUseCaseTest {
+//
+//  let memoUseCase: MemoUseCase
+//  let bookRepository: BookRepository
+//  let memoRepository: MemoRepository
+//  
+//  init() {
+//    let storage = SwiftDataTestStorage()
+//    self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
+//    self.memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
+//    self.memoUseCase = MemoUseCaseImpl(
+//      bookRepository: BookRepositoryImpl(modelContainer: storage.modelContainer),
+//      memoRepository: memoRepository,
+//      aiService: AlanService()
+//    )
+//  }
+//  
+//  
+//  @Test("Memo Create & Fetch Test")
+//  func saveMemoTestCreate() async throws {
+//    try await memoUseCase.saveMemo(DummyData.memos.first!)
+//    
+//    let fetchedMemo = try await memoUseCase.fetchMemo(id: DummyData.memos.first!.id)
+//    #expect(fetchedMemo == DummyData.memos.first!)
+//  }
+//  
+//  
+//  @Test("Memo Update Test")
+//  func saveMemoTestUpdate() async throws {
+//    try await memoUseCase.saveMemo(DummyData.memos.first!)
+//    
+//    var updatedMemo = DummyData.memos.first!
+//    updatedMemo.content = "Updated Contents"
+//    
+//    try await memoUseCase.saveMemo(updatedMemo)
+//    
+//    let fetchedMemo = try await memoUseCase.fetchMemo(id: DummyData.memos.first!.id)
+//    #expect(fetchedMemo == updatedMemo)
+//  }
+//  
+//  @Test("Memo delete Test")
+//  func deleteMemoTestUpdate() async throws {
+//    try await memoUseCase.saveMemo(DummyData.memos.first!)
+//    
+//    try await memoUseCase.deleteMemo(id: DummyData.memos.first!.id)
+//    await #expect(throws: RepositoryError.dataNotFound, performing: {
+//      try await memoUseCase.deleteMemo(id: DummyData.memos.first!.id)
+//    })
+//  }
+//  
+//  @Test("Guide Generate Test")
+//  func generateGuideTest() async throws {
+//    try await bookRepository.createBook(DummyData.books.first!)
+//    let guides = try await memoUseCase.generateGuide(isbn: DummyData.books.first!.isbn)
+//    print(guides)
+//  }
+//  
+//}

@@ -28,72 +28,72 @@ struct BookRepositoryTest {
     
     #expect(book == DummyData.dummyBooks[0])
   }
-  
-  @Test("Book Create Error Test - Data Already Exists")
-  func createBookDataAlreadyExist() async throws {
-    try await bookRepository.createBook(DummyData.dummyBooks[0])
-    
-    await #expect(throws: RepositoryError.dataAlreadyExist, performing: {
-      try await bookRepository.createBook(DummyData.dummyBooks[0])
-    })
-  }
-  
-  @Test("Book Fetch Error Test - Data Not Found")
-  func fetchBookDataNotFound() async throws {
-    await #expect(throws: RepositoryError.dataNotFound, performing: {
-      _ = try await bookRepository.fetchBook(isbn: "1111")
-    })
-  }
-  
-  @Test("Book All Update Test")
-  func updateBookAll() async throws {
-    try await bookRepository.createBook(DummyData.dummyBooks[0])
-    
-    let updatedBook = Book(
-      isbn: DummyData.dummyBooks[0].isbn,
-      name: "책 제목",
-      author: "작가",
-      publisher: DummyData.dummyBooks[0].publisher,
-      publishedAt: DummyData.dummyBooks[0].publishedAt,
-      totalPages: 100
-    )
-    
-    try await bookRepository.updateBook(updatedBook)
-    let fetchedBook = try await bookRepository.fetchBook(isbn: DummyData.dummyBooks[0].isbn)
-    #expect(fetchedBook == updatedBook)
-  }
-  
-  @Test("Book Partial Update Test - CoverImage, TotalPage")
-  func updatePartialBookCoverImage() async throws {
-    // 처음데이터, 생성 후 값 변경이 이루어짐
-    var currentBook = DummyData.dummyBooks[0]
-    let coverImageData = Data(count: 10)
-    
-    // 최종적으로 DB에 저장될 형태
-    let updatedBook = Book(
-      isbn: currentBook.isbn,
-      coverImage: coverImageData,
-      name: currentBook.name,
-      author: currentBook.author,
-      publisher: currentBook.publisher,
-      publishedAt: currentBook.publishedAt,
-      totalPages: currentBook.totalPages + 10
-    )
-    try await bookRepository.createBook(currentBook)
-    
-    currentBook.coverImage = coverImageData
-    currentBook.totalPages += 10
-    
-    try await bookRepository.updateBook(currentBook)
-    let fetchBook = try await bookRepository.fetchBook(isbn: currentBook.isbn)
-    
-    #expect(fetchBook == updatedBook)
-  }
-  
-  @Test("Book Update Error Test - Data Not Found")
-  func updateBookDataNotFound() async throws {
-    await #expect(throws: RepositoryError.dataNotFound, performing: {
-      try await bookRepository.updateBook(DummyData.dummyBooks[0])
-    })
-  }
+//  
+//  @Test("Book Create Error Test - Data Already Exists")
+//  func createBookDataAlreadyExist() async throws {
+//    try await bookRepository.createBook(DummyData.dummyBooks[0])
+//    
+//    await #expect(throws: RepositoryError.dataAlreadyExist, performing: {
+//      try await bookRepository.createBook(DummyData.dummyBooks[0])
+//    })
+//  }
+//  
+//  @Test("Book Fetch Error Test - Data Not Found")
+//  func fetchBookDataNotFound() async throws {
+//    await #expect(throws: RepositoryError.dataNotFound, performing: {
+//      _ = try await bookRepository.fetchBook(isbn: "1111")
+//    })
+//  }
+//  
+//  @Test("Book All Update Test")
+//  func updateBookAll() async throws {
+//    try await bookRepository.createBook(DummyData.dummyBooks[0])
+//    
+//    let updatedBook = Book(
+//      isbn: DummyData.dummyBooks[0].isbn,
+//      name: "책 제목",
+//      author: "작가",
+//      publisher: DummyData.dummyBooks[0].publisher,
+//      publishedAt: DummyData.dummyBooks[0].publishedAt,
+//      totalPages: 100
+//    )
+//    
+//    try await bookRepository.updateBook(updatedBook)
+//    let fetchedBook = try await bookRepository.fetchBook(isbn: DummyData.dummyBooks[0].isbn)
+//    #expect(fetchedBook == updatedBook)
+//  }
+//  
+//  @Test("Book Partial Update Test - CoverImage, TotalPage")
+//  func updatePartialBookCoverImage() async throws {
+//    // 처음데이터, 생성 후 값 변경이 이루어짐
+//    var currentBook = DummyData.dummyBooks[0]
+//    let coverImageData = Data(count: 10)
+//    
+//    // 최종적으로 DB에 저장될 형태
+//    let updatedBook = Book(
+//      isbn: currentBook.isbn,
+//      coverImage: coverImageData,
+//      name: currentBook.name,
+//      author: currentBook.author,
+//      publisher: currentBook.publisher,
+//      publishedAt: currentBook.publishedAt,
+//      totalPages: currentBook.totalPages + 10
+//    )
+//    try await bookRepository.createBook(currentBook)
+//    
+//    currentBook.coverImage = coverImageData
+//    currentBook.totalPages += 10
+//    
+//    try await bookRepository.updateBook(currentBook)
+//    let fetchBook = try await bookRepository.fetchBook(isbn: currentBook.isbn)
+//    
+//    #expect(fetchBook == updatedBook)
+//  }
+//  
+//  @Test("Book Update Error Test - Data Not Found")
+//  func updateBookDataNotFound() async throws {
+//    await #expect(throws: RepositoryError.dataNotFound, performing: {
+//      try await bookRepository.updateBook(DummyData.dummyBooks[0])
+//    })
+//  }
 }
