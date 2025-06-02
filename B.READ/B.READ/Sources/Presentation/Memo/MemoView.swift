@@ -42,12 +42,6 @@ struct MemoView: View {
       .frame(maxHeight: .infinity, alignment: .top)
       .padding(.horizontal, 24)
       .animation(.easeOut(duration: 0.25), value: viewModel.guideStatus)
-      .onChange(of: viewModel.startPage) {
-        viewModel.startPage = formatDigits($1)
-      }
-      .onChange(of: viewModel.endPage) {
-        viewModel.endPage = formatDigits($1)
-      }
       .onChange(of: viewModel.isSaveComplete) {
         coordinator.pop()
       }
@@ -103,10 +97,16 @@ struct MemoView: View {
       
       HStack {
         RoundedTextField(type: .pages, placeholder: "0", text: $viewModel.startPage)
+          .onChange(of: viewModel.startPage) {
+            viewModel.startPage = formatDigits($1)
+          }
         
         Text("~")
         
         RoundedTextField(type: .pages, placeholder: "0", text: $viewModel.endPage)
+          .onChange(of: viewModel.endPage) {
+            viewModel.endPage = formatDigits($1)
+          }
         
         Text("쪽")
       }.padding(.trailing, 52)
