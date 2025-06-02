@@ -28,16 +28,27 @@ enum SortOption: String, CaseIterable, Identifiable {
   // ForEach를 위한 id 추가
   var id: String { self.rawValue }
   
-  // 정렬을 부르는 탭의 종류에 따른, 정렬 기준 제공
+  // 화면에 따른 Option 반환
   static func sortMenus(type: SortTabType) -> [SortOption] {
     switch type {
     case .library: [.recent, .oldest, .titleAscending, .titleDescending]
     case .quote, .memo: [.recent, .oldest]
     }
   }
+  
+  // RecordCellVO를 쓸때의 정렬
+  func sort(_ lhs: RecordCellVO, _ rhs: RecordCellVO) -> Bool {
+    switch self {
+    case .recent: lhs.createdAt > rhs.createdAt
+    case .oldest: lhs.createdAt < rhs.createdAt
+    case .titleAscending: lhs.title < rhs.title
+    case .titleDescending: lhs.title > rhs.title
+    default: true
+    }
+  }
 }
 
-
+// TODO: - [시르] 메뉴 등장 및 사라질때 애니메이션 추가하기
 // MARK: - (S)SortMenuButton
 struct SortMenuButton: View {
   @Binding var isOpened: Bool
@@ -45,9 +56,7 @@ struct SortMenuButton: View {
   
   var body: some View {
     Button {
-      withAnimation {
-        isOpened.toggle()
-      }
+      isOpened.toggle()
     } label: {
       HStack(spacing: 4) {
         Text(isOpened ? "정렬 기준" : selectedOption.rawValue)
@@ -75,7 +84,6 @@ struct SortMenu: View {
         ForEach(SortOption.sortMenus(type: type)) { option in
           Button {
             selectedOption = option
-//              isOpened.toggle()
             DispatchQueue.main.async { isOpened.toggle() }
           } label: {
             Text(option.rawValue)
@@ -91,7 +99,7 @@ struct SortMenu: View {
       .padding(16)
       .background(.white)
       .clipShape(RoundedRectangle(cornerRadius: 6))
-      // TODO: - 진한 쉐도우 넣어야함
+      .shadow(color: .gray2.opacity(0.25), radius: 25, x: 0, y: 2)
     }
   }
 }
