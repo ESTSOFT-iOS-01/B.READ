@@ -55,7 +55,13 @@ struct MemoView: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button {
-          coordinator.pop()
+          let isValidPage = (viewModel.startPage <= viewModel.endPage) && (Int(viewModel.endPage) ?? 0 <= totalPage)
+          if isValidPage {
+            viewModel.send(.saveMemo)
+            coordinator.pop()
+          } else {
+            showErrorAlert = true
+          }
         } label: {
           Text("저장")
             .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.0)
@@ -71,6 +77,11 @@ struct MemoView: View {
       Button("삭제", role: .destructive) { viewModel.send(.deleteGuides) }
     } message: {
       Text("빵식이의 가이드를 삭제하시겠습니까?\n(다시 생성되지 않습니다)")
+    }
+    .alert("저장 실패", isPresented: $showErrorAlert){
+      Button("확인", role: .cancel) { }
+    } message: {
+      Text("올바른 페이지 번호가 아닙니다.")
     }
   }
   
