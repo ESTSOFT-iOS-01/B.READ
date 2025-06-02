@@ -106,8 +106,8 @@ struct RecordDetailView: View {
         print("독서 기록 수정 선택")
       }
       Button("메모 작성") {
-        if let pages = viewModel.state.info?.book.totalPages {
-          coordinator.push(.memo(totalPage: pages))
+        if let info = viewModel.state.info {
+          coordinator.push(.memo(record: info.record, totalPage: info.book.totalPages))
         }
       }
       Button("문장 작성") {

@@ -24,14 +24,19 @@ final class MemoViewModel: ObservableObject {
   
   // MARK: - Internal Variable
   private var memo: Memo?
+  private var record: Record
   
   // MARK: - Dependency
   @Dependency
   private var memoUseCase: MemoUseCase
   
-  init(id: String?) {
+  init(id: String?, record: Record) {
+    
+    self.record = record
+    
     guard let id else { return }
     fetchMemo(id: id)
+    
   }
   
   // MARK: - Action
@@ -84,7 +89,7 @@ private extension MemoViewModel {
       memo?.guides = self.guides.map { Guide(date: .now, content: $0) }
       memo?.createdAt = .now
       do {
-        if let memo { try await memoUseCase.saveMemo(memo) }
+        if let memo { try await memoUseCase.saveMemo(memo, in: self.record) }
         await MainActor.run { self.isSaveComplete = true }
       } catch {
         print(error)

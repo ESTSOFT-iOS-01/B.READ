@@ -22,7 +22,7 @@ enum MainRoute: Hashable {
   case pageInput(mode: SentenceInputMode, sentence: String)
   
   // MARK: - Memo
-  case memo(id: String? = nil, totalPage: Int)
+  case memo(id: String? = nil, record: Record, totalPage: Int)
   
   // MARK: - MyPage
   case insertNickname
@@ -84,8 +84,8 @@ extension Coordinator where T == MainRoute {
         PageInputView(mode: mode, sentence: sentence)
     
       // MARK: - Memo
-    case .memo(let id, let page):
-      MemoView(viewModel: MemoViewModel(id: id), totalPage: page)
+    case .memo(let id, let record, let page):
+      MemoView(viewModel: MemoViewModel(id: id, record: record), totalPage: page)
       
       // MARK: - MyPage Flow
     case .insertNickname:
