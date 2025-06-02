@@ -21,6 +21,22 @@ struct UserInfo: Equatable {
   var generateCount: Int
   var lastStreakUpdatedAt: Date
   var streak: [DailyStatus]
+  
+  init(
+    nickname: String,
+    categories: [Category],
+    recentKeywords: [Keyword],
+    generateCount: Int,
+    lastStreakUpdatedAt: Date,
+    streak: [DailyStatus]
+  ) {
+    self.nickname = nickname
+    self.categories = categories
+    self.recentKeywords = recentKeywords
+    self.generateCount = generateCount
+    self.lastStreakUpdatedAt = lastStreakUpdatedAt
+    self.streak = streak
+  }
 }
 
 /// 최근 검색 키워드입니다.
@@ -29,6 +45,11 @@ struct UserInfo: Equatable {
 struct Keyword: Equatable {
   let date: Date
   let value: String
+  
+  init(date: Date, value: String) {
+    self.date = date
+    self.value = value
+  }
 }
 
 
@@ -38,6 +59,11 @@ struct Keyword: Equatable {
 struct DailyStatus: Equatable {
   let weekday: Int
   var isCompleted: Bool
+  
+  init(weekday: Int, isCompleted: Bool) {
+    self.weekday = weekday
+    self.isCompleted = isCompleted
+  }
 }
 
 /// 책 장르입니다.
@@ -47,6 +73,11 @@ struct DailyStatus: Equatable {
 struct Category: Equatable {
   let id: Int
   let name: String
+  
+  init(id: Int, name: String) {
+    self.id = id
+    self.name = name
+  }
 }
 
 enum CategoryType: Int, CaseIterable {

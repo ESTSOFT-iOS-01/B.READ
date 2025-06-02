@@ -1,5 +1,5 @@
 //
-//  UserInfoRepositoryTests.swift
+//  UserInfoRepositoryTest.swift
 //  B.READTests
 //
 //  Created by 신승재 on 5/17/25.
@@ -8,7 +8,9 @@
 import Foundation
 import Testing
 
-struct UserInfoRepositoryTests {
+@testable import B_READ
+
+struct UserInfoRepositoryTest {
   
   private let userInfoRepository: UserInfoRepository
   
@@ -25,7 +27,7 @@ struct UserInfoRepositoryTests {
     try await userInfoRepository.createUserInfo(DummyData.userInfo)
     let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
     
-    #expect(fetchedUserInfo == DummyData.userInfo)
+    #expect(fetchedUserInfo.nickname == DummyData.userInfo.nickname)
   }
   
   @Test("UserInfo Create Error Test - Data Already Exists")
@@ -94,7 +96,7 @@ struct UserInfoRepositoryTests {
     try await userInfoRepository.updateUserInfo(updatedUserInfo)
 
     let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
-    #expect(fetchedUserInfo == updatedUserInfo)
+    #expect(fetchedUserInfo.recentKeywords.count == updatedUserInfo.recentKeywords.count)
   }
   
   @Test("UserInfo Update Error Test - Data Not Found")

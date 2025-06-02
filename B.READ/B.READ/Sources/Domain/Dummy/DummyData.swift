@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum DummyData { }
+public enum DummyData { }
 
 // MARK: - UserInfo
 extension DummyData {
@@ -99,55 +99,55 @@ extension DummyData {
   }
   
   static var dummyRecords: [Record] = [
-    Record( // 워런 버핏 웨이
-      id: UUID().uuidString,
-      isbn: "9791194368137",
-      state: .toRead,
-      heartCount: 3,
-      starCount: 0,
-      isFavorite: false,
-      period: (nil, nil),
-      currentPage: 0,
-      review: "",
-      summary: nil,
-      memos: [],
-      quotes: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
-      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
-          ),
-    Record( // 타이탄의 도구들
-      id: UUID().uuidString,
-      isbn: "9791158510619",
-      state: .reading,
-      heartCount: 0,
-      starCount: 0,
-      isFavorite: true,
-      period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
-      currentPage: 123,
-      review: "",
-      memos: [],
-      quotes: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
-      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
-          ),
-    Record( // 싯다르타
-      id: UUID().uuidString,
-      isbn: "9788937460586",
-      state: .completed,
-      heartCount: 0,
-      starCount: 4,
-      isFavorite: false,
-      period: (
-        Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
-        Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
-      ),
-      currentPage: 252,
-      review: "",
-      memos: [],
-      quotes: [],
-      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
-    )
+  Record( // 워런 버핏 웨이
+    id: UUID().uuidString,
+    isbn: "9791194368137",
+    state: .toRead,
+    heartCount: 3,
+    starCount: 0,
+    isFavorite: false,
+    period: (nil, nil),
+    currentPage: 0,
+    review: "",
+    summary: nil,
+    memos: [],
+    quotes: [],
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
+    updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
+        ),
+  Record( // 타이탄의 도구들
+    id: UUID().uuidString,
+    isbn: "9791158510619",
+    state: .reading,
+    heartCount: 0,
+    starCount: 0,
+    isFavorite: true,
+    period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
+    currentPage: 123,
+    review: "",
+    memos: [],
+    quotes: [],
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
+    updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
+        ),
+  Record( // 싯다르타
+    id: UUID().uuidString,
+    isbn: "9788937460586",
+    state: .completed,
+    heartCount: 0,
+    starCount: 4,
+    isFavorite: false,
+    period: (
+      Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
+      Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
+    ),
+    currentPage: 252,
+    review: "",
+    memos: [],
+    quotes: [],
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
+    updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
+  )
 //    Record( // 아주 작은 습관들
 //      id: UUID().uuidString,
 //      isbn: "9791162540640",
@@ -221,11 +221,64 @@ extension DummyData {
 //      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!,
 //      updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!
 //          )
+]
+  
+  static var records: [Record] = [
+    Record( // 워런 버핏 웨이
+      id: UUID().uuidString,
+      isbn: "9791194368137",
+      state: .toRead,
+      heartCount: 3,
+      starCount: 0,
+      isFavorite: false,
+      period: (nil, nil),
+      currentPage: 0,
+      review: "",
+      summary: nil,
+      memos: [],
+      quotes: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
+          ),
+    Record( // 타이탄의 도구들
+      id: UUID().uuidString,
+      isbn: "9791158510619",
+      state: .reading,
+      heartCount: 0,
+      starCount: 0,
+      isFavorite: true,
+      period: (Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11)), nil),
+      currentPage: 123,
+      review: "",
+      memos: [],
+      quotes: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
+          ),
+    Record( // 싯다르타
+      id: UUID().uuidString,
+      isbn: "9788937460586",
+      state: .completed,
+      heartCount: 0,
+      starCount: 4,
+      isFavorite: false,
+      period: (
+        Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
+        Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
+      ),
+      currentPage: 252,
+      review: "",
+      memos: [],
+      quotes: [],
+      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
+      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
+    )
   ]
 }
 
 // MARK: - Memo
 extension DummyData {
+  static let fixedDate: Date = .now
   static let dummyMemos: [Memo] = [
     Memo(
       id: "1",
@@ -233,7 +286,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (10, 20),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "2",
@@ -241,7 +294,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (22, 32),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "3",
@@ -249,7 +302,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!,
       content: "이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.",
       pages: (44, 82),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "4",
@@ -257,7 +310,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (100, 132),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "5",
@@ -265,21 +318,15 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (99, 111),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-    ),
-//    Memo(
-//      id: "6",
-//      isbn: "9791158510619",
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
-//      content: "이것은 테스트를 위한 메모입니다.",
-//      pages: (12, 25),
-//      guides:[Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
-//    )
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
+    )
   ]
 }
 
 // MARK: - Quote
 extension DummyData {
+  static let quote = Quote(id: "1", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 77)
+  
   static let dummyQuote: [Quote] = [
     Quote(id: "1", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 77),
     Quote(id: "2", isbn: "9791158510619", content: "수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장 수집된 문장", page: 12),

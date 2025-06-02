@@ -21,9 +21,30 @@ struct Memo: Identifiable {
   var content: String
   var pages: (Int, Int)
   var guides: [Guide]
+  
+  init(
+    id: String,
+    isbn: String,
+    createdAt: Date,
+    content: String,
+    pages: (Int, Int),
+    guides: [Guide]
+  ) {
+    self.id = id
+    self.isbn = isbn
+    self.createdAt = createdAt
+    self.content = content
+    self.pages = pages
+    self.guides = guides
+  }
 }
 
 struct Guide {
   let date: Date
   var content: String
+  
+  init(date: Date, content: String) {
+    self.date = date
+    self.content = content
+  }
 }

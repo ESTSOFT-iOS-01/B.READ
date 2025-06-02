@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+@testable import B_READ
+
 struct RecommandUseCaseTest {
   private let recommandUseCase: RecommandUseCase
   private let bookService: BookService

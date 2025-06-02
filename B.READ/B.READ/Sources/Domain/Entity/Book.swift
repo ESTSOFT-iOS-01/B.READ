@@ -23,4 +23,22 @@ struct Book: Equatable {
   let publisher: String
   let publishedAt: Date
   var totalPages: Int
+  
+  init(
+    isbn: String,
+    coverImage: Data? = nil,
+    name: String,
+    author: String,
+    publisher: String,
+    publishedAt: Date,
+    totalPages: Int
+  ) {
+    self.isbn = isbn
+    self.coverImage = coverImage
+    self.name = name
+    self.author = author
+    self.publisher = publisher
+    self.publishedAt = publishedAt
+    self.totalPages = totalPages
+  }
 }

@@ -8,6 +8,8 @@
 import Foundation
 import Testing
 
+@testable import B_READ
+
 struct SearchUseCaseTest {
   private let searchUseCase: SearchUseCase
   private let recordRepository: RecordRepository
@@ -43,7 +45,7 @@ struct SearchUseCaseTest {
   @Test("레포에서 키워드로 기록 조회 성공")
   func searchRecordByKeywordSuccess() async throws {
     // given
-    for book in DummyData.books {
+    for book in DummyData.dummyBooks {
       try await bookRepository.createBook(book)
     }
     
@@ -64,7 +66,7 @@ struct SearchUseCaseTest {
   @Test("쿼리에 해당하는 책이 없을 때 검색 결과는 빈 배열이어야 한다")
   func searchRecordByKeywordEmptyResults() async throws {
     // given
-    for book in DummyData.books {
+    for book in DummyData.dummyBooks {
       try await bookRepository.createBook(book)
     }
     
