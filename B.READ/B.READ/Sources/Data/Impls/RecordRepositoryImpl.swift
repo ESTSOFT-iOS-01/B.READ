@@ -8,6 +8,8 @@
 import Foundation
 import SwiftData
 
+// TODO: - Impl 코드 전부 교체
+
 @ModelActor
 actor RecordRepositoryImpl: RecordRepository {
   

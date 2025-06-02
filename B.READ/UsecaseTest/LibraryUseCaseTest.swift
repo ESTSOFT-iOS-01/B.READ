@@ -11,7 +11,7 @@ import Testing
 @testable import B_READ
 
 struct LibraryUseCaseTest {
-
+  
   private let libraryUseCase: LibraryUseCase
   
   private let recordRepository: RecordRepository
@@ -48,8 +48,7 @@ struct LibraryUseCaseTest {
     let record = DummyData.dummyRecords[0]
     
     // 2. 레코드, 책 생성
-    try await bookRepository.createBook(book)
-    try await recordRepository.createRecord(record)
+    try await libraryUseCase.saveRecord(record: record, book: book)
     
     // 3. 레코드 책 패치
     let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
@@ -80,112 +79,98 @@ struct LibraryUseCaseTest {
     
   }
   
-  @Test("Load Recent Updated Reading Record Test")
-  func loadRecentUpdatedReadingRecordTest() async throws {
+  @Test("Delete Record Test")
+  func deleteRecordTest() async throws {
+    // 1. 레코드 정보
+    let book = DummyData.dummyBooks[0]
+    let record = DummyData.dummyRecords[0]
     
+    // 2. 레코드, 책 생성
+    try await libraryUseCase.saveRecord(record: record, book: book)
+    
+    // 3. 레코드 삭제
+    try await libraryUseCase.deleteRecord(record)
+    
+    // 4. 레코드 패치
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      let _ = try await libraryUseCase.loadRecord(record.id)
+    })
   }
   
+  @Test("Edit Record Test")
+  func editRecordTest() async throws {
+    // 1. 레코드 정보
+    let book = DummyData.dummyBooks[0]
+    var record = DummyData.dummyRecords[0]
+    
+    // 2. 레코드, 책 생성
+    try await libraryUseCase.saveRecord(record: record, book: book)
+    
+    // 3. 레코드 정보 수정
+    record.isFavorite = true
+    record.state = .completed
+    record.starCount = 5
+    
+    // 4. 수정한 레코드 업데이트
+    try await libraryUseCase.editRecord(record)
+    
+    // 5. 레코드, 책 패치
+    let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
+    
+    #expect(fetchedInfo.0.id == record.id)
+    #expect(fetchedInfo.0.createdAt == record.createdAt)
+    #expect(fetchedInfo.0.state == record.state)
+    #expect(fetchedInfo.0.starCount == record.starCount)
+  }
   
-//
-//  @Test("Edit Record Test")
-//  func editRecordTest() async throws {
-//    try await recordRepository.createRecord(DummyData.records[0])
-//    try await bookRepository.createBook(DummyData.books[0])
-//    
-//    let updatedRecord = Record(
-//      id: DummyData.records[0].id,
-//      isbn: DummyData.records[0].isbn,
-//      state: ReadState.reading,
-//      heartCount: 4,
-//      starCount: 4,
-//      isFavorite: true,
-//      currentPage: 200,
-//      review: "",
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: DummyData.records[0].createdAt,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 20))!
-//    )
-//    
-//    try await libraryUseCase.editRecord(updatedRecord)
-//    let fetchedRecord = try await libraryUseCase.loadRecord(updatedRecord.id).0
-//    
-//    #expect(fetchedRecord == updatedRecord)
-//  }
-//  
-//  @Test("Edit Record Test - Data Not Found")
-//  func editRecordDataNotFoundTest() async throws {
-//    // 1. 책만 등록된 상태
-//    try await bookRepository.createBook(DummyData.books[0])
-//    let updatedRecord = Record(
-//      id: DummyData.records[0].id,
-//      isbn: DummyData.records[0].isbn,
-//      state: ReadState.reading,
-//      heartCount: 4,
-//      starCount: 4,
-//      isFavorite: true,
-//      currentPage: 200,
-//      review: "",
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: DummyData.records[0].createdAt,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 20))!
-//    )
-//    // 2. 독서 기록을 수정 - 수정할 기록이 없기 때문에 새로 만듦
-//    try await libraryUseCase.editRecord(updatedRecord)
-//    let fetchedRecord = try await libraryUseCase.loadRecord(updatedRecord.id).0
-//    // 3. 정상적으로 새로 만들어졌는지 확인
-//    #expect(updatedRecord == fetchedRecord)
-//  }
-//  
-//  @Test("Delete Record Test")
-//  func deleteRecordTest() async throws {
-//    try await recordRepository.createRecord(DummyData.records[0])
-//    try await bookRepository.createBook(DummyData.books[0])
-//    
-//    try await libraryUseCase.deleteRecord(DummyData.records[0])
-//    
-//    await #expect(throws: RepositoryError.dataNotFound, performing: {
-//      let _ = try await libraryUseCase.loadRecord(DummyData.records[0].id)
-//    })
-//  }
-//  
-//  @Test("Load Record Test")
-//  func loadRecordTest() async throws {
-//    try await recordRepository.createRecord(DummyData.records[0])
-//    try await bookRepository.createBook(DummyData.books[0])
-//    
-//    let info: (record: Record, book: Book)
-//    = try await libraryUseCase.loadRecord(DummyData.records[0].id)
-//    let record = info.record
-//    
-//    #expect(record == DummyData.records[0])
-//  }
-//  
-//  @Test("Load Record List Test")
-//  func loadRecordListTest() async throws {
-//    let fetchedRecordList = [
-//      DummyData.records[0],
-//      DummyData.records[1],
-//      DummyData.records[2]
-//    ]
-//    
-//    try await recordRepository.createRecord(DummyData.records[0])
-//    try await recordRepository.createRecord(DummyData.records[1])
-//    try await recordRepository.createRecord(DummyData.records[2])
-//    
-//    try await bookRepository.createBook(DummyData.books[0])
-//    try await bookRepository.createBook(DummyData.books[1])
-//    try await bookRepository.createBook(DummyData.books[2])
-//    
-//    let infos: [(record: Record, book: Book)] = try await libraryUseCase.loadRecordList()
-//    let infoRecords = infos.map { $0.record }.sorted { $0.createdAt > $1.createdAt }
-//    
-//    #expect(fetchedRecordList == infoRecords)
-//  }
-//  
-//  @Test("Load Recent Updated Reading Record Test")
-//  func loadRecentUpdatedReadingRecordTest() async throws {
-//    
-//  }
+  @Test("Edit Record Test - Record Data Not Found")
+  func editRecordDataNotFoundTest() async throws {
+    // 1. 레코드 정보
+    let book = DummyData.dummyBooks[0]
+    var record = DummyData.dummyRecords[0]
+    
+    // 2. 도서만 생성
+    try await bookRepository.createBook(book)
+    
+    // 3. 레코드 정보 수정
+    record.isFavorite = true
+    record.state = .completed
+    record.starCount = 5
+    
+    // 4. 수정한 레코드 업데이트
+    try await libraryUseCase.editRecord(record)
+    
+    // 5. 레코드, 책 패치
+    let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
+    
+    #expect(fetchedInfo.0.id == record.id)
+    #expect(fetchedInfo.0.createdAt == record.createdAt)
+    #expect(fetchedInfo.0.state == record.state)
+    #expect(fetchedInfo.0.starCount == record.starCount)
+  }
+  
+  @Test("loadRecentUpdatedReadingRecord Test")
+  func loadRecentUpdatedReadingRecordTest() async throws {
+    // 1. 레코드들 생성
+    let infos: [(Record, Book)] = [
+      (DummyData.dummyRecords[0], DummyData.dummyBooks[0]),
+      (DummyData.dummyRecords[1], DummyData.dummyBooks[1]),
+      (DummyData.dummyRecords[2], DummyData.dummyBooks[2])
+    ].sorted { $0.0.createdAt > $1.0.createdAt }
+    for info in infos {
+      try await libraryUseCase.saveRecord(record: info.0, book: info.1)
+    }
+    
+    // 2. 최근 업데이트한 읽는 중 상태의 독서 기록 패치
+    let fetchedList = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
+    
+    // 3. 기대되는 결과
+    let predictList = Array(infos
+      .filter { $0.0.state == .reading }
+      .sorted { $0.0.updatedAt > $1.0.updatedAt }
+      .prefix(3))
+    
+    #expect(fetchedList[0] == predictList[0])
+    
+  }
 }

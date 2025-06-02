@@ -13,9 +13,8 @@ import Testing
 struct RecordRepositoryTest {
 
   private let recordRepository: RecordRepository
-  
   init() {
-    ////    recordRepository = RecordRepositoryStub()
+//    recordRepository = RecordRepositoryStub()
     let storage = SwiftDataTestStorage()
     recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
   }
@@ -49,7 +48,7 @@ struct RecordRepositoryTest {
       try await recordRepository.createRecord(record)
     })
   }
-  
+
   @Test("Record Fetch Error Test - Data Not Found")
   func fetchRecordDataNotFound() async throws {
     // 1. 데이터를 패치하지만, 데이터를 못찾음
