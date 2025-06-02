@@ -40,7 +40,6 @@ final class MemoDTO {
     self.content = content
     self.startPage = startPage
     self.endPage = endPage
-    self.record = record
     self.guides = guides
     self.record = record
   }
