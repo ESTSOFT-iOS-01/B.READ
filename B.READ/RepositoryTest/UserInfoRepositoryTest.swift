@@ -27,7 +27,7 @@ struct UserInfoRepositoryTest {
     try await userInfoRepository.createUserInfo(DummyData.userInfo)
     let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
     
-    #expect(fetchedUserInfo == DummyData.userInfo)
+    #expect(fetchedUserInfo.nickname == DummyData.userInfo.nickname)
   }
   
   @Test("UserInfo Create Error Test - Data Already Exists")

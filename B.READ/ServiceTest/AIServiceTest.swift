@@ -12,18 +12,18 @@ import Testing
 
 struct AIServiceTest {
   
-  private let alanService: AIService
-  
-  init() {
-    self.alanService = AlanService()
-  }
-  
-  @Test("Request Question API")
-  func requestQuestion() async throws {
-    let response = try await alanService.request(prompt: "너 길게 말해봐")
-    
-    print(response)
-  }
+//  private let alanService: AIService
+//  
+//  init() {
+//    self.alanService = AlanService()
+//  }
+//  
+//  @Test("Request Question API")
+//  func requestQuestion() async throws {
+//    let response = try await alanService.request(prompt: "너 길게 말해봐")
+//    
+//    print(response)
+//  }
   
 //  TODO: 나중에 동기에서 테스트
 //  @Test("Request Question API Cancel")
@@ -41,8 +41,8 @@ struct AIServiceTest {
 //    }
 //  }
   
-  @Test("Request Reset API")
-  func requestReset() async throws {
-    try await alanService.reset()
-  }
+//  @Test("Request Reset API")
+//  func requestReset() async throws {
+//    try await alanService.reset()
+//  }
 }

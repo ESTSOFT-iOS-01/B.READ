@@ -14,20 +14,6 @@
 			remoteGlobalIDString = 35C171DF2DCB34320049724A;
 			remoteInfo = B.READ;
 		};
-		16BE8C822DED5466006FFD00 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 35C171D82DCB34320049724A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 35C171DF2DCB34320049724A;
-			remoteInfo = B.READ;
-		};
-		16BE8C912DED54CA006FFD00 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 35C171D82DCB34320049724A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 35C171DF2DCB34320049724A;
-			remoteInfo = B.READ;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -45,8 +31,6 @@
 
 /* Begin PBXFileReference section */
 		16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RepositoryTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		16BE8C7E2DED5466006FFD00 /* UsecaseTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UsecaseTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		16BE8C8D2DED54CA006FFD00 /* ServiceTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ServiceTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35C171E02DCB34320049724A /* B.READ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = B.READ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -86,76 +70,6 @@
 			);
 			target = 16BE8C682DED50C0006FFD00 /* RepositoryTest */;
 		};
-		16BE8C9C2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "UsecaseTest" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Sources/Data/DTOs/Record/BookDTO.swift,
-				Sources/Data/DTOs/Record/GuideDTO.swift,
-				Sources/Data/DTOs/Record/MemoDTO.swift,
-				Sources/Data/DTOs/Record/QuoteDTO.swift,
-				Sources/Data/DTOs/Record/RecordDTO.swift,
-				Sources/Data/DTOs/Record/SummaryDTO.swift,
-				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
-				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
-				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
-				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
-				Sources/Data/Impls/BookRepositoryImpl.swift,
-				Sources/Data/Impls/MemoRepositoryImpl.swift,
-				Sources/Data/Impls/QuoteRepositoryImpl.swift,
-				Sources/Data/Impls/RecordRepositoryImpl.swift,
-				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
-				Sources/Domain/Dummy/DummyData.swift,
-				Sources/Domain/Entity/AlanSummary.swift,
-				Sources/Domain/Entity/Book.swift,
-				Sources/Domain/Entity/BookServiceEntity.swift,
-				Sources/Domain/Entity/Memo.swift,
-				Sources/Domain/Entity/Quote.swift,
-				Sources/Domain/Entity/Record.swift,
-				Sources/Domain/Entity/UserInfo.swift,
-				Sources/Domain/Repository/Error/RepositoryError.swift,
-				Sources/Domain/Repository/Inerface/BookRepository.swift,
-				Sources/Domain/Repository/Inerface/MemoRepository.swift,
-				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
-				Sources/Domain/Repository/Inerface/RecordRepository.swift,
-				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
-			);
-			target = 16BE8C7D2DED5466006FFD00 /* UsecaseTest */;
-		};
-		16BE8C9D2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Sources/Data/DTOs/Record/BookDTO.swift,
-				Sources/Data/DTOs/Record/GuideDTO.swift,
-				Sources/Data/DTOs/Record/MemoDTO.swift,
-				Sources/Data/DTOs/Record/QuoteDTO.swift,
-				Sources/Data/DTOs/Record/RecordDTO.swift,
-				Sources/Data/DTOs/Record/SummaryDTO.swift,
-				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
-				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
-				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
-				Sources/Data/DTOs/UserInfo/UserInfoDTO.swift,
-				Sources/Data/Impls/BookRepositoryImpl.swift,
-				Sources/Data/Impls/MemoRepositoryImpl.swift,
-				Sources/Data/Impls/QuoteRepositoryImpl.swift,
-				Sources/Data/Impls/RecordRepositoryImpl.swift,
-				Sources/Data/Impls/UserInfoRepositoryImpl.swift,
-				Sources/Domain/Dummy/DummyData.swift,
-				Sources/Domain/Entity/AlanSummary.swift,
-				Sources/Domain/Entity/Book.swift,
-				Sources/Domain/Entity/BookServiceEntity.swift,
-				Sources/Domain/Entity/Memo.swift,
-				Sources/Domain/Entity/Quote.swift,
-				Sources/Domain/Entity/Record.swift,
-				Sources/Domain/Entity/UserInfo.swift,
-				Sources/Domain/Repository/Error/RepositoryError.swift,
-				Sources/Domain/Repository/Inerface/BookRepository.swift,
-				Sources/Domain/Repository/Inerface/MemoRepository.swift,
-				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
-				Sources/Domain/Repository/Inerface/RecordRepository.swift,
-				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
-			);
-			target = 16BE8C8C2DED54CA006FFD00 /* ServiceTest */;
-		};
 		35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -187,8 +101,6 @@
 			exceptions = (
 				35C172082DCB37170049724A /* Exceptions for "B.READ" folder in "B.READ" target */,
 				16BE8C9B2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "RepositoryTest" target */,
-				16BE8C9C2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "UsecaseTest" target */,
-				16BE8C9D2DED55C1006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */,
 			);
 			path = B.READ;
 			sourceTree = "<group>";
@@ -197,20 +109,6 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		16BE8C662DED50C0006FFD00 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16BE8C7B2DED5466006FFD00 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16BE8C8A2DED54CA006FFD00 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -245,8 +143,6 @@
 			children = (
 				35C171E02DCB34320049724A /* B.READ.app */,
 				16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */,
-				16BE8C7E2DED5466006FFD00 /* UsecaseTest.xctest */,
-				16BE8C8D2DED54CA006FFD00 /* ServiceTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -275,52 +171,6 @@
 			);
 			productName = RepositoryTest;
 			productReference = 16BE8C692DED50C0006FFD00 /* RepositoryTest.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		16BE8C7D2DED5466006FFD00 /* UsecaseTest */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 16BE8C842DED5466006FFD00 /* Build configuration list for PBXNativeTarget "UsecaseTest" */;
-			buildPhases = (
-				16BE8C7A2DED5466006FFD00 /* Sources */,
-				16BE8C7B2DED5466006FFD00 /* Frameworks */,
-				16BE8C7C2DED5466006FFD00 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				16BE8C832DED5466006FFD00 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				16BE8C7F2DED5466006FFD00 /* UsecaseTest */,
-			);
-			name = UsecaseTest;
-			packageProductDependencies = (
-			);
-			productName = UsecaseTest;
-			productReference = 16BE8C7E2DED5466006FFD00 /* UsecaseTest.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		16BE8C8C2DED54CA006FFD00 /* ServiceTest */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 16BE8C932DED54CA006FFD00 /* Build configuration list for PBXNativeTarget "ServiceTest" */;
-			buildPhases = (
-				16BE8C892DED54CA006FFD00 /* Sources */,
-				16BE8C8A2DED54CA006FFD00 /* Frameworks */,
-				16BE8C8B2DED54CA006FFD00 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				16BE8C922DED54CA006FFD00 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				16BE8C8E2DED54CA006FFD00 /* ServiceTest */,
-			);
-			name = ServiceTest;
-			packageProductDependencies = (
-			);
-			productName = ServiceTest;
-			productReference = 16BE8C8D2DED54CA006FFD00 /* ServiceTest.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		35C171DF2DCB34320049724A /* B.READ */ = {
@@ -354,17 +204,9 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 1600;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					16BE8C682DED50C0006FFD00 = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 35C171DF2DCB34320049724A;
-					};
-					16BE8C7D2DED5466006FFD00 = {
-						CreatedOnToolsVersion = 16.3;
-						TestTargetID = 35C171DF2DCB34320049724A;
-					};
-					16BE8C8C2DED54CA006FFD00 = {
 						CreatedOnToolsVersion = 16.3;
 						TestTargetID = 35C171DF2DCB34320049724A;
 					};
@@ -389,28 +231,12 @@
 			targets = (
 				35C171DF2DCB34320049724A /* B.READ */,
 				16BE8C682DED50C0006FFD00 /* RepositoryTest */,
-				16BE8C7D2DED5466006FFD00 /* UsecaseTest */,
-				16BE8C8C2DED54CA006FFD00 /* ServiceTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		16BE8C672DED50C0006FFD00 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16BE8C7C2DED5466006FFD00 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16BE8C8B2DED54CA006FFD00 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -434,20 +260,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		16BE8C7A2DED5466006FFD00 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		16BE8C892DED54CA006FFD00 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		35C171DC2DCB34320049724A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -463,16 +275,6 @@
 			target = 35C171DF2DCB34320049724A /* B.READ */;
 			targetProxy = 16BE8C6D2DED50C0006FFD00 /* PBXContainerItemProxy */;
 		};
-		16BE8C832DED5466006FFD00 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 35C171DF2DCB34320049724A /* B.READ */;
-			targetProxy = 16BE8C822DED5466006FFD00 /* PBXContainerItemProxy */;
-		};
-		16BE8C922DED54CA006FFD00 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 35C171DF2DCB34320049724A /* B.READ */;
-			targetProxy = 16BE8C912DED54CA006FFD00 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
@@ -484,9 +286,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 83K577A944;
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.RepositoryTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -504,86 +308,12 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 83K577A944;
+				ENABLE_MODULE_VERIFIER = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.RepositoryTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
-			};
-			name = Release;
-		};
-		16BE8C852DED5466006FFD00 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 83K577A944;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.UsecaseTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
-			};
-			name = Debug;
-		};
-		16BE8C862DED5466006FFD00 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 83K577A944;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.UsecaseTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
-			};
-			name = Release;
-		};
-		16BE8C942DED54CA006FFD00 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 83K577A944;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.ServiceTest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/B.READ.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/B.READ";
-			};
-			name = Debug;
-		};
-		16BE8C952DED54CA006FFD00 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 83K577A944;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.doyeonk429.ServiceTest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -628,6 +358,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -648,6 +379,7 @@
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -693,6 +425,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
+				ENABLE_MODULE_VERIFIER = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -707,6 +440,7 @@
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -795,24 +529,6 @@
 			buildConfigurations = (
 				16BE8C702DED50C0006FFD00 /* Debug */,
 				16BE8C712DED50C0006FFD00 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		16BE8C842DED5466006FFD00 /* Build configuration list for PBXNativeTarget "UsecaseTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				16BE8C852DED5466006FFD00 /* Debug */,
-				16BE8C862DED5466006FFD00 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		16BE8C932DED54CA006FFD00 /* Build configuration list for PBXNativeTarget "ServiceTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				16BE8C942DED54CA006FFD00 /* Debug */,
-				16BE8C952DED54CA006FFD00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
