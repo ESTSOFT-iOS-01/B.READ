@@ -199,9 +199,9 @@ extension DummyData {
 //      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!,
 //      updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!
 //          )
-//  ]
-//}
-//
+  ]
+}
+
 //// MARK: - Memo
 //extension DummyData {
 //  static let dummyMemos: [Memo] = [
