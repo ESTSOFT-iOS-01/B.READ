@@ -19,11 +19,11 @@ final class MemoUseCaseImpl: MemoUseCase {
     self.aiService = aiService
   }
   
-  func saveMemo(_ memo: Memo) async throws {
+  func saveMemo(_ memo: Memo, in record: Record) async throws {
     do {
       try await memoRepository.updateMemo(memo)
     } catch RepositoryError.dataNotFound {
-//      try await memoRepository.createMemo(memo)
+      try await memoRepository.createMemo(memo, in: record)
     }
   }
   
