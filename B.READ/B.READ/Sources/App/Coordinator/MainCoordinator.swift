@@ -15,7 +15,7 @@ enum MainRoute: Hashable {
   case goToWebView(url: URL)
   
   // MARK: - Library
-  case libraryDetail(id: String, isbn: String)
+  case libraryDetail(id: String)
   
   // MARK: - Sentence
   case sentenceInput(mode: SentenceInputMode)
@@ -73,8 +73,8 @@ extension Coordinator where T == MainRoute {
         }
       
       // MARK: - Library
-    case .libraryDetail(let id, let isbn):
-      RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
+    case .libraryDetail(let id):
+      RecordDetailView(viewModel: .init(recordID: id))
       
       // MARK: - Sentence
     case .sentenceInput(let mode):
