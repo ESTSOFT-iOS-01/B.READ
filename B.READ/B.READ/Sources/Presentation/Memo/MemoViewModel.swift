@@ -104,17 +104,15 @@ private extension MemoViewModel {
       await MainActor.run { self.guideStatus = .loading }
       
       do {
-        // TODO: ISBN DTO 바뀌면 수정해야함
-        //let guides = try await memoUseCase.generateGuide(isbn: "")
-        try await Task.sleep(nanoseconds: 3_000_000_000) // 3초간 sleep
+        let guides = try await memoUseCase.generateGuide(isbn: self.record.isbn)
         await MainActor.run {
-          self.guides = ["가이드1", "가이드2", "가이드3", "가이드4", "가이드5"]
+          self.guides = guides.map { $0.content }
+          self.guideStatus = .complete
         }
       } catch {
         print(error)
+        await MainActor.run { self.guideStatus = .empty }
       }
-      
-      await MainActor.run { self.guideStatus = .complete }
     }
   }
 }
