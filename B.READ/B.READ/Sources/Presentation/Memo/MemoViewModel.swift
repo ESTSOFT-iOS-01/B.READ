@@ -7,6 +7,10 @@
 
 import Foundation
 
+enum GuideStatus {
+  case loading, empty, complete
+}
+
 final class MemoViewModel: ObservableObject {
   
   // MARK: - State
@@ -15,9 +19,11 @@ final class MemoViewModel: ObservableObject {
   @Published var startPage: String = ""
   @Published var endPage: String = ""
   @Published var guides: [String] = []
+  @Published var isSaveComplete: Bool = false
+  @Published var guideStatus: GuideStatus = .empty
   
   // MARK: - Internal Variable
-  private var id: String?
+  private var memo: Memo?
   
   // MARK: - Dependency
   @Dependency
@@ -25,7 +31,6 @@ final class MemoViewModel: ObservableObject {
   
   init(id: String?) {
     guard let id else { return }
-    self.id = id
     fetchMemo(id: id)
   }
   
@@ -39,11 +44,12 @@ final class MemoViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .saveMemo:
-      print("saveMemo")
+      saveMemo()
     case .generateGuides:
-      print("generateGuides")
+      generateGuides()
     case .deleteGuides:
-      print("deleteGuides")
+      self.guides = []
+      self.guideStatus = .empty
     }
   }
 }
@@ -55,16 +61,55 @@ private extension MemoViewModel {
       guard let self else { return }
       do {
         let memo = try await memoUseCase.fetchMemo(id: id)
+        self.memo = memo
         await MainActor.run {
           self.createAt = memo.createdAt
           self.content = memo.content
           self.startPage = memo.pages.0.toString
           self.endPage = memo.pages.1.toString
           self.guides = memo.guides.map { $0.content }
+          self.guideStatus = self.guides.isEmpty ? .empty : .complete
         }
       } catch {
         print(error)
       }
+    }
+  }
+  
+  func saveMemo() {
+    Task { [weak self] in
+      guard let self else { return }
+      memo?.content = self.content
+      memo?.pages = (Int(self.startPage)!, Int(self.endPage)!)
+      memo?.guides = self.guides.map { Guide(date: .now, content: $0) }
+      memo?.createdAt = .now
+      do {
+        if let memo { try await memoUseCase.saveMemo(memo) }
+        await MainActor.run { self.isSaveComplete = true }
+      } catch {
+        print(error)
+      }
+    }
+  }
+  
+  func generateGuides() {
+    Task { [weak self] in
+      guard let self else { return }
+      
+      await MainActor.run { self.guideStatus = .loading }
+      
+      do {
+        // TODO: ISBN DTO 바뀌면 수정해야함
+        //let guides = try await memoUseCase.generateGuide(isbn: "")
+        try await Task.sleep(nanoseconds: 3_000_000_000) // 3초간 sleep
+        await MainActor.run {
+          self.guides = ["가이드1", "가이드2", "가이드3", "가이드4", "가이드5"]
+        }
+      } catch {
+        print(error)
+      }
+      
+      await MainActor.run { self.guideStatus = .complete }
     }
   }
 }
