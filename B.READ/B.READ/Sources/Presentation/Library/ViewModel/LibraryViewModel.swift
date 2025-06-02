@@ -37,6 +37,7 @@ final class LibraryViewModel: ObservableObject {
   @Dependency
   private var libraryUseCase: LibraryUseCase
   
+  
   // MARK: - Action
   enum Action {
     case onAppear // 뷰 등장 시
@@ -49,15 +50,18 @@ final class LibraryViewModel: ObservableObject {
     case .onAppear:
       Task { [weak self] in
         guard let self = self else { return }
-  
+        //1. 전체 독서 기록을 불러옴
         await self.loadRecords()
         await withTaskGroup(of: Void.self) { group in
           group.addTask {
+            // 2. 불러온 독서 기록의 상태별 개수 확인
             await self.loadTabs()
           }
           
           group.addTask {
+            // 3. 선택된 탭을 기준으로 필터 적용
             await self.filterRecords()
+            // 4. 필터 적용된 독서 기록에 정렬 적용
             await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
           }
         }
@@ -66,21 +70,24 @@ final class LibraryViewModel: ObservableObject {
     case .selectTab:
       Task { [weak self] in
         guard let self = self else { return }
-        
+        // 1. 선택된 탭을 기준으로 필터 적용
         await self.filterRecords()
+        // 2. 필터 적용된 독서 기록에 정렬 적용
         await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
       }
+      
     case .selectSort:
       Task { [weak self] in
         guard let self = self else { return }
+        // 1. 현재 독서 기록에 정렬 적용
         await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
       }
     }
   }
 }
 
+
 // MARK: - (F)LibraryViewModel
-// TODO: - [시르] Error 상황에 따른 옳은 행동 추가
 private extension LibraryViewModel {
   
   /// 독서 기록 정보를 불러옴
@@ -149,7 +156,7 @@ private extension LibraryViewModel {
   }
   
   /// 정렬 기준에 따라서 displayRecords를 정렬
-  private func sortDisplayRecords(by: SortOption = .recent) async {
+  func sortDisplayRecords(by: SortOption = .recent) async {
     // 1. 정렬한 결과
     let sortedRecords: [RecordCellVO] = displayRecords.sorted(by: by.sort)
     

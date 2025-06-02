@@ -8,39 +8,34 @@
 import Foundation
 import SwiftUI
 
-// TODO: - (db연결 후) Book 테이블에서 isbn에 맞는 책 이미지를 가져와서 보여줘야함
 // MARK: - (C)RecordDetailVieModel
 final class RecordDetailViewModel: ObservableObject {
   
   // MARK: - State
-  struct RecordDetailState {
-    var info: (record: Record, book: Book)? = nil
-    var memos: [MemoVO] = []
-    var quotes: [QuoteVO] = []
-    var selectedTab: Int = 0
-    var selectedQuote: QuoteVO? = nil
-  }
-  
-  @Published var state: RecordDetailState = .init()
+  @Published var record: RecordDetailVO? = nil
+  @Published var memos: [MemoVO] = []
+  @Published var quotes: [QuoteVO] = []
+  @Published var selectedTab: Int = 0
+  @Published var selectedSort: [SortOption] = [.recent, .recent]
   
   // MARK: - Internal Variable
-  let recordID: String
-  let isbn: String
+  private let recordID: String
   
-  init(recordID: String, isbn: String) {
+  init(recordID: String) {
     self.recordID = recordID
-    self.isbn = isbn
   }
   
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase
   @Dependency private var quoteUseCase: QuoteUseCase
   
+  
   // MARK: - Action
   enum Action {
-    case onAppear
-    case onTapFavorite
-    case onTapDelete
+    case onAppear // 뷰 등장 시
+    case onTapFavorite // 즐겨찾기 토글 시
+    case onTapDelete // 삭제 클릭 시
+    case selectSort // 정렬을 선택 시
   }
   
   func send(_ action: Action) {
@@ -48,16 +43,17 @@ final class RecordDetailViewModel: ObservableObject {
     case .onAppear:
       Task { [weak self] in
         guard let self = self else { return }
+        // 1. 상세 독서 기록을 불러옴 - 독서기록 + 메모, 문장
+        await self.loadInfo(id: recordID)
         
-        await self.loadInfo(id: recordID, isbn: isbn)
         await withTaskGroup(of: Void.self) { group in
+          // 2. 메모 정렬
           group.addTask {
-            await self.loadMemos()
+            await self.sortMemos(by: self.selectedSort[self.selectedTab])
           }
-          
+          // 3. 문장 정렬
           group.addTask {
-            await self.loadQuote()
-            await self.sortQuotes()
+            await self.sortQuotes(by: self.selectedSort[self.selectedTab])
           }
         }
       }
@@ -75,20 +71,40 @@ final class RecordDetailViewModel: ObservableObject {
         
         await self.deleteRecord()
       }
+      
+    case .selectSort:
+      Task { [weak self] in
+        guard let self = self else { return }
+        // 정렬 기준을 변경하면 해당 기준으로 정렬 적용
+        if self.selectedTab == 0 {
+          await self.sortMemos(by: self.selectedSort[self.selectedTab])
+        } else {
+          await self.sortQuotes(by: self.selectedSort[self.selectedTab])
+        }
+      }
+      
     }
   }
 }
 
-
-// MARK: - (F)LibraryViewModel
-// TODO: - Error 상황에 따른 옳은 행동 추가
+// MARK: - (F)RecordDetailViewModel
 private extension RecordDetailViewModel {
   
   /// 독서 기록 조회에서 필요한 정보를 불러옴
-  func loadInfo(id: String, isbn: String) async {
+  func loadInfo(id: String) async {
+    // TODO: - [시르] VO 생성은 전부 비동기 그룹처리
     do {
-      let info: (Record, Book) = try await libraryUseCase.loadRecord(recordID)
-      await MainActor.run { self.state.info = info }
+      // 1. 독서 기록 정보를 불러옴
+      let info: (record: Record, book: Book) = try await libraryUseCase.loadRecord(id)
+      await MainActor.run {
+        // 2. 레코드 상세 VO 생성
+        self.record = RecordDetailVO(record: info.record, book: info.book)
+        // 3. 메모 VO 생성
+        self.memos = info.record.memos.map { MemoVO($0) }
+        // 4. 문장 VO 생성
+        self.quotes = info.record.quotes.map { QuoteVO($0) }
+        // TODO: - [시르] 서머리 VO 정의 후 생성 해야함
+      }
     } catch {
       print(error.localizedDescription)
     }
@@ -96,97 +112,63 @@ private extension RecordDetailViewModel {
   
   /// 즐겨 찾기 정보를 업데이트
   func toggleIsFavorite() async {
+    
+    // 1. 즐겨 찾기 정보를 토글
     await MainActor.run {
-      // 즐겨찾기 정보를 토글
-      self.state.info?.record.isFavorite.toggle()
+      self.record?.isFavorite.toggle()
     }
-    // record 정보가 있는지 확인
-    guard let record = self.state.info?.record else {
-      print("ViewModelError.dataNotFound")
+   
+    // 2. 레코드가 없으면 큰 문제
+    guard let record = record else {
+      print("ViewModel Error: Record Not Found")
       return
     }
-    // 확인한 정보를 업데이트
+    
     do {
-      try await libraryUseCase.editRecord(record)
+      // 3. 정보 업데이트를 위한 Entity생성
+      let recordEntity = record.toEntity(memos: memos, quotes: quotes)
+      // 4. 생선한 Entity로 업데이트
+      try await libraryUseCase.editRecord(recordEntity)
     } catch {
+      // TODO: - [시르] 수정 실패 에러 메시지 추가
       print(error.localizedDescription)
     }
   }
   
   /// 독서 기록을 삭제
   func deleteRecord() async {
-    guard let record = self.state.info?.record else {
-      print("ViewModelError.dataNotFound")
+    // 1. 현재 레코드 정보 확인
+    guard let record = self.record else {
+      print("ViewModel Error: Record Not Found")
       return
     }
-    // 확인한 정보를 삭제
+    
     do {
-      try await libraryUseCase.deleteRecord(record)
+      // 2. 독서 기록 Entity 생성
+      let recordEntity = record.toEntity(memos: memos, quotes: quotes)
+      // 3. 독서 기록을 삭제
+      try await libraryUseCase.deleteRecord(recordEntity)
     } catch {
+      // TODO: - [시르] 삭제 실패에 따른 에러 처리
       print(error.localizedDescription)
     }
   }
   
-  @MainActor
-  /// 메모를 받아옴
-  func loadMemos() {
-   
-  }
-  
-  /// 문장을 받아옴
-  func loadQuote() async {
-    // 1. record가 없으면 quote도 없음
+  func sortMemos(by: SortOption = .pageAscending) async {
+    // 1. 정렬한 결과
+    let sortMemos: [MemoVO] = memos.sorted(by: by.sort)
     
-//    
-//    
-//    self.state.info?.record.quotes
-//    guard let quoteIDs = self.state.info?.record.quoteIDs else {
-//      print("ViewModelError.dataNotFound")
-//      return
-//    }
-//    
-//    // 2. quoteIDs를 가지고 quote를 받아옴
-//    let quoteInfos: [QuoteVO] = await withTaskGroup(of: QuoteVO?.self) { group in
-//      for quoteID in quoteIDs {
-//        // 그룹에 각 비동기 Task를 추가
-//        group.addTask {
-//          do {
-//            let quote = try await self.quoteUseCase.fetchQuote(id: quoteID)
-//            return QuoteVO(quote)
-//          } catch {
-//            return nil
-//          }
-//        }
-//      }
-//      
-//      var results: [QuoteVO] = []
-//      
-//      for await result in group {
-//        if let quote = result {
-//          results.append(quote)
-//        }
-//      }
-//      return results
-//    }
-//    
-//    await MainActor.run {
-//      self.state.quotes = quoteInfos
-//    }
+    await MainActor.run {
+      self.memos = sortMemos
+    }
   }
   
-  // TODO: - (2)Quotes 정렬 내용 추가
   func sortQuotes(by: SortOption = .recent) async {
-    // 정렬 기준에 따라서 displayRecords를 정렬
-//    let sortedQuotes: [QuoteVO]
-//    switch by {
-//    case .recent:
-//      sortedQuotes = state.quotes.sorted { $0.page > $1.page }
-//    case .older:
-//      sortedQuotes = state.quotes.sorted { $0.page < $1.page }
-//    }
-//    
-//    await MainActor.run {
-//      self.state.quotes = sortedQuotes
-//    }
+    // 1. 정렬한 결과
+    let sortQuotes: [QuoteVO] = quotes.sorted(by: by.sort)
+    
+    await MainActor.run {
+      self.quotes = sortQuotes
+    }
   }
 }
