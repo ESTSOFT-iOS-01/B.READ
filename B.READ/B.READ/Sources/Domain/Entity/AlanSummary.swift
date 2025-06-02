@@ -14,8 +14,15 @@ import Foundation
 /// - content : 요약노트 내용(마크다운)
 /// - createdAt : 생성날짜
 struct AlanSummary {
-  let id: String
+  public let id: String
   let isbn: String
   let content: String
   let createdAt: Date
+  
+  init(id: String, isbn: String, content: String, createdAt: Date) {
+    self.id = id
+    self.isbn = isbn
+    self.content = content
+    self.createdAt = createdAt
+  }
 }

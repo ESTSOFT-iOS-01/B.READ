@@ -17,6 +17,13 @@ struct Quote: Identifiable, Equatable, Hashable {
   let isbn: String
   var content: String
   var page: Int
+  
+  init(id: String, isbn: String, content: String, page: Int) {
+    self.id = id
+    self.isbn = isbn
+    self.content = content
+    self.page = page
+  }
 }
 
 

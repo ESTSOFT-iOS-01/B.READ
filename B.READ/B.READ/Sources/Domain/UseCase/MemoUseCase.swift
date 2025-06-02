@@ -11,9 +11,11 @@ protocol MemoUseCase {
   /// 메모를 저장합니다.
   /// 이미 존재하는 메모의 경우 업데이트하며, 존재하지 않으면 새로 생성됩니다.
   ///
-  /// - Parameter memo: 저장할 메모 객체
+  /// - Parameters:
+  ///   - memo: 저장할 `Memo` 객체
+  ///   - record: 메모를 저장할 대상 `Record` 객체
   /// - Throws: `RepositoryError.dataNotFound`, `RepositoryError.dataAlreadyExist`, 저장 중 오류 발생 시
-  func saveMemo(_ memo: Memo) async throws
+  func saveMemo(_ memo: Memo, in record: Record) async throws
   
   /// ID를 통해 특정 메모를 조회합니다.
   ///

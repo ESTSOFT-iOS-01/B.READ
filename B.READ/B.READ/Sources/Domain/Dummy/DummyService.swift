@@ -10,11 +10,10 @@ import Foundation
 final class DummyService {
   static let shared: DummyService = DummyService()
   
-  
   @Dependency private var libUseCase: LibraryUseCase
   @Dependency private var quoteUseCase: QuoteUseCase
   
-  func setDummy() async {
+  public func setDummy() async {
     // 1. 독서 기록, 도서 더미정보 저장
     for record in DummyData.dummyRecords {
       if let book = DummyData.dummyBooks.filter({ $0.isbn == record.isbn }).first {
