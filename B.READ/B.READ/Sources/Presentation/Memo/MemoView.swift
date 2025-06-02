@@ -216,7 +216,7 @@ private struct GuideSectionView: View {
       VStack(alignment: .leading, spacing: 10) {
         ForEach(viewModel.guides, id: \.self) { text in
           HStack(alignment: .top, spacing: 4) {
-            Text("•")
+            Text("-")
             Text(text)
               .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.2, letterSpacing: -0.025)
           }
