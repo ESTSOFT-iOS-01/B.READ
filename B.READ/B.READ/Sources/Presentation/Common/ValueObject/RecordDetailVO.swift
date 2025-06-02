@@ -17,6 +17,8 @@ struct RecordDetailVO: Identifiable {
   // 책정보
   let title: String
   let coverImage: Image?
+  let author: String
+  let totalPage: Int
   // 독서기록
   var readingState: ReadingState
   var heart: Int // 기대지수
@@ -24,29 +26,36 @@ struct RecordDetailVO: Identifiable {
   var currentPage: Int // 읽은 페이지
   var period: (startDate: Date?, endDate: Date?)
   var isFavorite: Bool
+  var createdAt: Date
   
   init(
     id: String,
     isbn: String,
     title: String,
     coverImage: Image?,
+    author: String,
+    totalPage: Int,
     readingState: ReadingState,
     heart: Int,
     star: Int,
     currentPage: Int,
     period: (startDate: Date?, endDate: Date?),
-    isFavorite: Bool
+    isFavorite: Bool,
+    createdAt: Date
   ) {
     self.id = id
     self.isbn = isbn
     self.title = title
     self.coverImage = coverImage
+    self.author = author
+    self.totalPage = totalPage
     self.readingState = readingState
     self.heart = heart
     self.star = star
     self.currentPage = currentPage
     self.period = period
     self.isFavorite = isFavorite
+    self.createdAt = createdAt
   }
   
   init(record: Record, book: Book) {
@@ -58,12 +67,15 @@ struct RecordDetailVO: Identifiable {
     } else {
       self.coverImage = nil
     }
+    self.author = book.author
+    self.totalPage = book.totalPages
     self.readingState = ReadingState.fromEntity(record.state)
     self.heart = record.heartCount
     self.star = record.starCount
     self.currentPage = record.currentPage
     self.period = record.period
     self.isFavorite = record.isFavorite
+    self.createdAt = record.createdAt
   }
 }
 
@@ -74,5 +86,26 @@ extension RecordDetailVO: Hashable {
   
   static func == (lhs: RecordDetailVO, rhs: RecordDetailVO) -> Bool {
     return lhs.id == rhs.id
+  }
+}
+
+extension RecordDetailVO {
+  // TODO: - [시르] 아이디어 필요! VO에 메모, 문장을 넣는방법도 있음
+  func toEntity(memos: [MemoVO], quotes: [QuoteVO]) -> Record {
+    Record(
+      id: self.id,
+      isbn: self.isbn,
+      state: self.readingState.toEntity(),
+      heartCount: self.heart,
+      starCount: self.star,
+      isFavorite: self.isFavorite,
+      period: self.period,
+      currentPage: self.currentPage,
+      review: "",
+      memos: memos.map { $0.toEntity() },
+      quotes: quotes.map { $0.toEntity() },
+      createdAt: self.createdAt,
+      updatedAt: Date()
+    )
   }
 }
