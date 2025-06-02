@@ -34,6 +34,30 @@ final class LibraryUseCaseImpl: LibraryUseCase {
     try await bookRepository.createBook(book)
   }
   
+  func loadRecord(_ recordID: String) async throws -> (Record, Book) {
+    
+    let record = try await recordRepository.fetchRecord(id: recordID)
+    let book = try await bookRepository.fetchBook(isbn: record.isbn)
+    
+    return (record, book)
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   func editRecord(_ record: Record) async throws {
     do {
@@ -55,16 +79,6 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   func deleteRecord(_ record: Record) async throws {
     try await recordRepository.deleteRecord(record.id)
   }
-  
-  
-  func loadRecord(_ recordID: String) async throws -> (Record, Book) {
-    
-    let record = try await recordRepository.fetchRecord(id: recordID)
-    let book = try await bookRepository.fetchBook(isbn: record.isbn)
-    
-    return (record, book)
-  }
-  
   
   func loadRecordList() async throws -> [(Record, Book)] {
     let cellInfos: [(Record, Book)]

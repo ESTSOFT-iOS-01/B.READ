@@ -11,32 +11,82 @@ import Testing
 @testable import B_READ
 
 struct LibraryUseCaseTest {
-//  
-//  private let libraryUseCase: LibraryUseCase
-//  private let recordRepository: RecordRepository
-//  private let bookRepository: BookRepository
-//  private let quoteRepository: QuoteRepository
-//  
-//  init() {
-//    let storage = SwiftDataTestStorage()
-//    
-//    recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
-//    bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
-//    quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
-//    
-//    libraryUseCase = LibraryUseCaseImpl(
-//      bookRepository: bookRepository ,
-//      recordRepository: recordRepository,
-//      quoteRepository: quoteRepository,
-//      bookService: AladinService(client: MockNetworkClient(nextMockFileName: "SearchList"))
-//    )
-//  }
-//  
-//  @Test("Save Record Test")
-//  func saveRecordTest() async throws {
-//    
-//  }
-//  
+
+  private let libraryUseCase: LibraryUseCase
+  
+  private let recordRepository: RecordRepository
+  private let bookRepository: BookRepository
+  private let quoteRepository: QuoteRepository
+  private let bookService: BookService
+  
+  init() {
+    let storage = SwiftDataTestStorage()
+    
+    recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
+    bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
+    quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
+    bookService = AladinService(client: MockNetworkClient(nextMockFileName: "SearchList"))
+    
+    libraryUseCase = LibraryUseCaseImpl(
+      bookRepository: bookRepository ,
+      recordRepository: recordRepository,
+      quoteRepository: quoteRepository,
+      bookService: bookService
+    )
+  }
+  
+  // TODO: - 도로시
+  @Test("Save Record Test")
+  func saveRecordTest() async throws {
+    
+  }
+  
+  @Test("Load Record Test")
+  func loadRecordTest() async throws {
+    // 1. 레코드, 책 정보
+    let book = DummyData.dummyBooks[0]
+    let record = DummyData.dummyRecords[0]
+    
+    // 2. 레코드, 책 생성
+    try await bookRepository.createBook(book)
+    try await recordRepository.createRecord(record)
+    
+    // 3. 레코드 책 패치
+    let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
+    
+    #expect(fetchedInfo.0.id == record.id)
+    #expect(fetchedInfo.0.createdAt == record.createdAt)
+  }
+  
+  @Test("Load Record List Test")
+  func loadRecordListTest() async throws {
+    // 1. 레코드들 생성
+    let infos: [(Record, Book)] = [
+      (DummyData.dummyRecords[0], DummyData.dummyBooks[0]),
+      (DummyData.dummyRecords[1], DummyData.dummyBooks[1]),
+      (DummyData.dummyRecords[2], DummyData.dummyBooks[2])
+    ].sorted { $0.0.createdAt > $1.0.createdAt }
+    for info in infos {
+      try await libraryUseCase.saveRecord(record: info.0, book: info.1)
+    }
+    
+    // 2. 레코드들 패치
+    let fetchedInfos = try await libraryUseCase.loadRecordList()
+      .sorted { $0.0.createdAt > $1.0.createdAt }
+    for (info, fetchedInfo) in zip(infos, fetchedInfos) {
+      #expect(info.0.id == fetchedInfo.0.id)
+      #expect(info.0.state == fetchedInfo.0.state)
+    }
+    
+  }
+  
+  @Test("Load Recent Updated Reading Record Test")
+  func loadRecentUpdatedReadingRecordTest() async throws {
+    
+  }
+  
+  
+//
 //  @Test("Edit Record Test")
 //  func editRecordTest() async throws {
 //    try await recordRepository.createRecord(DummyData.records[0])
