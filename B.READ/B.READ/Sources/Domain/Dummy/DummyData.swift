@@ -278,6 +278,7 @@ extension DummyData {
 
 // MARK: - Memo
 extension DummyData {
+  static let fixedDate: Date = .now
   static let dummyMemos: [Memo] = [
     Memo(
       id: "1",
@@ -285,7 +286,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (10, 20),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "2",
@@ -293,7 +294,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (22, 32),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "3",
@@ -301,7 +302,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 27))!,
       content: "이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.이것은 테스트를 위한 메모입니다.",
       pages: (44, 82),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "4",
@@ -309,7 +310,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (100, 132),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     ),
     Memo(
       id: "5",
@@ -317,7 +318,7 @@ extension DummyData {
       createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
       content: "이것은 테스트를 위한 메모입니다.",
       pages: (99, 111),
-      guides: [Guide(date: .now, content: "exmaple1"), Guide(date: .now, content: "exmaple1")]
+      guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
     )
   ]
 }
