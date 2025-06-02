@@ -166,12 +166,11 @@ private struct GuideSectionView: View {
         }
       }
       
-      HStack(spacing: 40) {
+      HStack(alignment: .center, spacing: 40) {
         guideText()
       }
-      .padding(.vertical, 25)
-      .padding(.horizontal, 37)
-      .frame(maxWidth: .infinity, minHeight: 150)
+      .frame(maxWidth: .infinity)
+      .frame(height: 150)
       .background(.green1)
       .clipShape(RoundedRectangle(cornerRadius: 8))
       .onTapGesture {
@@ -195,6 +194,8 @@ private struct GuideSectionView: View {
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(height: 100)
+        .frame(maxWidth: .infinity)
+        .padding(.leading, 37)
       
       Text(suggestionText)
         .foregroundStyle(.gray5)
@@ -202,15 +203,19 @@ private struct GuideSectionView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
       
     case .complete:
-      VStack(alignment: .leading, spacing: 10) {
-        ForEach(viewModel.guides, id: \.self) { text in
-          HStack(alignment: .top, spacing: 4) {
-            Text("-")
-            Text(text)
-              .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.2, letterSpacing: -0.025)
+      ScrollView {
+        VStack(alignment: .leading, spacing: 10) {
+          ForEach(viewModel.guides, id: \.self) { text in
+            HStack(alignment: .top, spacing: 4) {
+              Text("-")
+              Text(text)
+                .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.2, letterSpacing: -0.025)
+            }
           }
-        }
-      }.frame(maxWidth: .infinity, alignment: .leading)
+        }.frame(maxWidth: .infinity, alignment: .leading)
+      }
+      .padding(.horizontal, 16)
+      .padding(.vertical, 12)
     }
   }
 }
