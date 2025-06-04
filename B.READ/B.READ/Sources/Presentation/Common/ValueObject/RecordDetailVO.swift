@@ -24,6 +24,7 @@ struct RecordDetailVO: Identifiable {
   var heart: Int // 기대지수
   var star: Int // 평점
   var currentPage: Int // 읽은 페이지
+  var review: String // 한줄평
   var period: (startDate: Date?, endDate: Date?)
   var isFavorite: Bool
   var createdAt: Date
@@ -39,6 +40,7 @@ struct RecordDetailVO: Identifiable {
     heart: Int,
     star: Int,
     currentPage: Int,
+    review: String,
     period: (startDate: Date?, endDate: Date?),
     isFavorite: Bool,
     createdAt: Date
@@ -53,6 +55,7 @@ struct RecordDetailVO: Identifiable {
     self.heart = heart
     self.star = star
     self.currentPage = currentPage
+    self.review = review
     self.period = period
     self.isFavorite = isFavorite
     self.createdAt = createdAt
@@ -73,6 +76,7 @@ struct RecordDetailVO: Identifiable {
     self.heart = record.heartCount
     self.star = record.starCount
     self.currentPage = record.currentPage
+    self.review = record.review
     self.period = record.period
     self.isFavorite = record.isFavorite
     self.createdAt = record.createdAt
@@ -101,7 +105,7 @@ extension RecordDetailVO {
       isFavorite: self.isFavorite,
       period: self.period,
       currentPage: self.currentPage,
-      review: "",
+      review: self.review,
       memos: memos.map { $0.toEntity() },
       quotes: quotes.map { $0.toEntity() },
       createdAt: self.createdAt,
