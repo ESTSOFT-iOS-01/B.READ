@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 final class BookViewModel: ObservableObject {
   
   enum BookState {
@@ -21,6 +20,7 @@ final class BookViewModel: ObservableObject {
   @Published var selectedState: ReadingState = .notStart
   
   var isbn: String
+  internal var currentTask: Task<Void, Never>? = nil
   
   init(isbn: String) {
     self.isbn = isbn
@@ -43,14 +43,18 @@ private var searchUseCase: SearchUseCase
 
 private extension BookViewModel {
   func fetchBookInfo(isbn: String) {
-    Task {
+    currentTask?.cancel()
+    currentTask = Task {
       do {
+        try Task.checkCancellation()
         let data = try await searchUseCase.searchBookDetail(isbn: isbn)
+        try Task.checkCancellation()
         
         await MainActor.run {
           bookState = .loaded(BookDetailVO(data))
         }
       } catch {
+        if Task.isCancelled { return }
         await MainActor.run {
           bookState = .failed(error)
         }

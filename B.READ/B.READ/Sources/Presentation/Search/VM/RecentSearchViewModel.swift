@@ -12,7 +12,7 @@ final class RecentSearchViewModel: ObservableObject {
   
   // MARK: - State
   @Published var keywords: [String] = [] // 최근 검색어 리스트 - 검색창 활성화시에만 보여짐
-  private var currentTask: Task<Void, Never>? = nil
+  internal var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var profileUseCase: ProfileUseCase

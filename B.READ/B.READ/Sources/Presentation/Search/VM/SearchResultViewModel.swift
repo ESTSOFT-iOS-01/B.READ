@@ -28,7 +28,7 @@ final class SearchResultViewModel: ObservableObject {
   @Published var searchKeyword: String = ""
   
   private var totalBookCount: Int = .max
-  private var currentTask: Task<Void, Never>? = nil
+  internal var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
@@ -56,6 +56,9 @@ final class SearchResultViewModel: ObservableObject {
     }
   }
   
+}
+
+private extension SearchResultViewModel {
   func reset() {
     bookResults = []
     recordResults = []
@@ -65,7 +68,6 @@ final class SearchResultViewModel: ObservableObject {
     searchKeyword = ""
     totalBookCount = .max
   }
-  
   
   func loadMoreBooksFromService(by keyword: String, page: Int) {
     DispatchQueue.main.async { [weak self] in
@@ -104,7 +106,7 @@ final class SearchResultViewModel: ObservableObject {
           }
           return results
         }
-
+        
         await MainActor.run {
           totalBookCount = data.totalCount
           if page == 1 {
@@ -172,5 +174,4 @@ final class SearchResultViewModel: ObservableObject {
       send(.searchBook(searchKeyword))
     }
   }
-  
 }
