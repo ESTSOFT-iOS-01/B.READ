@@ -8,13 +8,48 @@
 import SwiftUI
 
 struct LibraryGridView: View {
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @Binding var records: [RecordCellVO]
+  
+  private let columns = [
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible())
+  ]
+  
   var body: some View {
-    Text("Hello Grid View!")
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(.blue.opacity(0.3))
+    ScrollView {
+      LazyVGrid(columns: columns, spacing: 8) {
+        ForEach($records) { $record in
+          LibraryGridCell(record: $record)
+            .onTapGesture {
+              // TODO: - [시르] 머지 후, 뷰 연결 수정
+              coordinator.push(.libraryDetail(id: record.id, isbn: record.isbn))
+            }
+        }
+      } // : LazyVGrid
+    } // : ScrollView
+    .scrollIndicators(.hidden)
   }
 }
 
 #Preview {
-  LibraryGridView()
+  @Previewable @State var record = [
+    RecordCellVO(
+      record: DummyData.dummyRecords[0],
+      book: DummyData.dummyBooks[0]
+    ),
+    RecordCellVO(
+      record: DummyData.dummyRecords[1],
+      book: DummyData.dummyBooks[1]
+    ),
+    RecordCellVO(
+      record: DummyData.dummyRecords[2],
+      book: DummyData.dummyBooks[2]
+    )
+  ]
+  PreviewableContainer {
+    LibraryGridView(records: $record)
+      .padding(.all, 24)
+  }
 }
