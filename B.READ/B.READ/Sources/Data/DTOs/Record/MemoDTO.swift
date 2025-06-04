@@ -22,7 +22,7 @@ final class MemoDTO {
   @Relationship(deleteRule: .cascade)
   var guides: [GuideDTO]
   
-  var record: RecordDTO
+  var record: RecordDTO?
   
   init(
     id: String,
