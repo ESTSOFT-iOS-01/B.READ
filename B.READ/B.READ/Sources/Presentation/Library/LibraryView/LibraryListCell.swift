@@ -58,13 +58,11 @@ struct LibraryListCell: View {
           .foregroundStyle(.green4)
           .frame(width: 14, height: 28)
           .frame(maxHeight: .infinity, alignment: .top)
-          .animation(.easeInOut(duration: 0.15), value: record.isFavorite)
       }
     } // : HStack
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.horizontal, layoutPadding)
     .padding(.vertical, 13) // 114(전체높이) - 88(사진높이) = 26 / 2 = 13 => 내부 요소로 높이 맞추기
-//    .animation(.easeInOut(duration: 0.15), value: record)
   }
   
   // MARK: - (F)periodView
