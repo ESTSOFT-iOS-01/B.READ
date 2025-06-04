@@ -61,11 +61,12 @@ final class LibraryViewModel: ObservableObject {
             // 3. 선택된 탭을 기준으로 필터 적용
             await self.filterRecords()
             // 4. 필터 적용된 독서 기록에 정렬 적용
-            
+            await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
           }
         }
-        await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
         
+        print("여기서 부터 확인 함수")
+        try? await libraryUseCase.checkingAllData()
       }
       
     case .selectTab:
@@ -160,14 +161,13 @@ private extension LibraryViewModel {
   }
   
   /// 정렬 기준에 따라서 displayRecords를 정렬
-  @MainActor
   func sortDisplayRecords(by: SortOption = .recent) async {
     // 1. 정렬한 결과
     let sortedRecords: [RecordCellVO] = displayRecords.sorted(by: by.sort)
     
     // 2. 결과를 뷰에 반영
-//    await MainActor.run {
+    await MainActor.run {
       self.displayRecords = sortedRecords
-//    }
+    }
   }
 }
