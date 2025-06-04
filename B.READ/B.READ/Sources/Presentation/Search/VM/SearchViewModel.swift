@@ -9,24 +9,26 @@ import Foundation
 import SwiftUI
 
 final class SearchViewModel: ObservableObject {
+  
   // MARK: - State
-  @Published var searchText: String = ""
-  @Published var bestBookList: [BestSellerVO] = []
-  @Published var keywordList: [String] = []
+  @Published var searchText: String = "" // 검색창에 입력된 검색어 내용
+  @Published var bestBookList: [BestSellerVO] = [] // 기본으로 보이는 베스트셀러 리스트
+  @Published var keywordList: [String] = [] // 최근 검색어 리스트 - 검색창 활성화시에만 보여짐
   
-  @Published var bookResults: [BookVO] = []
-  @Published var recordResults: [RecordCellVO] = []
+  @Published var bookResults: [BookVO] = [] // 검색어로 검색한 책 목록
+  @Published var recordResults: [RecordCellVO] = [] // 검색어로 검색한 기록 목록
   
-  @Published var selectedTabIndex: Int = 0
-  @Published var isSearchSubmitted: Bool = false
-  @Published var isSearchFocused: Bool = false
+  @Published var selectedTabIndex: Int = 0 // 지금 보는 화면이 book인지 record인지 섹션 번호 관리
+  @Published var isSearchSubmitted: Bool = false // 검색어가 제출되었는지 여부
+  @Published var isSearchFocused: Bool = false // 검색창이 활성화되어있는지 여부
   
-  private var serviceIndex: Int = 1
+  private var serviceIndex: Int = 1 // 책 검색시 pagnation에서 쓰이는 인덱스
   
   
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
   @Dependency private var profileUseCase: ProfileUseCase
+  @Dependency private var recommandUseCase: RecommandUseCase
   
   // MARK: - Action
   enum Action {
@@ -42,37 +44,44 @@ final class SearchViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      loadDummyData()
+      // 초기에 베스트셀러 fetch
+      loadBestSellerList()
       
     case .onTapClear:
+      // x버튼 눌렀을 때, 검책창 클리어
       searchText = ""
       isSearchSubmitted = false
       isSearchFocused = true
       
     case .onSubmitSearch:
+      // 검색어 입력 후 submit햇을 때
       if !searchText.isEmpty {
         isSearchSubmitted = true
         isSearchFocused = false
-        
+        search(by: searchText)
       }
     case let .onTapTab(index):
+      // 섹션 탭 바꿨을 때
       selectedTabIndex = index
       
     case let .deleteKeyword(index):
+      // 최근 검색어 단일 삭제
 //      guard keywordList.indices.contains(index) else { return }
 //      keywordList.remove(at: index)
       
     case .deleteAllKeywords:
+      // 모든 최근 검색어 삭제
 //      keywordList.removeAll()
       
     case let .selectKeyword(keyword):
+      // 최근 검색어 골라서 바로 검색
 //      searchText = keyword
       send(.onSubmitSearch)
     }
   }
 }
 
-// MARK: - Internal Function : DUMMY DATA SETTING
+// MARK: - Internal Function
 private extension SearchViewModel {
   func search(by keyword: String) {
     Task {
@@ -153,5 +162,31 @@ private extension SearchViewModel {
       }
     }
   }
+  
+  func loadBestSellerList() {
+    Task {
+      do {
+        let data = try await recommandUseCase.requestBestSeller(in: 0)
+        
+        let list = data.map {
+          BestSellerVO(
+            id: UUID().uuidString,
+            rank: $0.rank,
+            isbn: $0.isbn,
+            title: $0.title,
+            author: $0.author,
+            imageURL: $0.coverURL
+          )
+        }
+        
+        await MainActor.run {
+          self.bestBookList = list
+        }
+      } catch {
+        print("베스트셀러 로딩 실패: \(error)")
+      }
+    }
+  }
+
   
 }

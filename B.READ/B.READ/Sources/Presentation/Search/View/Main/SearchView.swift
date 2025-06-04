@@ -21,7 +21,7 @@ struct SearchView: View {
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      if !viewModel.state.isSearchFocused && !viewModel.state.isSearchSubmitted {
+      if !viewModel.isSearchFocused && !viewModel.isSearchSubmitted {
         logoView
           .transition(.opacity)
       }
@@ -30,10 +30,10 @@ struct SearchView: View {
       searchBarSection
         .padding(
           .top,
-          viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted ? layoutSize : 0)
+          viewModel.isSearchFocused || viewModel.isSearchSubmitted ? layoutSize : 0)
       
       Group {
-        if viewModel.state.isSearchFocused {
+        if viewModel.isSearchFocused {
           RecentSearchView(viewModel: viewModel)
             .transition(.opacity)
             .frame(maxHeight: .infinity, alignment: .top)
@@ -53,7 +53,7 @@ struct SearchView: View {
       }
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .animation(.easeInOut(duration: 0.3), value: viewModel.state.isSearchFocused || viewModel.state.isSearchSubmitted)
+    .animation(.easeInOut(duration: 0.3), value: viewModel.isSearchFocused || viewModel.isSearchSubmitted)
     .onAppear {
       viewModel.send(.onAppear)
     }
@@ -69,15 +69,15 @@ struct SearchView: View {
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
       SearchBar(
-        text: $viewModel.state.searchText,
-        isFocused: $viewModel.state.isSearchFocused,
+        text: $viewModel.searchText,
+        isFocused: $viewModel.isSearchFocused,
         onSubmit: {
-          if !viewModel.state.searchText.isEmpty {
+          if !viewModel.searchText.isEmpty {
             viewModel.send(.onSubmitSearch)
           }
         })
       
-      if viewModel.state.searchText.isEmpty {
+      if viewModel.searchText.isEmpty {
         SearchButton {
           coordinator.push(.barcode)
         }
@@ -98,7 +98,7 @@ struct SearchView: View {
                      letterSpacing: -0.025)
         .foregroundStyle(.black)
       
-      BestSellerView(bookList: viewModel.state.bestBookList) { book in
+      BestSellerView(bookList: viewModel.bestBookList) { book in
         coordinator.push(.searchBook(isbn: book.isbn))
       }
     } // : vstack - best seller
