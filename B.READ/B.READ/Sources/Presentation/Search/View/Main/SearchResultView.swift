@@ -48,46 +48,94 @@ struct SearchTabContentView: View {
     Group {
       if viewModel.selectedTabIndex == 0 {
         Group {
-          if viewModel.bookResults.isEmpty {
-            ProgressView("검색 결과를 불러오는 중...")
+          switch viewModel.bookLoadState {
+          case .loading:
+            if viewModel.bookResults.isEmpty {
+              ProgressView("검색 결과를 불러오는 중...")
+                .padding()
+            } else {
+              SearchListView(
+                items: viewModel.bookResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
+                onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
+                content: { book in
+                  BookSearchCell(data: book)
+                }
+              )
+            }
+          case .loaded:
+            if viewModel.bookResults.isEmpty {
+              failedView(desp: "일치하는 검색 결과가 없습니다.")
+                .padding()
+            } else {
+              SearchListView(
+                items: viewModel.bookResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
+                onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
+                content: { book in
+                  BookSearchCell(data: book)
+                }
+              )
+            }
+          case .failed(let error):
+            failedView(error)
               .padding()
-          } else {
-            SearchListView(
-              items: viewModel.bookResults,
-              layoutPadding: 24,
-              listPadding: 16,
-              onTap: {
-                coordinator.push(.searchBook(isbn: $0.isbn))
-              },
-              content: { book in
-                BookSearchCell(data: book)
-              }
-            )
           }
         }
         .transition(.asymmetric(insertion: .move(edge: .leading), removal: .opacity))
       } else {
         Group {
-          if viewModel.recordResults.isEmpty {
+          switch viewModel.recordLoadState {
+          case .loading:
             ProgressView("검색 결과를 불러오는 중...")
               .padding()
-          } else {
-            SearchListView(
-              items: viewModel.recordResults,
-              layoutPadding: 24,
-              listPadding: 16,
-              onTap: {
-                coordinator.push(.libraryDetail(id: $0.id, isbn: $0.isbn))
-              },
-              content: { record in
-                RecordSearchCell(data: record)
-              }
-            )
+          case .loaded:
+            if viewModel.recordResults.isEmpty {
+              failedView(desp: "일치하는 검색 결과가 없습니다.")
+                .padding()
+            } else {
+              SearchListView(
+                items: viewModel.recordResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.libraryDetail(id: $0.id, isbn: $0.isbn)) },
+                onAppearNearBottom: nil,
+                content: { record in
+                  RecordSearchCell(data: record)
+                }
+              )
+            }
+          case .failed(let error):
+            failedView(error)
+              .padding()
           }
         }
         .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .opacity))
       }
     }
+  }
+  
+  @ViewBuilder
+  private func failedView(_ error: Error? = nil, desp: String? = nil) -> some View {
+    VStack(spacing: 8) {
+      Text("😢 정보를 불러오는 데 실패했어요.")
+        .font(.headline)
+      if let error = error {
+        Text(error.localizedDescription)
+          .font(.caption)
+          .foregroundColor(.gray)
+      }
+      if let desp = desp {
+        Text(desp)
+          .font(.caption)
+          .foregroundColor(.gray)
+      }
+    }
+    .padding()
   }
 }
 
@@ -97,6 +145,7 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
   let layoutPadding: CGFloat
   let listPadding: CGFloat
   let onTap: (Data) -> Void
+  let onAppearNearBottom: ((Data) -> Void)?
   let content: (Data) -> Content
   
   var body: some View {
@@ -107,6 +156,11 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
             .padding(.horizontal, layoutPadding)
             .onTapGesture {
               onTap(item)
+            }
+            .onAppear {
+              if index >= items.count - 3 {
+                onAppearNearBottom?(item)
+              }
             }
           
           Divider()

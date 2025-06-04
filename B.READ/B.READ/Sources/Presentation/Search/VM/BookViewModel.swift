@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+
 final class BookViewModel: ObservableObject {
   
   enum BookState {

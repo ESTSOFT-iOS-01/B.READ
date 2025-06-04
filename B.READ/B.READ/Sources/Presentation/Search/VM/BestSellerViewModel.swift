@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+
 final class BestSellerViewModel: ObservableObject {
   // MARK: - State
   @Published var error: Error?

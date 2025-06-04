@@ -27,7 +27,7 @@ struct BookDetailView: View {
         failedView(error)
       }
     }
-    .background(.backgroundDefault)
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .sheet(item: $coordinator.sheet, content: { route in
       coordinator.buildView(for: route)
         .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
@@ -43,6 +43,7 @@ struct BookDetailView: View {
   private var loadingView: some View {
     ProgressView("책 데이터 불러오는 중...")
       .padding()
+      .background(.backgroundDefault)
   }
   
   // MARK: - (F)failedView
@@ -56,6 +57,7 @@ struct BookDetailView: View {
         .foregroundColor(.gray)
     }
     .padding()
+    .background(.backgroundDefault)
   }
   
   // MARK: - (F)loadedView
@@ -111,6 +113,7 @@ struct BookDetailView: View {
       .padding(.top, 8)
       .padding(.bottom, 16)
     }
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
 }
 

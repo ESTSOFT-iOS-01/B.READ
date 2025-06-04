@@ -78,8 +78,10 @@ struct SearchView: View {
         isFocused: $inputViewModel.isFocused,
         onSubmit: {
           inputViewModel.send(.onSubmitSearch)
+  
+          resultViewModel.send(.clearResult)
           recentSearchViewModel.send(.addKeyword(inputViewModel.searchText))
-          resultViewModel.send(.onAppear(inputViewModel.searchText))
+          resultViewModel.send(.searchAll(inputViewModel.searchText))
         })
       
       if inputViewModel.searchText.isEmpty {
@@ -139,7 +141,11 @@ struct SearchContentView: View {
           .padding(.horizontal, horizontalPadding)
 
       } else if inputViewModel.isSubmitted {
-        SearchResultView(viewModel: resultViewModel)
+        if !inputViewModel.searchText.isEmpty {
+          SearchResultView(
+            viewModel: resultViewModel
+          )
+        }
 
       } else {
         VStack(alignment: .leading, spacing: layoutSize) {

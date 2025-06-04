@@ -65,7 +65,7 @@ struct RecentSearchView: View {
             inputViewModel.searchText = keyword
             viewModel.send(.selectKeyword(keyword))
             inputViewModel.send(.onSubmitSearch)
-            resultViewModel.send(.onAppear(keyword))
+            resultViewModel.send(.searchAll(keyword))
           },
           onDelete: {
             withAnimation(.easeInOut(duration: 0.25)) {

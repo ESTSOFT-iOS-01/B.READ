@@ -9,54 +9,83 @@ import Foundation
 import SwiftUI
 
 final class SearchResultViewModel: ObservableObject {
+  
+  enum DataState {
+    case loading
+    case loaded
+    case failed(Error)
+  }
+  
   // MARK: - State
   @Published var bookResults: [BookVO] = [] // 검색어로 검색한 책 목록
   @Published var recordResults: [RecordCellVO] = [] // 검색어로 검색한 기록 목록
   
-  // 호출 중 상태 관리 변수 2개
   @Published var selectedTabIndex: Int = 0 // 지금 보는 화면이 book인지 record인지 섹션 번호 관리 -> 이거 뷰에서 바로 하나?
+  @Published var bookLoadState: DataState = .loading
+  @Published var recordLoadState: DataState = .loading
   
-  private var serviceIndex: Int = 1
+  private var curIndex: Int = 1
+  @Published var searchKeyword: String = ""
+  
+  private var totalBookCount: Int = .max
   
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
   
   enum Action {
-    case onAppear(String)
+    case searchAll(String)
     case clearResult
     case searchBook(String)
     case searchRecord(String)
+    case fetchMoreBooks(BookVO)
   }
   
   func send(_ action: Action) {
     switch action {
-    case .onAppear(let keyword):
+    case .searchAll(let keyword):
       searchAll(by: keyword)
     case .clearResult:
-      serviceIndex = 1
+      reset()
     case .searchBook(let keyword):
-      loadMoreBooksFromService(by: keyword, page: serviceIndex)
+      loadMoreBooksFromService(by: keyword, page: curIndex)
     case .searchRecord(let keyword):
       loadBooksFromRepository(by: keyword)
+    case .fetchMoreBooks(let data):
+      loadMoreIfNeeded(current: data)
     }
   }
   
+  func reset() {
+    bookResults = []
+    recordResults = []
+    bookLoadState = .loading
+    recordLoadState = .loading
+    curIndex = 1
+    searchKeyword = ""
+    totalBookCount = .max
+  }
+  
+  
   func loadMoreBooksFromService(by keyword: String, page: Int) {
+    DispatchQueue.main.async { [weak self] in
+      self?.searchKeyword = keyword
+    }
+    
     Task {
       do {
         let data = try await searchUseCase.searchBooksFromService(query: keyword, page: page)
-
+        
         let bookDatas: [BookVO] = try await withThrowingTaskGroup(of: BookVO?.self) { group in
           for item in data.books {
             group.addTask {
               guard let imageData = try? await ImageConverter.convertImageURLToData(
                 ImageURLConverter.highQualityURL(from: item.coverURL)
               ),
-              let uiImage = UIImage(data: imageData),
-              let date = item.publishedDate.toDate() else {
+                    let uiImage = UIImage(data: imageData),
+                    let date = item.publishedDate.toDate() else {
                 return nil
               }
-
+              
               return BookVO(
                 id: UUID().uuidString,
                 isbn: item.isbn,
@@ -68,7 +97,7 @@ final class SearchResultViewModel: ObservableObject {
               )
             }
           }
-
+          
           var results: [BookVO] = []
           for try await book in group {
             if let book = book {
@@ -79,34 +108,46 @@ final class SearchResultViewModel: ObservableObject {
         }
 
         await MainActor.run {
+          totalBookCount = data.totalCount
+          print("총 검색 결과 개수: \(totalBookCount)")
+          print("현재 내가 가지고 있는 데이터 갯수 : \(bookResults.count)")
           if page == 1 {
             bookResults = bookDatas
-            serviceIndex += 1
+            curIndex += 1
           } else {
             bookResults.append(contentsOf: bookDatas)
-            serviceIndex += 1
+            curIndex += 1
           }
+          bookLoadState = .loaded
         }
-
+        
       } catch {
         await MainActor.run {
-          print("서비스 검색 실패: \(error)")
-          serviceIndex = 1
+          totalBookCount = .max
+          bookLoadState = .failed(error)
+          print("알라딘 서비스 검색 실패: \(error)")
+          curIndex = 1
         }
       }
     }
   }
   
   func loadBooksFromRepository(by keyword: String) {
+    DispatchQueue.main.async { [weak self] in
+      self?.searchKeyword = keyword
+    }
+    
     Task {
       do {
         let repoData = try await searchUseCase.searchBooksFromRepository(query: keyword)
         let records = repoData.map { RecordCellVO(record: $0.0, book: $0.1) }
         await MainActor.run {
           recordResults = records
+          recordLoadState = .loaded
         }
       } catch {
         await MainActor.run {
+          recordLoadState = .failed(error)
           print("로컬 검색 실패: \(error)")
         }
       }
@@ -114,11 +155,22 @@ final class SearchResultViewModel: ObservableObject {
   }
   
   func searchAll(by keyword: String) {
+    DispatchQueue.main.async { [weak self] in
+      self?.searchKeyword = keyword
+    }
     Task {
       await withTaskGroup(of: Void.self) { group in
         group.addTask { self.loadBooksFromRepository(by: keyword) }
         group.addTask { self.loadMoreBooksFromService(by: keyword, page: 1) }
       }
+    }
+  }
+  
+  func loadMoreIfNeeded(current item: BookVO) {
+    guard bookResults.count < totalBookCount else { return }
+    guard let lastItem = bookResults.dropLast().last else { return }
+    if lastItem.id == item.id {
+      send(.searchBook(searchKeyword))
     }
   }
   

@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 
+
 final class SearchInputViewModel: ObservableObject {
   // MARK: - State
   @Published var searchText: String = "" // 검색창에 입력된 검색어 내용
