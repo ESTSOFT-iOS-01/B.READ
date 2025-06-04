@@ -6,56 +6,61 @@
 //
 
 import SwiftUI
+import Foundation
 
 // MARK: - (S)SearchView
 struct SearchView: View {
-  @StateObject var viewModel: SearchViewModel
+  @StateObject private var inputViewModel: SearchInputViewModel
+  @StateObject private var resultViewModel: SearchResultViewModel
+  @StateObject private var recentSearchViewModel: RecentSearchViewModel
+  @StateObject private var bestSellerViewModel: BestSellerViewModel
+  
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
   
-  init(viewModel: SearchViewModel) {
-    self._viewModel = .init(wrappedValue: viewModel)
+  init(
+    inputViewModel: SearchInputViewModel,
+    resultViewModel: SearchResultViewModel,
+    recentSearchViewModel: RecentSearchViewModel,
+    bestSellerViewModel: BestSellerViewModel
+  ) {
+    self._inputViewModel = .init(wrappedValue: inputViewModel)
+    self._resultViewModel = .init(wrappedValue: resultViewModel)
+    self._recentSearchViewModel = .init(wrappedValue: recentSearchViewModel)
+    self._bestSellerViewModel = .init(wrappedValue: bestSellerViewModel)
   }
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      if !viewModel.isSearchFocused && !viewModel.isSearchSubmitted {
+      if !inputViewModel.isFocused && !inputViewModel.isSubmitted {
         logoView
           .transition(.opacity)
       }
       
       // 검색창은 한 개만 존재해야함
       searchBarSection
-        .padding(
-          .top,
-          viewModel.isSearchFocused || viewModel.isSearchSubmitted ? layoutSize : 0)
+        .padding(.top, inputViewModel.isFocused || inputViewModel.isSubmitted ? layoutSize : 0)
       
-      Group {
-        if viewModel.isSearchFocused {
-          RecentSearchView(viewModel: viewModel)
-            .transition(.opacity)
-            .frame(maxHeight: .infinity, alignment: .top)
-            .padding(.horizontal, horizontalPadding)
-          
-        } else if viewModel.state.isSearchSubmitted {
-          SearchResultView(viewModel: viewModel)
-            .transition(.opacity)
-            .frame(maxHeight: .infinity, alignment: .top)
-          
-        } else {
-          bestSellerSection
-            .environmentObject(coordinator)
-            .transition(.opacity)
-            .padding(.horizontal, horizontalPadding)
-        }
-      }
+      SearchContentView(
+        inputViewModel: inputViewModel,
+        recentSearchViewModel: recentSearchViewModel,
+        resultViewModel: resultViewModel,
+        bestSellerViewModel: bestSellerViewModel,
+        layoutSize: layoutSize,
+        horizontalPadding: horizontalPadding
+      )
+      
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .animation(.easeInOut(duration: 0.3), value: viewModel.isSearchFocused || viewModel.isSearchSubmitted)
+    .animation(
+      .easeInOut(duration: 0.3),
+      value: inputViewModel.isFocused || inputViewModel.isSubmitted
+    )
     .onAppear {
-      viewModel.send(.onAppear)
+      bestSellerViewModel.send(.onAppear)
+      recentSearchViewModel.send(.onAppear)
     }
   }
   
@@ -69,26 +74,27 @@ struct SearchView: View {
   private var searchBarSection: some View {
     HStack(spacing: layoutSize) {
       SearchBar(
-        text: $viewModel.searchText,
-        isFocused: $viewModel.isSearchFocused,
+        text: $inputViewModel.searchText,
+        isFocused: $inputViewModel.isFocused,
         onSubmit: {
-          if !viewModel.searchText.isEmpty {
-            viewModel.send(.onSubmitSearch)
-          }
+          inputViewModel.send(.onSubmitSearch)
+          recentSearchViewModel.send(.addKeyword(inputViewModel.searchText))
+          resultViewModel.send(.onAppear(inputViewModel.searchText))
         })
       
-      if viewModel.searchText.isEmpty {
+      if inputViewModel.searchText.isEmpty {
         SearchButton {
           coordinator.push(.barcode)
         }
       } else {
         SearchButton(style: .close) {
-          viewModel.send(.onTapClear)
+          inputViewModel.send(.onTapClear)
+          resultViewModel.send(.clearResult)
         }
       }
-    } // : Hstack - 검색창 영역
+    }
   }
-  
+
   // MARK: - (S)bestSellerSection
   private var bestSellerSection: some View {
     VStack(alignment: .leading, spacing: layoutSize) {
@@ -98,7 +104,7 @@ struct SearchView: View {
                      letterSpacing: -0.025)
         .foregroundStyle(.black)
       
-      BestSellerView(bookList: viewModel.bestBookList) { book in
+      BestSellerView(bookList: bestSellerViewModel.bestBookList) { book in
         coordinator.push(.searchBook(isbn: book.isbn))
       }
     } // : vstack - best seller
@@ -108,3 +114,47 @@ struct SearchView: View {
 //#Preview {
 //  SearchView(viewModel: SearchViewModel())
 //}
+
+
+
+// MARK: - (S)SearchContentView
+struct SearchContentView: View {
+  @ObservedObject var inputViewModel: SearchInputViewModel
+  @ObservedObject var recentSearchViewModel: RecentSearchViewModel
+  @ObservedObject var resultViewModel: SearchResultViewModel
+  @ObservedObject var bestSellerViewModel: BestSellerViewModel
+  
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  
+  var layoutSize: CGFloat
+  var horizontalPadding: CGFloat
+
+  var body: some View {
+    Group {
+      if inputViewModel.isFocused {
+        RecentSearchView(
+          viewModel: recentSearchViewModel,
+          inputViewModel: inputViewModel,
+          resultViewModel: resultViewModel)
+          .padding(.horizontal, horizontalPadding)
+
+      } else if inputViewModel.isSubmitted {
+        SearchResultView(viewModel: resultViewModel)
+
+      } else {
+        VStack(alignment: .leading, spacing: layoutSize) {
+          Text("인기 도서")
+            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1, letterSpacing: -0.025)
+            .foregroundStyle(.black)
+
+          BestSellerView(bookList: bestSellerViewModel.bestBookList) { book in
+            coordinator.push(.searchBook(isbn: book.isbn))
+          }
+        }
+        .padding(.horizontal, horizontalPadding)
+      }
+    }
+    .frame(maxHeight: .infinity, alignment: .top)
+    .transition(.opacity)
+  }
+}
