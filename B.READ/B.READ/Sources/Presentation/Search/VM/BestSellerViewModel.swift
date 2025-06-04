@@ -32,16 +32,7 @@ final class BestSellerViewModel: ObservableObject {
       do {
         let data = try await recommandUseCase.requestBestSeller(in: 0)
         
-        let list = data.map {
-          BestSellerVO(
-            id: UUID().uuidString,
-            rank: $0.rank,
-            isbn: $0.isbn,
-            title: $0.title,
-            author: $0.author,
-            imageURL: $0.coverURL
-          )
-        }
+        let list = data.map { BestSellerVO($0) }
         
         await MainActor.run {
           bestBookList = list
