@@ -17,7 +17,7 @@ struct RecordDetailView: View {
   @State var showRecordMenuActionSheet: Bool = false
   
   private let layoutPadding: CGFloat = 16
-  private let floatingButtonPadding: CGFloat = 32
+  private let floatingButtonPadding: CGFloat = 24
 
   // MARK: - Init
   init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
@@ -117,7 +117,7 @@ struct RecordDetailView: View {
       }
       Button("메모 작성") {
         guard let record = viewModel.record else { return }
-        coordinator.push(.memo(record: record, totalPage: record.totalPage))
+        coordinator.push(.memo(record: record))
       }
       Button("문장 작성") {
         guard let record = viewModel.record else { return }

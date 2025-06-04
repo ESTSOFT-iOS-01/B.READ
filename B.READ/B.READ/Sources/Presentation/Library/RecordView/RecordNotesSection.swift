@@ -60,6 +60,7 @@ struct RecordNotesSection: View {
     } // : LazyVStcks
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 8)
+    .padding(.bottom, 72)
     .confirmationDialog(
       "메뉴를 선택하세요",
       isPresented: $showMenuActionSheet,
@@ -74,22 +75,21 @@ struct RecordNotesSection: View {
     Button("\(type.name) 수정") {
       switch type {
       case .memo:
-        print("\(type.name) 수정 선택")
+        guard let record = viewModel.record, let memo = viewModel.selectedMemo else { return }
+        coordinator.push(.memo(id: memo.id, record: record))
       case .quote:
         guard let record = viewModel.record, let quote = viewModel.selectedQuote else { return }
         coordinator.push(.sentenceInput(mode: .edit(record: record, quote: quote)))
-        print("\(type.name) 수정 선택")
       }
     }
     
+    // TODO: - [시르] 삭제 alert띄우기
     Button("\(type.name) 삭제", role: .destructive) {
       switch type {
       case .memo:
-        print("\(type.name) 삭제 선택")
         guard let memo = viewModel.selectedMemo else { return }
         viewModel.send(.deleteMemo(id: memo.id))
       case .quote:
-        print("\(type.name) 삭제 선택")
         guard let quote = viewModel.selectedQuote else { return }
         viewModel.send(.deleteQuote(id: quote.id))
       }
