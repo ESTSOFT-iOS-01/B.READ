@@ -137,8 +137,12 @@ struct RecordDetailView: View {
       } label: {
         if let isFavorite = viewModel.record?.isFavorite {
           Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+            .resizable()
+            .frame(width: 12, height: 24)
         } else {
           Image(systemName: "bookmark")
+            .resizable()
+            .frame(width: 12, height: 24)
         }
       }
       // 삭제 버튼
