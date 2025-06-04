@@ -47,7 +47,9 @@ extension DIContainer {
     let userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     let bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     let recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
+    let memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
     let quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
+    let aiService = AlanService()
     
     // MARK: - UseCase 생성 및 등록
     // Profile UseCase
@@ -66,6 +68,14 @@ extension DIContainer {
       for: LibraryUseCase.self
     )
     // TODO: - Memo UseCase
+    self.shared.register(
+      MemoUseCaseImpl(
+        bookRepository: bookRepository,
+        memoRepository: memoRepository,
+        aiService: aiService
+      ),
+      for: MemoUseCase.self
+    )
     // Quote UseCase
     self.shared.register(
       QuoteUseCaseImpl(
