@@ -51,8 +51,7 @@ struct SearchTabContentView: View {
           switch viewModel.bookLoadState {
           case .loading:
             if viewModel.bookResults.isEmpty {
-              ProgressView("검색 결과를 불러오는 중...")
-                .padding()
+              LoadingView()
             } else {
               SearchListView(
                 items: viewModel.bookResults,
@@ -67,8 +66,7 @@ struct SearchTabContentView: View {
             }
           case .loaded:
             if viewModel.bookResults.isEmpty {
-              failedView(desp: "일치하는 검색 결과가 없습니다.")
-                .padding()
+              FailedView(desp: "일치하는 검색 결과가 없습니다.")
             } else {
               SearchListView(
                 items: viewModel.bookResults,
@@ -82,8 +80,7 @@ struct SearchTabContentView: View {
               )
             }
           case .failed(let error):
-            failedView(error)
-              .padding()
+            FailedView(error: error)
           }
         }
         .transition(.asymmetric(insertion: .move(edge: .leading), removal: .opacity))
@@ -91,12 +88,10 @@ struct SearchTabContentView: View {
         Group {
           switch viewModel.recordLoadState {
           case .loading:
-            ProgressView("검색 결과를 불러오는 중...")
-              .padding()
+            LoadingView()
           case .loaded:
             if viewModel.recordResults.isEmpty {
-              failedView(desp: "일치하는 검색 결과가 없습니다.")
-                .padding()
+              FailedView(desp: "일치하는 검색 결과가 없습니다.")
             } else {
               SearchListView(
                 items: viewModel.recordResults,
@@ -110,33 +105,14 @@ struct SearchTabContentView: View {
               )
             }
           case .failed(let error):
-            failedView(error)
-              .padding()
+            FailedView(error: error)
           }
         }
         .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .opacity))
       }
     }
   }
-  
-  @ViewBuilder
-  private func failedView(_ error: Error? = nil, desp: String? = nil) -> some View {
-    VStack(spacing: 8) {
-      Text("😢 정보를 불러오는 데 실패했어요.")
-        .font(.headline)
-      if let error = error {
-        Text(error.localizedDescription)
-          .font(.caption)
-          .foregroundColor(.gray)
-      }
-      if let desp = desp {
-        Text(desp)
-          .font(.caption)
-          .foregroundColor(.gray)
-      }
-    }
-    .padding()
-  }
+
 }
 
 // MARK: - (S)SearchListView

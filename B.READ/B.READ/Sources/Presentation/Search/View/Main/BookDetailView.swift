@@ -20,44 +20,23 @@ struct BookDetailView: View {
     Group {
       switch viewModel.bookState {
       case .loading:
-        loadingView
+        LoadingView()
       case .loaded(let bookDetailVO):
         loadedView(bookDetailVO)
       case .failed(let error):
-        failedView(error)
+        FailedView(error: error)
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
       }
     }
-    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .sheet(item: $coordinator.sheet, content: { route in
       coordinator.buildView(for: route)
         .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
         .presentationDragIndicator(.hidden)
     })
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
     .onAppear {
       viewModel.send(.onAppear)
     }
-  }
-  
-  // MARK: - (F)loadingView
-  @ViewBuilder
-  private var loadingView: some View {
-    ProgressView("책 데이터 불러오는 중...")
-      .padding()
-      .background(.backgroundDefault)
-  }
-  
-  // MARK: - (F)failedView
-  @ViewBuilder
-  private func failedView(_ error: Error) -> some View {
-    VStack(spacing: 8) {
-      Text("😢 책 정보를 불러오는 데 실패했어요.")
-        .font(.headline)
-      Text(error.localizedDescription)
-        .font(.caption)
-        .foregroundColor(.gray)
-    }
-    .padding()
-    .background(.backgroundDefault)
   }
   
   // MARK: - (F)loadedView
