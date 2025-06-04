@@ -37,6 +37,9 @@ struct BookDetailView: View {
     .onAppear {
       viewModel.send(.onAppear)
     }
+    .onDisappear {
+      viewModel.send(.cancelTask)
+    }
   }
   
   // MARK: - (F)loadedView

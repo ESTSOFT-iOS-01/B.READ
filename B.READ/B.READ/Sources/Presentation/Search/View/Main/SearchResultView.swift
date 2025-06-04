@@ -29,6 +29,9 @@ struct SearchResultView: View {
       .animation(.easeInOut(duration: 0.3), value: viewModel.selectedTabIndex)
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    .onDisappear {
+      viewModel.send(.cancelTask)
+    }
   }
   
   // TODO : 이상한 상황이다...원래 유지되어야 정상임 ㅠ

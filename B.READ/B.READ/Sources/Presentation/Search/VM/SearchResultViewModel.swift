@@ -28,10 +28,17 @@ final class SearchResultViewModel: ObservableObject {
   @Published var searchKeyword: String = ""
   
   private var totalBookCount: Int = .max
-  internal var currentTask: Task<Void, Never>? = nil
+  private var bookTask: Task<Void, Never>?
+  private var recordTask: Task<Void, Never>?
+
   
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
+  
+  deinit {
+    bookTask?.cancel()
+    recordTask?.cancel()
+  }
   
   enum Action {
     case searchAll(String)
@@ -39,6 +46,7 @@ final class SearchResultViewModel: ObservableObject {
     case searchBook(String)
     case searchRecord(String)
     case fetchMoreBooks(BookVO)
+    case cancelTask
   }
   
   func send(_ action: Action) {
@@ -53,6 +61,9 @@ final class SearchResultViewModel: ObservableObject {
       loadBooksFromRepository(by: keyword)
     case .fetchMoreBooks(let data):
       loadMoreIfNeeded(current: data)
+    case .cancelTask:
+      bookTask?.cancel()
+      recordTask?.cancel()
     }
   }
   
@@ -73,9 +84,9 @@ private extension SearchResultViewModel {
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
-    currentTask?.cancel()
+    bookTask?.cancel()
     
-    currentTask = Task {
+    bookTask = Task {
       do {
         try Task.checkCancellation()
         let data = try await searchUseCase.searchBooksFromService(query: keyword, page: page)
@@ -121,11 +132,14 @@ private extension SearchResultViewModel {
         
       } catch {
         if Task.isCancelled { return }
-        await MainActor.run {
-          totalBookCount = .max
-          bookLoadState = .failed(error)
-          print("알라딘 서비스 검색 실패: \(error)")
-          curIndex = 1
+        
+        else {
+          await MainActor.run {
+            totalBookCount = .max
+            bookLoadState = .failed(error)
+            print("알라딘 서비스 검색 실패: \(error)")
+            curIndex = 1
+          }
         }
       }
     }
@@ -135,8 +149,9 @@ private extension SearchResultViewModel {
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
+    recordTask?.cancel()
     
-    Task {
+    recordTask = Task {
       do {
         let repoData = try await searchUseCase.searchBooksFromRepository(query: keyword)
         let records = repoData.map { RecordCellVO(record: $0.0, book: $0.1) }
@@ -145,6 +160,8 @@ private extension SearchResultViewModel {
           recordLoadState = .loaded
         }
       } catch {
+        if Task.isCancelled { return }
+        
         await MainActor.run {
           recordLoadState = .failed(error)
           print("로컬 검색 실패: \(error)")
@@ -154,17 +171,15 @@ private extension SearchResultViewModel {
   }
   
   func searchAll(by keyword: String) {
-    currentTask?.cancel()
+    bookTask?.cancel()
+    recordTask?.cancel()
+    
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
     
-    currentTask = Task {
-      await withTaskGroup(of: Void.self) { group in
-        group.addTask { self.loadBooksFromRepository(by: keyword) }
-        group.addTask { self.loadMoreBooksFromService(by: keyword, page: 1) }
-      }
-    }
+    bookTask = Task { loadMoreBooksFromService(by: keyword, page: 1) }
+    recordTask = Task { loadBooksFromRepository(by: keyword) }
   }
   
   func loadMoreIfNeeded(current item: BookVO) {

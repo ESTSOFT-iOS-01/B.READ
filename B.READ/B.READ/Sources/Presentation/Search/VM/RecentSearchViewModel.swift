@@ -28,6 +28,7 @@ final class RecentSearchViewModel: ObservableObject {
     case deleteKeyword(String)
     case deleteAllKeywords
     case selectKeyword(String)
+    case cancelTask
   }
   
   func send(_ action: Action) {
@@ -55,6 +56,8 @@ final class RecentSearchViewModel: ObservableObject {
         try await self?.profileUseCase.clearRecentKeywords()
         try await self?.fetch()
       }
+    case .cancelTask:
+      currentTask?.cancel()
     }
   }
 }
@@ -71,15 +74,17 @@ private extension RecentSearchViewModel {
   
   private func execute(_ operation: @escaping () async throws -> Void) {
     currentTask?.cancel()
+    
     currentTask = Task {
       do {
         try Task.checkCancellation()
         try await operation()
       } catch {
-        if Task.isCancelled {
-          print("작업 취소")
-        } else {
+        if Task.isCancelled { return }
+        
+        await MainActor.run {
           print("Error: \(error)")
+          keywords = []
         }
       }
     }

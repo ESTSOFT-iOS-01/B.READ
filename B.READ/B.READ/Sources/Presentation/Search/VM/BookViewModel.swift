@@ -26,17 +26,23 @@ final class BookViewModel: ObservableObject {
     self.isbn = isbn
   }
   
-  @Dependency
-private var searchUseCase: SearchUseCase
+  deinit {
+    currentTask?.cancel()
+  }
+  
+  @Dependency private var searchUseCase: SearchUseCase
   
   enum Action {
     case onAppear
+    case cancelTask
   }
   
   func send(_ action: Action) {
     switch action {
     case .onAppear:
       fetchBookInfo(isbn: isbn)
+    case .cancelTask:
+      currentTask?.cancel()
     }
   }
 }
@@ -44,6 +50,7 @@ private var searchUseCase: SearchUseCase
 private extension BookViewModel {
   func fetchBookInfo(isbn: String) {
     currentTask?.cancel()
+    
     currentTask = Task {
       do {
         try Task.checkCancellation()
@@ -55,6 +62,7 @@ private extension BookViewModel {
         }
       } catch {
         if Task.isCancelled { return }
+        
         await MainActor.run {
           bookState = .failed(error)
         }

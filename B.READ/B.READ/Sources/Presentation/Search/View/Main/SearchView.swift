@@ -62,6 +62,11 @@ struct SearchView: View {
       bestSellerViewModel.send(.onAppear)
       recentSearchViewModel.send(.onAppear)
     }
+    .onDisappear {
+      resultViewModel.send(.cancelTask)
+      recentSearchViewModel.send(.cancelTask)
+      bestSellerViewModel.send(.cancelTask)
+    }
   }
   
   // MARK: - (S)logoView
