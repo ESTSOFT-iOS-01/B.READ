@@ -109,8 +109,6 @@ final class SearchResultViewModel: ObservableObject {
 
         await MainActor.run {
           totalBookCount = data.totalCount
-          print("총 검색 결과 개수: \(totalBookCount)")
-          print("현재 내가 가지고 있는 데이터 갯수 : \(bookResults.count)")
           if page == 1 {
             bookResults = bookDatas
             curIndex += 1
