@@ -53,7 +53,6 @@ struct RecordDetailView: View {
           // 메모, 문장 리스트
           RecordNotesSection(viewModel: viewModel)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.vertical, layoutPadding)
           
         } // : VStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
