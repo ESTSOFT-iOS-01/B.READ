@@ -42,10 +42,13 @@ struct RecordBookSection: View {
     } // : VStack
   }
 }
-//
-//#Preview {
-//  RecordDetailView(viewModel: .init(
-//    recordID: DummyData.dummyRecords[2].id,
-//    isbn: DummyData.dummyRecords[2].isbn
-//  ))
-//}
+
+#Preview {
+  @Previewable @State var recordDetail: RecordDetailVO? = RecordDetailVO(
+    record: DummyData.dummyRecords[1],
+    book: DummyData.dummyBooks[1]
+  )
+  PreviewableContainer {
+    RecordBookSection(record: $recordDetail)
+  }
+}

@@ -64,9 +64,6 @@ final class LibraryViewModel: ObservableObject {
             await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
           }
         }
-        
-        print("여기서 부터 확인 함수")
-        try? await libraryUseCase.checkingAllData()
       }
       
     case .selectTab:
