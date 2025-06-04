@@ -42,6 +42,7 @@ struct RecordNotesSection: View {
             endPage: memo.pages.1
           ) {
             showMenuActionSheet = true
+            viewModel.selectedMemo = memo
           }
         } // : ForEach
       } else {
@@ -52,6 +53,7 @@ struct RecordNotesSection: View {
             colorTone: .soft
           ) {
             showMenuActionSheet = true
+            viewModel.selectedQuote = quote
           }
         } // : ForEach
       }
@@ -74,13 +76,9 @@ struct RecordNotesSection: View {
       case .memo:
         print("\(type.name) 수정 선택")
       case .quote:
+        guard let record = viewModel.record, let quote = viewModel.selectedQuote else { return }
+        coordinator.push(.sentenceInput(mode: .edit(record: record, quote: quote)))
         print("\(type.name) 수정 선택")
-        // TODO: 문장넘겨주기
-//        if let quote = viewModel.state.selectedQuote, let isbn = viewModel.state.info?.record.isbn {
-//          coordinator.push(.sentenceInput(mode: .edit(isbn: isbn, quote: quote)))
-//        } else {
-//          print("선택된 문장이 없습니다.")
-//        }
       }
     }
     
@@ -88,8 +86,12 @@ struct RecordNotesSection: View {
       switch type {
       case .memo:
         print("\(type.name) 삭제 선택")
+        guard let memo = viewModel.selectedMemo else { return }
+        viewModel.send(.deleteMemo(id: memo.id))
       case .quote:
         print("\(type.name) 삭제 선택")
+        guard let quote = viewModel.selectedQuote else { return }
+        viewModel.send(.deleteQuote(id: quote.id))
       }
     }
     

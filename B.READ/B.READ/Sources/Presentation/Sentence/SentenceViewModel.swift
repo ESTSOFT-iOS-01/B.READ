@@ -9,8 +9,8 @@ import Foundation
 
 /// 새 문장 작성(create) 혹은 기존 문장 수정(edit) 모드 구분
 enum SentenceInputMode: Hashable {
-  case create(isbn: String)
-  case edit(isbn: String, quote: QuoteVO)
+  case create(record: RecordDetailVO)
+  case edit(record: RecordDetailVO, quote: QuoteVO)
 }
 
 @MainActor
@@ -25,10 +25,10 @@ final class SentenceViewModel: ObservableObject {
   
   // MARK: - Internal Variables
   private let mode: SentenceInputMode
-  private let quoteUseCase: QuoteUseCase = QuoteUseCaseImpl(
-    quoteRepository: QuoteRepositoryStub(),
-    bookRepository: BookRepositoryStub()
-  )
+  private let record: RecordDetailVO
+  
+  // MARK: - Depenency
+  @Dependency private var quoteUseCase: QuoteUseCase
   
   // MARK: - Actions
   enum Action {
@@ -52,20 +52,21 @@ final class SentenceViewModel: ObservableObject {
   init(mode: SentenceInputMode) {
     self.mode = mode
     switch mode {
-    case .create(let isbn):
+    case .create(let record):
       self.content = ""
       self.page = nil
-      print("[🚀] SentenceViewModel.init(.create) 호출됨, isbn:", isbn)
-      Task { await loadMaxPage(isbn) }
+      self.record = record
+      self.maxPage = record.totalPage
       
-    case .edit(let isbn, let quote):
+    case .edit(let record, let quote):
       self.content = quote.content
       self.page = quote.page
-      print("[🚀] SentenceViewModel.init(.edit) 호출됨, isbn:", isbn)
-      Task { await loadMaxPage(isbn) }
+      self.record = record
+      self.maxPage = record.totalPage
     }
   }
 }
+
 
 // MARK: - Private Helpers
 private extension SentenceViewModel {
@@ -108,28 +109,9 @@ private extension SentenceViewModel {
         print("[ℹ️] maxPage가 아직 로드되지 않음 (검증 건너뛰기)")
       }
       
-      // 4) ISBN 결정 + 최종 범위 검증
-      let isbn: String
-      switch mode {
-      case .create(let bookISBN):
-        isbn = bookISBN
-      case .edit(let bookISBN, _):
-        isbn = bookISBN
-      }
-      print("[ℹ️] ISBN 결정: \(isbn)")
-      do {
-        try await quoteUseCase.validatePage(page, forISBN: isbn)
-        print("[✅] UseCase.validatePage 통과: page=\(page) forISBN=\(isbn)")
-      } catch {
-        print("[⚠️] UseCase.validatePage 실패:", error.localizedDescription)
-        await MainActor.run {
-          self.errorMessage = error.localizedDescription
-        }
-        return
-      }
-      
-      // 5) ID 결정 및 모델 생성
+      // 4) ID 결정 및 모델 생성
       let id: String
+      let isbn = self.record.isbn
       switch mode {
       case .create:
         id = UUID().uuidString
@@ -138,13 +120,9 @@ private extension SentenceViewModel {
         id = quote.id
         print("[ℹ️] 수정 모드: 기존 id=\(id)")
       }
-      let model = Quote(id: id,
-                        isbn: isbn,
-                        content: trimmed,
-                        page: page)
-      print("[ℹ️] DTO 생성: \(model)")
-      
-      // 6) 제출 상태 갱신
+      let model = Quote(id: id, isbn: isbn, content: trimmed, page: page)
+      let recordEntity = self.record.toEntity(memos: [], quotes: [])
+      // 5) 제출 상태 갱신
       await MainActor.run {
         self.isSubmitting = true
         self.errorMessage = nil
@@ -153,13 +131,12 @@ private extension SentenceViewModel {
         Task { await MainActor.run { self.isSubmitting = false } }
       }
       print("[ℹ️] isSubmitting = true")
-      
-      // 7) UseCase 호출
+      // 6) UseCase 호출
       do {
         switch mode {
         case .create:
           print("[ℹ️] QuoteUseCase.addQuote 호출 시도")
-//          try await quoteUseCase.addQuote(model)
+          try await quoteUseCase.addQuote(model, in: recordEntity)
           print("[✅] addQuote 성공")
           await print(try quoteUseCase.fetchAllQuotes())
         case .edit:
@@ -170,6 +147,7 @@ private extension SentenceViewModel {
         // 성공 시점에 didSubmitSuccess를 true로 변경
         await MainActor.run {
           self.didSubmitSuccess = true
+          
         }
         print("[🎉] didSubmitSuccess = true")
       } catch {
@@ -177,23 +155,6 @@ private extension SentenceViewModel {
         await MainActor.run {
           self.errorMessage = error.localizedDescription
         }
-      }
-    }
-  }
-  
-  private func loadMaxPage(_ isbn: String) async {
-    print("[🕵️] loadMaxPage 시작, isbn:", isbn)
-    do {
-      let total = try await quoteUseCase.pageCount(forISBN: isbn)
-      //print("[✅] loadMaxPage 성공, total page:", total)
-      await MainActor.run {
-        self.maxPage = total
-        //print("[📝] self.maxPage = \(total)")
-      }
-    } catch {
-      //print("[❌] loadMaxPage 실패:", error.localizedDescription)
-      await MainActor.run {
-        self.errorMessage = error.localizedDescription
       }
     }
   }

@@ -76,6 +76,12 @@ struct PageInputView: View {
     .onChange(of: pageText, { oldValue, newValue in
       viewModel.page = Int(newValue)
     })
+    .onChange(of: viewModel.didSubmitSuccess) {
+      if viewModel.didSubmitSuccess {
+        coordinator.pop()
+        coordinator.pop()
+      }
+    }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
@@ -88,8 +94,6 @@ struct PageInputView: View {
             return
           }
           viewModel.send(.submit)
-          coordinator.pop()
-          coordinator.pop()
         }
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
@@ -120,9 +124,9 @@ struct PageInputView: View {
     }
   }
 }
-
-#Preview {
-  NavigationStack {
-    PageInputView(mode: .create(isbn: "9781234567890"), sentence: "")
-  }
-}
+//
+//#Preview {
+//  NavigationStack {
+//    PageInputView(mode: .create(isbn: "9781234567890"), sentence: "")
+//  }
+//}

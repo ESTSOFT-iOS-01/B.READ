@@ -11,7 +11,7 @@ struct SentenceInputView: View {
   let mode: SentenceInputMode
   
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @StateObject var viewModel: SentenceViewModel = SentenceViewModel(mode: .create(isbn: ""))
+  @StateObject var viewModel: SentenceViewModel
   @FocusState private var isEditorFocused: Bool
   @State private var showPageAlert = false
   
@@ -94,12 +94,12 @@ extension View {
                                     to: nil, from: nil, for: nil)
   }
 }
-
-#Preview {
-  let dummy = Coordinator<MainRoute, SheetRoute>()
-  
-  NavigationStack {
-    SentenceInputView(mode: .create(isbn: "9781234567890"))
-  }
-  .environmentObject(dummy)
-}
+//
+//#Preview {
+//  let dummy = Coordinator<MainRoute, SheetRoute>()
+//  
+//  NavigationStack {
+//    SentenceInputView(mode: .create(isbn: "9781234567890"))
+//  }
+//  .environmentObject(dummy)
+//}

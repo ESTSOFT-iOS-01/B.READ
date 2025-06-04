@@ -16,10 +16,12 @@ final class RecordDetailViewModel: ObservableObject {
   @Published var memos: [MemoVO] = []
   @Published var quotes: [QuoteVO] = []
   @Published var selectedTab: Int = 0
-  @Published var selectedSort: [SortOption] = [.recent, .recent]
+  @Published var selectedSort: [SortOption] = [.pageAscending, .pageAscending]
   
   // MARK: - Internal Variable
   private let recordID: String
+  var selectedQuote: QuoteVO? = nil
+  var selectedMemo: MemoVO? = nil
   
   init(recordID: String) {
     self.recordID = recordID
@@ -28,6 +30,7 @@ final class RecordDetailViewModel: ObservableObject {
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase
   @Dependency private var quoteUseCase: QuoteUseCase
+  @Dependency private var memoUseCase: MemoUseCase
   
   
   // MARK: - Action
@@ -36,6 +39,8 @@ final class RecordDetailViewModel: ObservableObject {
     case onTapFavorite // 즐겨찾기 토글 시
     case onTapDelete // 삭제 클릭 시
     case selectSort // 정렬을 선택 시
+    case deleteMemo(id: String) // 메모 삭제
+    case deleteQuote(id: String) // 문장 삭제
   }
   
   func send(_ action: Action) {
@@ -49,11 +54,11 @@ final class RecordDetailViewModel: ObservableObject {
         await withTaskGroup(of: Void.self) { group in
           // 2. 메모 정렬
           group.addTask {
-            await self.sortMemos(by: self.selectedSort[self.selectedTab])
+            await self.sortMemos()
           }
           // 3. 문장 정렬
           group.addTask {
-            await self.sortQuotes(by: self.selectedSort[self.selectedTab])
+            await self.sortQuotes()
           }
         }
       }
@@ -77,12 +82,17 @@ final class RecordDetailViewModel: ObservableObject {
         guard let self = self else { return }
         // 정렬 기준을 변경하면 해당 기준으로 정렬 적용
         if self.selectedTab == 0 {
-          await self.sortMemos(by: self.selectedSort[self.selectedTab])
+          await self.sortMemos()
         } else {
-          await self.sortQuotes(by: self.selectedSort[self.selectedTab])
+          await self.sortQuotes()
         }
       }
+     
+    case .deleteQuote(let id):
+      self.deleteQuote(id)
       
+    case .deleteMemo(let id):
+      self.deleteMemo(id)
     }
   }
 }
@@ -154,7 +164,9 @@ private extension RecordDetailViewModel {
     }
   }
   
-  func sortMemos(by: SortOption = .pageAscending) async {
+  /// 메모 정렬
+  func sortMemos() async {
+    let by = self.selectedSort[0]
     // 1. 정렬한 결과
     let sortMemos: [MemoVO] = memos.sorted(by: by.sort)
     
@@ -163,12 +175,50 @@ private extension RecordDetailViewModel {
     }
   }
   
-  func sortQuotes(by: SortOption = .recent) async {
+  /// 문장 정렬
+  func sortQuotes() async {
+    let by = self.selectedSort[1]
     // 1. 정렬한 결과
     let sortQuotes: [QuoteVO] = quotes.sorted(by: by.sort)
     
     await MainActor.run {
       self.quotes = sortQuotes
+    }
+  }
+  
+  /// 메모 삭제
+  func deleteMemo(_ id: String) {
+    Task {
+      // 1. 데이터 삭제
+      try await memoUseCase.deleteMemo(id: id)
+      
+      // 2. 내부 데이터에 삭제를 반영
+      if let index = self.memos.firstIndex(where: { $0.id == id }) {
+        await MainActor.run {
+          _ = self.memos.remove(at: index)
+        }
+      }
+      
+      // 3. 새롭게 정렬진행
+      await sortMemos()
+    }
+  }
+  
+  /// 문장 삭제
+  func deleteQuote(_ id: String) {
+    Task {
+      // 1. 데이터 삭제
+      try await quoteUseCase.removeQuote(id: id)
+      
+      // 2. 내부 데이터에 삭제를 반영
+      if let index = self.quotes.firstIndex(where: { $0.id == id }) {
+        await MainActor.run {
+          _ = self.quotes.remove(at: index)
+        }
+      }
+      
+      // 3. 새롭게 정렬진행
+      await sortQuotes()
     }
   }
 }

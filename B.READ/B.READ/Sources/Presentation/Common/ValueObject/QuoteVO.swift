@@ -38,7 +38,9 @@ struct QuoteVO: Identifiable, Hashable {
   
   static func == (lhs: QuoteVO, rhs: QuoteVO) -> Bool {
     if lhs.id != rhs.id { return false }
-
+    if lhs.content != rhs.content { return false }
+    if lhs.page != rhs.page { return false }
+    if lhs.isbn != rhs.isbn { return false }
     return true
   }
 }
