@@ -17,12 +17,12 @@ struct RecordBookSection: View {
         if let coverImage = record?.coverImage {
           coverImage
             .resizable()
-            .aspectRatio(contentMode: .fit)
+            .aspectRatio(contentMode: .fill)
         } else {
           // TODO: - [시르] 사진이 없을때, 들어갈 이미지 or 도형 추가
           Image(.exampleBook)
             .resizable()
-            .aspectRatio(contentMode: .fit)
+            .aspectRatio(contentMode: .fill)
         }
       } // : Group
       .frame(width: 176, height: 284)
