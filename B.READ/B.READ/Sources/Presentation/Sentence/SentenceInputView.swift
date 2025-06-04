@@ -93,12 +93,14 @@ extension View {
                                     to: nil, from: nil, for: nil)
   }
 }
-//
-//#Preview {
-//  let dummy = Coordinator<MainRoute, SheetRoute>()
-//  
-//  NavigationStack {
-//    SentenceInputView(mode: .create(isbn: "9781234567890"))
-//  }
-//  .environmentObject(dummy)
-//}
+
+#Preview {
+  PreviewableContainer {
+    let dummy = Coordinator<MainRoute, SheetRoute>()
+    let record = RecordDetailVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1])
+    NavigationStack {
+      SentenceInputView(mode: .create(record: record))
+    }
+    .environmentObject(dummy)
+  }
+}

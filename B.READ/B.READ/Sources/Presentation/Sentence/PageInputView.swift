@@ -125,9 +125,13 @@ struct PageInputView: View {
     }
   }
 }
-//
-//#Preview {
-//  NavigationStack {
-//    PageInputView(mode: .create(isbn: "9781234567890"), sentence: "")
-//  }
-//}
+
+#Preview {
+  let record = RecordDetailVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1])
+  PreviewableContainer {
+    NavigationStack {
+      PageInputView(mode: .create(record: record), sentence: "프리뷰 테스트 문장")
+    }
+  }
+  
+}
