@@ -33,3 +33,24 @@ struct RecordStatsView: View {
     .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
   }
 }
+
+#Preview {
+  @Previewable @State var record1 = RecordCellVO(
+    record: DummyData.dummyRecords[0],
+    book: DummyData.dummyBooks[0]
+  )
+  @Previewable @State var record2 = RecordCellVO(
+    record: DummyData.dummyRecords[1],
+    book: DummyData.dummyBooks[1]
+  )
+  @Previewable @State var record3 = RecordCellVO(
+    record: DummyData.dummyRecords[2],
+    book: DummyData.dummyBooks[2]
+  )
+  
+  PreviewableContainer {
+    RecordStatsView(record: $record1)
+    RecordStatsView(record: $record2)
+    RecordStatsView(record: $record3)
+  }
+}
