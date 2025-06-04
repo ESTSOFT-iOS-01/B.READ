@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 // MARK: - (C)LibraryViewModel
 final class LibraryViewModel: ObservableObject {
   
@@ -62,9 +61,11 @@ final class LibraryViewModel: ObservableObject {
             // 3. 선택된 탭을 기준으로 필터 적용
             await self.filterRecords()
             // 4. 필터 적용된 독서 기록에 정렬 적용
-            await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
+            
           }
         }
+        await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
+        
       }
       
     case .selectTab:
@@ -97,6 +98,9 @@ private extension LibraryViewModel {
       let infos: [(record: Record, book: Book)] = try await libraryUseCase.loadRecordList()
       // 2. Entity -> VO
       self.records = infos.map { RecordCellVO(record: $0.record, book: $0.book) }
+      for record in records {
+        print(record.title, "즐겨찾기: \(record.isFavorite)")
+      }
     } catch {
       // TODO: - [시르] 에러 메시지를 띄우는 코드 추가
       // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환하고, 에러 메시지를 띄움
@@ -156,13 +160,14 @@ private extension LibraryViewModel {
   }
   
   /// 정렬 기준에 따라서 displayRecords를 정렬
+  @MainActor
   func sortDisplayRecords(by: SortOption = .recent) async {
     // 1. 정렬한 결과
     let sortedRecords: [RecordCellVO] = displayRecords.sorted(by: by.sort)
     
     // 2. 결과를 뷰에 반영
-    await MainActor.run {
+//    await MainActor.run {
       self.displayRecords = sortedRecords
-    }
+//    }
   }
 }

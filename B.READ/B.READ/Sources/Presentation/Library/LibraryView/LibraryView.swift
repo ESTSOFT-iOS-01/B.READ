@@ -92,6 +92,7 @@ struct LibraryView: View {
     } // : ZStack
     .background(.backgroundDefault)
     .onAppear {
+      print("appear 작동")
       viewModel.send(.onAppear)
     }
   }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: - Binding으로 안만들어도 뷰 반영되면 삭제 예정
 // MARK: - (S)RecordStatsView
 struct RecordStatsView: View {
   

@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)LibraryListView
 struct LibraryListView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+//  @ObservedObject var viewModel: LibraryViewModel
   @Binding var records: [RecordCellVO]
   
   var body: some View {
@@ -20,7 +21,6 @@ struct LibraryListView: View {
             .background(.green1.opacity(0.6))
             .cornerRadius(16)
             .onTapGesture {
-              print(record)
               coordinator.push(.libraryDetail(id: record.id))
             }
         }
@@ -30,13 +30,15 @@ struct LibraryListView: View {
   }
 }
 
-#Preview {
-  @Previewable @State var records: [RecordCellVO] = [
-    RecordCellVO(record: DummyData.dummyRecords[0], book: DummyData.dummyBooks[0]),
-    RecordCellVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1]),
-    RecordCellVO(record: DummyData.dummyRecords[2], book: DummyData.dummyBooks[2])
-  ]
-  PreviewableContainer {
-    LibraryListView(records: $records)
-  }
-}
+//#Preview {
+//  @Previewable @StateObject var viewModel = LibraryViewModel()
+//  
+//  @Previewable @State var records: [RecordCellVO] = [
+//    RecordCellVO(record: DummyData.dummyRecords[0], book: DummyData.dummyBooks[0]),
+//    RecordCellVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1]),
+//    RecordCellVO(record: DummyData.dummyRecords[2], book: DummyData.dummyBooks[2])
+//  ]
+//  PreviewableContainer {
+//    LibraryListView(records: $records)
+//  }
+//}

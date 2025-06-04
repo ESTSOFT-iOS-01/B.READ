@@ -12,9 +12,8 @@ struct RecordDetailView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: RecordDetailViewModel
   @State var showSortMenu: Bool = false
+  @State var showDeleteAlert: Bool = false
   
-//
-//  @State var showDeleteAlert: Bool = false
 //  @State var showRecordMenuActionSheet: Bool = false
 //  
   private let layoutPadding: CGFloat = 24
@@ -73,51 +72,45 @@ struct RecordDetailView: View {
           }
       }
       
-      // 플로팅 버튼
-      Button {
-//        showRecordMenuActionSheet = true
-      } label: {
-        Image(systemName: "plus")
-          .font(.system(size: 26))
-          .frame(width: 64, height: 64)
-          .foregroundStyle(.orange3)
+      if !showSortMenu {
+        // 플로팅 버튼
+        Button {
+          //        showRecordMenuActionSheet = true
+        } label: {
+          Image(systemName: "plus")
+            .font(.system(size: 26))
+            .frame(width: 64, height: 64)
+            .foregroundStyle(.orange3)
+        }
+        .zIndex(1)
+        .background(
+          Circle()
+            .fill(Color.backgroundDefault)
+            .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
+        )
+        .padding(.trailing, floatingButtonPadding)
+        .padding(.bottom, floatingButtonPadding)
       }
-      .zIndex(1)
-      .background(
-        Circle()
-          .fill(Color.backgroundDefault)
-          .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
-      )
-      .padding(.trailing, floatingButtonPadding)
-      .padding(.bottom, floatingButtonPadding)
     } // : ZStack
     .background(.backgroundDefault)
+    .toolbar {
+      // 즐겨찾기, 삭제 버튼
+      ToolbarItem(placement: .topBarTrailing) {
+        topBarTrailingButton()
+      }
+    } // : toolBar
     .onAppear {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
     } // : onAppear
+
+
     
-    // TODO: - ZStack으로 플로팅 버튼 만들기 -> 액션 시트?
-//    ZStack(alignment: .bottomTrailing) {
-//      ScrollView(.vertical) {
-//        VStack(spacing: layoutPadding) {
-//
-//          
+    
+    
+    
+    
 
-//
-//          
-
-//
-//      
-
-//    } // ZStack
-
-//    .toolbar {
-//      // 즐겨찾기, 삭제 버튼
-//      ToolbarItem(placement: .topBarTrailing) {
-//        topBarTrailingButton()
-//      }
-//    } // : toolBar
 //    .alert("독서 기록 삭제", isPresented: $showDeleteAlert) {
 //      Button("삭제", role: .destructive) {
 //        viewModel.send(.onTapDelete)
@@ -142,29 +135,29 @@ struct RecordDetailView: View {
   }
   
   
-//  // MARK: - (F)topBarTrailingButton
-//  private func topBarTrailingButton() -> some View {
-//    HStack(spacing: 0) {
-//      // 즐겨찾기 버튼
-//      Button {
-//        viewModel.send(.onTapFavorite)
-//      } label: {
-//        if let isFavorite = viewModel.state.info?.record.isFavorite {
-//          Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
-//        } else {
-//          Image(systemName: "bookmark")
-//        }
-//      }
-//      // 삭제 버튼
-//      Button {
-//        showDeleteAlert = true
-//      } label: {
-//        Text("삭제")
-//          .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.4)
-//      }
-//    } // : HStack
-//    .foregroundColor(.green6)
-//  }
+  // MARK: - (F)topBarTrailingButton
+  private func topBarTrailingButton() -> some View {
+    HStack(spacing: 0) {
+      // 즐겨찾기 버튼
+      Button {
+        viewModel.send(.onTapFavorite)
+      } label: {
+        if let isFavorite = viewModel.record?.isFavorite {
+          Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+        } else {
+          Image(systemName: "bookmark")
+        }
+      }
+      // 삭제 버튼
+      Button {
+        showDeleteAlert = true
+      } label: {
+        Text("삭제")
+          .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.4)
+      }
+    } // : HStack
+    .foregroundColor(.green6)
+  }
 }
 
 #Preview {
