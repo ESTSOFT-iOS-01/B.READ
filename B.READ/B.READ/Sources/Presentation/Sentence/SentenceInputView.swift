@@ -63,7 +63,6 @@ struct SentenceInputView: View {
             showPageAlert = true
             return
           }
-          
           coordinator.push(
             .pageInput(mode: mode,
                        sentence: trimmedContent)

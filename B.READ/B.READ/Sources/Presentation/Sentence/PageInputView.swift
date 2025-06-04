@@ -59,7 +59,7 @@ struct PageInputView: View {
           .fill(.green1)
         
         ScrollView(.vertical, showsIndicators: true) {
-          Text(viewModel.content)
+          Text(sentence)
             .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
@@ -85,6 +85,7 @@ struct PageInputView: View {
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
+          viewModel.content = sentence
           guard viewModel.page != nil else {
             showInvalidAlert = true
             return
