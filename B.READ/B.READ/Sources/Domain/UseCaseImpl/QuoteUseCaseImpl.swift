@@ -20,25 +20,11 @@ final class QuoteUseCaseImpl: QuoteUseCase {
   }
   
   func addQuote(_ quote: Quote, in record: Record) async throws {
-    // 빈 내용 검증
-    let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !content.isEmpty else {
-      throw QuoteUseCaseError.emptyContent
-    }
-    // 페이지 범위 검증
-    try await validatePage(quote.page, forISBN: quote.isbn)
     // 저장 수행
     try await quoteRepository.createQuote(quote, in: record)
   }
   
   func updateQuote(_ quote: Quote) async throws {
-    // 빈 내용 검증
-    let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !content.isEmpty else {
-      throw QuoteUseCaseError.emptyContent
-    }
-    // 페이지 범위 검증
-    try await validatePage(quote.page, forISBN: quote.isbn)
     // 업데이트 수행
     try await quoteRepository.updateQuote(quote)
   }
@@ -59,24 +45,9 @@ final class QuoteUseCaseImpl: QuoteUseCase {
   func fetchAllQuotes() async throws -> [Quote] {
     return try await quoteRepository.fetchAllQuotes()
   }
-  
-  func pageCount(forISBN isbn: String) async throws -> Int {
-    let book = try await bookRepository.fetchBook(isbn: isbn)
-    return book.totalPages
-  }
 
   // TODO: - 조회한 도서가 없을 경우 알라딘 검색 후 도서 저장 -> 도서 제목 반환
   func loadBookTitle(_ isbn: String) async throws -> String {
     return try await bookRepository.fetchBook(isbn: isbn).name
-  }
-}
-
-extension QuoteUseCaseImpl {
-  func validatePage(_ page: Int, forISBN isbn: String) async throws {
-    let book = try await bookRepository.fetchBook(isbn: isbn)
-    let maxPage = book.totalPages
-    guard (1...maxPage).contains(page) else {
-      throw QuoteUseCaseError.invalidPage(max: maxPage)
-    }
   }
 }
