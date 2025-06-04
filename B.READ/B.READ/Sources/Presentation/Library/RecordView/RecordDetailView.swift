@@ -11,14 +11,14 @@ import SwiftUI
 struct RecordDetailView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: RecordDetailViewModel
+  
   @State var showSortMenu: Bool = false
   @State var showDeleteAlert: Bool = false
+  @State var showRecordMenuActionSheet: Bool = false
   
-//  @State var showRecordMenuActionSheet: Bool = false
-//  
-  private let layoutPadding: CGFloat = 24
+  private let layoutPadding: CGFloat = 16
   private let floatingButtonPadding: CGFloat = 32
-//  
+
   // MARK: - Init
   init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel())
@@ -33,12 +33,15 @@ struct RecordDetailView: View {
           
           // 기대지수(평점), 독서기간, 독서량
           RecordStatsSection(record: $viewModel.record)
+            .padding(.top, 8)
           
           // 메모, 문장 탭바
           TopTabBar(
             tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
             selectedIndex: $viewModel.selectedTab
           )
+          .frame(height: 34)
+          .padding(.top, 8)
           
           // 정렬 버튼
           SortMenuButton(
@@ -46,19 +49,16 @@ struct RecordDetailView: View {
             selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
           )
           .padding(.trailing, 8)
-          .padding(.top, 16)
-          .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
-            viewModel.send(.selectSort)
-          }
-        
+          
           // 메모, 문장 리스트
-//          RecordNotesSection(viewModel: viewModel)
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .padding(.vertical, layoutPadding)
+          RecordNotesSection(viewModel: viewModel)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.vertical, layoutPadding)
           
         } // : VStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.horizontal, layoutPadding)
+        
         
       } // : ScrollView
       .scrollIndicators(.never)
@@ -75,7 +75,7 @@ struct RecordDetailView: View {
       if !showSortMenu {
         // 플로팅 버튼
         Button {
-          //        showRecordMenuActionSheet = true
+          showRecordMenuActionSheet = true
         } label: {
           Image(systemName: "plus")
             .font(.system(size: 26))
@@ -99,39 +99,31 @@ struct RecordDetailView: View {
         topBarTrailingButton()
       }
     } // : toolBar
+    .alert("독서 기록 삭제", isPresented: $showDeleteAlert) {
+      Button("삭제", role: .destructive) {
+        viewModel.send(.onTapDelete)
+        coordinator.pop()
+      }
+      Button("취소", role: .cancel) { }
+    } message: {
+      Text("정말로 독서 기록을 삭제하시겠습니까?")
+    } // : alert
     .onAppear {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
     } // : onAppear
-
-
-    
-    
-    
-    
-    
-
-//    .alert("독서 기록 삭제", isPresented: $showDeleteAlert) {
-//      Button("삭제", role: .destructive) {
-//        viewModel.send(.onTapDelete)
-//        coordinator.pop()
-//      }
-//      Button("취소", role: .cancel) { }
-//    } message: {
-//      Text("정말로 독서 기록을 삭제하시겠습니까?")
-//    } // : alert
-//    .confirmationDialog("독서 기록 메뉴", isPresented: $showRecordMenuActionSheet) {
-//      Button("독서 기록") {
-//        print("독서 기록 수정 선택")
-//      }
-//      Button("메모 작성") {
-//        coordinator.push(.memo(date: .now, totalPage: viewModel.state.info?.book.totalPages ?? 0))
-//      }
-//      Button("문장 작성") {
+    .confirmationDialog("독서 기록 메뉴", isPresented: $showRecordMenuActionSheet) {
+      Button("독서 기록") {
+        print("독서 기록 수정 선택")
+      }
+      Button("메모 작성") {
+        coordinator.push(.memo(date: .now, totalPage: viewModel.record?.totalPage ?? 0))
+      }
+      Button("문장 작성") {
 //        coordinator.push(.sentenceInput(mode: .create(isbn: viewModel.state.info?.record.isbn ?? "")))
-//      }
-//      Button("취소", role: .cancel) { }
-//    }
+      }
+      Button("취소", role: .cancel) { }
+    }
   }
   
   
