@@ -17,17 +17,17 @@ final class BookViewModel: ObservableObject {
     case failed(Error)
   }
   
-  var isbn: String
-  
   @Published var bookState: BookState = .loading
   @Published var selectedState: ReadingState = .notStart
-
+  
+  var isbn: String
+  
   init(isbn: String) {
     self.isbn = isbn
   }
   
   @Dependency
-  private var searchUseCase: SearchUseCase
+private var searchUseCase: SearchUseCase
   
   enum Action {
     case onAppear
@@ -48,22 +48,7 @@ private extension BookViewModel {
         let data = try await searchUseCase.searchBookDetail(isbn: isbn)
         
         await MainActor.run {
-          bookState = .loaded(
-            BookDetailVO(
-              id: UUID().uuidString,
-              title: data.title,
-              author: data.author,
-              publishedDate: data.publishedDate,
-              description: data.description,
-              isbn: data.isbn,
-              coverURL: data.coverURL,
-              publisher: data.publisher,
-              pageCount: data.pageCount,
-              ratingScore: data.ratingScore,
-              ratingCount: data.ratingCount,
-              link: data.link
-            )
-          )
+          bookState = .loaded(BookDetailVO(data))
         }
       } catch {
         await MainActor.run {
@@ -71,12 +56,5 @@ private extension BookViewModel {
         }
       }
     }
-  }
-}
-
-struct ImageURLConverter {
-  /// 썸네일(coversum)을 고화질(cover500)로 변환
-  static func highQualityURL(from originalURL: String) -> String {
-    originalURL.replacingOccurrences(of: "/coversum/", with: "/cover500/")
   }
 }
