@@ -28,6 +28,7 @@ final class SearchResultViewModel: ObservableObject {
   @Published var searchKeyword: String = ""
   
   private var totalBookCount: Int = .max
+  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
@@ -70,14 +71,18 @@ final class SearchResultViewModel: ObservableObject {
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
+    currentTask?.cancel()
     
-    Task {
+    currentTask = Task {
       do {
+        try Task.checkCancellation()
         let data = try await searchUseCase.searchBooksFromService(query: keyword, page: page)
+        try Task.checkCancellation()
         
         let bookDatas: [BookVO] = try await withThrowingTaskGroup(of: BookVO?.self) { group in
           for item in data.books {
             group.addTask {
+              try Task.checkCancellation()
               guard let imageData = try? await ImageConverter.convertImageURLToData(
                 ImageURLConverter.highQualityURL(from: item.coverURL)
               ),
@@ -86,20 +91,13 @@ final class SearchResultViewModel: ObservableObject {
                 return nil
               }
               
-              return BookVO(
-                id: UUID().uuidString,
-                isbn: item.isbn,
-                coverImage: Image(uiImage: uiImage),
-                title: item.title,
-                author: item.author,
-                publisher: item.publisher,
-                publishedDate: date
-              )
+              return BookVO(book: item, image: Image(uiImage: uiImage), pubDate: date)
             }
           }
           
           var results: [BookVO] = []
           for try await book in group {
+            try Task.checkCancellation()
             if let book = book {
               results.append(book)
             }
@@ -120,6 +118,7 @@ final class SearchResultViewModel: ObservableObject {
         }
         
       } catch {
+        if Task.isCancelled { return }
         await MainActor.run {
           totalBookCount = .max
           bookLoadState = .failed(error)
@@ -153,10 +152,12 @@ final class SearchResultViewModel: ObservableObject {
   }
   
   func searchAll(by keyword: String) {
+    currentTask?.cancel()
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
-    Task {
+    
+    currentTask = Task {
       await withTaskGroup(of: Void.self) { group in
         group.addTask { self.loadBooksFromRepository(by: keyword) }
         group.addTask { self.loadMoreBooksFromService(by: keyword, page: 1) }

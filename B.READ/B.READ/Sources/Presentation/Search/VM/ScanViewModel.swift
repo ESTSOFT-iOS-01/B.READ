@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-
 final class ScanViewModel: ObservableObject {
   @Published var noCamera: Bool = false
   @Published var isbnNumber: String = ""
