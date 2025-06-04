@@ -69,7 +69,7 @@ struct RecordCellVO: Identifiable {
     }
     self.readingState = ReadingState.fromEntity(record.state)
     self.heart = record.heartCount
-    self.progress = Int(record.currentPage / book.totalPages)
+    self.progress = Int(Double(record.currentPage) / Double(book.totalPages) * 100)
     self.star = record.starCount
     self.memoCount = record.memos.count
     self.quoteCount = record.quotes.count
