@@ -16,11 +16,14 @@ final class BookViewModel: ObservableObject {
     case failed(Error)
   }
   
+  // MARK: - State
   @Published var bookState: BookState = .loading
   @Published var selectedState: ReadingState = .notStart
   
   var isbn: String
-  internal var currentTask: Task<Void, Never>? = nil
+  
+  // MARK: - Intenal Property
+  private var currentTask: Task<Void, Never>? = nil
   
   init(isbn: String) {
     self.isbn = isbn
@@ -30,6 +33,7 @@ final class BookViewModel: ObservableObject {
     currentTask?.cancel()
   }
   
+  // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
   
   enum Action {
@@ -61,7 +65,10 @@ private extension BookViewModel {
           bookState = .loaded(BookDetailVO(data))
         }
       } catch {
-        if Task.isCancelled { return }
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
         
         await MainActor.run {
           bookState = .failed(error)

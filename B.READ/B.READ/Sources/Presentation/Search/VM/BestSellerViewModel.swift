@@ -13,8 +13,9 @@ final class BestSellerViewModel: ObservableObject {
   @Published var error: Error?
   @Published var bestBookList: [BestSellerVO] = []
   
-  internal var currentTask: Task<Void, Never>? = nil
+  private var currentTask: Task<Void, Never>? = nil
   
+  // MARK: - Dependency
   @Dependency private var recommandUseCase: RecommandUseCase
   
   enum Action {
@@ -33,6 +34,7 @@ final class BestSellerViewModel: ObservableObject {
   
   func loadBestSellerList() {
     currentTask?.cancel()
+    
     currentTask = Task {
       do {
         try Task.checkCancellation()
@@ -46,7 +48,10 @@ final class BestSellerViewModel: ObservableObject {
           error = nil
         }
       } catch {
-        if Task.isCancelled { return }
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
         
         await MainActor.run {
           self.error = error

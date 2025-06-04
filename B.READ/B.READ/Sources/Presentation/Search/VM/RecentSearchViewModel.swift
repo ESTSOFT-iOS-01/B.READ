@@ -56,6 +56,7 @@ final class RecentSearchViewModel: ObservableObject {
         try await self?.profileUseCase.clearRecentKeywords()
         try await self?.fetch()
       }
+      
     case .cancelTask:
       currentTask?.cancel()
     }
@@ -80,7 +81,10 @@ private extension RecentSearchViewModel {
         try Task.checkCancellation()
         try await operation()
       } catch {
-        if Task.isCancelled { return }
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
         
         await MainActor.run {
           print("Error: \(error)")

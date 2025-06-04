@@ -20,18 +20,19 @@ final class SearchResultViewModel: ObservableObject {
   @Published var bookResults: [BookVO] = [] // 검색어로 검색한 책 목록
   @Published var recordResults: [RecordCellVO] = [] // 검색어로 검색한 기록 목록
   
-  @Published var selectedTabIndex: Int = 0 // 지금 보는 화면이 book인지 record인지 섹션 번호 관리 -> 이거 뷰에서 바로 하나?
+  @Published var selectedTabIndex: Int = 0 // 지금 보는 화면이 book인지 record인지 섹션 번호 관리
   @Published var bookLoadState: DataState = .loading
   @Published var recordLoadState: DataState = .loading
-  
-  private var curIndex: Int = 1
   @Published var searchKeyword: String = ""
   
+  // MARK: - Internal Property
+  private var curIndex: Int = 1
   private var totalBookCount: Int = .max
+  
+  // MARK: - Task Controller
   private var bookTask: Task<Void, Never>?
   private var recordTask: Task<Void, Never>?
 
-  
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
   
@@ -53,14 +54,19 @@ final class SearchResultViewModel: ObservableObject {
     switch action {
     case .searchAll(let keyword):
       searchAll(by: keyword)
+      
     case .clearResult:
       reset()
+      
     case .searchBook(let keyword):
       loadMoreBooksFromService(by: keyword, page: curIndex)
+      
     case .searchRecord(let keyword):
       loadBooksFromRepository(by: keyword)
+      
     case .fetchMoreBooks(let data):
       loadMoreIfNeeded(current: data)
+      
     case .cancelTask:
       bookTask?.cancel()
       recordTask?.cancel()
@@ -81,10 +87,10 @@ private extension SearchResultViewModel {
   }
   
   func loadMoreBooksFromService(by keyword: String, page: Int) {
+    bookTask?.cancel()
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
-    bookTask?.cancel()
     
     bookTask = Task {
       do {
@@ -131,7 +137,10 @@ private extension SearchResultViewModel {
         }
         
       } catch {
-        if Task.isCancelled { return }
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
         
         else {
           await MainActor.run {
@@ -146,10 +155,10 @@ private extension SearchResultViewModel {
   }
   
   func loadBooksFromRepository(by keyword: String) {
+    recordTask?.cancel()
     DispatchQueue.main.async { [weak self] in
       self?.searchKeyword = keyword
     }
-    recordTask?.cancel()
     
     recordTask = Task {
       do {
@@ -160,7 +169,10 @@ private extension SearchResultViewModel {
           recordLoadState = .loaded
         }
       } catch {
-        if Task.isCancelled { return }
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
         
         await MainActor.run {
           recordLoadState = .failed(error)
