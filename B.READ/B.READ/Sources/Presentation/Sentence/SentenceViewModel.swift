@@ -121,7 +121,7 @@ private extension SentenceViewModel {
         print("[ℹ️] 수정 모드: 기존 id=\(id)")
       }
       let model = Quote(id: id, isbn: isbn, content: trimmed, page: page)
-      let recordEntity = self.record.toEntity(memos: [], quotes: [])
+      let recordEntity = self.record.toEntity()
       // 5) 제출 상태 갱신
       await MainActor.run {
         self.isSubmitting = true
