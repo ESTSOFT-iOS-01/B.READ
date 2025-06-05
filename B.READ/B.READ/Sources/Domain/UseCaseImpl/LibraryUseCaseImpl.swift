@@ -41,67 +41,22 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   func editRecord(_ record: Record) async throws {
     do {
-      // 1. 독서 기록을 수정
+      // 1. 책이 있는지 부터 확인
+      let _ = try await bookRepository.fetchBook(isbn: record.isbn)
+    } catch RepositoryError.dataNotFound{
+      // 2. 책이 없으면 책 생성
+      let requestBook = try await requestBookDetail(isbn: record.isbn)
+      try await bookRepository.createBook(requestBook)
+    }
+    
+    do {
+      // 3. 독서 기록을 수정
       try await recordRepository.updateRecord(record)
-    } catch RepositoryError.dataNotFound {
-      // 2. 책은 존재하는지 확인
-      do {
-        let _ = try await bookRepository.fetchBook(isbn: record.isbn)
-      } catch RepositoryError.dataNotFound {
-        // TODO: - 2-1. 책도 없으면 알라딘에서 검색해서 생성
-      }
-      // 1-1. 데이터가 없는 경우, 데이터 새로 생성
+    } catch RepositoryError.dataNotFound{
+      // 4. 독서 기록이 없으면 생성
       try await recordRepository.createRecord(record)
     }
   }
-  
-  
-  func deleteRecord(_ record: Record) async throws {
-    try await withThrowingTaskGroup(of: Void.self) {
-      [weak self] group in
-      guard let self = self else { return }
-      
-      // 1. 요약노트 삭제
-      
-      if let noteID = record.summaryID {
-        group.addTask {
-//          do {
-//            try await noteRepository.deleteNote(id: noteID)
-//          } catch {
-//            print("ERROR: Note Delete Fail")
-//          }
-        }
-      }
-      
-      // 2. 문장 삭제
-      for quoteID in record.quoteIDs {
-        group.addTask {
-          do {
-            try await self.quoteRepository.deleteQuote(id: quoteID)
-          } catch {
-            print("ERROR: Quote Delete Fail")
-          }
-        }
-      }
-      
-      // 3. 메모 삭제
-      for memoID in record.memoIDs {
-        group.addTask {
-//          do {
-//            try await memoRepository.deleteMemo(id: memoID)
-//          } catch {
-//            print("ERROR: Memo Delete Fail")
-//          }
-        }
-      }
-      
-      // group의 작업이 종료 되길 기다림
-      for try await _ in group { }
-    }
-    // 4. 독서 기록 삭제
-    try await recordRepository.deleteRecord(record.id)
-  }
-  
   
   func loadRecord(_ recordID: String) async throws -> (Record, Book) {
     
@@ -152,25 +107,6 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   func deleteRecord(_ record: Record) async throws {
     try await recordRepository.deleteRecord(record.id)
-  }
-  
-  func editRecord(_ record: Record) async throws {
-    do {
-      // 1. 책이 있는지 부터 확인
-      let _ = try await bookRepository.fetchBook(isbn: record.isbn)
-    } catch RepositoryError.dataNotFound{
-      // 2. 책이 없으면 책 생성
-      let requestBook = try await requestBookDetail(isbn: record.isbn)
-      try await bookRepository.createBook(requestBook)
-    }
-    
-    do {
-      // 3. 독서 기록을 수정
-      try await recordRepository.updateRecord(record)
-    } catch RepositoryError.dataNotFound{
-      // 4. 독서 기록이 없으면 생성
-      try await recordRepository.createRecord(record)
-    }
   }
   
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {
