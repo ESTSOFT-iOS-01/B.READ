@@ -51,9 +51,9 @@ extension UINavigationBar {
     keyWindow.addSubview(overlay)
     
     // 애니메이션 적용
-    UIView.animate(withDuration: duration) {
-      overlay.backgroundColor = color
-    }
+    UIView.animate(withDuration: 0.3, delay: 0.0, options: [.curveLinear], animations: {
+        overlay.backgroundColor = color
+    })
   }
   
   static func removeOverlay(duration: TimeInterval = 0.3) {
@@ -61,7 +61,7 @@ extension UINavigationBar {
           let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }),
           let overlay = keyWindow.viewWithTag(88888) else { return }
     
-    UIView.animate(withDuration: duration, animations: {
+    UIView.animate(withDuration: 0.3, delay: 0.0, options: [.curveLinear], animations: {
       overlay.alpha = 0
     }, completion: { _ in
       overlay.removeFromSuperview()

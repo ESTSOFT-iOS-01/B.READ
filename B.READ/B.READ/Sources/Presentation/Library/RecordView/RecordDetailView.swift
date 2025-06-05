@@ -83,16 +83,9 @@ struct RecordDetailView: View {
         AddActionView(coordinator: coordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
         
       }
-      .animation(.easeInOut(duration: 0.3), value: showAddMenu)
+      .animation(.linear(duration: 0.3), value: showAddMenu)
       .onTapGesture {
         showAddMenu = false
-      }
-    }
-    .onChange(of: showAddMenu) {
-      if $1 {
-        UINavigationBar.showOverlay()
-      } else {
-        UINavigationBar.removeOverlay()
       }
     }
   }
@@ -167,6 +160,11 @@ private struct AddActionView: View {
       
       Button {
         showAddMenu.toggle()
+        if showAddMenu {
+          UINavigationBar.showOverlay()
+        } else {
+          UINavigationBar.removeOverlay()
+        }
       } label: {
         Image(systemName: "plus")
           .font(.system(size: 26))
@@ -190,7 +188,9 @@ private struct AddActionView: View {
 #Preview {
   let recordID = DummyData.dummyRecords[2].id
   PreviewableContainer {
-    RecordDetailView(viewModel: .init(recordID: recordID))
-      .environmentObject(Coordinator<MainRoute, SheetRoute>())
+    NavigationStack {
+      RecordDetailView(viewModel: .init(recordID: recordID))
+        .environmentObject(Coordinator<MainRoute, SheetRoute>())
+    }
   }
 }
