@@ -26,7 +26,7 @@ struct LibraryGridView: View {
           LibraryGridCell(record: $record)
             .onTapGesture {
               // TODO: - [시르] 머지 후, 뷰 연결 수정
-              coordinator.push(.libraryDetail(id: record.id, isbn: record.isbn))
+              coordinator.push(.libraryDetail(id: record.id))
             }
         }
       } // : LazyVGrid
