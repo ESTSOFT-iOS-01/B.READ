@@ -16,7 +16,7 @@ struct QuoteWidget: Widget {
   var body: some WidgetConfiguration {
     StaticConfiguration(kind: kind, provider: QuoteProvider()) { entry in
       QuoteWidgetView(entry: entry)
-        .containerBackground(Color("BackgroundDefault"), for: .widget)
+        .containerBackground(.backgroundDefault, for: .widget)
     }
     .configurationDisplayName("BREED 문장 위젯")
     .description("저장한 문장을 랜덤으로 표시합니다.")
