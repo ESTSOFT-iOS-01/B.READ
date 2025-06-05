@@ -36,8 +36,15 @@ struct BestSellerVO: Identifiable {
   }
 }
 
+enum DataState {
+  case loading
+  case loaded
+  case failed(Error)
+}
 
-struct BestSellerListVO {
-  let categoryName: String
-  let bestSellers: [BestSellerVO]
+struct BestSellerListVO: Identifiable {
+  let id = UUID()  // 리스트 구분용
+  let category: CategoryType
+  var bestSellers: [BestSellerVO]
+  var state: DataState
 }

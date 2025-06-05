@@ -81,25 +81,25 @@ struct Category: Equatable {
 }
 
 enum CategoryType: Int, CaseIterable {
-  case homeCookingBeauty = 0
-  case healthHobbyLeisure
-  case economics
-  case classics
-  case science
-  case comics
-  case socialScience
-  case literature
-  case essay
-  case travel
-  case history
-  case artCulture
-  case foreignLanguage
-  case humanities
-  case selfDevelopment
-  case magazine
-  case genreFiction
-  case religionPhilosophy
-  case computerMobile
+  case homeCookingBeauty = 1230
+  case healthHobbyLeisure = 55890
+  case economics = 170
+  case classics = 2105
+  case science = 987
+  case comics = 2551
+  case socialScience = 798
+  case literature = 1
+  case essay = 55889
+  case travel = 1196
+  case history = 74
+  case artCulture = 517
+  case foreignLanguage = 1322
+  case humanities = 656
+  case selfDevelopment = 336
+  case magazine = 2913
+  case genreFiction = 112011
+  case religionPhilosophy = 1237
+  case computerMobile = 351
 
   var name: String {
     switch self {
