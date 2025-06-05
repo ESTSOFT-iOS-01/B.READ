@@ -17,35 +17,64 @@ struct BookDetailView: View {
   }
   
   var body: some View {
+    Group {
+      switch viewModel.bookState {
+      case .loading:
+        LoadingView()
+      case .loaded(let bookDetailVO):
+        loadedView(bookDetailVO)
+      case .failed(let error):
+        FailedView(error: error)
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+      }
+    }
+    .sheet(item: $coordinator.sheet, content: { route in
+      coordinator.buildView(for: route)
+        .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
+        .presentationDragIndicator(.hidden)
+    })
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    .onAppear {
+      viewModel.send(.onAppear)
+    }
+    .onDisappear {
+      viewModel.send(.cancelTask)
+    }
+  }
+  
+  // MARK: - (F)loadedView
+  @ViewBuilder
+  private func loadedView(_ bookDetailVO: BookDetailVO) -> some View {
     VStack {
       ScrollView {
         VStack(alignment: .center, spacing: 16) {
           LargeImageView(
-            imageURL: ImageURLConverter.highQualityURL(from: viewModel.bookVO.coverURL),
+            imageURL: ImageURLConverter.highQualityURL(from: bookDetailVO.coverURL),
             frameSize: (190, 290)
           )
             .padding(.bottom, 24)
           
           BookTitleView(
-            title: viewModel.bookVO.title,
-            author: viewModel.bookVO.author,
-            publisher: viewModel.bookVO.publisher,
-            page: viewModel.bookVO.pageCount,
-            date: viewModel.bookVO.publishedDate.toDotDateFormat()
+            title: bookDetailVO.title,
+            author: bookDetailVO.author,
+            publisher: bookDetailVO.publisher,
+            page: bookDetailVO.pageCount,
+            date: bookDetailVO.publishedDate.toDotDateFormat()
           )
           
-          BookRateView(count: viewModel.bookVO.ratingCount, rate: viewModel.bookVO.ratingScore)
+          BookRateView(count: bookDetailVO.ratingCount, rate: bookDetailVO.ratingScore)
           
-          BookInfoView(title: "ISBN", content: viewModel.bookVO.isbn)
-          BookInfoView(title: "상세 정보", content: viewModel.bookVO.description)
+          BookInfoView(title: "ISBN", content: bookDetailVO.isbn)
+          BookInfoView(title: "상세 정보", content: bookDetailVO.description)
           
           Button {
-            coordinator.push(.goToWebView(url: URL(string: viewModel.bookVO.link)!))
+            if let url = URL(string: bookDetailVO.link) {
+              coordinator.push(.goToWebView(url: url))
+            }
           } label: {
             LinkView()
           }
           .padding(.bottom, 40)
-          
         }
       }
       .scrollIndicators(.hidden)
@@ -57,7 +86,7 @@ struct BookDetailView: View {
             .presentSheet(
               .createRecord(
                 state: $viewModel.selectedState,
-                page: viewModel.bookVO.pageCount
+                page: bookDetailVO.pageCount
               )
             )
         }
@@ -65,17 +94,11 @@ struct BookDetailView: View {
       .padding(.horizontal, 30)
       .padding(.top, 8)
       .padding(.bottom, 16)
-      
     }
-    .background(.backgroundDefault)
-    .sheet(item: $coordinator.sheet, content: { route in
-      coordinator.buildView(for: route)
-        .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
-        .presentationDragIndicator(.hidden)
-    })
+    .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
   }
 }
 
-#Preview {
-  BookDetailView(viewModel: BookViewModel(isbn: "9791187011590"))
-}
+//#Preview {
+//  BookDetailView(viewModel: BookViewModel(isbn: "9791187011590"))
+//}
