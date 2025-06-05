@@ -18,6 +18,8 @@ final class RecordDetailViewModel: ObservableObject {
   @Published var selectedTab: Int = 0
   @Published var selectedSort: [SortOption] = [.pageAscending, .pageAscending]
   
+  @Published var selectedState: ReadingState = .notStart
+  
   // MARK: - Internal Variable
   private let recordID: String
   var selectedQuote: QuoteVO? = nil
@@ -97,6 +99,10 @@ private extension RecordDetailViewModel {
           group.addTask {
             await self.sortQuotes()
           }
+        }
+        
+        await MainActor.run {
+          self.selectedState = .fromEntity(info.record.state)
         }
       } catch {
         print(error.localizedDescription)
