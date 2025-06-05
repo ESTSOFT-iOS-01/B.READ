@@ -35,13 +35,7 @@ struct LibraryUseCaseTest {
     )
   }
   
-  // TODO: - 도로시
-  @Test("Save Record Test")
-  func saveRecordTest() async throws {
-    
-  }
-  
-  @Test("Load Record Test")
+  @Test("Save/Load Record Test")
   func loadRecordTest() async throws {
     // 1. 레코드, 책 정보
     let book = DummyData.dummyBooks[0]
