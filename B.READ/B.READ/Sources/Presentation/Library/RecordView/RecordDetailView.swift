@@ -15,6 +15,7 @@ struct RecordDetailView: View {
   @State private var showAddMenu: Bool = false
   @State private var showSortMenu: Bool = false
   @State private var showDeleteAlert: Bool = false
+  @State private var needRefresh: Bool = false
   
   private let layoutPadding: CGFloat = 16
   
@@ -73,22 +74,38 @@ struct RecordDetailView: View {
       viewModel.send(.onAppear)
       if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
     } // : onAppear
+    .onChange(of: needRefresh, { oldValue, newValue in
+      if newValue {
+        viewModel.send(.onAppear)
+        if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
+      }
+    })
     .overlay {
       ZStack {
-        
+
         if showAddMenu {
           Color.black.opacity(0.2)
             .ignoresSafeArea(edges: .bottom)
         }
         
-        AddActionView(coordinator: coordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
+        AddActionView(coordinator: coordinator,
+                      showAddMenu: $showAddMenu,
+                      needRefresh: $needRefresh,
+                      viewModel: viewModel)
         
       }
       .animation(.linear(duration: 0.298), value: showAddMenu)
       .onTapGesture {
         showAddMenu = false
+        if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
       }
     }
+    .sheet(item: $coordinator.sheet, content: { route in
+      coordinator.buildView(for: route)
+        .presentationDetents([.height(viewModel.selectedState.preferredHeight)])
+        .presentationDragIndicator(.hidden)
+    })
+    
   }
   
   // MARK: - (F)topBarTrailingButton
@@ -122,7 +139,8 @@ struct RecordDetailView: View {
 private struct AddActionView: View {
   @ObservedObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @Binding var showAddMenu: Bool
-  let viewModel: RecordDetailViewModel
+  @Binding var needRefresh: Bool
+  @ObservedObject var viewModel: RecordDetailViewModel
   
   var body: some View {
     VStack(alignment: .trailing, spacing: 16) {
@@ -132,21 +150,36 @@ private struct AddActionView: View {
           Button {
             guard let record = viewModel.record else { return }
             UINavigationBar.removeOverlay(duration: 0.0)
-            coordinator.push(.sentenceInput(mode: .create(record: record)))
+            coordinator
+              .presentSheet(
+                .updateRecord(
+                  state: $viewModel.selectedState,
+                  record: record,
+                  onComplete: { isEdit in
+                    if isEdit {
+                      needRefresh = true
+                      showAddMenu = false
+                    }
+                  }
+                )
+              )
+            
           } label: {
             Text("독서 기록")
           }
           
           Button {
             guard let record = viewModel.record else { return }
-            UINavigationBar.removeOverlay()
+            UINavigationBar.removeOverlay(duration: 0.0)
             coordinator.push(.memo(record: record))
           } label: {
             Text("메모 작성")
           }
           
           Button {
-            print("tab")
+            guard let record = viewModel.record else { return }
+            UINavigationBar.removeOverlay(duration: 0.0)
+            coordinator.push(.sentenceInput(mode: .create(record: record)))
           } label: {
             Text("문장 수집")
           }
