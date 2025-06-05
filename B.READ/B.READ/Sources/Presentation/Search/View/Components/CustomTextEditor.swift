@@ -113,7 +113,10 @@ struct CustomTextEditor: UIViewRepresentable {
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-      $isFocused.wrappedValue = true
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+        self?.$isFocused.wrappedValue = true
+      }
+      
       if textView.text == placeholder {
         textView.text = nil
         textView.textColor = textColor
@@ -121,7 +124,10 @@ struct CustomTextEditor: UIViewRepresentable {
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
-      $isFocused.wrappedValue = false
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) { [weak self] in
+        self?.$isFocused.wrappedValue = false
+      }
+      
       if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
         textView.text = placeholder
         textView.textColor = placeholderColor
@@ -129,6 +135,14 @@ struct CustomTextEditor: UIViewRepresentable {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText string: String) -> Bool {
+      if string == "\n" {
+        textView.resignFirstResponder()
+        DispatchQueue.main.async { [weak self] in
+          self?.$isFocused.wrappedValue = false
+        }
+        return false
+      }
+      
       guard let maxLength = maxLength else { return true }
       
       let inputString = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
