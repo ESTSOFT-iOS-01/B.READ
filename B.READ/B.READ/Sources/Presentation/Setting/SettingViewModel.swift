@@ -53,8 +53,7 @@ final class SettingViewModel: ObservableObject {
 // MARK: - Internal Function
 private extension SettingViewModel {
   func fetchUserInfo() {
-    Task { [weak self] in
-      guard let self else { return }
+    Task {
       do {
         let userInfo = try await profileUseCase.fetchUserInfo()
         await MainActor.run {
@@ -69,8 +68,7 @@ private extension SettingViewModel {
   }
   
   func saveNickname() {
-    Task { [weak self] in
-      guard let self else { return }
+    Task {
       do {
         try await profileUseCase.setNickname(nicknameText)
         await MainActor.run { self.isSaveComplete = true }
@@ -81,8 +79,7 @@ private extension SettingViewModel {
   }
   
   func saveCategories() {
-    Task { [weak self] in
-      guard let self else { return }
+    Task {
       do {
         try await profileUseCase.setCategory(Array(selectedCategories))
         await MainActor.run { self.isSaveComplete = true }
