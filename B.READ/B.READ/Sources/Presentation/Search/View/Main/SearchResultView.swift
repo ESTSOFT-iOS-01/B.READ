@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)SearchResultView
 struct SearchResultView: View {
-  @ObservedObject var viewModel: SearchViewModel
+  @ObservedObject var viewModel: SearchResultViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   // TODO : 스와이프 제스처로 탭 전환 기능 추가 예정?
   
@@ -20,18 +20,18 @@ struct SearchResultView: View {
   
   var body: some View {
     VStack(spacing: 2) {
-      TopTabBar(tabs: tabs, selectedIndex: $viewModel.state.selectedTabIndex)
+      TopTabBar(tabs: tabs, selectedIndex: $viewModel.selectedTabIndex)
         .frame(height: 34)
         .padding(.horizontal, 24)
       
-      SearchTabContentView(
-        state: viewModel.state,
-        send: viewModel.send
-      )
+      SearchTabContentView(viewModel: viewModel)
       .padding(.top, 16)
-      .animation(.easeInOut(duration: 0.3), value: viewModel.state.selectedTabIndex)
+      .animation(.easeInOut(duration: 0.3), value: viewModel.selectedTabIndex)
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    .onDisappear {
+      viewModel.send(.cancelTask)
+    }
   }
   
   // TODO : 이상한 상황이다...원래 유지되어야 정상임 ㅠ
@@ -45,40 +45,77 @@ struct SearchResultView: View {
 // MARK: - (S)SearchTabContentView
 struct SearchTabContentView: View {
   @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
-  let state: SearchViewModel.SearchViewState
-  let send: (SearchViewModel.Action) -> Void
+  @ObservedObject var viewModel: SearchResultViewModel
   
   var body: some View {
     Group {
-      if state.selectedTabIndex == 0 {
-        SearchListView(
-          items: state.bookResults,
-          layoutPadding: 24,
-          listPadding: 16,
-          onTap: {
-            coordinator.push(.searchBook(isbn: $0.isbn))
-          },
-          content: { book in
-            BookSearchCell(data: book)
+      if viewModel.selectedTabIndex == 0 {
+        Group {
+          switch viewModel.bookLoadState {
+          case .loading:
+            if viewModel.bookResults.isEmpty {
+              LoadingView()
+            } else {
+              SearchListView(
+                items: viewModel.bookResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
+                onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
+                content: { book in
+                  BookSearchCell(data: book)
+                }
+              )
+            }
+          case .loaded:
+            if viewModel.bookResults.isEmpty {
+              FailedView(desp: "일치하는 검색 결과가 없습니다.")
+            } else {
+              SearchListView(
+                items: viewModel.bookResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
+                onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
+                content: { book in
+                  BookSearchCell(data: book)
+                }
+              )
+            }
+          case .failed(let error):
+            FailedView(error: error)
           }
-        )
+        }
         .transition(.asymmetric(insertion: .move(edge: .leading), removal: .opacity))
       } else {
-        SearchListView(
-          items: state.recordResults,
-          layoutPadding: 24,
-          listPadding: 16,
-          onTap: {
-            coordinator.push(.libraryDetail(id: $0.id))
-          },
-          content: { record in
-            RecordSearchCell(data: record)
+        Group {
+          switch viewModel.recordLoadState {
+          case .loading:
+            LoadingView()
+          case .loaded:
+            if viewModel.recordResults.isEmpty {
+              FailedView(desp: "일치하는 검색 결과가 없습니다.")
+            } else {
+              SearchListView(
+                items: viewModel.recordResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.libraryDetail(id: $0.id, isbn: $0.isbn)) },
+                onAppearNearBottom: nil,
+                content: { record in
+                  RecordSearchCell(data: record)
+                }
+              )
+            }
+          case .failed(let error):
+            FailedView(error: error)
           }
-        )
+        }
         .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .opacity))
       }
     }
   }
+
 }
 
 // MARK: - (S)SearchListView
@@ -87,6 +124,7 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
   let layoutPadding: CGFloat
   let listPadding: CGFloat
   let onTap: (Data) -> Void
+  let onAppearNearBottom: ((Data) -> Void)?
   let content: (Data) -> Content
   
   var body: some View {
@@ -97,6 +135,11 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
             .padding(.horizontal, layoutPadding)
             .onTapGesture {
               onTap(item)
+            }
+            .onAppear {
+              if index >= items.count - 3 {
+                onAppearNearBottom?(item)
+              }
             }
           
           Divider()

@@ -51,7 +51,9 @@ final class ProfileUseCaseImpl: ProfileUseCase {
   }
   
   func fetchRecentKeywords() async throws -> [String] {
+    try Task.checkCancellation()
     let userInfo = try await userInfoRepository.fetchUserInfo()
+    try Task.checkCancellation()
     
     return userInfo.recentKeywords
       .sorted(by: { $0.date > $1.date }) // 정렬
@@ -63,9 +65,11 @@ final class ProfileUseCaseImpl: ProfileUseCase {
       throw ProfileUseCaseError.emptyInput
     }
     
+    try Task.checkCancellation()
     var userInfo = try await userInfoRepository.fetchUserInfo()
     
     // 1. 중복 값 제거
+    try Task.checkCancellation()
     userInfo.recentKeywords.removeAll { $0.value == keyword }
     
     // 2. 새로운 키워드 추가
@@ -82,22 +86,29 @@ final class ProfileUseCaseImpl: ProfileUseCase {
       )
     }
     
+    try Task.checkCancellation()
     try await userInfoRepository.updateUserInfo(userInfo)
   }
   
   func deleteRecentKeyword(_ value: String) async throws {
+    try Task.checkCancellation()
     var userInfo = try await userInfoRepository.fetchUserInfo()
+    try Task.checkCancellation()
     
     userInfo.recentKeywords.removeAll { $0.value == value }
     
+    try Task.checkCancellation()
     try await userInfoRepository.updateUserInfo(userInfo)
   }
   
   func clearRecentKeywords() async throws {
+    try Task.checkCancellation()
     var userInfo = try await userInfoRepository.fetchUserInfo()
+    try Task.checkCancellation()
     
     userInfo.recentKeywords.removeAll()
     
+    try Task.checkCancellation()
     try await userInfoRepository.updateUserInfo(userInfo)
   }
 }

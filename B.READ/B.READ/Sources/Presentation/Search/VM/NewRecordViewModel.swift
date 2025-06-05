@@ -5,9 +5,9 @@
 //  Created by 김도연 on 5/29/25.
 //
 
-
 import Foundation
 import SwiftUI
+
 
 final class NewRecordViewModel: ObservableObject {
   var recordVO: RecordDetailVO?

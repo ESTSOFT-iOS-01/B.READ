@@ -24,20 +24,30 @@ final class SearchUseCaseImpl: SearchUseCase {
   }
   
   func searchBookDetail(isbn: String) async throws -> BookDetail {
-    return try await bookService.fetchBookDetail(isbn: isbn)
+    try Task.checkCancellation()
+    let result = try await bookService.fetchBookDetail(isbn: isbn)
+    try Task.checkCancellation()
+    return result
   }
 
   func searchBooksFromService(query: String, page: Int) async throws -> SearchPagnation {
-    return try await bookService.fetchBookList(for: query, index: page)
+    try Task.checkCancellation()
+    let result = try await bookService.fetchBookList(for: query, index: page)
+    try Task.checkCancellation()
+    return result
   }
 
   func searchBooksFromRepository(query: String) async throws -> [(Record, Book)] {
+    try Task.checkCancellation()
     let allRecords = try await recordRepository.fetchAllRecord()
+    try Task.checkCancellation()
 
     return try await withThrowingTaskGroup(of: (Record, Book)?.self) { group in
       for record in allRecords {
         group.addTask {
+          try Task.checkCancellation()
           let book = try await self.bookRepository.fetchBook(isbn: record.isbn)
+          try Task.checkCancellation()
           
           if book.name.localizedStandardContains(query) {
             return (record, book)
@@ -50,6 +60,7 @@ final class SearchUseCaseImpl: SearchUseCase {
       var results: [(Record, Book)] = []
       
       for try await pair in group {
+        try Task.checkCancellation()
         if let pair = pair {
           results.append(pair)
         }

@@ -9,7 +9,7 @@ import Foundation
 
 enum AladinRouter: RequestConvertible {
   
-  case getBookList(query: String)
+  case getBookList(query: String, page: Int)
   case getBook(isbn: String)
   case getBestSellerList(categoryID: Int = 0)
   
@@ -21,7 +21,7 @@ enum AladinRouter: RequestConvertible {
   // MARK: - Path
   private var path: String {
     switch self {
-    case .getBookList(_):
+    case .getBookList(_, _):
       "/ItemSearch.aspx"
     case .getBook(_):
       "/ItemLookUp.aspx"
@@ -47,9 +47,10 @@ enum AladinRouter: RequestConvertible {
     ]
     
     switch self {
-    case .getBookList(let query):
+    case .getBookList(let query, let page):
       let bookListQueryItems = queryItems + [
-        URLQueryItem(name: "Query", value: query)
+        URLQueryItem(name: "Query", value: query),
+        URLQueryItem(name: "Start", value: "\(page)")
       ]
       return bookListQueryItems
       

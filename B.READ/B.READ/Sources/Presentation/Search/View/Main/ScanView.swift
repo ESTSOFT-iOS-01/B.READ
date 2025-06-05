@@ -63,9 +63,7 @@ struct ScanView: View {
     } message: {
       Text("카메라를 사용할 수 없습니다.")
     }
-    .toolbar(.hidden) // 하단 탭바 안보이게 처리?
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    
   }
 }
 

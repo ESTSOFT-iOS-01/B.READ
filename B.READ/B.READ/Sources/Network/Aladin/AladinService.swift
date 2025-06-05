@@ -19,7 +19,7 @@ public final class AladinService: BookService {
     print("Impl: ", #function)
     
     let dto = try await client.performOrDecodeAladinError(
-      AladinRouter.getBookList(query: keyword),
+      AladinRouter.getBookList(query: keyword, page: pageIndex),
       decodeType: SearchListDTO.self)
 
     return dto.toEntity()
