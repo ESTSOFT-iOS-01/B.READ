@@ -87,8 +87,7 @@ struct BookDetailView: View {
             coordinator.presentSheet(
               .createRecord(
                 state: $viewModel.selectedState,
-                book: book,
-                onComplete: { _ in return }
+                book: book
               )
             )
           } else {
