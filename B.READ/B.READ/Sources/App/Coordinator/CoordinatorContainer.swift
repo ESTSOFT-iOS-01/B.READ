@@ -10,15 +10,18 @@ import SwiftUI
 struct CoordinatorContainer<Content: View>: View {
   
   @StateObject private var coordinator = Coordinator<MainRoute, SheetRoute>()
+  @ObservedObject var rootCoordinator: RootCoordinator
   
   let content: () -> Content
   
   var body: some View {
-    NavigationStack(path: $coordinator.paths) {
+    NavigationStack(path: $rootCoordinator.paths) {
       content()
-        .navigationDestination(for: MainRoute.self) { route in
-          coordinator.buildView(for: route)
+        .navigationDestination(for: SettingRoute.self) { route in
+          rootCoordinator.settingCoordinator.builView(for: route)
         }
-    }.environmentObject(coordinator)
+    }
+    .environmentObject(rootCoordinator)
+    .environmentObject(coordinator)
   }
 }

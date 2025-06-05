@@ -16,6 +16,18 @@ enum RootScene {
 }
 
 final class RootCoordinator: ObservableObject {
+  
+  
+  // MARK: Coordinator
+  let settingCoordinator = SettingCoordinator()
+  
+  
+  // MARK: ViewModel
+  let inputViewModel = SearchInputViewModel()
+  let resultViewModel = SearchResultViewModel()
+  let recentSearchViewModel = RecentSearchViewModel()
+  let bestSellerViewModel = BestSellerViewModel()
+  
   @ViewBuilder
   func buildView(for scene: RootScene) -> some View {
     switch scene {
@@ -23,10 +35,10 @@ final class RootCoordinator: ObservableObject {
       HomeView()
     case .search:
       SearchView(
-        inputViewModel: SearchInputViewModel(),
-        resultViewModel: SearchResultViewModel(),
-        recentSearchViewModel: RecentSearchViewModel(),
-        bestSellerViewModel: BestSellerViewModel()
+        inputViewModel: inputViewModel,
+        resultViewModel: resultViewModel,
+        recentSearchViewModel: recentSearchViewModel,
+        bestSellerViewModel: bestSellerViewModel
       )
     case .library:
       LibraryView()

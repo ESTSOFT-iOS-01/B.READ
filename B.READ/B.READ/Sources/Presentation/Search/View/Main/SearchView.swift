@@ -10,27 +10,16 @@ import Foundation
 
 // MARK: - (S)SearchView
 struct SearchView: View {
-  @StateObject private var inputViewModel: SearchInputViewModel
-  @StateObject private var resultViewModel: SearchResultViewModel
-  @StateObject private var recentSearchViewModel: RecentSearchViewModel
-  @StateObject private var bestSellerViewModel: BestSellerViewModel
   
-  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
+  
+  @ObservedObject var inputViewModel: SearchInputViewModel
+  @ObservedObject var resultViewModel: SearchResultViewModel
+  @ObservedObject var recentSearchViewModel: RecentSearchViewModel
+  @ObservedObject var bestSellerViewModel: BestSellerViewModel
   
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
-  
-  init(
-    inputViewModel: SearchInputViewModel,
-    resultViewModel: SearchResultViewModel,
-    recentSearchViewModel: RecentSearchViewModel,
-    bestSellerViewModel: BestSellerViewModel
-  ) {
-    self._inputViewModel = .init(wrappedValue: inputViewModel)
-    self._resultViewModel = .init(wrappedValue: resultViewModel)
-    self._recentSearchViewModel = .init(wrappedValue: recentSearchViewModel)
-    self._bestSellerViewModel = .init(wrappedValue: bestSellerViewModel)
-  }
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {

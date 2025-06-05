@@ -21,7 +21,7 @@ struct MainTabView: View {
   }
   
   var body: some View {
-    CoordinatorContainer {
+    CoordinatorContainer(rootCoordinator: rootCoordinator) {
       TabView(selection: $selectedTab) {
 
         rootCoordinator.buildView(for: .home)
