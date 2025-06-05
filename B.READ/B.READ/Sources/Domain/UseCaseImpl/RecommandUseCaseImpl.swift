@@ -15,7 +15,10 @@ final class RecommandUseCaseImpl: RecommandUseCase {
   }
   
   func requestBestSeller(in category: Int = 0) async throws -> [BestSeller] {
-    return try await bookService.fetchBestSeller(in: category)
+    try Task.checkCancellation()
+    let result =  try await bookService.fetchBestSeller(in: category)
+    try Task.checkCancellation()
+    return result
   }
   
 }

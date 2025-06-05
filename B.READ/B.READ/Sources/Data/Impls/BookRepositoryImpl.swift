@@ -46,8 +46,11 @@ actor BookRepositoryImpl: BookRepository {
     data.publisher = book.publisher
     data.publishedAt = book.publishedAt
     data.totalPages = book.totalPages
+    
+    try modelContext.save()
   }
 }
+
 
 extension BookRepositoryImpl {
   /// 저장소에서 `BookDTO`를 조회합니다.
