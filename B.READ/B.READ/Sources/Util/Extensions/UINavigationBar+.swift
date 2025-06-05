@@ -39,9 +39,8 @@ extension UINavigationBar {
     // 이미 있다면 스킵
     if keyWindow.viewWithTag(88888) != nil { return }
     
-    let statusBarHeight = keyWindow.safeAreaInsets.top
-    let navBarHeight = navBar.frame.height - 5
-    let totalHeight = statusBarHeight + navBarHeight
+    let navBarHeight = navBar.frame.maxY
+    let totalHeight = navBarHeight
     
     // 오버레이 추가
     let overlay = UIView(frame: CGRect(x: 0, y: 0, width: keyWindow.bounds.width, height: totalHeight))
