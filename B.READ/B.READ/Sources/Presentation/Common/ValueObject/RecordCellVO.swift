@@ -85,6 +85,14 @@ extension RecordCellVO: Hashable {
   }
   
   static func == (lhs: RecordCellVO, rhs: RecordCellVO) -> Bool {
-    return lhs.id == rhs.id
+    return lhs.id == rhs.id &&
+    lhs.readingState == rhs.readingState &&
+    lhs.heart == rhs.heart &&
+    lhs.progress == rhs.progress &&
+    lhs.star == rhs.star &&
+    lhs.memoCount == rhs.memoCount &&
+    lhs.quoteCount == rhs.quoteCount &&
+    lhs.period == rhs.period &&
+    lhs.isFavorite == rhs.isFavorite
   }
 }

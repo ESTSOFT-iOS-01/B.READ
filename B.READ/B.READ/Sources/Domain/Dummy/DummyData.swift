@@ -100,7 +100,7 @@ extension DummyData {
   
   static var dummyRecords: [Record] = [
   Record( // 워런 버핏 웨이
-    id: UUID().uuidString,
+    id: "1",
     isbn: "9791194368137",
     state: .toRead,
     heartCount: 3,
@@ -116,7 +116,7 @@ extension DummyData {
     updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 17))!
         ),
   Record( // 타이탄의 도구들
-    id: UUID().uuidString,
+    id: "2",
     isbn: "9791158510619",
     state: .reading,
     heartCount: 0,
@@ -131,7 +131,7 @@ extension DummyData {
     updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
         ),
   Record( // 싯다르타
-    id: UUID().uuidString,
+    id: "3",
     isbn: "9788937460586",
     state: .completed,
     heartCount: 0,

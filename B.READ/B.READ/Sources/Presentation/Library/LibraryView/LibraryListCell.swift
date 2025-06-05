@@ -15,6 +15,7 @@ struct LibraryListCell: View {
   
   var body: some View {
     HStack(alignment: .top, spacing: 0) {
+
       coverImage()
       .frame(width: 57, height: 88)
       .cornerRadius(6)
@@ -26,7 +27,9 @@ struct LibraryListCell: View {
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
         
         // 독서 현황
-        RecordStatsView(record: record)
+        // TODO: - [시르] Binding으로 만들어야하면, 제작해서 사용
+        RecordPropertyRow(data: record)
+//        RecordStatsView(record: $record)
         
         // 독서 기간
         periodView(record.period)
@@ -46,7 +49,6 @@ struct LibraryListCell: View {
           .frame(width: 14, height: 28)
           .frame(maxHeight: .infinity, alignment: .top)
       }
-      
     } // : HStack
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .padding(.horizontal, layoutPadding)
@@ -79,11 +81,13 @@ struct LibraryListCell: View {
     }
   }
 }
-//
-//#Preview {
-//  @Previewable @State var record = RecordCellVO(
-//    record: DummyData.dummyRecords[2],
-//    book: DummyData.dummyBooks[2]
-//  )
-//  LibraryListCell(record: $record)
-//}
+
+#Preview {
+  @Previewable @State var record = RecordCellVO(
+    record: DummyData.dummyRecords[1],
+    book: DummyData.dummyBooks[1]
+  )
+  PreviewableContainer {
+    LibraryListCell(record: $record)
+  }
+}

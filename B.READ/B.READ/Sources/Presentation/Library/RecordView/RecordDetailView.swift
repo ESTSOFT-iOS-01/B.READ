@@ -12,80 +12,86 @@ struct RecordDetailView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @StateObject var viewModel: RecordDetailViewModel
   
+  @State var showSortMenu: Bool = false
   @State var showDeleteAlert: Bool = false
   @State var showRecordMenuActionSheet: Bool = false
   
-  private let layoutPadding: CGFloat = 24
-  private let floatingButtonPadding: CGFloat = 32
-  
+  private let layoutPadding: CGFloat = 16
+  private let floatingButtonPadding: CGFloat = 24
+
   // MARK: - Init
   init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel())
-    // 24615번 줄
   }
   
   var body: some View {
-    // TODO: - ZStack으로 플로팅 버튼 만들기 -> 액션 시트?
     ZStack(alignment: .bottomTrailing) {
-      ScrollView(.vertical) {
-        VStack(spacing: layoutPadding) {
+      ScrollView {
+        VStack(alignment: .trailing, spacing: layoutPadding) {
           // 표지, 제목, 작가
-          RecordBookSection(book: viewModel.state.info?.book)
-            .padding(.top, layoutPadding)
+          RecordBookSection(record: $viewModel.record)
           
           // 기대지수(평점), 독서기간, 독서량
-          if let info = viewModel.state.info {
-            RecordStatsSection(
-              readState: info.record.state,
-              period: (info.record.period.startDate, info.record.period.endDate),
-              currentPage: info.record.currentPage,
-              totalPage: info.book.totalPages,
-              heartCount: info.record.heartCount,
-              starCount: info.record.starCount
-            )
-          } else {
-            Text("info 정보가 없습니다")
-          }
+          RecordStatsSection(record: $viewModel.record)
+            .padding(.top, 8)
           
           // 메모, 문장 탭바
           TopTabBar(
             tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
-            selectedIndex: $viewModel.state.selectedTab
+            selectedIndex: $viewModel.selectedTab
           )
+          .frame(height: 34)
+          .padding(.top, 8)
           
-          // TODO: - 정렬 버튼 여기 들어감
+          // 정렬 버튼
+          SortMenuButton(
+            isOpened: $showSortMenu,
+            selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+          )
+          .padding(.trailing, 8)
           
           // 메모, 문장 리스트
           RecordNotesSection(viewModel: viewModel)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.vertical, layoutPadding)
           
         } // : VStack
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.horizontal, layoutPadding)
+        
+        
       } // : ScrollView
+      .scrollIndicators(.never)
       
-      Button {
-        showRecordMenuActionSheet = true
-      } label: {
-        Image(systemName: "plus")
-          .font(.system(size: 26))
-          .frame(width: 64, height: 64)
-          .foregroundStyle(.orange3)
+      if showSortMenu {
+        Color.black.opacity(0.2)
+          .ignoresSafeArea()
+          .zIndex(2)
+          .onTapGesture {
+            showSortMenu = false
+          }
       }
-      .background(
-        Circle()
-          .fill(Color.backgroundDefault)
-          .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
-      )
-      .padding(.trailing, floatingButtonPadding)
-      .padding(.bottom, floatingButtonPadding)
-    }
+      
+      if !showSortMenu {
+        // 플로팅 버튼
+        Button {
+          showRecordMenuActionSheet = true
+        } label: {
+          Image(systemName: "plus")
+            .font(.system(size: 26))
+            .frame(width: 64, height: 64)
+            .foregroundStyle(.orange3)
+        }
+        .zIndex(1)
+        .background(
+          Circle()
+            .fill(Color.backgroundDefault)
+            .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
+        )
+        .padding(.trailing, floatingButtonPadding)
+        .padding(.bottom, floatingButtonPadding)
+      }
+    } // : ZStack
     .background(.backgroundDefault)
-    .onAppear {
-      print("DetailView OnAppear")
-      viewModel.send(.onAppear)
-    } // : onAppear
     .toolbar {
       // 즐겨찾기, 삭제 버튼
       ToolbarItem(placement: .topBarTrailing) {
@@ -101,17 +107,21 @@ struct RecordDetailView: View {
     } message: {
       Text("정말로 독서 기록을 삭제하시겠습니까?")
     } // : alert
+    .onAppear {
+      print("DetailView OnAppear")
+      viewModel.send(.onAppear)
+    } // : onAppear
     .confirmationDialog("독서 기록 메뉴", isPresented: $showRecordMenuActionSheet) {
       Button("독서 기록") {
         print("독서 기록 수정 선택")
       }
       Button("메모 작성") {
-        if let info = viewModel.state.info {
-          coordinator.push(.memo(record: info.record, totalPage: info.book.totalPages))
-        }
+        guard let record = viewModel.record else { return }
+        coordinator.push(.memo(record: record))
       }
       Button("문장 작성") {
-        coordinator.push(.sentenceInput(mode: .create(isbn: viewModel.state.info?.record.isbn ?? "")))
+        guard let record = viewModel.record else { return }
+        coordinator.push(.sentenceInput(mode: .create(record: record)))
       }
       Button("취소", role: .cancel) { }
     }
@@ -125,10 +135,14 @@ struct RecordDetailView: View {
       Button {
         viewModel.send(.onTapFavorite)
       } label: {
-        if let isFavorite = viewModel.state.info?.record.isFavorite {
+        if let isFavorite = viewModel.record?.isFavorite {
           Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+            .resizable()
+            .frame(width: 12, height: 24)
         } else {
           Image(systemName: "bookmark")
+            .resizable()
+            .frame(width: 12, height: 24)
         }
       }
       // 삭제 버튼
@@ -142,10 +156,10 @@ struct RecordDetailView: View {
     .foregroundColor(.green6)
   }
 }
-//
-//#Preview {
-//  RecordDetailView(viewModel: .init(
-//    recordID: DummyData.dummyRecords[2].id,
-//    isbn: DummyData.dummyRecords[2].isbn
-//  ))
-//}
+
+#Preview {
+  let recordID = DummyData.dummyRecords[2].id
+  PreviewableContainer {
+    RecordDetailView(viewModel: .init(recordID: recordID))
+  }
+}

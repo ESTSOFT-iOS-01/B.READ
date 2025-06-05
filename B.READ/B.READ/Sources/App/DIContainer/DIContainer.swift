@@ -66,6 +66,7 @@ extension DIContainer {
       ),
       for: LibraryUseCase.self
     )
+
     // Memo UseCase
     self.shared.register(
       MemoUseCaseImpl(
@@ -84,7 +85,20 @@ extension DIContainer {
       for: QuoteUseCase.self
     )
     // TODO: - Note UseCase
-    // TODO: - Search UseCase
-    // TODO: - Recommand UseCase
+    
+    // Search UseCase
+    self.shared.register(
+      SearchUseCaseImpl(
+        bookRepository: bookRepository,
+        recordRepository: recordRepository,
+        bookService: AladinService()),
+      for: SearchUseCase.self
+    )
+    
+    // Recommand UseCase
+    self.shared.register(
+      RecommandUseCaseImpl(bookService: AladinService()),
+      for: RecommandUseCase.self
+    )
   }
 }

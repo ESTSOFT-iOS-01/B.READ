@@ -16,7 +16,7 @@ final class QuoteDTO {
   var content: String
   var page: Int
   
-  var record: RecordDTO
+  var record: RecordDTO?
   
   init(id: String, isbn: String, content: String, page: Int, record: RecordDTO) {
     self.id = id
