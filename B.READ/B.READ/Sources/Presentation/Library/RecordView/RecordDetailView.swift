@@ -9,91 +9,56 @@ import SwiftUI
 
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @StateObject var viewModel: RecordDetailViewModel
+  @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
+  @StateObject private var viewModel: RecordDetailViewModel
   
-  @State var showSortMenu: Bool = false
-  @State var showDeleteAlert: Bool = false
-  @State var showRecordMenuActionSheet: Bool = false
+  @State private var showAddMenu: Bool = false
+  @State private var showSortMenu: Bool = false
+  @State private var showDeleteAlert: Bool = false
   
   private let layoutPadding: CGFloat = 16
-  private let floatingButtonPadding: CGFloat = 24
-
+  
+  private var isBackgroundDisabled: Bool {
+    showSortMenu || showAddMenu
+  }
+  
   // MARK: - Init
   init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
     _viewModel = StateObject(wrappedValue: viewModel())
   }
   
   var body: some View {
-    ZStack(alignment: .bottomTrailing) {
-      ScrollView {
-        VStack(alignment: .trailing, spacing: layoutPadding) {
-          // 표지, 제목, 작가
-          RecordBookSection(record: $viewModel.record)
-          
-          // 기대지수(평점), 독서기간, 독서량
-          RecordStatsSection(record: $viewModel.record)
-            .padding(.top, 8)
-          
-          // 메모, 문장 탭바
-          TopTabBar(
-            tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
-            selectedIndex: $viewModel.selectedTab
-          )
-          .frame(height: 34)
+    ScrollView {
+      VStack(alignment: .trailing, spacing: layoutPadding) {
+        
+        RecordBookSection(record: $viewModel.record)
+        
+        RecordStatsSection(record: $viewModel.record)
           .padding(.top, 8)
-          
-          // 정렬 버튼
-          SortMenuButton(
-            isOpened: $showSortMenu,
-            selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-          )
-          .padding(.trailing, 8)
-          
-          // 메모, 문장 리스트
-          RecordNotesSection(viewModel: viewModel)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-          
-        } // : VStack
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .padding(.horizontal, layoutPadding)
         
-        
-      } // : ScrollView
-      .scrollIndicators(.never)
-      
-      if showSortMenu {
-        Color.black.opacity(0.2)
-          .ignoresSafeArea()
-          .zIndex(2)
-          .onTapGesture {
-            showSortMenu = false
-          }
-      }
-      
-      if !showSortMenu {
-        // 플로팅 버튼
-        Button {
-          showRecordMenuActionSheet = true
-        } label: {
-          Image(systemName: "plus")
-            .font(.system(size: 26))
-            .frame(width: 64, height: 64)
-            .foregroundStyle(.orange3)
-        }
-        .zIndex(1)
-        .background(
-          Circle()
-            .fill(Color.backgroundDefault)
-            .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
+        TopTabBar(
+          tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
+          selectedIndex: $viewModel.selectedTab
         )
-        .padding(.trailing, floatingButtonPadding)
-        .padding(.bottom, floatingButtonPadding)
-      }
-    } // : ZStack
+        .frame(height: 34)
+        .padding(.top, 8)
+        
+        SortMenuButton(
+          isOpened: $showSortMenu,
+          selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+        )
+        .padding(.trailing, 8)
+        
+        RecordNotesSection(viewModel: viewModel)
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
+        
+      } // : VStack
+      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+      .padding(.horizontal, layoutPadding)
+    } // : ScrollView
+    .scrollIndicators(.never)
     .background(.backgroundDefault)
     .toolbar {
-      // 즐겨찾기, 삭제 버튼
       ToolbarItem(placement: .topBarTrailing) {
         topBarTrailingButton()
       }
@@ -111,27 +76,40 @@ struct RecordDetailView: View {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
     } // : onAppear
-    .confirmationDialog("독서 기록 메뉴", isPresented: $showRecordMenuActionSheet) {
-      Button("독서 기록") {
-        print("독서 기록 수정 선택")
+    .overlay {
+      ZStack {
+        
+        if isBackgroundDisabled {
+          Color.black.opacity(0.2)
+              .ignoresSafeArea()
+              .zIndex(showSortMenu ? 2 : 0)
+        }
+        
+        AddActionView(coordinator: coordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
+          .zIndex(1)
+        
+        // TODO: 정렬 메뉴가 들어갈 자리
+        if showSortMenu {
+          Button {
+            showSortMenu.toggle()
+          } label: {
+            Text("근웅님이 알아서 넣으세요 ㅋ")
+              .background(.backgroundDefault)
+          }.zIndex(3)
+        }
+
       }
-      Button("메모 작성") {
-        guard let record = viewModel.record else { return }
-        coordinator.push(.memo(record: record))
+      .animation(.easeInOut(duration: 0.25), value: isBackgroundDisabled)
+      .onTapGesture {
+        showSortMenu = false
+        showAddMenu = false
       }
-      Button("문장 작성") {
-        guard let record = viewModel.record else { return }
-        coordinator.push(.sentenceInput(mode: .create(record: record)))
-      }
-      Button("취소", role: .cancel) { }
     }
   }
-  
   
   // MARK: - (F)topBarTrailingButton
   private func topBarTrailingButton() -> some View {
     HStack(spacing: 0) {
-      // 즐겨찾기 버튼
       Button {
         viewModel.send(.onTapFavorite)
       } label: {
@@ -145,7 +123,6 @@ struct RecordDetailView: View {
             .frame(width: 12, height: 24)
         }
       }
-      // 삭제 버튼
       Button {
         showDeleteAlert = true
       } label: {
@@ -157,9 +134,73 @@ struct RecordDetailView: View {
   }
 }
 
+// MARK: - (S)AddActionView
+private struct AddActionView: View {
+  @ObservedObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @Binding var showAddMenu: Bool
+  let viewModel: RecordDetailViewModel
+  
+  var body: some View {
+    VStack(alignment: .trailing, spacing: 16) {
+      
+      if showAddMenu {
+        VStack(spacing: 16) {
+          Button {
+            guard let record = viewModel.record else { return }
+            coordinator.push(.sentenceInput(mode: .create(record: record)))
+          } label: {
+            Text("독서 기록")
+          }
+          
+          Button {
+            guard let record = viewModel.record else { return }
+            coordinator.push(.memo(record: record))
+          } label: {
+            Text("메모 작성")
+          }
+          
+          Button {
+            print("tab")
+          } label: {
+            Text("문장 수집")
+          }
+
+        }
+        .foregroundStyle(.black)
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.2)
+        .frame(width: 150, height: 150)
+        .background(.backgroundDefault)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
+        .transition(.move(edge: .trailing).combined(with: .opacity))
+      }
+      
+      Button {
+        showAddMenu.toggle()
+      } label: {
+        Image(systemName: "plus")
+          .font(.system(size: 26))
+          .frame(width: 64, height: 64)
+          .foregroundStyle(.orange3)
+          .rotationEffect(.degrees(showAddMenu ? 45 : 0))
+      }
+      .background(
+        Circle()
+          .fill(Color.backgroundDefault)
+          .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
+      )
+    }
+    .padding(.trailing, 32)
+    .padding(.bottom, 28)
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+  }
+}
+
+
 #Preview {
   let recordID = DummyData.dummyRecords[2].id
   PreviewableContainer {
     RecordDetailView(viewModel: .init(recordID: recordID))
+      .environmentObject(Coordinator<MainRoute, SheetRoute>())
   }
 }

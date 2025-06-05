@@ -49,7 +49,3 @@ struct RootViewSwitcher: View {
     .animation(.linear(duration: 0.3), value: rootScene)
   }
 }
-
-#Preview {
-  RootViewSwitcher()
-}
