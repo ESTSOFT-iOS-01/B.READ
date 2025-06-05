@@ -31,7 +31,16 @@ enum MainRoute: Hashable {
 }
 
 enum SheetRoute: Identifiable {
-  case createRecord(state: Binding<ReadingState>, book: Book, onComplete: (_ isEdit: Bool) -> Void)
+  case createRecord(
+    state: Binding<ReadingState>,
+    book: Book
+  )
+  
+  case updateRecord(
+    state: Binding<ReadingState>,
+    record: RecordDetailVO,
+    onComplete: (_ isEdit: Bool) -> Void
+  )
   
   var id: String {
     String(describing: self)
@@ -42,10 +51,16 @@ extension Coordinator where R == SheetRoute {
   @ViewBuilder
   func buildView(for route: R) -> some View {
     switch route {
-    case let .createRecord(state, book, onComplete):
+    case let .createRecord(state, book):
       CreateRecordView(
         state: state,
-        viewModel: NewRecordViewModel(book: book),
+        viewModel: NewRecordViewModel(book: book)
+      )
+      
+    case let .updateRecord(state, record, onComplete):
+      CreateRecordView(
+        state: state,
+        viewModel: NewRecordViewModel(recordVO: record),
         onComplete: onComplete
       )
     }
