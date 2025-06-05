@@ -185,15 +185,26 @@ private struct RecommandSectionView: View {
   
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
-      RecommandHeaderView(categoryName: bookList.categoryName)
+      RecommandHeaderView(categoryName: bookList.category.name)
         .padding(.leading, 24)
       
-      ScrollView(.horizontal, showsIndicators: false) {
-        LazyHStack(spacing: 0) {
-          ForEach(bookList.bestSellers, id: \.id) { item in
-            RecommandCell(bestSellerVO: item, onTap: {
-              coordinator.push(.searchBook(isbn: item.isbn))
-            })
+      switch bookList.state {
+      case .loading:
+        LoadingView()
+          .frame(height: 140)
+        
+      case .failed(let error):
+        FailedView(error: error)
+          .frame(height: 140)
+        
+      case .loaded:
+        ScrollView(.horizontal, showsIndicators: false) {
+          LazyHStack(spacing: 0) {
+            ForEach(bookList.bestSellers, id: \.id) { item in
+              RecommandCell(bestSellerVO: item, onTap: {
+                coordinator.push(.searchBook(isbn: item.isbn))
+              })
+            }
           }
         }
       }
