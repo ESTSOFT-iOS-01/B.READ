@@ -8,11 +8,10 @@
 import Foundation
 import SwiftUI
 
-
 final class NewRecordViewModel: ObservableObject {
   // MARK: - State
   var recordVO: RecordDetailVO?
-  var book: Book
+  var book: Book?
   
   @Published var heartRate: Int
   @Published var starRate: Int
@@ -25,6 +24,7 @@ final class NewRecordViewModel: ObservableObject {
   @Published var isTextEditorFocused: Bool = false
   @Published var reviewText: String
   
+  var totalPage: Int
   @Published var isSuccess: Bool = false
   
   var pageNum : Int = 0
@@ -39,31 +39,33 @@ final class NewRecordViewModel: ObservableObject {
     self.recordVO = nil
     self.heartRate = 0
     self.starRate = 0
-    self.startDate = Date()
-    self.endDate = Date()
+    self.startDate = .now
+    self.endDate = .now
     self.page = ""
     self.reviewText = ""
     self.book = book
+    self.totalPage = book.totalPages
   }
   
   /// Library에서 Record 수정하는 경우
   init(
-    recordVO: RecordDetailVO,
-    book: Book
+    recordVO: RecordDetailVO
   ) {
     self.recordVO = recordVO
     self.heartRate = recordVO.heart
     self.starRate = recordVO.star
-    self.startDate = recordVO.period.startDate ?? Date()
-    self.endDate = recordVO.period.endDate ?? Date()
+    self.startDate = recordVO.period.startDate ?? .now
+    self.endDate = recordVO.period.endDate ?? .now
     self.page = String(recordVO.currentPage)
     self.reviewText = recordVO.review
-    self.book = book
+    self.totalPage = recordVO.totalPage
+    self.book = nil
   }
   
   // MARK: - Action
   enum Action {
-    case onSubmit(ReadingState)
+    case updateRecord(ReadingState)
+    case createRecord(ReadingState)
     case pageSubmit
     case releaseEditorFocus
     case releaseAllFocus
@@ -71,17 +73,19 @@ final class NewRecordViewModel: ObservableObject {
   
   func send(_ action: Action) {
     switch action {
-    case .onSubmit(let state):
-      let entity = setEntity(state)
-      if recordVO != nil {
-        updateRecord(entity)
-      } else {
+    case let .createRecord(state):
+      if let entity = setEntityByBook(state) {
         saveNewRecord(entity)
+      }
+      
+    case let .updateRecord(state):
+      if let entity = setEntity(state) {
+        updateRecord(entity)
       }
 
     case .pageSubmit:
       isFocused = false
-      if let value = Int(page), value >= 0, value <= book.totalPages {
+      if let value = Int(page), value >= 0, value <= totalPage {
         pageNum = value
       } else {
         pageNum = 0
@@ -103,33 +107,107 @@ final class NewRecordViewModel: ObservableObject {
 
 
 private extension NewRecordViewModel {
-  func setEntity(_ state: ReadingState) -> Record {
-    if let origin = recordVO {
+  func setEntity(_ state: ReadingState) -> Record? {
+    guard let origin = self.recordVO else { return nil }
+    
+    switch state {
+    case .notStart:
       return Record(
         id: origin.id,
         isbn: origin.isbn,
         state: state.toEntity(),
         heartCount: heartRate,
+        starCount: 0,
+        isFavorite: origin.isFavorite,
+        period: (nil, nil),
+        currentPage: 0,
+        review: "",
+        memos: [],
+        quotes: [],
+        createdAt: origin.createdAt,
+        updatedAt: .now
+      )
+    case .reading:
+      return Record(
+        id: origin.id,
+        isbn: origin.isbn,
+        state: state.toEntity(),
+        heartCount: origin.heart,
+        starCount: 0,
+        isFavorite: origin.isFavorite,
+        period: (startDate, nil),
+        currentPage: pageNum,
+        review: "",
+        memos: [],
+        quotes: [],
+        createdAt: origin.createdAt,
+        updatedAt: .now
+      )
+    case .finished:
+      return Record(
+        id: origin.id,
+        isbn: origin.isbn,
+        state: state.toEntity(),
+        heartCount: origin.heart,
         starCount: starRate,
         isFavorite: origin.isFavorite,
         period: (startDate, endDate),
-        currentPage: pageNum,
+        currentPage: origin.currentPage,
         review: reviewText,
         memos: [],
         quotes: [],
         createdAt: origin.createdAt,
         updatedAt: .now
       )
-    } else {
+    }
+  }
+  
+  func setEntityByBook(_ state: ReadingState) -> Record? {
+    guard let book = self.book else { return nil }
+    
+    switch state {
+    case .notStart:
       return Record(
         id: UUID().uuidString,
         isbn: book.isbn,
         state: state.toEntity(),
         heartCount: heartRate,
+        starCount: 0,
+        isFavorite: false,
+        period: (nil, nil),
+        currentPage: 0,
+        review: "",
+        memos: [],
+        quotes: [],
+        createdAt: .now,
+        updatedAt: .now
+      )
+    case .reading:
+      return Record(
+        id: UUID().uuidString,
+        isbn: book.isbn,
+        state: state.toEntity(),
+        heartCount: 0,
+        starCount: 0,
+        isFavorite: false,
+        period: (startDate, nil),
+        currentPage: pageNum,
+        review: "",
+        memos: [],
+        quotes: [],
+        createdAt: .now,
+        updatedAt: .now
+      )
+    case .finished:
+      return Record(
+        id: UUID().uuidString,
+        isbn: book.isbn,
+        state: state.toEntity(),
+        heartCount: 0,
         starCount: starRate,
         isFavorite: false,
         period: (startDate, endDate),
-        currentPage: pageNum,
+        currentPage: totalPage,
         review: reviewText,
         memos: [],
         quotes: [],
@@ -140,6 +218,8 @@ private extension NewRecordViewModel {
   }
   
   func saveNewRecord(_ record: Record) {
+    guard let book = self.book else { return }
+    
     Task {
       do {
         try await libraryUseCase.saveRecord(record: record, book: book)
