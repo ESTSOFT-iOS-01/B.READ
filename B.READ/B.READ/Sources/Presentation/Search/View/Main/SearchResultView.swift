@@ -100,7 +100,7 @@ struct SearchTabContentView: View {
                 items: viewModel.recordResults,
                 layoutPadding: 24,
                 listPadding: 16,
-                onTap: { coordinator.push(.libraryDetail(id: $0.id, isbn: $0.isbn)) },
+                onTap: { coordinator.push(.libraryDetail(id: $0.id)) },
                 onAppearNearBottom: nil,
                 content: { record in
                   RecordSearchCell(data: record)
