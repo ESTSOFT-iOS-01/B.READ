@@ -11,10 +11,7 @@ final class HomeViewModel: ObservableObject {
   
   // MARK: - State
   @Published var recentRecords: [RecordCellVO] = []
-  @Published var bestSellerList: [BestSellerListVO] = [
-//    BestSellerListVO(category: CategoryType.literature, bestSellers: [], state: .loading),
-//    BestSellerListVO(category: CategoryType.literature, bestSellers: [], state: .loading)
-  ]
+  @Published var bestSellerList: [BestSellerListVO] = []
   
   var currentTask: Task<Void, Never>? = nil
   
