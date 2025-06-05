@@ -71,6 +71,7 @@ struct RecordDetailView: View {
     .onAppear {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
+      if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
     } // : onAppear
     .overlay {
       ZStack {
@@ -83,7 +84,7 @@ struct RecordDetailView: View {
         AddActionView(coordinator: coordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
         
       }
-      .animation(.linear(duration: 0.3), value: showAddMenu)
+      .animation(.linear(duration: 0.298), value: showAddMenu)
       .onTapGesture {
         showAddMenu = false
       }
@@ -130,6 +131,7 @@ private struct AddActionView: View {
         VStack(spacing: 16) {
           Button {
             guard let record = viewModel.record else { return }
+            UINavigationBar.removeOverlay(duration: 0.0)
             coordinator.push(.sentenceInput(mode: .create(record: record)))
           } label: {
             Text("독서 기록")
@@ -137,6 +139,7 @@ private struct AddActionView: View {
           
           Button {
             guard let record = viewModel.record else { return }
+            UINavigationBar.removeOverlay()
             coordinator.push(.memo(record: record))
           } label: {
             Text("메모 작성")
@@ -159,12 +162,12 @@ private struct AddActionView: View {
       }
       
       Button {
-        showAddMenu.toggle()
-        if showAddMenu {
+        if !showAddMenu {
           UINavigationBar.showOverlay()
         } else {
           UINavigationBar.removeOverlay()
         }
+        showAddMenu.toggle()
       } label: {
         Image(systemName: "plus")
           .font(.system(size: 26))
