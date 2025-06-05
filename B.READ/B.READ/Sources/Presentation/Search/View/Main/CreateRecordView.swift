@@ -10,16 +10,22 @@ import SwiftUI
 // MARK: - (S)CreateRecordView
 struct CreateRecordView: View {
   private let layoutPadding: CGFloat = 24
+  let onComplete: (_ isEdit: Bool) -> Void
   
   @Binding var selectedState: ReadingState
   @StateObject var viewModel: NewRecordViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  init(state: Binding<ReadingState>, viewModel: NewRecordViewModel) {
+  init(
+    state: Binding<ReadingState>,
+    viewModel: NewRecordViewModel,
+    onComplete: @escaping (_ isEdit: Bool) -> Void
+  ) {
     self._selectedState = state
     self._viewModel = .init(wrappedValue: viewModel)
+    self.onComplete = onComplete
   }
-  
+
   var body: some View {
     Group {
       ZStack(alignment: .topTrailing) {
@@ -35,24 +41,20 @@ struct CreateRecordView: View {
         VStack(alignment: .leading) {
           ReadStateSelectorView(selectedState: $selectedState)
             .onChange(of: selectedState) { _, _ in
-              viewModel.isFocused = false
-              viewModel.isTextEditorFocused = false
+              viewModel.send(.releaseAllFocus)
             }
-          
+
           stateContentView()
             .padding(.top, layoutPadding)
           
           BottomButton(buttonTitle: "저장하기") {
-            viewModel.send(.onSubmit)
-            // TODO : callback함수로 부모뷰에 영향끼치는 flag 하나 넘겨줘야한다.
-            if viewModel.isSuccess { coordinator.dismissSheet() }
+            viewModel.send(.onSubmit(selectedState))
           }
           .padding(.top, layoutPadding)
           .padding(.horizontal, 2)
         }
         .frame(alignment: .bottom)
       }
-      //      .animation(.easeOut(duration: 1), value: selectedState)
       .padding(.horizontal, layoutPadding)
       .padding(.top, layoutPadding)
       .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
@@ -62,17 +64,21 @@ struct CreateRecordView: View {
       
     }
     .ignoresSafeArea()
-    .contentShape(Rectangle())
-    .onTapGesture {
-      viewModel.isTextEditorFocused = false
-      viewModel.isFocused = false
+    .onChange(of: viewModel.isSuccess) { _, newValue in
+      if newValue {
+        DispatchQueue.main.async {
+          let isEdit = viewModel.recordVO != nil
+          onComplete(isEdit)
+          coordinator.dismissSheet()
+        }
+      }
     }
+
   }
   
   // MARK: - (F)stateContentView
   @ViewBuilder
   private func stateContentView() -> some View {
-    
     switch selectedState {
     case .notStart:
       SelectRateView(isStar: false, rate: $viewModel.heartRate)
@@ -90,7 +96,7 @@ struct CreateRecordView: View {
         SelectPageView(
           page: $viewModel.page,
           isFocused: $viewModel.isFocused,
-          maxPage: viewModel.maxPage) {
+          maxPage: viewModel.book.totalPages) {
             viewModel.send(.pageSubmit)
           }
           .topLeadingPadding()
