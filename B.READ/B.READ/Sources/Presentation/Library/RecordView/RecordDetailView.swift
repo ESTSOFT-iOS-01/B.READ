@@ -172,7 +172,7 @@ private struct AddActionView: View {
           .font(.system(size: 26))
           .frame(width: 64, height: 64)
           .foregroundStyle(.orange3)
-          .rotationEffect(.degrees(showAddMenu ? 45 : 0))
+          .rotationEffect(.degrees(showAddMenu ? -45 : 0))
       }
       .background(
         Circle()
