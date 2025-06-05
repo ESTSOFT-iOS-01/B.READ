@@ -82,13 +82,18 @@ struct BookDetailView: View {
       BottomButton(
         buttonTitle: "내 책빵에 저장하기",
         action: {
-          coordinator
-            .presentSheet(
+          // 책 정보가 있을 때만 생성 가능
+          if let book = viewModel.currentBook {
+            coordinator.presentSheet(
               .createRecord(
                 state: $viewModel.selectedState,
-                page: bookDetailVO.pageCount
+                book: book,
+                onComplete: { _ in return }
               )
             )
+          } else {
+            // alertpopup?
+          }
         }
       )
       .padding(.horizontal, 30)
