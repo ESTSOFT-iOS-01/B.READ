@@ -8,11 +8,8 @@
 import SwiftUI
 
 struct MainTabView: View {
-  @State private var selectedTab: Tab = .home
-  
-  enum Tab {
-    case home, search, library, record, mypage
-  }
+  @StateObject private var rootCoordinator = RootCoordinator()
+  @State private var selectedTab: RootScene = .home
   
   init() {
     let appearance = UITabBarAppearance()
@@ -27,50 +24,47 @@ struct MainTabView: View {
     CoordinatorContainer {
       TabView(selection: $selectedTab) {
 
-        HomeView()
+        rootCoordinator.buildView(for: .home)
           .tabItem {
             Image(systemName: SFSymbol.house.name)
             Text("홈")
           }
-          .tag(Tab.home)
+          .tag(RootScene.home)
         
-        SearchView(
-          inputViewModel: SearchInputViewModel(),
-          resultViewModel: SearchResultViewModel(),
-          recentSearchViewModel: RecentSearchViewModel(),
-          bestSellerViewModel: BestSellerViewModel()
-        )
+        rootCoordinator.buildView(for: .search)
           .tabItem {
             Image(systemName: SFSymbol.magnify.name)
             Text("검색")
           }
-          .tag(Tab.search)
+          .tag(RootScene.search)
         
-        LibraryView()
+        rootCoordinator.buildView(for: .library)
           .tabItem {
             Image(systemName: SFSymbol.library.name)
             Text("책빵")
           }
-          .tag(Tab.library)
+          .tag(RootScene.library)
         
-        RecordView()
+        rootCoordinator.buildView(for: .record)
           .tabItem {
             Image(systemName: SFSymbol.record.name)
             Text("기록")
           }
-          .tag(Tab.record)
+          .tag(RootScene.record)
         
-        MyPageView()
+        rootCoordinator.buildView(for: .mypage)
           .tabItem {
             Image(systemName: SFSymbol.myPage.name)
             Text("마이")
           }
-          .tag(Tab.mypage)
+          .tag(RootScene.mypage)
       }.tint(.brown3)
     }
   }
 }
 
 #Preview {
-  MainTabView()
+  PreviewableContainer {
+    MainTabView()
+  }
 }
