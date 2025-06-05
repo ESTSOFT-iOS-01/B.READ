@@ -51,3 +51,17 @@ struct MemoVO: Identifiable {
     )
   }
 }
+
+extension MemoVO {
+  // TODO: - Guide에는 date도 있음
+  func toEntity() -> Memo {
+    Memo(
+      id: self.id,
+      isbn: self.isbn,
+      createdAt: self.createdAt,
+      content: self.content,
+      pages: self.pages,
+      guides: self.guides.map { Guide(date: .now, content: $0) }
+    )
+  }
+}

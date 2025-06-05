@@ -25,8 +25,6 @@ struct LibraryView: View {
   @State var showSortMenu: Bool = false
   @State var displayMode: DisplayMode = .list
   
-  @State var selectedOption: SortOption = .recent
-  
   private let layoutPadding: CGFloat = 16
   
   var body: some View {
@@ -34,17 +32,19 @@ struct LibraryView: View {
       VStack(alignment: .trailing, spacing: 0) {
         // 상단 탭바
         ScrollView(.horizontal, showsIndicators: false) {
-          TopTabBar(tabs: viewModel.state.tabs, selectedIndex: $viewModel.state.selectedTab)
+          TopTabBar(tabs: viewModel.tabs, selectedIndex: $viewModel.selectedTab)
             .frame(width: 450, height: 34)
-            .onChange(of: viewModel.state.selectedTab) {
+            .onChange(of: viewModel.selectedTab) {
               viewModel.send(.selectTab)
             }
         } // : ScrollView
         
         HStack(spacing: 8) {
           // 정렬 버튼
-          SortMenuButton(isOpened: $showSortMenu, selectedOption: $selectedOption)
-          
+          SortMenuButton(
+            isOpened: $showSortMenu,
+            selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+          )
           // 리스트, 그리드 선택 버튼
           Button {
             displayMode = (displayMode == .list ? .grid : .list)
@@ -57,12 +57,12 @@ struct LibraryView: View {
         .padding(.top, layoutPadding)
         
         // 독서기록 목록 뷰
-        if viewModel.state.displayRecords.isEmpty {
+        if viewModel.displayRecords.isEmpty {
           Text("독서 기록이 없습니다.")
             .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if displayMode == .list {
-          LibraryListView(records: $viewModel.state.displayRecords)
+          LibraryListView(records: $viewModel.displayRecords)
         } else {
           LibraryGridView()
         }
@@ -77,27 +77,29 @@ struct LibraryView: View {
           .onTapGesture {
             showSortMenu = false
           }
-        
-        // 정렬 메뉴
-        SortMenu(type: .library, isOpened: $showSortMenu, selectedOption: $selectedOption)
-          .padding(.trailing, 48)
-          .padding(.top, 90)
-          .onChange(of: selectedOption) {
-            // TODO: - 내부 구현 필요
-            viewModel.state.displayRecords = [RecordCellVO(
-              record: DummyData.dummyRecords[0],
-              book: DummyData.dummyBooks[0])]
-          }
-        
+      }
+      // 정렬 메뉴
+      SortMenu(
+        type: .library,
+        isOpened: $showSortMenu,
+        selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+      )
+      .padding(.trailing, 48)
+      .padding(.top, 90)
+      .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
+        viewModel.send(.selectSort)
       }
     } // : ZStack
     .background(.backgroundDefault)
     .onAppear {
+      print("appear 작동")
       viewModel.send(.onAppear)
     }
   }
 }
 
 #Preview {
-  LibraryView(viewModel: LibraryViewModel())
+  PreviewableContainer {
+    LibraryView()
+  }
 }

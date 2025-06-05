@@ -105,39 +105,39 @@ private extension RecordQuoteViewModel {
   
   // TODO: - 정렬 버튼 만들고 기능 추가 예정
   /// 보여주고자 하는 Quote의 순서를 정렬합니다.
-  func sortDisplayQuoteGroups(by: SortState = .older) async {
+  func sortDisplayQuoteGroups(by: SortOption = .recent) async {
     // 1. 태스크 그룹으로 정렬
-    let quoteGroups = await withTaskGroup(of: QuoteGroup.self) { group in
-      
-      // 2. 도서 제목 이름 순으로 정렬을 기준으로 작동
-      let sortedGroup = state.displayQuoteGroups.sorted { $0.bookTitle > $1.bookTitle }
-      
-      // 3. 각 도서별 문장을 비동기로 정렬
-      for groupItem in sortedGroup {
-        group.addTask {
-          // TODO: - 정렬 기준별 구현
-          // 4. 우선 페이지 오름차순으로 정렬
-          let sortedQuotes = groupItem.quotes.sorted { $0.page < $1.page }
-          return QuoteGroup(
-            isbn: groupItem.isbn,
-            bookTitle: groupItem.bookTitle,
-            quotes: sortedQuotes
-          )
-        }
-      }
-      
-      var results: [QuoteGroup] = []
-      // 5. 결과값 저장
-      for await result in group {
-        results.append(result)
-      }
-      
-      return results
-    }
-    
-    // 6. 뷰에 반영
-    await MainActor.run {
-      state.displayQuoteGroups = quoteGroups
-    }
+//    let quoteGroups = await withTaskGroup(of: QuoteGroup.self) { group in
+//      
+//      // 2. 도서 제목 이름 순으로 정렬을 기준으로 작동
+//      let sortedGroup = state.displayQuoteGroups.sorted { $0.bookTitle > $1.bookTitle }
+//      
+//      // 3. 각 도서별 문장을 비동기로 정렬
+//      for groupItem in sortedGroup {
+//        group.addTask {
+//          // TODO: - 정렬 기준별 구현
+//          // 4. 우선 페이지 오름차순으로 정렬
+//          let sortedQuotes = groupItem.quotes.sorted { $0.page < $1.page }
+//          return QuoteGroup(
+//            isbn: groupItem.isbn,
+//            bookTitle: groupItem.bookTitle,
+//            quotes: sortedQuotes
+//          )
+//        }
+//      }
+//      
+//      var results: [QuoteGroup] = []
+//      // 5. 결과값 저장
+//      for await result in group {
+//        results.append(result)
+//      }
+//      
+//      return results
+//    }
+//    
+//    // 6. 뷰에 반영
+//    await MainActor.run {
+//      state.displayQuoteGroups = quoteGroups
+//    }
   }
 }

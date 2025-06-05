@@ -144,10 +144,7 @@ private struct InfiniteBannerView: View {
           .tag(index)
           .onTapGesture {
             coordinator.push(
-              .libraryDetail(
-                id: viewModel.recentRecords[index].id,
-                isbn: viewModel.recentRecords[index].isbn
-              )
+              .libraryDetail(id: viewModel.recentRecords[index].id)
             )
           }
       }
