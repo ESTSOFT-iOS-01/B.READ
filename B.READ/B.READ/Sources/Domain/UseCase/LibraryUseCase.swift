@@ -17,7 +17,6 @@ protocol LibraryUseCase {
   /// - Throws:
   ///   - `RepositoryError.dataAlreadyExist`: 이미 독서 기록이 존재하는 경우
   ///   - `RepositoryError.fetchError`: 기존 데이터를 조회하는 과정에서 에러가 발생한 경우
-  /// - Note: Todo. 도로시
   func saveRecord(record: Record, book: Book) async throws
   
   /// 독서 기록을 수정합니다.

@@ -9,12 +9,14 @@ import SwiftUI
 
 // MARK: - (S)RecentSearchView
 struct RecentSearchView: View {
-  @ObservedObject var viewModel: SearchViewModel
+  @ObservedObject var viewModel: RecentSearchViewModel
+  @ObservedObject var inputViewModel: SearchInputViewModel
+  @ObservedObject var resultViewModel: SearchResultViewModel
   
   var body: some View {
     VStack(spacing: 8) {
       headerView
-      if viewModel.state.keywordList.isEmpty {
+      if viewModel.keywords.isEmpty {
         Text("최근 검색어가 없습니다.")
           .foregroundStyle(.gray7)
           .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.0, letterSpacing: -0.025)
@@ -25,7 +27,7 @@ struct RecentSearchView: View {
           .transition(.opacity)
       }
     }
-    .animation(.easeInOut(duration: 0.25), value: viewModel.state.keywordList)
+    .animation(.easeInOut(duration: 0.25), value: viewModel.keywords)
   }
   
   // MARK: - (S)headerView
@@ -56,15 +58,18 @@ struct RecentSearchView: View {
   // MARK: - (S)listView
   private var listView: some View {
     VStack {
-      ForEach(Array(viewModel.state.keywordList.enumerated()), id: \.offset) { index, keyword in
+      ForEach(Array(viewModel.keywords.enumerated()), id: \.offset) { index, keyword in
         RecentSearchCell(
           keyword: keyword,
           onSelect: { _ in
+            inputViewModel.searchText = keyword
             viewModel.send(.selectKeyword(keyword))
+            inputViewModel.send(.onSubmitSearch)
+            resultViewModel.send(.searchAll(keyword))
           },
           onDelete: {
             withAnimation(.easeInOut(duration: 0.25)) {
-              viewModel.send(.deleteKeyword(at: index))
+              viewModel.send(.deleteKeyword(keyword))
             }
           }
         )

@@ -52,3 +52,9 @@ enum ImageConverter {
 //    }
 //}
 
+struct ImageURLConverter {
+  /// 썸네일(coversum)을 고화질(cover500)로 변환
+  static func highQualityURL(from originalURL: String) -> String {
+    originalURL.replacingOccurrences(of: "/coversum/", with: "/cover500/")
+  }
+}

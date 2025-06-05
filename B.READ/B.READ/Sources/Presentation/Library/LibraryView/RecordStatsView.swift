@@ -7,13 +7,14 @@
 
 import SwiftUI
 
+// TODO: - Binding으로 안만들어도 뷰 반영되면 삭제 예정
 // MARK: - (S)RecordStatsView
 struct RecordStatsView: View {
   
-  private let record: RecordCellVO
+  @Binding private var record: RecordCellVO
   
-  init(record: RecordCellVO) {
-    self.record = record
+  init(record: Binding<RecordCellVO>) {
+    self._record = record
   }
   
   var body: some View {
@@ -30,5 +31,26 @@ struct RecordStatsView: View {
       PropertyView(SFSymbol.bubble.name, "\(record.quoteCount)", .count) // 문장
     } // : HStack
     .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
+  }
+}
+
+#Preview {
+  @Previewable @State var record1 = RecordCellVO(
+    record: DummyData.dummyRecords[0],
+    book: DummyData.dummyBooks[0]
+  )
+  @Previewable @State var record2 = RecordCellVO(
+    record: DummyData.dummyRecords[1],
+    book: DummyData.dummyBooks[1]
+  )
+  @Previewable @State var record3 = RecordCellVO(
+    record: DummyData.dummyRecords[2],
+    book: DummyData.dummyBooks[2]
+  )
+  
+  PreviewableContainer {
+    RecordStatsView(record: $record1)
+    RecordStatsView(record: $record2)
+    RecordStatsView(record: $record3)
   }
 }

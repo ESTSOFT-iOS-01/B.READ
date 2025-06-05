@@ -15,14 +15,15 @@ enum MainRoute: Hashable {
   case goToWebView(url: URL)
   
   // MARK: - Library
-  case libraryDetail(id: String, isbn: String)
+  case libraryDetail(id: String)
   
   // MARK: - Sentence
   case sentenceInput(mode: SentenceInputMode)
   case pageInput(mode: SentenceInputMode, sentence: String)
   
   // MARK: - Memo
-  case memo(id: String? = nil, record: Record, totalPage: Int)
+//  case memo(id: String? = nil, record: Record, totalPage: Int)
+  case memo(id: String? = nil, record: RecordDetailVO)
   
   // MARK: - MyPage
   case insertNickname
@@ -73,8 +74,8 @@ extension Coordinator where T == MainRoute {
         }
       
       // MARK: - Library
-    case .libraryDetail(let id, let isbn):
-      RecordDetailView(viewModel: .init(recordID: id, isbn: isbn))
+    case .libraryDetail(let id):
+      RecordDetailView(viewModel: .init(recordID: id))
       
       // MARK: - Sentence
     case .sentenceInput(let mode):
@@ -84,8 +85,8 @@ extension Coordinator where T == MainRoute {
         PageInputView(mode: mode, sentence: sentence)
     
       // MARK: - Memo
-    case .memo(let id, let record, let page):
-      MemoView(viewModel: MemoViewModel(id: id, record: record), totalPage: page)
+    case .memo(let id, let record):
+      MemoView(viewModel: MemoViewModel(id: id, record: record), totalPage: record.totalPage)
       
       // MARK: - MyPage Flow
     case .insertNickname:

@@ -34,7 +34,12 @@ struct MainTabView: View {
           }
           .tag(Tab.home)
         
-        SearchView(viewModel: SearchViewModel())
+        SearchView(
+          inputViewModel: SearchInputViewModel(),
+          resultViewModel: SearchResultViewModel(),
+          recentSearchViewModel: RecentSearchViewModel(),
+          bestSellerViewModel: BestSellerViewModel()
+        )
           .tabItem {
             Image(systemName: SFSymbol.magnify.name)
             Text("검색")

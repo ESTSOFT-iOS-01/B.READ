@@ -59,7 +59,7 @@ struct PageInputView: View {
           .fill(.green1)
         
         ScrollView(.vertical, showsIndicators: true) {
-          Text(viewModel.content)
+          Text(sentence)
             .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.025)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
@@ -76,9 +76,16 @@ struct PageInputView: View {
     .onChange(of: pageText, { oldValue, newValue in
       viewModel.page = Int(newValue)
     })
+    .onChange(of: viewModel.didSubmitSuccess) {
+      if viewModel.didSubmitSuccess {
+        coordinator.pop()
+        coordinator.pop()
+      }
+    }
     .toolbar {
       ToolbarItem(placement: .topBarTrailing) {
         Button("저장") {
+          viewModel.content = sentence
           guard viewModel.page != nil else {
             showInvalidAlert = true
             return
@@ -88,8 +95,6 @@ struct PageInputView: View {
             return
           }
           viewModel.send(.submit)
-          coordinator.pop()
-          coordinator.pop()
         }
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
         .foregroundStyle(.green6)
@@ -122,7 +127,11 @@ struct PageInputView: View {
 }
 
 #Preview {
-  NavigationStack {
-    PageInputView(mode: .create(isbn: "9781234567890"), sentence: "")
+  let record = RecordDetailVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1])
+  PreviewableContainer {
+    NavigationStack {
+      PageInputView(mode: .create(record: record), sentence: "프리뷰 테스트 문장")
+    }
   }
+  
 }

@@ -11,7 +11,6 @@ import SwiftUI
 struct LibraryListView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @Binding var records: [RecordCellVO]
-  @State var selectedRecord: RecordCellVO?
   
   var body: some View {
     ScrollView {
@@ -21,15 +20,23 @@ struct LibraryListView: View {
             .background(.green1.opacity(0.6))
             .cornerRadius(16)
             .onTapGesture {
-              coordinator.push(.libraryDetail(id: record.id, isbn: record.isbn))
+              coordinator.push(.libraryDetail(id: record.id))
             }
         }
       }
     } // : ScrollView
     .scrollIndicators(.hidden)
+    .padding(.top, 8)
   }
 }
 
 #Preview {
-  LibraryView(viewModel: LibraryViewModel())
+  @Previewable @State var records: [RecordCellVO] = [
+    RecordCellVO(record: DummyData.dummyRecords[0], book: DummyData.dummyBooks[0]),
+    RecordCellVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1]),
+    RecordCellVO(record: DummyData.dummyRecords[2], book: DummyData.dummyBooks[2])
+  ]
+  PreviewableContainer {
+    LibraryListView(records: $records)
+  }
 }

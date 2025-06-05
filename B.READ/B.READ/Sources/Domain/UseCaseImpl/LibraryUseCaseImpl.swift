@@ -28,10 +28,34 @@ final class LibraryUseCaseImpl: LibraryUseCase {
     self.bookService = bookService
   }
   
-  // TODO: - 도로시
   func saveRecord(record: Record, book: Book) async throws {
+    do {
+      try await bookRepository.createBook(book)
+    } catch RepositoryError.dataAlreadyExist {
+      // 이미 존재하면 무시
+      print("이미 존재하는 책입니다.")
+    }
+    
     try await recordRepository.createRecord(record)
-    try await bookRepository.createBook(book)
+  }
+  
+  func editRecord(_ record: Record) async throws {
+    do {
+      // 1. 책이 있는지 부터 확인
+      let _ = try await bookRepository.fetchBook(isbn: record.isbn)
+    } catch RepositoryError.dataNotFound{
+      // 2. 책이 없으면 책 생성
+      let requestBook = try await requestBookDetail(isbn: record.isbn)
+      try await bookRepository.createBook(requestBook)
+    }
+    
+    do {
+      // 3. 독서 기록을 수정
+      try await recordRepository.updateRecord(record)
+    } catch RepositoryError.dataNotFound{
+      // 4. 독서 기록이 없으면 생성
+      try await recordRepository.createRecord(record)
+    }
   }
   
   func loadRecord(_ recordID: String) async throws -> (Record, Book) {
@@ -83,25 +107,6 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   func deleteRecord(_ record: Record) async throws {
     try await recordRepository.deleteRecord(record.id)
-  }
-  
-  func editRecord(_ record: Record) async throws {
-    do {
-      // 1. 책이 있는지 부터 확인
-      let _ = try await bookRepository.fetchBook(isbn: record.isbn)
-    } catch RepositoryError.dataNotFound{
-      // 2. 책이 없으면 책 생성
-      let requestBook = try await requestBookDetail(isbn: record.isbn)
-      try await bookRepository.createBook(requestBook)
-    }
-    
-    do {
-      // 3. 독서 기록을 수정
-      try await recordRepository.updateRecord(record)
-    } catch RepositoryError.dataNotFound{
-      // 4. 독서 기록이 없으면 생성
-      try await recordRepository.createRecord(record)
-    }
   }
   
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {

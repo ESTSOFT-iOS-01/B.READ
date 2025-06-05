@@ -24,17 +24,27 @@ final class MemoViewModel: ObservableObject {
   
   // MARK: - Internal Variable
   private var memo: Memo?
-  private var record: Record
+  private var record: RecordDetailVO
   
   // MARK: - Dependency
   @Dependency
   private var memoUseCase: MemoUseCase
   
-  init(id: String?, record: Record) {
+  init(id: String?, record: RecordDetailVO) {
     
     self.record = record
     
-    guard let id else { return }
+    guard let id else {
+      self.memo = Memo(
+        id: UUID().uuidString,
+        isbn: "",
+        createdAt: .now,
+        content: "",
+        pages: (0, 0),
+        guides: []
+      )
+      return
+    }
     fetchMemo(id: id)
     
   }
@@ -89,7 +99,7 @@ private extension MemoViewModel {
       memo?.guides = self.guides.map { Guide(date: .now, content: $0) }
       memo?.createdAt = .now
       do {
-        if let memo { try await memoUseCase.saveMemo(memo, in: self.record) }
+        if let memo { try await memoUseCase.saveMemo(memo, in: self.record.toEntity()) }
         await MainActor.run { self.isSaveComplete = true }
       } catch {
         print(error)

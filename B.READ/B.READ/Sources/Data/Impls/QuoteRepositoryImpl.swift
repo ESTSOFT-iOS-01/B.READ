@@ -27,9 +27,11 @@ actor QuoteRepositoryImpl: QuoteRepository {
     guard let dto = try findQuote(id: quote.id) else {
       throw RepositoryError.dataNotFound
     }
-    dto.isbn = quote.isbn
+    
     dto.content = quote.content
     dto.page = quote.page
+    
+    try modelContext.save()
   }
   
   func deleteQuote(id: String) throws {
@@ -38,6 +40,8 @@ actor QuoteRepositoryImpl: QuoteRepository {
       throw RepositoryError.dataNotFound
     }
     modelContext.delete(dto)
+    
+    try modelContext.save()
   }
   
   func fetchQuotes(isbn: String) throws -> [Quote] {

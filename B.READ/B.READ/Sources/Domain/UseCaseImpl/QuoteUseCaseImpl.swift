@@ -22,13 +22,6 @@ final class QuoteUseCaseImpl: QuoteUseCase {
   }
   
   func addQuote(_ quote: Quote, in record: Record) async throws {
-    // 빈 내용 검증
-    let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !content.isEmpty else {
-      throw QuoteUseCaseError.emptyContent
-    }
-    // 페이지 범위 검증
-    try await validatePage(quote.page, forISBN: quote.isbn)
     // 저장 수행
     try await quoteRepository.createQuote(quote, in: record)
     // UserDefaults에 저장
@@ -36,13 +29,6 @@ final class QuoteUseCaseImpl: QuoteUseCase {
   }
   
   func updateQuote(_ quote: Quote) async throws {
-    // 빈 내용 검증
-    let content = quote.content.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !content.isEmpty else {
-      throw QuoteUseCaseError.emptyContent
-    }
-    // 페이지 범위 검증
-    try await validatePage(quote.page, forISBN: quote.isbn)
     // 업데이트 수행
     try await quoteRepository.updateQuote(quote)
     // UserDefaults에 저장
@@ -86,15 +72,5 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     sharedDefaults?.set(quoteContents, forKey: "quotes")
     
     print("quotes 저장 완료: \(quoteContents)")
-  }
-}
-
-extension QuoteUseCaseImpl {
-  func validatePage(_ page: Int, forISBN isbn: String) async throws {
-    let book = try await bookRepository.fetchBook(isbn: isbn)
-    let maxPage = book.totalPages
-    guard (1...maxPage).contains(page) else {
-      throw QuoteUseCaseError.invalidPage(max: maxPage)
-    }
   }
 }
