@@ -57,8 +57,7 @@ private extension HomeViewModel {
       BestSellerListVO(categoryName: "경제경영", bestSellers: bestSellerDummyData)
     ]
     
-    Task { [weak self] in
-      guard let self else { return }
+    Task {
       let records = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
       await MainActor.run {
         self.recentRecords = records.map { RecordCellVO(record: $0, book: $1) }
