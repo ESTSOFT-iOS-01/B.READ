@@ -61,7 +61,7 @@ extension MemoVO {
       createdAt: self.createdAt,
       content: self.content,
       pages: self.pages,
-      guides: self.guides.map { Guide(date: Date(), content: $0) }
+      guides: self.guides.map { Guide(date: .now, content: $0) }
     )
   }
 }
