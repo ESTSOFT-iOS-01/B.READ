@@ -12,9 +12,11 @@ final class HomeViewModel: ObservableObject {
   // MARK: - State
   @Published var recentRecords: [RecordCellVO] = []
   @Published var bestSellerList: [BestSellerListVO] = [
-    BestSellerListVO(category: CategoryType.literature, bestSellers: [], state: .loading),
-    BestSellerListVO(category: CategoryType.literature, bestSellers: [], state: .loading)
+//    BestSellerListVO(category: CategoryType.literature, bestSellers: [], state: .loading),
+//    BestSellerListVO(category: CategoryType.literature, bestSellers: [], state: .loading)
   ]
+  
+  var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase
@@ -29,6 +31,7 @@ final class HomeViewModel: ObservableObject {
   enum Action {
     case onAppear
     case fetchBestSeller
+    case cancelTask
   }
   
   func send(_ action: Action) {
@@ -38,6 +41,8 @@ final class HomeViewModel: ObservableObject {
       fetchCategories()
     case .fetchBestSeller:
       fetchCategories()
+    case .cancelTask:
+      currentTask?.cancel()
     }
   }
   
@@ -58,7 +63,9 @@ private extension HomeViewModel {
   }
   
   func fetchCategories() {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
       do {
         let data = try await profileUseCase.fetchUserInfo()
         
@@ -66,13 +73,13 @@ private extension HomeViewModel {
           guard let categoryType = CategoryType(rawValue: category.id) else { return nil }
           return BestSellerListVO(category: categoryType, bestSellers: [], state: .loading)
         }
-
+        
         await MainActor.run {
           self.bestSellerList = lists
         }
-
+        
         await self.fetchBestSellers(for: lists.map(\.category))
-
+        
       } catch {
         print("추천 카테고리 불러오기 실패: \(error)")
       }
