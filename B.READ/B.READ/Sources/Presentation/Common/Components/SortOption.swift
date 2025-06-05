@@ -21,8 +21,6 @@ enum SortOption: String, CaseIterable, Identifiable {
   case oldest = "오래된 순"
   case pageAscending = "오름차 순"
   case pageDescending = "내림차 순"
-  case titleAscending = "가나다 순"
-  case titleDescending = "다나가 순"
   
   // ForEach를 위한 id 추가
   var id: String { self.rawValue }
@@ -30,7 +28,7 @@ enum SortOption: String, CaseIterable, Identifiable {
   // 화면에 따른 Option 반환
   static func sortMenus(type: SortTabType) -> [SortOption] {
     switch type {
-    case .library: [.recent, .oldest, .titleAscending, .titleDescending]
+    case .library: [.recent, .oldest]
     case .quote, .memo: [.pageAscending, .pageDescending]
     }
   }
@@ -43,13 +41,16 @@ extension SortOption {
     switch self {
     case .recent: lhs.createdAt > rhs.createdAt
     case .oldest: lhs.createdAt < rhs.createdAt
-    case .titleAscending: lhs.title < rhs.title
-    case .titleDescending: lhs.title > rhs.title
     default: true
     }
   }
   
-  // MemoVO를 쓸때의 정렬
+  // MemoGroup을 쓸때 정렬
+  func sort(_ lhs: MemoGroup, _ rhs: MemoGroup) -> Bool {
+    return lhs.bookTitle < rhs.bookTitle
+  }
+  
+  // MemoVO를 쓸때 정렬
   func sort(_ lhs: MemoVO, _ rhs: MemoVO) -> Bool {
     switch self {
     case .pageAscending:
@@ -66,7 +67,12 @@ extension SortOption {
     }
   }
   
-  // QuoteVO를 쓸때의 정렬
+  // QuoteGroup을 쓸때 정렬
+  func sort(_ lhs: QuoteGroup, _ rhs: QuoteGroup) -> Bool {
+    return lhs.bookTitle < rhs.bookTitle
+  }
+  
+  // QuoteVO를 쓸때 정렬
   func sort(_ lhs: QuoteVO, _ rhs: QuoteVO) -> Bool {
     switch self {
     case .pageAscending: lhs.page < rhs.page
@@ -74,4 +80,5 @@ extension SortOption {
     default: true
     }
   }
+  
 }
