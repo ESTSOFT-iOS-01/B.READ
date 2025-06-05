@@ -26,6 +26,7 @@ struct LibraryListView: View {
       }
     } // : ScrollView
     .scrollIndicators(.hidden)
+    .padding(.top, 8)
   }
 }
 

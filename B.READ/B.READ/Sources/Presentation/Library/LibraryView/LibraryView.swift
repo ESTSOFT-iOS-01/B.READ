@@ -64,7 +64,7 @@ struct LibraryView: View {
         } else if displayMode == .list {
           LibraryListView(records: $viewModel.displayRecords)
         } else {
-          LibraryGridView()
+          LibraryGridView(records: $viewModel.displayRecords)
         }
       } // : VStack - 책빵 화면
       .padding(.top, layoutPadding)

@@ -15,18 +15,8 @@ struct LibraryListCell: View {
   
   var body: some View {
     HStack(alignment: .top, spacing: 0) {
-      Group {
-        if let coverImage = record.coverImage {
-          coverImage
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-        } else {
-          // TODO: - [시르] 사진이 없을때, 들어갈 이미지 or 도형 추가
-          Image(.exampleBook)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-        }
-      } // : Group
+
+      coverImage()
       .frame(width: 57, height: 88)
       .cornerRadius(6)
       
@@ -74,6 +64,20 @@ struct LibraryListCell: View {
       } else {
         Text("\(start) ~")
       }
+    }
+  }
+  
+  // MARK: - (F)coverImage
+  @ViewBuilder
+  private func coverImage() -> some View {
+    if let coverImage = record.coverImage {
+      coverImage
+        .resizable()
+        .aspectRatio(contentMode: .fill)
+    } else {
+      Image(.exampleBook)
+        .resizable()
+        .aspectRatio(contentMode: .fill)
     }
   }
 }
