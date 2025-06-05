@@ -27,9 +27,12 @@ struct LibraryListView: View {
       }
     } // : ScrollView
     .scrollIndicators(.hidden)
+    .padding(.top, 8)
   }
 }
 
 #Preview {
-  LibraryView(viewModel: LibraryViewModel())
+  PreviewableContainer {
+    LibraryView(viewModel: LibraryViewModel())
+  }
 }

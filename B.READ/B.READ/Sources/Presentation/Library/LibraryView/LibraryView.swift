@@ -99,5 +99,7 @@ struct LibraryView: View {
 }
 
 #Preview {
-  LibraryView(viewModel: LibraryViewModel())
+  PreviewableContainer {
+    LibraryView(viewModel: LibraryViewModel())
+  }
 }
