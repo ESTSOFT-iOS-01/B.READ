@@ -4,7 +4,7 @@
 //
 //  Created by 심근웅 on 5/18/25.
 //
-
+import UIKit
 import SwiftUI
 
 // MARK: - (S)RecordDetailView
@@ -17,10 +17,6 @@ struct RecordDetailView: View {
   @State private var showDeleteAlert: Bool = false
   
   private let layoutPadding: CGFloat = 16
-  
-  private var isBackgroundDisabled: Bool {
-    showSortMenu || showAddMenu
-  }
   
   // MARK: - Init
   init(viewModel: @autoclosure @escaping () -> RecordDetailViewModel) {
@@ -79,30 +75,24 @@ struct RecordDetailView: View {
     .overlay {
       ZStack {
         
-        if isBackgroundDisabled {
+        if showAddMenu {
           Color.black.opacity(0.2)
-              .ignoresSafeArea()
-              .zIndex(showSortMenu ? 2 : 0)
+            .ignoresSafeArea(edges: .bottom)
         }
         
         AddActionView(coordinator: coordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
-          .zIndex(1)
         
-        // TODO: 정렬 메뉴가 들어갈 자리
-        if showSortMenu {
-          Button {
-            showSortMenu.toggle()
-          } label: {
-            Text("근웅님이 알아서 넣으세요 ㅋ")
-              .background(.backgroundDefault)
-          }.zIndex(3)
-        }
-
       }
-      .animation(.easeInOut(duration: 0.25), value: isBackgroundDisabled)
+      .animation(.easeInOut(duration: 0.3), value: showAddMenu)
       .onTapGesture {
-        showSortMenu = false
         showAddMenu = false
+      }
+    }
+    .onChange(of: showAddMenu) {
+      if $1 {
+        UINavigationBar.showOverlay()
+      } else {
+        UINavigationBar.removeOverlay()
       }
     }
   }
@@ -164,7 +154,7 @@ private struct AddActionView: View {
           } label: {
             Text("문장 수집")
           }
-
+          
         }
         .foregroundStyle(.black)
         .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.2)
