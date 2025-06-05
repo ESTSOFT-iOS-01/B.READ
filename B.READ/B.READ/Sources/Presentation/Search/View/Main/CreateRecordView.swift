@@ -16,6 +16,10 @@ struct CreateRecordView: View {
   @StateObject var viewModel: NewRecordViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
+  init(state: Binding<ReadingState>, viewModel: NewRecordViewModel) {
+    self.init(state: state, viewModel: viewModel, onComplete: { _ in })
+  }
+
   init(
     state: Binding<ReadingState>,
     viewModel: NewRecordViewModel,
@@ -48,7 +52,11 @@ struct CreateRecordView: View {
             .padding(.top, layoutPadding)
           
           BottomButton(buttonTitle: "저장하기") {
-            viewModel.send(.onSubmit(selectedState))
+            if viewModel.recordVO != nil {
+              viewModel.send(.updateRecord(selectedState))
+            } else {
+              viewModel.send(.createRecord(selectedState))
+            }
           }
           .padding(.top, layoutPadding)
           .padding(.horizontal, 2)
@@ -96,7 +104,7 @@ struct CreateRecordView: View {
         SelectPageView(
           page: $viewModel.page,
           isFocused: $viewModel.isFocused,
-          maxPage: viewModel.book.totalPages) {
+          maxPage: viewModel.totalPage) {
             viewModel.send(.pageSubmit)
           }
           .topLeadingPadding()
