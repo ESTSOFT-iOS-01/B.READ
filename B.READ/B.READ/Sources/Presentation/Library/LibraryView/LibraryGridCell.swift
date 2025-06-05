@@ -16,19 +16,9 @@ struct LibraryGridCell: View {
   var body: some View {
     VStack(spacing: layoutPadding) {
       ZStack(alignment: .topTrailing) {
-        Group {
-          if let coverImage = record.coverImage {
-            coverImage
-              .resizable()
-              .aspectRatio(contentMode: .fill)
-          } else {
-            Image(.exampleBook)
-              .resizable()
-              .aspectRatio(contentMode: .fill)
-          }
-        }
-        .frame(width: 88, height: 142, alignment: .top)
-        .cornerRadius(6)
+        coverImage()
+          .frame(width: 88, height: 142, alignment: .top)
+          .cornerRadius(6)
         
         if record.isFavorite {
           Image(systemName: SFSymbol.bookMarkFill.name)
@@ -40,7 +30,7 @@ struct LibraryGridCell: View {
       } // : ZStack
       
       RecordInfoView()
-//      RecordStatsView(record: record)
+      //      RecordStatsView(record: record)
     } // : VStack
   }
   
@@ -59,6 +49,20 @@ struct LibraryGridCell: View {
       case .finished: // 평점
         PropertyView(SFSymbol.star.name, record.star.toString)
       }
+    }
+  }
+  
+  // MARK: - (F)coverImage
+  @ViewBuilder
+  private func coverImage() -> some View {
+    if let coverImage = record.coverImage {
+      coverImage
+        .resizable()
+        .aspectRatio(contentMode: .fill)
+    } else {
+      Image(.exampleBook)
+        .resizable()
+        .aspectRatio(contentMode: .fill)
     }
   }
 }
