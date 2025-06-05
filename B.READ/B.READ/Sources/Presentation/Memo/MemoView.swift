@@ -222,6 +222,7 @@ private struct GuideSectionView: View {
 
 #Preview {
   PreviewableContainer {
-    MemoView(viewModel: MemoViewModel(id: "exampleId", record: DummyData.dummyRecords.first!), totalPage: 300)
+    let record = RecordDetailVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1])
+    MemoView(viewModel: MemoViewModel(id: "exampleId", record: record), totalPage: record.totalPage)
   }
 }

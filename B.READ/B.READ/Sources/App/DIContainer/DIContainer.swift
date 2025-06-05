@@ -66,6 +66,7 @@ extension DIContainer {
       ),
       for: LibraryUseCase.self
     )
+
     // Memo UseCase
     self.shared.register(
       MemoUseCaseImpl(

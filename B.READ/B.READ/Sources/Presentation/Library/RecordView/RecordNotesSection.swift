@@ -9,11 +9,8 @@ import SwiftUI
 
 // MARK: - (S)RecordNotesSection
 struct RecordNotesSection: View {
-  
-  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  
-  enum CellType {
-    case memo
+  enum CellType: Int {
+    case memo = 0
     case quote
     
     var name: String {
@@ -24,18 +21,20 @@ struct RecordNotesSection: View {
     }
   }
   
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @ObservedObject var viewModel: RecordDetailViewModel
   @State var showMenuActionSheet: Bool = false
-  private var cellType: CellType {
-    if viewModel.state.selectedTab == 0 { return .memo }
-    else { return .quote }
-  }
 
+  private var cellType: CellType {
+    return CellType(rawValue: viewModel.selectedTab) ?? .memo
+  }
+  
   
   var body: some View {
-    LazyVStack {
+    LazyVStack(alignment: .trailing, spacing: 8) {
+      // 리스트 뷰
       if cellType == .memo {
-        ForEach(viewModel.state.memos) { memo in
+        ForEach($viewModel.memos) { $memo in
           MemoCell(
             content: memo.content,
             date: memo.createdAt,
@@ -43,19 +42,25 @@ struct RecordNotesSection: View {
             endPage: memo.pages.1
           ) {
             showMenuActionSheet = true
+            viewModel.selectedMemo = memo
           }
         } // : ForEach
       } else {
-        ForEach(viewModel.state.quotes) { quote in
-          QuoteCell(content: quote.content, page: quote.page, colorTone: .soft) {
+        ForEach($viewModel.quotes) { $quote in
+          QuoteCell(
+            content: quote.content,
+            page: quote.page,
+            colorTone: .soft
+          ) {
             showMenuActionSheet = true
-            viewModel.state.selectedQuote = quote
+            viewModel.selectedQuote = quote
           }
         } // : ForEach
       }
     } // : LazyVStcks
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 8)
+    .padding(.bottom, 72)
     .confirmationDialog(
       "메뉴를 선택하세요",
       isPresented: $showMenuActionSheet,
@@ -70,34 +75,32 @@ struct RecordNotesSection: View {
     Button("\(type.name) 수정") {
       switch type {
       case .memo:
-        print("\(type.name) 수정 선택")
+        guard let record = viewModel.record, let memo = viewModel.selectedMemo else { return }
+        coordinator.push(.memo(id: memo.id, record: record))
       case .quote:
-        print("\(type.name) 수정 선택")
-        // TODO: 문장넘겨주기
-        if let quote = viewModel.state.selectedQuote, let isbn = viewModel.state.info?.record.isbn {
-          coordinator.push(.sentenceInput(mode: .edit(isbn: isbn, quote: quote)))
-        } else {
-          print("선택된 문장이 없습니다.")
-        }
+        guard let record = viewModel.record, let quote = viewModel.selectedQuote else { return }
+        coordinator.push(.sentenceInput(mode: .edit(record: record, quote: quote)))
       }
     }
     
+    // TODO: - [시르] 삭제 alert띄우기
     Button("\(type.name) 삭제", role: .destructive) {
       switch type {
       case .memo:
-        print("\(type.name) 삭제 선택")
+        guard let memo = viewModel.selectedMemo else { return }
+        viewModel.send(.deleteMemo(id: memo.id))
       case .quote:
-        print("\(type.name) 삭제 선택")
+        guard let quote = viewModel.selectedQuote else { return }
+        viewModel.send(.deleteQuote(id: quote.id))
       }
     }
     
     Button("취소", role: .cancel) { }
   }
 }
-//
-//#Preview {
-//  RecordDetailView(viewModel: .init(
-//    recordID: DummyData.dummyRecords[2].id,
-//    isbn: DummyData.dummyRecords[2].isbn
-//  ))
-//}
+
+#Preview {
+  PreviewableContainer {
+    RecordNotesSection(viewModel: .init(recordID: DummyData.dummyRecords[2].id))
+  }
+}
