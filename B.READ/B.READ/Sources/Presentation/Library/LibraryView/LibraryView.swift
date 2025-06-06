@@ -45,7 +45,7 @@ struct LibraryView: View {
             isOpened: $showSortMenu,
             selectedOption: $viewModel.selectedSort[viewModel.selectedTab],
             type: .library
-          ).onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
+          ).onChange(of: viewModel.selectedSort) {
             viewModel.send(.selectSort)
           }
           
