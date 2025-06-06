@@ -51,6 +51,22 @@ struct LibraryUseCaseTest {
     #expect(fetchedInfo.0.createdAt == record.createdAt)
   }
   
+  @Test("Save/Load Record Tests", arguments: [
+    (DummyData.dummyBooks[0], DummyData.dummyRecords[0]),
+    (DummyData.dummyBooks[1], DummyData.dummyRecords[1]),
+    (DummyData.dummyBooks[2], DummyData.dummyRecords[2])
+  ])
+  func loadRecordTest(book: Book, record: Record) async throws {
+    // 2. 레코드, 책 생성
+    try await libraryUseCase.saveRecord(record: record, book: book)
+    
+    // 3. 레코드 책 패치
+    let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
+    
+    #expect(fetchedInfo.0.id == record.id)
+    #expect(fetchedInfo.0.createdAt == record.createdAt)
+  }
+  
   @Test("Load Record List Test")
   func loadRecordListTest() async throws {
     // 1. 레코드들 생성
