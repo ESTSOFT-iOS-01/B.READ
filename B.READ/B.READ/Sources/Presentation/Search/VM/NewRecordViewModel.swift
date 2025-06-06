@@ -26,6 +26,7 @@ final class NewRecordViewModel: ObservableObject {
   
   var totalPage: Int
   @Published var isSuccess: Bool = false
+  @Published var inValidPageNumber: Bool = false
   
   var pageNum : Int = 0
   
@@ -68,6 +69,7 @@ final class NewRecordViewModel: ObservableObject {
     case createRecord(ReadingState)
     case pageSubmit
     case releaseEditorFocus
+    case focusOnTextField
     case releaseAllFocus
   }
   
@@ -87,14 +89,23 @@ final class NewRecordViewModel: ObservableObject {
       isFocused = false
       if let value = Int(page), value >= 0, value <= totalPage {
         pageNum = value
+        inValidPageNumber = false
       } else {
         pageNum = 0
+        page = "0"
+        inValidPageNumber = true
       }
       
     case .releaseEditorFocus:
       DispatchQueue.main.async { [weak self] in
         self?.isTextEditorFocused = false
       }
+      
+    case .focusOnTextField:
+      DispatchQueue.main.async { [weak self] in
+        self?.isFocused = true
+      }
+      
     case .releaseAllFocus:
       DispatchQueue.main.async { [weak self] in
         self?.isFocused = false

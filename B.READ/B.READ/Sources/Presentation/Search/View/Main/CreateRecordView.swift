@@ -53,10 +53,12 @@ struct CreateRecordView: View {
           
           BottomButton(buttonTitle: "저장하기") {
             viewModel.send(.pageSubmit)
-            if viewModel.recordVO != nil {
-              viewModel.send(.updateRecord(selectedState))
-            } else {
-              viewModel.send(.createRecord(selectedState))
+            if !viewModel.inValidPageNumber {
+              if viewModel.recordVO != nil {
+                viewModel.send(.updateRecord(selectedState))
+              } else {
+                viewModel.send(.createRecord(selectedState))
+              }
             }
           }
           .padding(.top, layoutPadding)
@@ -81,6 +83,13 @@ struct CreateRecordView: View {
           coordinator.dismissSheet()
         }
       }
+    }
+    .alert("저장 실패", isPresented: $viewModel.inValidPageNumber) {
+      Button("확인", role: .cancel) {
+        viewModel.send(.focusOnTextField)
+      }
+    } message: {
+      Text("올바른 페이지 번호가 아닙니다.\n1 ~ \(viewModel.totalPage) 사이의 숫자를 입력해주세요")
     }
 
   }
