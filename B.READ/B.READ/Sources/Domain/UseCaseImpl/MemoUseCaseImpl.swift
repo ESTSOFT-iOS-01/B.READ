@@ -31,6 +31,10 @@ final class MemoUseCaseImpl: MemoUseCase {
     return try await memoRepository.fetchMemo(id: id)
   }
   
+  func fetchAllMemo() async throws -> [Memo] {
+    return try await memoRepository.fetchAllMemos()
+  }
+  
   func deleteMemo(id: String) async throws {
     return try await memoRepository.deleteMemo(id: id)
   }
@@ -75,4 +79,7 @@ final class MemoUseCaseImpl: MemoUseCase {
     throw MemoUseCaseError.parsingError
   }
   
+  func loadBookTitle(_ isbn: String) async throws -> String {
+    return try await bookRepository.fetchBook(isbn: isbn).name
+  }
 }
