@@ -9,7 +9,11 @@ import SwiftUI
 
 // MARK: - (S)RecordView
 struct RecordView: View {
-  @State var selectedTab: Int = 0
+
+  @State private var selectedTab: Int = 0
+  @StateObject private var memoViewModel = RecordMemoViewModel()
+  @StateObject private var quoteViewModel = RecordQuoteViewModel()
+//  @StateObject var noteViewModel =
   
   var body: some View {
     VStack(spacing: .zero) {
@@ -22,9 +26,9 @@ struct RecordView: View {
       
       Group {
         if selectedTab == 0 {
-          RecordMemoView()
+          RecordMemoView(viewModel: memoViewModel)
         } else if selectedTab == 1 {
-          RecordQuoteView()
+          RecordQuoteView(viewModel: quoteViewModel)
         } else if selectedTab == 2 {
           RecordNoteView()
         }
@@ -38,5 +42,7 @@ struct RecordView: View {
 }
 
 #Preview {
-  RecordView()
+  PreviewableContainer {
+    RecordView()
+  }
 }
