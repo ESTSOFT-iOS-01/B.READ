@@ -70,6 +70,7 @@ struct RecordNotesSection: View {
     }
   }
   
+  // MARK: - (F)menuActionSheet
   @ViewBuilder
   private func menuActionSheet(type: CellType) -> some View {
     Button("\(type.name) 수정") {
