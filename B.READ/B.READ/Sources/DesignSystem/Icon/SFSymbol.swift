@@ -26,6 +26,7 @@ enum SFSymbol {
   case grid
   case ellipsis
   case trash
+  case chevronCompactUp
   case chevronCompactDown
   case chevronLeft
   case chevronRight
@@ -68,6 +69,8 @@ enum SFSymbol {
       "ellipsis"
     case .trash:
       "trash"
+    case .chevronCompactUp:
+      "chevron.compact.up"
     case .chevronCompactDown:
       "chevron.compact.down"
     case .chevronLeft:
