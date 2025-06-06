@@ -52,6 +52,20 @@ struct MemoVO: Identifiable {
   }
 }
 
+extension MemoVO: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+  
+  static func == (lhs: MemoVO, rhs: MemoVO) -> Bool {
+    return lhs.id == rhs.id &&
+    lhs.createdAt == rhs.createdAt &&
+    lhs.content == rhs.content &&
+    lhs.pages == rhs.pages &&
+    lhs.guides == rhs.guides
+  }
+}
+
 extension MemoVO {
   // TODO: - Guide에는 date도 있음
   func toEntity() -> Memo {
