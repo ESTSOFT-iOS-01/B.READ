@@ -48,9 +48,9 @@ struct RecordNotesSection: View {
       } else {
         ForEach($viewModel.quotes) { $quote in
           QuoteCell(
-            content: quote.content,
+            content: quote.content, 
             page: quote.page,
-            colorTone: .soft
+            colorTone: ColorTone.tone(isbn: quote.isbn)
           ) {
             showMenuActionSheet = true
             viewModel.selectedQuote = quote

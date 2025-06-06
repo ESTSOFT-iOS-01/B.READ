@@ -22,6 +22,12 @@ enum ColorTone {
         .green6
     }
   }
+  
+  static func tone(isbn: String) -> ColorTone {
+    let hash = abs(isbn.hash)
+    let tones: [ColorTone] = [.soft, .regular, .strong]
+    return tones[hash % tones.count]
+  }
 }
 
 struct QuoteCell: View {
@@ -41,18 +47,15 @@ struct QuoteCell: View {
   var body: some View {
     VStack(spacing: 8) {
       Text(content)
-        // TODO: Gray Scale로 바꾸기
         .foregroundStyle(colorTone == .strong ? .backgroundDefault : .black)
-        .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.3)
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.3)
         .frame(maxWidth: .infinity, alignment: .leading)
       
       HStack(spacing: 4) {
         Text("\(page)쪽")
-          
+          .foregroundStyle(colorTone == .strong ? .green1 : .gray7)
         if action != nil { menuButton() }
       }
-      // TODO: Gray Scale로 바꾸기
-      .foregroundStyle(colorTone == .strong ? .green1 : .black)
       .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1, letterSpacing: 0.02)
       .frame(maxWidth: .infinity, alignment: .trailing)
     }
@@ -76,6 +79,7 @@ struct QuoteCell: View {
         .frame(width: 16, height: 16)
         .rotationEffect(.degrees(90))
     }
+    .foregroundStyle(colorTone == .strong ? .green1 : .gray7)
   }
 }
 
