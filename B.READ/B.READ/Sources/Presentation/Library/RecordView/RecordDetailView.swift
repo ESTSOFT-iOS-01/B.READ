@@ -39,11 +39,15 @@ struct RecordDetailView: View {
         .frame(height: 34)
         .padding(.top, 8)
         
-        SortMenuButton(
+        SortMenu(
           isOpened: $showSortMenu,
-          selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+          selectedOption: $viewModel.selectedSort[viewModel.selectedTab],
+          type: viewModel.selectedTab == 0 ? .memo : .quote
         )
         .padding(.trailing, 8)
+        .onChange(of: viewModel.selectedSort) { 
+          viewModel.send(.selectSort)
+        }
         
         RecordNotesSection(viewModel: viewModel)
           .frame(maxWidth: .infinity, maxHeight: .infinity)
