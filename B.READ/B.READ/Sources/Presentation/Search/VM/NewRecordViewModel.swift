@@ -219,7 +219,7 @@ private extension NewRecordViewModel {
   
   func saveNewRecord(_ record: Record) {
     guard let book = self.book else { return }
-    
+
     Task {
       do {
         try await libraryUseCase.saveRecord(record: record, book: book)

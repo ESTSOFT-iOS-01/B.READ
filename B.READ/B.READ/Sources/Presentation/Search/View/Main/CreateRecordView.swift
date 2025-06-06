@@ -52,6 +52,7 @@ struct CreateRecordView: View {
             .padding(.top, layoutPadding)
           
           BottomButton(buttonTitle: "저장하기") {
+            viewModel.send(.pageSubmit)
             if viewModel.recordVO != nil {
               viewModel.send(.updateRecord(selectedState))
             } else {
