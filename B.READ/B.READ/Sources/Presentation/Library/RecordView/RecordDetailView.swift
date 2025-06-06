@@ -78,6 +78,7 @@ struct RecordDetailView: View {
       if newValue {
         viewModel.send(.onAppear)
         if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
+        needRefresh = false
       }
     })
     .overlay {

@@ -89,8 +89,23 @@ extension RecordDetailVO: Hashable {
   }
   
   static func == (lhs: RecordDetailVO, rhs: RecordDetailVO) -> Bool {
-    return lhs.id == rhs.id
+    // 이미지 제외하고 프로퍼티 비교
+    return lhs.id == rhs.id &&
+      lhs.isbn == rhs.isbn &&
+      lhs.title == rhs.title &&
+      lhs.author == rhs.author &&
+      lhs.totalPage == rhs.totalPage &&
+      lhs.readingState == rhs.readingState &&
+      lhs.heart == rhs.heart &&
+      lhs.star == rhs.star &&
+      lhs.currentPage == rhs.currentPage &&
+      lhs.review == rhs.review &&
+      lhs.period.startDate == rhs.period.startDate &&
+      lhs.period.endDate == rhs.period.endDate &&
+      lhs.isFavorite == rhs.isFavorite &&
+      lhs.createdAt == rhs.createdAt
   }
+
 }
 
 extension RecordDetailVO {
