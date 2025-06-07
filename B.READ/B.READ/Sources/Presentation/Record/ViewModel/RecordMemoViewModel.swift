@@ -89,8 +89,9 @@ private extension RecordMemoViewModel {
         return results
       } // : withTaskGroup
       
-      // 4. 만들어진 MemoGroup을 반영
+      
       await MainActor.run {
+        // 4. 만들어진 MemoGroup을 반영
         self.memoGroups = memoGroups
         // 5. MemoGroup 정렬을 진행
         sortDisplayMemoGroups()

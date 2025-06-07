@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)RecordMemoView
 struct RecordMemoView: View {
-  @ObservedObject var viewModel = RecordMemoViewModel()
+  @ObservedObject var viewModel: RecordMemoViewModel
   @State private var showSortMenu: Bool = false
   
   var body: some View {
@@ -46,8 +46,9 @@ struct RecordMemoView: View {
 }
 
 #Preview {
+  @Previewable @StateObject var viewModel = RecordMemoViewModel()
   PreviewableContainer {
-    RecordMemoView()
+    RecordMemoView(viewModel: viewModel)
       .padding(.horizontal, 24)
   }
 }
