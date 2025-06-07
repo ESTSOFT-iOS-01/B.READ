@@ -119,8 +119,8 @@ private extension RecordMemoViewModel {
       // 1. 데이터 삭제
       try await memoUseCase.deleteMemo(id: id)
       
-      // 2. 내부 데이터에 삭제를 반영
-      // 메모가 담긴 그룹을 찾아서 메모를 삭제 후 반영해야함
+      // 2. 데이터 일관성을 위해서 새로 데이터를 받아옴
+      loadMemoGroups()
     }
   }
 }
