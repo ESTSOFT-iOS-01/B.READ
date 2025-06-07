@@ -54,7 +54,7 @@ struct SearchTabContentView: View {
           switch viewModel.bookLoadState {
           case .loading:
             if viewModel.bookResults.isEmpty {
-              LoadingView()
+              BouncingImageLoadingView()
             } else {
               SearchListView(
                 items: viewModel.bookResults,
@@ -91,7 +91,7 @@ struct SearchTabContentView: View {
         Group {
           switch viewModel.recordLoadState {
           case .loading:
-            LoadingView()
+            BouncingImageLoadingView()
           case .loaded:
             if viewModel.recordResults.isEmpty {
               FailedView(desp: "일치하는 검색 결과가 없습니다.")
