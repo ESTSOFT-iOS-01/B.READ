@@ -12,6 +12,7 @@ final class DummyService {
   
   @Dependency private var libUseCase: LibraryUseCase
   @Dependency private var quoteUseCase: QuoteUseCase
+  @Dependency private var memoUseCase: MemoUseCase
   
   public func setDummy() async {
     // 1. 독서 기록, 도서 더미정보 저장
@@ -36,7 +37,14 @@ final class DummyService {
     }
     
     // 3. 메모 더미 정보 저장
-    
+    for memo in DummyData.dummyMemos {
+      for record in DummyData.dummyRecords {
+        if record.isbn == memo.isbn {
+          try? await memoUseCase.saveMemo(memo, in: record)
+          break
+        }
+      }
+    }
     
   }
 }
