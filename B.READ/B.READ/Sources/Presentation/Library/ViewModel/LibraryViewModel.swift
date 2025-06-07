@@ -96,9 +96,6 @@ private extension LibraryViewModel {
       let infos: [(record: Record, book: Book)] = try await libraryUseCase.loadRecordList()
       // 2. Entity -> VO
       self.records = infos.map { RecordCellVO(record: $0.record, book: $0.book) }
-      for record in records {
-        print(record.title, "즐겨찾기: \(record.isFavorite)")
-      }
     } catch {
       // TODO: - [시르] 에러 메시지를 띄우는 코드 추가
       // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환하고, 에러 메시지를 띄움
