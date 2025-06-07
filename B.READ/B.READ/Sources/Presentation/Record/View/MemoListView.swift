@@ -84,5 +84,8 @@ struct MemoListView: View {
   @Previewable @StateObject var viewModel = RecordMemoViewModel()
   PreviewableContainer {
     MemoListView(viewModel: viewModel)
+      .onAppear {
+        viewModel.send(.onAppear)
+      }
   }
 }

@@ -16,8 +16,8 @@ struct NoteListview: View {
       LazyVStack(alignment: .leading, spacing: 0) {
         ForEach($viewModel.displayNotes) { $note in
           NoteListCell(note: $note)
-//            .background(.red.opacity(0.3))
             .onTapGesture {
+              // TODO: - [시르] 상세 페이지가 아닌 요약노트 확인 페이지로 이동해야함
               coordinator.push(.libraryDetail(id: note.recordId))
             }
           Divider()
@@ -27,12 +27,6 @@ struct NoteListview: View {
         
       } // : LazyVStack
     }// : ScrollView
-  }
-  
-  
-  @ViewBuilder
-  private func noteListCell() -> some View {
-    
   }
 }
 

@@ -103,59 +103,6 @@ private extension RecordMemoViewModel {
         print("메모 로드 중 문제 발생")
       }
     }
-    
-    
-    
-    
-    
-    
-//    Task {
-//      // 1. 전체 문장을 가져옴
-//      guard let allMemos = try? await memoUseCase.fetchAllMemo() else {
-//        print("RepositoryError.fetchError.errorDescription")
-//        return
-//      }
-//      
-//      // 2. 메모를 ISBN을 기준으로 나눔
-//      let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
-//      
-//      let memoGroups: [MemoGroup] = await withTaskGroup(of: MemoGroup?.self) {
-//        [weak self] group in
-//        guard let self = self else { return [] }
-//        
-//        // 3. 구분된 책의 문장을 QuoteGroup으로 생성
-//        for (isbn, memos) in memoDict {
-//          group.addTask {
-//            do {
-//              let bookTitle = try await self.memoUseCase.loadBookTitle(isbn)
-//              let memoVOs = memos.map { MemoVO($0) }
-//              return MemoGroup(isbn: isbn, bookTitle: bookTitle, memos: memoVOs)
-//            } catch {
-//              print("ERROR: MemoGroup Create Fail")
-//              return nil
-//            }
-//          }
-//        }
-//        
-//        var results: [MemoGroup] = []
-//        
-//        for await result in group {
-//          if let item = result {
-//            results.append(item)
-//          }
-//        }
-//        
-//        return results
-//      } // : withTaskGroup
-//      
-//      
-//      await MainActor.run {
-//        // 4. 만들어진 MemoGroup을 반영
-//        self.memoGroups = memoGroups
-//        // 5. MemoGroup 정렬을 진행
-//        sortDisplayMemoGroups()
-//      }
-//    }
   }
   
   /// 보여주고자 하는 Memo의 순서를 정렬합니다.
