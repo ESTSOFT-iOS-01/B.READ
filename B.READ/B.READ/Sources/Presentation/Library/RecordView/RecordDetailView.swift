@@ -99,6 +99,7 @@ struct RecordDetailView: View {
       .onTapGesture {
         showAddMenu = false
         if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
+        else { UINavigationBar.removeOverlay(duration: 0.0) }
       }
     }
     .sheet(item: $coordinator.sheet, content: { route in
