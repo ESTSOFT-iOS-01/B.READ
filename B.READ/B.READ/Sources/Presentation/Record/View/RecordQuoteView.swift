@@ -9,35 +9,46 @@ import SwiftUI
 
 // MARK: - (S)RecordQuoteView
 struct RecordQuoteView: View {
-  @ObservedObject var viewModel = RecordQuoteViewModel()
+  @ObservedObject var viewModel: RecordQuoteViewModel
+  @State private var showSortMenu: Bool = false
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
-      Text("Hear Quote")
-//      HStack {
-//        SearchBar(text: $viewModel.state.searchText, onSubmit: {
-//          if !viewModel.state.searchText.isEmpty {
-//            viewModel.send(.onSubmit)
-//          }
-//        }, style: .compact)
-//        
-//        sortButton()
-//          .padding(.trailing, 4)
-//      } // : HStack
-//      
-//      QuoteListView(quoteGroups: viewModel.state.displayQuoteGroups)
-//      .padding(.top, 8)
-//      .scrollIndicators(.never)
+      HStack {
+        SearchBar(
+          text: $viewModel.searchText,
+          onSubmit: {
+            if !viewModel.searchText.isEmpty {
+              viewModel.send(.onSubmit)
+            }
+          },
+          style: .compact)
+        
+        SortMenu(
+          isOpened: $showSortMenu,
+          selectedOption: $viewModel.selectedSort,
+          type: .quote
+        )
+        .padding(.trailing, 4)
+        .onChange(of: viewModel.selectedSort) {
+          viewModel.send(.selectSort)
+        }
+      } // : HStack
+
+      QuoteListView(viewModel: viewModel)
+      .padding(.top, 8)
+      .scrollIndicators(.never)
     } // : VStack
     .onAppear {
-//      viewModel.send(.onAppear)
+      viewModel.send(.onAppear)
     }
   }
 }
 
 #Preview {
+  @Previewable @StateObject var viewModel = RecordQuoteViewModel()
   PreviewableContainer {
-    RecordQuoteView()
+    RecordQuoteView(viewModel: viewModel)
       .padding(.horizontal, 24)
   }
 }
