@@ -13,7 +13,7 @@ struct RecordView: View {
   @State private var selectedTab: Int = 0
   @StateObject private var memoViewModel = RecordMemoViewModel()
   @StateObject private var quoteViewModel = RecordQuoteViewModel()
-//  @StateObject var noteViewModel =
+  @StateObject private var noteViewModel = RecordNoteViewModel()
   
   var body: some View {
     VStack(spacing: .zero) {
@@ -30,7 +30,7 @@ struct RecordView: View {
         } else if selectedTab == 1 {
           RecordQuoteView(viewModel: quoteViewModel)
         } else if selectedTab == 2 {
-          RecordNoteView()
+          RecordNoteView(viewModel: noteViewModel)
         }
       } // : Group
       .padding(.top, 8)
