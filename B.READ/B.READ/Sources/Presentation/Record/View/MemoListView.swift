@@ -12,6 +12,7 @@ struct MemoListView: View {
   @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
   @ObservedObject var viewModel: RecordMemoViewModel
   @State private var showMenuActionSheet = false
+  @State private var showDeleteAlert = false
   
   var body: some View {
     ScrollView {
@@ -37,7 +38,7 @@ struct MemoListView: View {
               .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
               .frame(maxWidth: .infinity, alignment: .leading)
               .background(.backgroundDefault)
-              .padding(.top, 24)
+              .padding(.top, 16)
           }// : Section
         }
         
@@ -50,21 +51,30 @@ struct MemoListView: View {
       titleVisibility: .hidden
     ) {
       menuActionSheet()
-    }
+    } // : confirmationDialog
+    .alert("메모 삭제", isPresented: $showDeleteAlert) {
+      Button("삭제", role: .destructive) {
+        guard let memo = viewModel.selectedMemo else { return }
+        viewModel.send(.deleteMemo(id: memo.id))
+      }
+      Button("취소", role: .cancel) { }
+    } message: {
+      Text("정말로 메모를 삭제하시겠습니까?")
+    } // : alert
   }
   
+  // TODO: - [시르]액션 시트 tintColor systemblue 적용하기
   // MARK: - (F)menuActionSheet
   @ViewBuilder
   private func menuActionSheet() -> some View {
     Button("메모 수정") {
+      // TODO: - 메모 수정으로 넘어가게 해야함
 //      guard let record = viewModel.record, let memo = viewModel.selectedMemo else { return }
 //      coordinator.push(.memo(id: memo.id, record: record))
     }
     
-    // TODO: - [시르] 삭제 alert띄우기
     Button("메모 삭제", role: .destructive) {
-      guard let memo = viewModel.selectedMemo else { return }
-      viewModel.send(.deleteMemo(id: memo.id))
+      showDeleteAlert = true
     }
     
     Button("취소", role: .cancel) { }
@@ -72,5 +82,8 @@ struct MemoListView: View {
 }
 
 #Preview {
-  RecordMemoView()
+  @Previewable @StateObject var viewModel = RecordMemoViewModel()
+  PreviewableContainer {
+    MemoListView(viewModel: viewModel)
+  }
 }
