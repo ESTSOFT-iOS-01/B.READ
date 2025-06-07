@@ -66,6 +66,8 @@ struct QuoteListView: View {
   @ViewBuilder
   private func menuActionSheet() -> some View {
     Button("문장 수정") {
+      guard let quote = viewModel.selectedQuote else { return }
+      coordinator.push(.sentenceInput(mode: .edit(record: quote.record, quote: quote)))
     }
     
     Button("문장 삭제", role: .destructive) {
@@ -81,5 +83,8 @@ struct QuoteListView: View {
   @Previewable @StateObject var viewModel = RecordQuoteViewModel()
   PreviewableContainer {
     QuoteListView(viewModel: viewModel)
+      .onAppear {
+        viewModel.send(.onAppear)
+      }
   }
 }
