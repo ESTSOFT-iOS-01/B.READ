@@ -21,6 +21,7 @@ final class RecordMemoViewModel: ObservableObject {
   
   // MARK: - Dependency
   @Dependency private var memoUseCase: MemoUseCase
+  @Dependency private var libraryUseCase: LibraryUseCase
   
   // MARK: - Action
   enum Action {
@@ -51,52 +52,110 @@ private extension RecordMemoViewModel {
   /// 메모를 불러와서 뷰에 보여줄 형태로 가공합니다.
   func loadMemoGroups() {
     Task {
-      // 1. 전체 문장을 가져옴
-      guard let allMemos = try? await memoUseCase.fetchAllMemo() else {
-        print("RepositoryError.fetchError.errorDescription")
-        return
-      }
-      
-      // 2. 메모를 ISBN을 기준으로 나눔
-      let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
-      
-      let memoGroups: [MemoGroup] = await withTaskGroup(of: MemoGroup?.self) {
-        [weak self] group in
-        guard let self = self else { return [] }
+      do {
+        // 1. 전체 독서 기록을 받아옴
+        let allRecords = try await libraryUseCase.loadRecordList()
         
-        // 3. 구분된 책의 문장을 QuoteGroup으로 생성
-        for (isbn, memos) in memoDict {
-          group.addTask {
-            do {
-              let bookTitle = try await self.memoUseCase.loadBookTitle(isbn)
-              let memoVOs = memos.map { MemoVO($0) }
-              return MemoGroup(isbn: isbn, bookTitle: bookTitle, memos: memoVOs)
-            } catch {
-              print("ERROR: MemoGroup Create Fail")
-              return nil
+        // 2. 모든 메모를 VO로 변환
+        let allMemos: [MemoVO] = allRecords.flatMap { record, book in
+          record.memos.map { MemoVO($0, record: RecordDetailVO(record: record, book: book)) }
+        }
+        
+        // 3. ISBN 기준으로 메모를 그룹화
+        let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
+        
+        // 4. TaskGroup을 사용해 각 그룹을 MemoGroup으로 변환
+        let memoGroups: [MemoGroup] = await withTaskGroup(of: MemoGroup?.self) {
+          [weak self] group in
+          guard let self = self else { return [] }
+          
+          
+          for (isbn, memos) in memoDict {
+            group.addTask {
+              do {
+                let bookTitle = try await self.memoUseCase.loadBookTitle(isbn)
+                return MemoGroup(isbn: isbn, bookTitle: bookTitle, memos: memos)
+              } catch {
+                print("ERROR: MemoGroup Create Fail")
+                return nil
+              }
             }
           }
-        }
-        
-        var results: [MemoGroup] = []
-        
-        for await result in group {
-          if let item = result {
-            results.append(item)
+          
+          var results: [MemoGroup] = []
+          
+          for await result in group {
+            if let item = result {
+              results.append(item)
+            }
           }
-        }
+          
+          return results
+        } // : withTaskGroup
         
-        return results
-      } // : withTaskGroup
-      
-      
-      await MainActor.run {
-        // 4. 만들어진 MemoGroup을 반영
-        self.memoGroups = memoGroups
-        // 5. MemoGroup 정렬을 진행
-        sortDisplayMemoGroups()
+        await MainActor.run {
+          // 5. 만들어진 MemoGroup을 반영
+          self.memoGroups = memoGroups
+          // 6. MemoGroup 정렬을 진행
+          sortDisplayMemoGroups()
+        }
+      } catch {
+        print("메모 로드 중 문제 발생")
       }
     }
+    
+    
+    
+    
+    
+    
+//    Task {
+//      // 1. 전체 문장을 가져옴
+//      guard let allMemos = try? await memoUseCase.fetchAllMemo() else {
+//        print("RepositoryError.fetchError.errorDescription")
+//        return
+//      }
+//      
+//      // 2. 메모를 ISBN을 기준으로 나눔
+//      let memoDict = Dictionary(grouping: allMemos, by: { $0.isbn })
+//      
+//      let memoGroups: [MemoGroup] = await withTaskGroup(of: MemoGroup?.self) {
+//        [weak self] group in
+//        guard let self = self else { return [] }
+//        
+//        // 3. 구분된 책의 문장을 QuoteGroup으로 생성
+//        for (isbn, memos) in memoDict {
+//          group.addTask {
+//            do {
+//              let bookTitle = try await self.memoUseCase.loadBookTitle(isbn)
+//              let memoVOs = memos.map { MemoVO($0) }
+//              return MemoGroup(isbn: isbn, bookTitle: bookTitle, memos: memoVOs)
+//            } catch {
+//              print("ERROR: MemoGroup Create Fail")
+//              return nil
+//            }
+//          }
+//        }
+//        
+//        var results: [MemoGroup] = []
+//        
+//        for await result in group {
+//          if let item = result {
+//            results.append(item)
+//          }
+//        }
+//        
+//        return results
+//      } // : withTaskGroup
+//      
+//      
+//      await MainActor.run {
+//        // 4. 만들어진 MemoGroup을 반영
+//        self.memoGroups = memoGroups
+//        // 5. MemoGroup 정렬을 진행
+//        sortDisplayMemoGroups()
+//      }
+//    }
   }
   
   /// 보여주고자 하는 Memo의 순서를 정렬합니다.

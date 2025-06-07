@@ -68,9 +68,8 @@ struct MemoListView: View {
   @ViewBuilder
   private func menuActionSheet() -> some View {
     Button("메모 수정") {
-      // TODO: - 메모 수정으로 넘어가게 해야함
-//      guard let record = viewModel.record, let memo = viewModel.selectedMemo else { return }
-//      coordinator.push(.memo(id: memo.id, record: record))
+      guard let memo = viewModel.selectedMemo else { return }
+      coordinator.push(.memo(id: memo.id, record: memo.record))
     }
     
     Button("메모 삭제", role: .destructive) {
