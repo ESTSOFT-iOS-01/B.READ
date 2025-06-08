@@ -14,10 +14,14 @@ enum SettingRoute {
 
 final class SettingCoordinator: ObservableObject {
   
+  let settingViewModel: SettingViewModel
   
+  init(settingViewModel: SettingViewModel) {
+    self.settingViewModel = settingViewModel
+  }
   
   @ViewBuilder
-  func builView(for route: SettingRoute) -> some View {
+  func buildView(for route: SettingRoute) -> some View {
     switch route {
     case .nickname:
       NicknameView()

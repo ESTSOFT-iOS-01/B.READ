@@ -1,5 +1,5 @@
 //
-//  RootCoordinator.swift
+//  TabCoordinator.swift
 //  B.READ
 //
 //  Created by 신승재 on 6/5/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum RootScene {
+enum TabScene {
   case home
   case search
   case library
@@ -15,12 +15,7 @@ enum RootScene {
   case mypage
 }
 
-final class RootCoordinator: ObservableObject {
-  
-  
-  // MARK: Coordinator
-  let settingCoordinator = SettingCoordinator()
-  
+final class TabCoordinator: ObservableObject {
   
   // MARK: ViewModel
   let inputViewModel = SearchInputViewModel()
@@ -29,7 +24,7 @@ final class RootCoordinator: ObservableObject {
   let bestSellerViewModel = BestSellerViewModel()
   
   @ViewBuilder
-  func buildView(for scene: RootScene) -> some View {
+  func buildView(for scene: TabScene) -> some View {
     switch scene {
     case .home:
       HomeView()
