@@ -21,6 +21,7 @@ struct LibraryView: View {
     }
   }
   
+  @StateObject private var recordDetailCoordinator = RecordDetailCoordinator()
   @StateObject var viewModel = LibraryViewModel()
   @State var showSortMenu: Bool = false
   @State var displayMode: DisplayMode = .list
@@ -28,72 +29,78 @@ struct LibraryView: View {
   private let layoutPadding: CGFloat = 16
   
   var body: some View {
-    ZStack(alignment: .topTrailing) {
-      VStack(alignment: .trailing, spacing: 0) {
-        // 상단 탭바
-        ScrollView(.horizontal, showsIndicators: false) {
-          TopTabBar(tabs: viewModel.tabs, selectedIndex: $viewModel.selectedTab)
-            .frame(width: 450, height: 34)
-            .onChange(of: viewModel.selectedTab) {
-              viewModel.send(.selectTab)
+    NavigationStack(path: $recordDetailCoordinator.paths) {
+      ZStack(alignment: .topTrailing) {
+        VStack(alignment: .trailing, spacing: 0) {
+          // 상단 탭바
+          ScrollView(.horizontal, showsIndicators: false) {
+            TopTabBar(tabs: viewModel.tabs, selectedIndex: $viewModel.selectedTab)
+              .frame(width: 450, height: 34)
+              .onChange(of: viewModel.selectedTab) {
+                viewModel.send(.selectTab)
+              }
+          } // : ScrollView
+          
+          HStack(spacing: 8) {
+            // 정렬 버튼
+            SortMenuButton(
+              isOpened: $showSortMenu,
+              selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+            )
+            // 리스트, 그리드 선택 버튼
+            Button {
+              displayMode = (displayMode == .list ? .grid : .list)
+            } label: {
+              displayMode.image
             }
-        } // : ScrollView
-        
-        HStack(spacing: 8) {
-          // 정렬 버튼
-          SortMenuButton(
-            isOpened: $showSortMenu,
-            selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-          )
-          // 리스트, 그리드 선택 버튼
-          Button {
-            displayMode = (displayMode == .list ? .grid : .list)
-          } label: {
-            displayMode.image
+            .frame(width: 24, height: 24)
+          } // : HStack
+          .foregroundStyle(.gray2)
+          .padding(.top, layoutPadding)
+          
+          // 독서기록 목록 뷰
+          if viewModel.displayRecords.isEmpty {
+            Text("독서 기록이 없습니다.")
+              .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+              .frame(maxWidth: .infinity, maxHeight: .infinity)
+          } else if displayMode == .list {
+            LibraryListView(records: $viewModel.displayRecords)
+              .environmentObject(recordDetailCoordinator)
+          } else {
+            LibraryGridView(records: $viewModel.displayRecords)
           }
-          .frame(width: 24, height: 24)
-        } // : HStack
-        .foregroundStyle(.gray2)
+        } // : VStack - 책빵 화면
         .padding(.top, layoutPadding)
+        .padding(.horizontal, 24)
         
-        // 독서기록 목록 뷰
-        if viewModel.displayRecords.isEmpty {
-          Text("독서 기록이 없습니다.")
-            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if displayMode == .list {
-          LibraryListView(records: $viewModel.displayRecords)
-        } else {
-          LibraryGridView(records: $viewModel.displayRecords)
+        if showSortMenu {
+          // 메뉴 바깥의 화면 - 터치 시 정렬 메뉴 닫음
+          Color.black.opacity(0.2)
+            .ignoresSafeArea()
+            .onTapGesture {
+              showSortMenu = false
+            }
         }
-      } // : VStack - 책빵 화면
-      .padding(.top, layoutPadding)
-      .padding(.horizontal, 24)
-      
-      if showSortMenu {
-        // 메뉴 바깥의 화면 - 터치 시 정렬 메뉴 닫음
-        Color.black.opacity(0.2)
-          .ignoresSafeArea()
-          .onTapGesture {
-            showSortMenu = false
-          }
+        // 정렬 메뉴
+        SortMenu(
+          type: .library,
+          isOpened: $showSortMenu,
+          selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+        )
+        .padding(.trailing, 48)
+        .padding(.top, 90)
+        .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
+          viewModel.send(.selectSort)
+        }
+      } // : ZStack
+      .background(.backgroundDefault)
+      .onAppear {
+        print("appear 작동")
+        viewModel.send(.onAppear)
       }
-      // 정렬 메뉴
-      SortMenu(
-        type: .library,
-        isOpened: $showSortMenu,
-        selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-      )
-      .padding(.trailing, 48)
-      .padding(.top, 90)
-      .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
-        viewModel.send(.selectSort)
+      .navigationDestination(for: RecordDetailRoute.self) { route in
+        recordDetailCoordinator.buildView(for: route)
       }
-    } // : ZStack
-    .background(.backgroundDefault)
-    .onAppear {
-      print("appear 작동")
-      viewModel.send(.onAppear)
     }
   }
 }

@@ -22,6 +22,7 @@ final class TabCoordinator: ObservableObject {
   let resultViewModel = SearchResultViewModel()
   let recentSearchViewModel = RecentSearchViewModel()
   let bestSellerViewModel = BestSellerViewModel()
+  let settingViewModel = SettingViewModel()
   
   @ViewBuilder
   func buildView(for scene: TabScene) -> some View {
@@ -40,7 +41,7 @@ final class TabCoordinator: ObservableObject {
     case .record:
       RecordView()
     case .mypage:
-      MyPageView()
+      MyPageView(settingViewModel: settingViewModel)
     }
   }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)LibraryListView
 struct LibraryListView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @EnvironmentObject var recordDetailCoordinator: RecordDetailCoordinator
   @Binding var records: [RecordCellVO]
   
   var body: some View {
@@ -20,7 +21,8 @@ struct LibraryListView: View {
             .background(.green1.opacity(0.6))
             .cornerRadius(16)
             .onTapGesture {
-              coordinator.push(.libraryDetail(id: record.id))
+              //coordinator.push(.libraryDetail(id: record.id))
+              recordDetailCoordinator.push(.RecordDetail(id: record.id))
             }
         }
       }

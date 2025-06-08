@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)RecordDetailView
 struct RecordDetailView: View {
   @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
+  @StateObject private var memoCoordinator = MemoCoordinator()
   @StateObject private var viewModel: RecordDetailViewModel
   
   @State private var showAddMenu: Bool = false
@@ -24,72 +25,73 @@ struct RecordDetailView: View {
   }
   
   var body: some View {
-    ScrollView {
-      VStack(alignment: .trailing, spacing: layoutPadding) {
-        
-        RecordBookSection(record: $viewModel.record)
-        
-        RecordStatsSection(record: $viewModel.record)
+    
+      ScrollView {
+        VStack(alignment: .trailing, spacing: layoutPadding) {
+          
+          RecordBookSection(record: $viewModel.record)
+          
+          RecordStatsSection(record: $viewModel.record)
+            .padding(.top, 8)
+          
+          TopTabBar(
+            tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
+            selectedIndex: $viewModel.selectedTab
+          )
+          .frame(height: 34)
           .padding(.top, 8)
-        
-        TopTabBar(
-          tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
-          selectedIndex: $viewModel.selectedTab
-        )
-        .frame(height: 34)
-        .padding(.top, 8)
-        
-        SortMenuButton(
-          isOpened: $showSortMenu,
-          selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-        )
-        .padding(.trailing, 8)
-        
-        RecordNotesSection(viewModel: viewModel)
-          .frame(maxWidth: .infinity, maxHeight: .infinity)
-        
-      } // : VStack
-      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-      .padding(.horizontal, layoutPadding)
-    } // : ScrollView
-    .scrollIndicators(.never)
-    .background(.backgroundDefault)
-    .toolbar {
-      ToolbarItem(placement: .topBarTrailing) {
-        topBarTrailingButton()
-      }
-    } // : toolBar
-    .alert("독서 기록 삭제", isPresented: $showDeleteAlert) {
-      Button("삭제", role: .destructive) {
-        viewModel.send(.onTapDelete)
-        coordinator.pop()
-      }
-      Button("취소", role: .cancel) { }
-    } message: {
-      Text("정말로 독서 기록을 삭제하시겠습니까?")
-    } // : alert
-    .onAppear {
-      print("DetailView OnAppear")
-      viewModel.send(.onAppear)
-      if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
-    } // : onAppear
-    .overlay {
-      ZStack {
-        
-        if showAddMenu {
-          Color.black.opacity(0.2)
-            .ignoresSafeArea(edges: .bottom)
+          
+          SortMenuButton(
+            isOpened: $showSortMenu,
+            selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
+          )
+          .padding(.trailing, 8)
+          
+          RecordNotesSection(viewModel: viewModel)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+          
+        } // : VStack
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.horizontal, layoutPadding)
+      } // : ScrollView
+      .scrollIndicators(.never)
+      .background(.backgroundDefault)
+      .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          topBarTrailingButton()
         }
-        
-        AddActionView(coordinator: coordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
-        
-      }
-      .animation(.linear(duration: 0.298), value: showAddMenu)
-      .onTapGesture {
-        showAddMenu = false
+      } // : toolBar
+      .alert("독서 기록 삭제", isPresented: $showDeleteAlert) {
+        Button("삭제", role: .destructive) {
+          viewModel.send(.onTapDelete)
+          coordinator.pop()
+        }
+        Button("취소", role: .cancel) { }
+      } message: {
+        Text("정말로 독서 기록을 삭제하시겠습니까?")
+      } // : alert
+      .onAppear {
+        print("DetailView OnAppear")
+        viewModel.send(.onAppear)
+        if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
+      } // : onAppear
+      .overlay {
+        ZStack {
+          
+          if showAddMenu {
+            Color.black.opacity(0.2)
+              .ignoresSafeArea(edges: .bottom)
+          }
+          
+          AddActionView(memoCoordinator: memoCoordinator, showAddMenu: $showAddMenu, viewModel: viewModel)
+          
+        }
+        .animation(.linear(duration: 0.298), value: showAddMenu)
+        .onTapGesture {
+          showAddMenu = false
+        }
       }
     }
-  }
   
   // MARK: - (F)topBarTrailingButton
   private func topBarTrailingButton() -> some View {
@@ -120,7 +122,7 @@ struct RecordDetailView: View {
 
 // MARK: - (S)AddActionView
 private struct AddActionView: View {
-  @ObservedObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @ObservedObject var memoCoordinator: MemoCoordinator
   @Binding var showAddMenu: Bool
   let viewModel: RecordDetailViewModel
   
@@ -132,17 +134,21 @@ private struct AddActionView: View {
           Button {
             guard let record = viewModel.record else { return }
             UINavigationBar.removeOverlay(duration: 0.0)
-            coordinator.push(.sentenceInput(mode: .create(record: record)))
+            //coordinator.push(.sentenceInput(mode: .create(record: record)))
           } label: {
             Text("독서 기록")
           }
           
-          Button {
-            guard let record = viewModel.record else { return }
-            UINavigationBar.removeOverlay()
-            coordinator.push(.memo(record: record))
-          } label: {
-            Text("메모 작성")
+          NavigationStack(path: $memoCoordinator.paths) {
+            Button {
+              guard let record = viewModel.record else { return }
+              UINavigationBar.removeOverlay()
+              memoCoordinator.push(.memo(record: record))
+            } label: {
+              Text("메모 작성")
+            }.navigationDestination(for: MemoRoute.self) { route in
+              memoCoordinator.buildView(for: route)
+            }
           }
           
           Button {

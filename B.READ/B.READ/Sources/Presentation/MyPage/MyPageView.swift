@@ -10,7 +10,15 @@ import SwiftUI
 struct MyPageView: View {
   
   @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
-  @StateObject private var viewModel = SettingViewModel()
+  @StateObject private var settingCoordinator: SettingCoordinator
+  @ObservedObject private var viewModel: SettingViewModel
+  
+  init(settingViewModel: SettingViewModel) {
+    self.viewModel = settingViewModel
+    self._settingCoordinator = .init(
+      wrappedValue: SettingCoordinator(settingViewModel: settingViewModel)
+    )
+  }
   
   var body: some View {
     VStack(alignment: .leading, spacing: 32) {
@@ -185,6 +193,6 @@ private struct MenuListView: View {
 
 
 #Preview {
-  MyPageView()
+  MyPageView(settingViewModel: SettingViewModel())
     .environmentObject(Coordinator<MainRoute, SheetRoute>())
 }
