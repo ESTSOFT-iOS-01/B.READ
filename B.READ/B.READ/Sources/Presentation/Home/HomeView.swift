@@ -12,7 +12,7 @@ struct HomeView: View {
   @StateObject private var viewModel = HomeViewModel()
   
   var body: some View {
-    ScrollView(showsIndicators: false) {
+    ScrollView {
       BreadGuideView()
         .padding(.top, 24)
       
@@ -28,6 +28,7 @@ struct HomeView: View {
     }
     .frame(maxWidth: .infinity, alignment: .top)
     .background(.backgroundDefault)
+    .scrollIndicators(.hidden)
     .onAppear {
       viewModel.send(.onAppear)
     }
