@@ -61,17 +61,17 @@ struct RandomSentenceWidgetEntryView : View {
         .scaledToFit()
         .frame(width: 56, height: 56)
       
-      VStack(spacing: 5) {
+      VStack {
         Text(entry.quote)
-          .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.4)
-          .multilineTextAlignment(.center)
-          .fixedSize(horizontal: false, vertical: true)
+          .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
+          .lineLimit(4)
+          .multilineTextAlignment(.trailing)
           .minimumScaleFactor(0.6)
-          .padding()
+          .frame(maxWidth: .infinity, alignment: .trailing)
         
         if !entry.bookTitle.isEmpty {
           Text("– \(entry.bookTitle) –")
-            .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.3)
+            .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1)
             .frame(maxWidth: .infinity, alignment: .trailing)
         }
       }
