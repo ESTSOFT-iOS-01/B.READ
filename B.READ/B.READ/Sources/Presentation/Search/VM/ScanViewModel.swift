@@ -11,4 +11,9 @@ import SwiftUI
 final class ScanViewModel: ObservableObject {
   @Published var noCamera: Bool = false
   @Published var isbnNumber: String = ""
+  
+  init() {
+    self.noCamera = false
+    self.isbnNumber = ""
+  }
 }
