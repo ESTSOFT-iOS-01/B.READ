@@ -72,16 +72,13 @@ struct CreateRecordView: View {
       .clipShape(
         RoundedCorner(radius: 16, corners: [.topLeft, .topRight])
       )
-      
     }
     .ignoresSafeArea()
     .onChange(of: viewModel.isSuccess) { _, newValue in
-      if newValue {
-        DispatchQueue.main.async {
-          let isEdit = viewModel.recordVO != nil
-          onComplete(isEdit)
-          coordinator.dismissSheet()
-        }
+      DispatchQueue.main.async {
+        let isEdit = newValue
+        onComplete(isEdit)
+        coordinator.dismissSheet()
       }
     }
     .alert("저장 실패", isPresented: $viewModel.inValidPageNumber) {

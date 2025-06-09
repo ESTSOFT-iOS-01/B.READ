@@ -19,6 +19,7 @@ final class BookViewModel: ObservableObject {
   // MARK: - State
   @Published var bookState: BookState = .loading
   @Published var selectedState: ReadingState = .notStart
+  @Published var isSuccess: Bool = false
   
   var currentBook: Book?
   var isbn: String
