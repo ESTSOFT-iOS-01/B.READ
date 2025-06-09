@@ -34,10 +34,19 @@ struct BookDetailView: View {
         .presentationDragIndicator(.hidden)
     })
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .onAppear {
+    .alert("저장 성공", isPresented: $viewModel.isSuccess) {
+      Button("확인", role: .cancel) {
+        DispatchQueue.main.async {
+          viewModel.isSuccess = false
+        }
+      }
+    } message: {
+      Text("내 책빵에 저장되었습니다.")
+    } // : alert
+    .onAppear { // onAppear
       viewModel.send(.onAppear)
     }
-    .onDisappear {
+    .onDisappear { // onDisappear
       viewModel.send(.cancelTask)
     }
   }
@@ -87,7 +96,14 @@ struct BookDetailView: View {
             coordinator.presentSheet(
               .createRecord(
                 state: $viewModel.selectedState,
-                book: book
+                book: book,
+                onComplete: { isSuccess in
+                  if isSuccess {
+                    DispatchQueue.main.async {
+                      viewModel.isSuccess = true
+                    }
+                  }
+                }
               )
             )
           } else {
