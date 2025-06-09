@@ -37,4 +37,8 @@ struct Tag {
     self.id = id
     self.content = content
   }
+  
+  init(_ content: String) {
+    self.init(id: UUID().uuidString, content: content)
+  }
 }
