@@ -40,10 +40,11 @@ struct MemoCell: View {
         }
         else {
           Text(content)
+            .font(Font(UIFont.pretendard(.regular, size: 16)))
+            .foregroundColor(.black)
         }
       }
-      .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.3)
-      .foregroundStyle(.black)
+      .brStyle(.pretendard(.regular, size: 16), lineHeight: 1.3)
       .frame(maxWidth: .infinity, alignment: .leading)
       
       HStack(spacing: 4) {
@@ -61,7 +62,7 @@ struct MemoCell: View {
       .frame(maxWidth: .infinity)
     }
     .padding(16)
-    .background(.brown4.opacity(0.3))
+    .background(.brown2.opacity(0.3))
     .clipShape(
       RoundedRectangle(cornerRadius: 16)
     )

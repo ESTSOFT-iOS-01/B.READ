@@ -37,7 +37,11 @@ struct MemoListView: View {
           } header: {
             Group {
               if let keyword = viewModel.highlightKeyword, !keyword.isEmpty {
-                group.bookTitle.highlightedText(keyword: keyword)
+                group.bookTitle.highlightedText(
+                  keyword: keyword,
+                  regularFont: Font(UIFont.pretendard(.semiBold, size: 18)),
+                  highlightFont: Font(UIFont.pretendard(.semiBold, size: 18))
+                )
               }
               else {
                 Text(group.bookTitle)
