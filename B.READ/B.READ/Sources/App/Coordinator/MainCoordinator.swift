@@ -19,7 +19,7 @@ enum MainRoute: Hashable {
   
   // MARK: - Sentence
   case sentenceInput(mode: SentenceInputMode)
-  case pageInput(mode: SentenceInputMode, sentence: String)
+  case pageInput(record: RecordDetailVO, quote: QuoteVO)
   
   // MARK: - Memo
 //  case memo(id: String? = nil, record: Record, totalPage: Int)
@@ -98,10 +98,10 @@ extension Coordinator where T == MainRoute {
       
       // MARK: - Sentence
     case .sentenceInput(let mode):
-        SentenceInputView(mode: mode)
-
-    case .pageInput(let mode, let sentence):
-        PageInputView(mode: mode, sentence: sentence)
+      SentenceInputView(viewModel: .init(mode: mode))
+    
+    case .pageInput(let record, let quote):
+      PageInputView(viewModel: .init(record: record, quote: quote))
     
       // MARK: - Memo
     case .memo(let id, let record):
