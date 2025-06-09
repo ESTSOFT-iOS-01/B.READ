@@ -21,19 +21,22 @@ struct QuoteVO: Identifiable, Hashable {
   let isbn: String
   let content: String
   let page: Int
+  let record: RecordDetailVO
   
-  init(id: String, isbn: String, content: String, page: Int) {
+  init(id: String, isbn: String, content: String, page: Int, record: RecordDetailVO) {
     self.id = id
     self.isbn = isbn
     self.content = content
     self.page = page
+    self.record = record
   }
   
-  init(_ quote: Quote) {
+  init(_ quote: Quote, record: RecordDetailVO) {
     self.id = quote.id
     self.isbn = quote.isbn
     self.content = quote.content
     self.page = quote.page
+    self.record = record
   }
   
   static func == (lhs: QuoteVO, rhs: QuoteVO) -> Bool {

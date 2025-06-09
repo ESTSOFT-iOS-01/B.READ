@@ -37,7 +37,7 @@ final class MemoViewModel: ObservableObject {
     guard let id else {
       self.memo = Memo(
         id: UUID().uuidString,
-        isbn: "",
+        isbn: record.isbn,
         createdAt: .now,
         content: "",
         pages: (0, 0),

@@ -24,7 +24,8 @@ struct RecordNotesSection: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @ObservedObject var viewModel: RecordDetailViewModel
   @State var showMenuActionSheet: Bool = false
-
+  @State var showDeleteAlert: Bool = false
+  
   private var cellType: CellType {
     return CellType(rawValue: viewModel.selectedTab) ?? .memo
   }
@@ -48,9 +49,9 @@ struct RecordNotesSection: View {
       } else {
         ForEach($viewModel.quotes) { $quote in
           QuoteCell(
-            content: quote.content,
+            content: quote.content, 
             page: quote.page,
-            colorTone: .soft
+            colorTone: ColorTone.tone(isbn: quote.isbn)
           ) {
             showMenuActionSheet = true
             viewModel.selectedQuote = quote
@@ -67,9 +68,30 @@ struct RecordNotesSection: View {
       titleVisibility: .hidden
     ) {
       menuActionSheet(type: cellType)
-    }
+    } // : confirmationDialog
+    .alert("\(cellType.name) 삭제", isPresented: $showDeleteAlert) {
+      Button("삭제", role: .destructive) {
+        switch cellType {
+        case .memo:
+          guard let memo = viewModel.selectedMemo else { return }
+          viewModel.send(.deleteMemo(id: memo.id))
+        case .quote:
+          guard let quote = viewModel.selectedQuote else { return }
+          viewModel.send(.deleteQuote(id: quote.id))
+        }
+      }
+      Button("취소", role: .cancel) { }
+    } message: {
+      switch cellType {
+      case .memo:
+        Text("정말로 메모를 삭제하시겠습니까?")
+      case .quote:
+        Text("정말로 문장을 삭제하시겠습니까?")
+      }
+    } // : alert
   }
   
+  // MARK: - (F)menuActionSheet
   @ViewBuilder
   private func menuActionSheet(type: CellType) -> some View {
     Button("\(type.name) 수정") {
@@ -83,16 +105,8 @@ struct RecordNotesSection: View {
       }
     }
     
-    // TODO: - [시르] 삭제 alert띄우기
     Button("\(type.name) 삭제", role: .destructive) {
-      switch type {
-      case .memo:
-        guard let memo = viewModel.selectedMemo else { return }
-        viewModel.send(.deleteMemo(id: memo.id))
-      case .quote:
-        guard let quote = viewModel.selectedQuote else { return }
-        viewModel.send(.deleteQuote(id: quote.id))
-      }
+      showDeleteAlert = true
     }
     
     Button("취소", role: .cancel) { }

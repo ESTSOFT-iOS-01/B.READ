@@ -84,9 +84,11 @@ private extension RecordDetailViewModel {
           // 2. 레코드 상세 VO 생성
           self.record = RecordDetailVO(record: info.record, book: info.book)
           // 3. 메모 VO 생성
-          self.memos = info.record.memos.map { MemoVO($0) }
+          self.memos = info.record.memos
+            .map { MemoVO($0, record: RecordDetailVO(record: info.record, book: info.book)) }
           // 4. 문장 VO 생성
-          self.quotes = info.record.quotes.map { QuoteVO($0) }
+          self.quotes = info.record.quotes
+            .map { QuoteVO($0, record: RecordDetailVO(record: info.record, book: info.book)) }
           // TODO: - [시르] 서머리 VO 정의 후 생성 해야함
         }
         

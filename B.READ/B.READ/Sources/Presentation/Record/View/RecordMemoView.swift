@@ -9,22 +9,33 @@ import SwiftUI
 
 // MARK: - (S)RecordMemoView
 struct RecordMemoView: View {
-  @StateObject var viewModel = RecordMemoViewModel()
+  @ObservedObject var viewModel: RecordMemoViewModel
+  @State private var showSortMenu: Bool = false
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
       HStack {
-        SearchBar(text: $viewModel.state.searchText, onSubmit: {
-          if !viewModel.state.searchText.isEmpty {
-            viewModel.send(.onSubmit)
-          }
-        }, style: .compact)
+        SearchBar(
+          text: $viewModel.searchText,
+          onSubmit: {
+            if !viewModel.searchText.isEmpty {
+              viewModel.send(.onSubmit)
+            }
+          },
+          style: .compact)
         
-        sortButton()
-          .padding(.trailing, 4)
+        SortMenu(
+          isOpened: $showSortMenu,
+          selectedOption: $viewModel.selectedSort,
+          type: .memo
+        )
+        .padding(.trailing, 4)
+        .onChange(of: viewModel.selectedSort) {
+          viewModel.send(.selectSort)
+        }
       } // : HStack
       
-      MemoListView(memoGroups: viewModel.state.displayMemoGroups)
+      MemoListView(viewModel: viewModel)
         .padding(.top, 8)
         .scrollIndicators(.never)
     } // : VStack
@@ -32,29 +43,12 @@ struct RecordMemoView: View {
       viewModel.send(.onAppear)
     }
   }
-  
-  // MARK: - (F)sortButton
-  // TODO: - (2)정렬 버튼 공통 컴포넌트로 제작 후, 컴포넌트로 변경
-  // 예시) sortButton(type: .record)
-  @ViewBuilder
-  func sortButton() -> some View {
-    Button {
-      print("정렬 버튼 클릭")
-    } label: {
-      HStack {
-        Text("최신 순")
-        Image(systemName: SFSymbol.chevronCompactDown.name)
-          .resizable()
-          .frame(width: 8, height: 3)
-      } // : HStack
-      .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
-      .foregroundStyle(.gray2)
-      .frame(width: 60, height: 36, alignment: .trailing)
-    }
-  }
 }
 
 #Preview {
-  RecordMemoView()
-    .padding(.horizontal, 24)
+  @Previewable @StateObject var viewModel = RecordMemoViewModel()
+  PreviewableContainer {
+    RecordMemoView(viewModel: viewModel)
+      .padding(.horizontal, 24)
+  }
 }

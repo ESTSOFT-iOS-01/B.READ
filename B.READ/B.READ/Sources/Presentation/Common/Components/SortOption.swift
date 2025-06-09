@@ -12,6 +12,7 @@ enum SortTabType {
   case library
   case quote
   case memo
+  case note
 }
 
 // 정렬 기준
@@ -30,6 +31,7 @@ enum SortOption: String, CaseIterable, Identifiable {
     switch type {
     case .library: [.recent, .oldest]
     case .quote, .memo: [.pageAscending, .pageDescending]
+    case .note: [.recent, .oldest]
     }
   }
 }
@@ -81,4 +83,12 @@ extension SortOption {
     }
   }
   
+  // AI Summary를 쓸때 정렬
+  func sort(_ lhs: NoteVO, _ rhs: NoteVO) -> Bool {
+    switch self {
+    case .recent: lhs.createdAt > rhs.createdAt
+    case .oldest: lhs.createdAt < rhs.createdAt
+    default: true
+    }
+  }
 }

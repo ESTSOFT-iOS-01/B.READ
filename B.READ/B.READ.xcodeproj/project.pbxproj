@@ -89,6 +89,7 @@
 		16BE95112DED7174006FFD00 /* Exceptions for "B.READ" folder in "ServiceTest" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Resources/APIConfig/APIKey.plist,
 				Resources/APIConfig/APIUrl.plist,
 				Sources/Data/DTOs/Record/BookDTO.swift,
 				Sources/Data/DTOs/Record/GuideDTO.swift,
@@ -155,6 +156,7 @@
 		16BE95412DED731A006FFD00 /* Exceptions for "B.READ" folder in "UsecaseTest" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Resources/APIConfig/APIKey.plist,
 				Resources/APIConfig/APIUrl.plist,
 				Sources/Data/DTOs/Record/BookDTO.swift,
 				Sources/Data/DTOs/Record/GuideDTO.swift,
@@ -793,7 +795,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = 83K577A944;
+				DEVELOPMENT_TEAM = C5K6DF875Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";
@@ -829,7 +831,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"B.READ/Resources/Preview Content\"";
-				DEVELOPMENT_TEAM = 83K577A944;
+				DEVELOPMENT_TEAM = C5K6DF875Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "B.READ/Resources/B-READ-Info.plist";

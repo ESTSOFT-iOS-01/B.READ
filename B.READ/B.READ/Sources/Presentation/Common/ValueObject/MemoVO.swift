@@ -23,6 +23,7 @@ struct MemoVO: Identifiable {
   let content: String
   let pages: (Int, Int)
   let guides: [String]
+  let record: RecordDetailVO
   
   init(
     id: String,
@@ -30,7 +31,8 @@ struct MemoVO: Identifiable {
     createdAt: Date,
     content: String,
     pages: (Int, Int),
-    guides: [String]
+    guides: [String],
+    record: RecordDetailVO
   ) {
     self.id = id
     self.isbn = isbn
@@ -38,17 +40,33 @@ struct MemoVO: Identifiable {
     self.content = content
     self.pages = pages
     self.guides = guides
+    self.record = record
   }
   
-  init(_ memo: Memo) {
+  init(_ memo: Memo, record: RecordDetailVO) {
     self.init(
       id: memo.id,
       isbn: memo.isbn,
       createdAt: memo.createdAt,
       content: memo.content,
       pages: memo.pages,
-      guides: memo.guides.map { $0.content }
+      guides: memo.guides.map { $0.content },
+      record: record
     )
+  }
+}
+
+extension MemoVO: Hashable {
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+  
+  static func == (lhs: MemoVO, rhs: MemoVO) -> Bool {
+    return lhs.id == rhs.id &&
+    lhs.createdAt == rhs.createdAt &&
+    lhs.content == rhs.content &&
+    lhs.pages == rhs.pages &&
+    lhs.guides == rhs.guides
   }
 }
 

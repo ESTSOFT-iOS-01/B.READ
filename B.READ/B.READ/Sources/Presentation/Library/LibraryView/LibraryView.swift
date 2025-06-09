@@ -41,10 +41,14 @@ struct LibraryView: View {
         
         HStack(spacing: 8) {
           // 정렬 버튼
-          SortMenuButton(
+          SortMenu(
             isOpened: $showSortMenu,
-            selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-          )
+            selectedOption: $viewModel.selectedSort[viewModel.selectedTab],
+            type: .library
+          ).onChange(of: viewModel.selectedSort) {
+            viewModel.send(.selectSort)
+          }
+          
           // 리스트, 그리드 선택 버튼
           Button {
             displayMode = (displayMode == .list ? .grid : .list)
@@ -70,25 +74,6 @@ struct LibraryView: View {
       .padding(.top, layoutPadding)
       .padding(.horizontal, 24)
       
-      if showSortMenu {
-        // 메뉴 바깥의 화면 - 터치 시 정렬 메뉴 닫음
-        Color.black.opacity(0.2)
-          .ignoresSafeArea()
-          .onTapGesture {
-            showSortMenu = false
-          }
-      }
-      // 정렬 메뉴
-      SortMenu(
-        type: .library,
-        isOpened: $showSortMenu,
-        selectedOption: $viewModel.selectedSort[viewModel.selectedTab]
-      )
-      .padding(.trailing, 48)
-      .padding(.top, 90)
-      .onChange(of: viewModel.selectedSort[viewModel.selectedTab]) {
-        viewModel.send(.selectSort)
-      }
     } // : ZStack
     .background(.backgroundDefault)
     .onAppear {
