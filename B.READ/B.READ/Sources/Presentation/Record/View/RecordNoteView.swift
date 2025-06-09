@@ -18,7 +18,8 @@ struct RecordNoteView: View {
         SearchBar(
           text: $viewModel.searchText,
           onSubmit: { viewModel.send(.onSubmit) },
-          style: .compact)
+          style: .compact
+        )
         
         SortMenu(
           isOpened: $showSortMenu,
