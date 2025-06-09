@@ -20,7 +20,7 @@ final class SummaryDTO {
   
   var createdAt: Date
   
-  var record: RecordDTO
+  var record: RecordDTO?
   
   init(
     id: String,

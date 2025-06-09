@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+final class SummaryUseCaseImpl: SummaryUseCase {
+  let aiService: AIService
+  
+}

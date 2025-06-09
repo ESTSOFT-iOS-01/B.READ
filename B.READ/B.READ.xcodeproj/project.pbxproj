@@ -83,6 +83,7 @@
 				Sources/Domain/Repository/Inerface/MemoRepository.swift,
 				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
+				Sources/Domain/Repository/Inerface/SummaryRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 			);
 			target = 16BE8C682DED50C0006FFD00 /* RepositoryTest */;
@@ -121,6 +122,7 @@
 				Sources/Domain/Repository/Inerface/MemoRepository.swift,
 				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
+				Sources/Domain/Repository/Inerface/SummaryRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Service/Interface/AIService.swift,
 				Sources/Domain/Service/Interface/BookService.swift,
@@ -191,6 +193,7 @@
 				Sources/Domain/Repository/Inerface/MemoRepository.swift,
 				Sources/Domain/Repository/Inerface/QuoteRepository.swift,
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
+				Sources/Domain/Repository/Inerface/SummaryRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
 				Sources/Domain/Service/Interface/AIService.swift,
 				Sources/Domain/Service/Interface/BookService.swift,
