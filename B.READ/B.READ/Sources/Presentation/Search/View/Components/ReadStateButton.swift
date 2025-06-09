@@ -185,6 +185,7 @@ struct ReviewInputView: View {
       )
       .background(Color.clear.onTapGesture(perform: tapGesture))
       .frame(height: 100, alignment: .center)
+      .tint(.gray9)
     }
   }
 }
