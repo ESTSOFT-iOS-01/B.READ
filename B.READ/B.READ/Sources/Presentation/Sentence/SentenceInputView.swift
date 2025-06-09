@@ -63,9 +63,6 @@ struct SentenceInputView: View {
         .animation(.easeInOut(duration: 0.2), value: viewModel.trimmedContent.isEmpty)
       } // : ToolbarItem
     } // : toolbar
-    .onAppear {
-      UINavigationBar.removeOverlay(duration: 0.0)
-    }
   }
 }
 
