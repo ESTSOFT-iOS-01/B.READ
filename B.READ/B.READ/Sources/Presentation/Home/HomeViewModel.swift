@@ -15,19 +15,16 @@ final class HomeViewModel: ObservableObject {
   
   var currentTask: Task<Void, Never>? = nil
   
+  private var selectedCategories: [Category] = []
+  
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase
   @Dependency private var recommandUseCase: RecommandUseCase
   @Dependency private var profileUseCase: ProfileUseCase
   
-  init() {
-    //print("HomeViewModel 생성")
-  }
-  
   // MARK: - Action
   enum Action {
     case onAppear
-    case fetchBestSeller
     case cancelTask
   }
   
@@ -36,15 +33,9 @@ final class HomeViewModel: ObservableObject {
     case .onAppear:
       fetchRecentRecords()
       fetchCategories()
-    case .fetchBestSeller:
-      fetchCategories()
     case .cancelTask:
       currentTask?.cancel()
     }
-  }
-  
-  deinit {
-    // print("HomeViewModel 소멸")
   }
 }
 
@@ -65,6 +56,9 @@ private extension HomeViewModel {
     currentTask = Task {
       do {
         let data = try await profileUseCase.fetchUserInfo()
+        
+        if self.selectedCategories == data.categories { return }
+        self.selectedCategories = data.categories
         
         let lists: [BestSellerListVO] = data.categories.compactMap { category in
           guard let categoryType = CategoryType(rawValue: category.id) else { return nil }
@@ -110,8 +104,6 @@ private extension HomeViewModel {
     await MainActor.run {
       self.bestSellerList = results.compactMap { $0 }
     }
-    
   }
-  
 }
 

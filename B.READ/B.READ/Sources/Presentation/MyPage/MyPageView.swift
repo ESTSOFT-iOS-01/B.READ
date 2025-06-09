@@ -13,14 +13,17 @@ struct MyPageView: View {
   @StateObject private var viewModel = SettingViewModel()
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 32) {
+    VStack(alignment: .leading) {
       
-      nicknameButton()
-      
-      MenuListView(coordinator: coordinator, viewModel: viewModel)
-      
+      LogoView()
+      VStack {
+        nicknameButton()
+        
+        MenuListView(coordinator: coordinator, viewModel: viewModel)
+          .padding(.top, 32)
+      }
+      .padding(.horizontal, 24)
     }
-    .padding(.horizontal, 24)
     .frame(maxHeight: .infinity, alignment: .top)
     .background(.backgroundDefault)
     .onAppear {
@@ -109,15 +112,6 @@ private struct MenuListView: View {
       
       // TODO: Sprint 3
       //menuTitle(title: "SNS 인증")
-      
-      Button {
-        print("초기화")
-      } label: {
-        Text("초기화")
-          .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.35, letterSpacing: 0.02)
-          .foregroundStyle(.red)
-          .underline()
-      }.padding(.top, menuSpacing)
       
       Image(.readBreadMyPage)
         .resizable()
