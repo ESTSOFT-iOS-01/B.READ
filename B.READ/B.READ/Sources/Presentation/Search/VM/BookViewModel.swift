@@ -20,6 +20,7 @@ final class BookViewModel: ObservableObject {
   @Published var bookState: BookState = .loading
   @Published var selectedState: ReadingState = .notStart
   
+  var currentBook: Book?
   var isbn: String
   
   // MARK: - Intenal Property
@@ -59,10 +60,12 @@ private extension BookViewModel {
       do {
         try Task.checkCancellation()
         let data = try await searchUseCase.searchBookDetail(isbn: isbn)
+        let book = try await convertBookDetailToBook(data)
         try Task.checkCancellation()
         
         await MainActor.run {
           bookState = .loaded(BookDetailVO(data))
+          currentBook = book
         }
       } catch {
         if Task.isCancelled {
@@ -75,5 +78,28 @@ private extension BookViewModel {
         }
       }
     }
+  }
+  
+  func convertBookDetailToBook(_ detail: BookDetail) async throws -> Book {
+    try Task.checkCancellation()
+
+    guard let publishedAt = detail.publishedDate.toDate() else {
+      throw NSError(domain: "InvalidDateFormat", code: 0)
+    }
+
+    let imageURL = ImageURLConverter.highQualityURL(from: detail.coverURL)
+    let imageData = try await ImageConverter.convertImageURLToData(imageURL)
+
+    try Task.checkCancellation()
+
+    return Book(
+      isbn: detail.isbn,
+      coverImage: imageData,
+      name: detail.title,
+      author: detail.author,
+      publisher: detail.publisher,
+      publishedAt: publishedAt,
+      totalPages: detail.pageCount
+    )
   }
 }

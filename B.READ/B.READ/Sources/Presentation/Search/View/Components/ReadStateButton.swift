@@ -135,14 +135,26 @@ struct SelectPageView: View {
       .frame(width: 256)
       .focused($internalFocus)
       .onChange(of: isFocused?.wrappedValue) { _, new in
-        if let new = new {
-          internalFocus = new
+        if let new = new, internalFocus != new {
+          DispatchQueue.main.async {
+            internalFocus = new
+          }
         }
       }
       .onSubmit {
         isFocused?.wrappedValue = false
         onSubmit()
       }
+//      .toolbar {
+//        ToolbarItemGroup(placement: .keyboard) {
+//          Spacer()
+//          
+//          Button("완료") {
+//            isFocused?.wrappedValue = false
+//            onSubmit()
+//          }
+//        }
+//      }
       
       Text("쪽")
         .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
