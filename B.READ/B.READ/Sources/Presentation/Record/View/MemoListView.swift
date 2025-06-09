@@ -23,6 +23,7 @@ struct MemoListView: View {
             ForEach($group.memos) { $memo in
               MemoCell(
                 content: memo.content,
+                highlight: viewModel.highlightKeyword,
                 date: memo.createdAt,
                 startPage: memo.pages.0,
                 endPage: memo.pages.1
@@ -32,13 +33,20 @@ struct MemoListView: View {
               }
               .padding(.leading, 8)
             }
-
+            
           } header: {
-            Text(group.bookTitle)
-              .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .background(.backgroundDefault)
-              .padding(.top, 16)
+            Group {
+              if let keyword = viewModel.highlightKeyword, !keyword.isEmpty {
+                group.bookTitle.highlightedText(keyword: keyword)
+              }
+              else {
+                Text(group.bookTitle)
+              }
+            }
+            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.backgroundDefault)
+            .padding(.top, 16)
           }// : Section
         }
         
