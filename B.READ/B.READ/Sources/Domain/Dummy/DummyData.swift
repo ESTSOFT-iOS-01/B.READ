@@ -335,8 +335,35 @@ extension DummyData {
     Quote(id: "5", isbn: "9788937460586", content: "수집된 문장 문장 수집된 문장 수집된 문장 수집된 문장", page: 72),
   ]
 }
-//
-//// MARK: - AI Note
-//extension DummyData {
-//  
-//}
+
+// MARK: - AI Note
+extension DummyData {
+  static let summary1 = AlanSummary(
+    id: "summary-1",
+    isbn: "9791194368137",
+    content: "워런 버핏의 투자 철학 요약입니다.",
+    tags: [Tag(id: "t1", content: "투자"), Tag(id: "t2", content: "버핏")],
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 18))!
+  )
+
+  static let summary2 = AlanSummary(
+    id: "summary-2",
+    isbn: "9791158510619",
+    content: "타이탄의 도구들 핵심 내용을 정리했습니다.",
+    tags: [Tag(id: "t3", content: "자기계발"), Tag(id: "t4", content: "성공")],
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 12))!
+  )
+
+  static let summary3 = AlanSummary(
+    id: "summary-3",
+    isbn: "9788937460586",
+    content: "싯다르타의 삶과 깨달음 요약본.",
+    tags: [Tag(id: "t5", content: "철학"), Tag(id: "t6", content: "삶")],
+    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
+  )
+
+  static var dummySummaries: [AlanSummary] {
+    [summary1, summary2, summary3]
+  }
+}
+
