@@ -17,6 +17,5 @@ struct LogoView: View {
       .frame(height: 25)
       .frame(maxWidth: .infinity)
       .padding(.vertical, 8)
-      //.padding(.bottom, 10)
   }
 }
