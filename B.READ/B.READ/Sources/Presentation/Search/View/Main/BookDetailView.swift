@@ -34,12 +34,6 @@ struct BookDetailView: View {
         .presentationDragIndicator(.hidden)
     })
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .onAppear {
-      viewModel.send(.onAppear)
-    }
-    .onDisappear {
-      viewModel.send(.cancelTask)
-    }
     .alert("저장 성공", isPresented: $viewModel.isSuccess) {
       Button("확인", role: .cancel) {
         DispatchQueue.main.async {
@@ -48,6 +42,12 @@ struct BookDetailView: View {
       }
     } message: {
       Text("내 책빵에 저장되었습니다.")
+    } // : alert
+    .onAppear { // onAppear
+      viewModel.send(.onAppear)
+    }
+    .onDisappear { // onDisappear
+      viewModel.send(.cancelTask)
     }
   }
   
