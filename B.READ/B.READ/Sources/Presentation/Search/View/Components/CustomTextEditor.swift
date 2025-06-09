@@ -41,14 +41,6 @@ struct CustomTextEditor: UIViewRepresentable {
   }
   
   func updateUIView(_ uiView: UITextView, context: Context) {
-    if isFocused != uiView.isFirstResponder {
-      if isFocused {
-        uiView.becomeFirstResponder()
-      } else {
-        uiView.resignFirstResponder()
-      }
-    }
-    
     if uiView.isFirstResponder {
       if uiView.textColor == placeholderColor {
         uiView.text = ""
@@ -63,7 +55,6 @@ struct CustomTextEditor: UIViewRepresentable {
         uiView.textColor = textColor
       }
     }
-    
     uiView.typingAttributes = makeTypingAttributes()
   }
   
