@@ -42,6 +42,7 @@ struct SearchView: View {
       // 검색창은 한 개만 존재해야함
       searchBarSection
         .padding(.top, inputViewModel.isFocused || inputViewModel.isSubmitted ? layoutSize : 0)
+        .padding(.horizontal, horizontalPadding)
       
       SearchContentView(
         inputViewModel: inputViewModel,
