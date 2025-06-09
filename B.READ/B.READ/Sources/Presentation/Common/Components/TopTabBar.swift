@@ -17,6 +17,12 @@ struct TabItem {
     self.selectedImage = selectedImage
     self.unselectedImage = unselectedImage
   }
+  
+  init(title: String, image: Image? = nil) {
+    self.title = title
+    self.selectedImage = image
+    self.unselectedImage = image
+  }
 }
 
 // MARK: - (S)TopTabBar

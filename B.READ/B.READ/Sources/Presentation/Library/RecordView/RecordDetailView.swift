@@ -35,16 +35,8 @@ struct RecordDetailView: View {
         
         TopTabBar(
           tabs: [
-            TabItem(
-              title: "메모",
-              selectedImage: Image(.menuBread),
-              unselectedImage: Image(.menuBread)
-            ),
-            TabItem(
-              title: "문장",
-              selectedImage: Image(.donut),
-              unselectedImage: Image(.donut)
-            )
+            TabItem(title: "메모", image: Image(.menuBread)),
+            TabItem(title: "문장", image: Image(.donut))
           ],
           selectedIndex: $viewModel.selectedTab
         )

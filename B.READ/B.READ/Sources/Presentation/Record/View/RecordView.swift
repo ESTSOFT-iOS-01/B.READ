@@ -19,21 +19,9 @@ struct RecordView: View {
     VStack(spacing: .zero) {
       TopTabBar(
         tabs: [
-          TabItem(
-            title: "메모",
-            selectedImage: Image(.menuBread),
-            unselectedImage: Image(.menuBread)
-          ),
-          TabItem(
-            title: "문장",
-            selectedImage: Image(.donut),
-            unselectedImage: Image(.donut)
-          ),
-          TabItem(
-            title: "빵식이",
-            selectedImage: Image(.aiBread),
-            unselectedImage: Image(.aiBread)
-          )
+          TabItem(title: "메모", image: Image(.menuBread)),
+          TabItem(title: "문장", image: Image(.donut)),
+          TabItem(title: "빵식이", image: Image(.aiBread))
         ],
         selectedIndex: $selectedTab
       )
