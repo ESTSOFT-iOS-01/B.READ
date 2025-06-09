@@ -33,12 +33,20 @@ enum ColorTone {
 struct QuoteCell: View {
   
   let content: String
+  let highlight: String?
   let page: Int
   let colorTone: ColorTone
   let action: (() -> Void)?
   
-  init(content: String, page: Int, colorTone: ColorTone, action: (() -> Void)? = nil) {
+  init(
+    content: String,
+    highlight: String? = nil,
+    page: Int,
+    colorTone: ColorTone,
+    action: (() -> Void)? = nil
+  ) {
     self.content = content
+    self.highlight = highlight
     self.page = page
     self.colorTone = colorTone
     self.action = action
@@ -46,10 +54,17 @@ struct QuoteCell: View {
   
   var body: some View {
     VStack(spacing: 8) {
-      Text(content)
-        .foregroundStyle(colorTone == .strong ? .backgroundDefault : .black)
-        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.3)
-        .frame(maxWidth: .infinity, alignment: .leading)
+      Group {
+        if let keyword = self.highlight, !keyword.isEmpty {
+          content.highlightedText(keyword: keyword)
+        }
+        else {
+          Text(content)
+        }
+      }
+      .foregroundStyle(colorTone == .strong ? .backgroundDefault : .black)
+      .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.3)
+      .frame(maxWidth: .infinity, alignment: .leading)
       
       HStack(spacing: 4) {
         Text("\(page)쪽")
@@ -90,4 +105,7 @@ struct QuoteCell: View {
   QuoteCell(content: content, page: 28, colorTone: .strong) {
     print("action")
   }
+  QuoteCell(content: content, highlight: "가나다라마", page: 28, colorTone: .regular)
+  QuoteCell(content: content, highlight: "수집한", page: 28, colorTone: .soft)
+  QuoteCell(content: content, highlight: "캡쳐해볼게요", page: 28, colorTone: .strong)
 }
