@@ -44,7 +44,7 @@ struct FailedView: View {
   var body: some View {
     VStack(spacing: 16) {
       Text("😢 정보를 불러오는 데 실패했어요.")
-        .font(.headline)
+        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1, letterSpacing: -0.02)
         .foregroundStyle(.brown9)
       
       Group {
@@ -55,7 +55,7 @@ struct FailedView: View {
           Text(desp)
         }
       }
-      .font(.caption)
+      .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1, letterSpacing: -0.02)
       .foregroundColor(.gray7)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
