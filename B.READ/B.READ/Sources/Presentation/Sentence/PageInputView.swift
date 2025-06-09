@@ -13,26 +13,29 @@ struct PageInputView: View {
   @FocusState private var isFocused: Bool
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 8) {
-      Text("페이지를 입력해 주세요")
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
-      
-      HStack(spacing: 0) {
-        RoundedTextField(
-          type: .pages,
-          placeholder: "0",
-          text: $viewModel.page,
-          isValid: viewModel.isValid
-        )
-        .focused($isFocused)
-        .onChange(of: viewModel.page) {
-          viewModel.send(.updatePage)
-        }
+    VStack(spacing: 24) {
+      VStack(alignment: .leading, spacing: 8) {
+        Text("페이지를 입력해 주세요")
+          .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
         
-        Text("쪽")
-          .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
-          .padding(.leading, 16)
-      } // : HStack
+        HStack(spacing: 16) {
+          RoundedTextField(
+            type: .pages,
+            placeholder: "0",
+            text: $viewModel.page,
+            isValid: viewModel.isValid
+          )
+          .focused($isFocused)
+          .onChange(of: viewModel.page) {
+            viewModel.send(.updatePage)
+          }
+          
+          Text("쪽")
+            .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
+        } // : HStack
+      }
+      .padding(.horizontal, 24)
+      .padding(.top, 16)
       
       ZStack {
         RoundedRectangle(cornerRadius: 8)
@@ -49,16 +52,13 @@ struct PageInputView: View {
             .padding(16)
         } // : ScrollView
         .scrollIndicators(.hidden)
-        
       } // : ZStack
       .frame(height: 134)
-      .padding(.top, 24)
+      .padding(.horizontal, 24)
       
     } // : VStack
     .frame(maxHeight: .infinity, alignment: .top)
     .background(Color.backgroundDefault)
-    .padding(.top, 16)
-    .padding(.horizontal, 24)
     .onTapGesture {
       self.hideKeyboard()
     }
@@ -91,7 +91,7 @@ struct PageInputView: View {
         Text(error)
       }
     } // : alert
-    .animation(.easeInOut(duration: 0.2), value:  viewModel.showErrorAlert)
+    .animation(.easeInOut(duration: 0.2), value: viewModel.showErrorAlert)
   }
 }
 
