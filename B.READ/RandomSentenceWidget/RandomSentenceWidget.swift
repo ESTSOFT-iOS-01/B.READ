@@ -33,7 +33,7 @@ struct QuoteProvider: TimelineProvider {
                    completion: @escaping (Timeline<QuoteEntry>) -> Void) {
     
     let entry      = randomEntry()
-    let nextUpdate = entry.date.addingTimeInterval(3)     // 8 초 테스트
+    let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: entry.date)!
     
     completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
   }
@@ -59,7 +59,7 @@ struct RandomSentenceWidgetEntryView : View {
       Image("HappyBread")
         .resizable()
         .scaledToFit()
-        .frame(width: 56, height: 56)
+        .frame(width: 64, height: 64)
       
       VStack {
         Text(entry.quote)
