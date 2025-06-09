@@ -20,7 +20,7 @@ struct BookDetailView: View {
     Group {
       switch viewModel.bookState {
       case .loading:
-        LoadingView()
+        BouncingImageLoadingView()
       case .loaded(let bookDetailVO):
         loadedView(bookDetailVO)
       case .failed(let error):
