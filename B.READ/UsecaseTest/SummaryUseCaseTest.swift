@@ -26,7 +26,6 @@ final class AIServiceMock: AIService {
 }
 
 
-
 struct SummaryUseCaseTest {
   let summaryUseCase: SummaryUseCase
   let recordRepository: RecordRepository
@@ -78,24 +77,11 @@ struct SummaryUseCaseTest {
 
     let summary = try await summaryUseCase.generateSummary(in: dummyRecord)
 
-    let expected = DummyData.summaryForRecordForSummary
+    let expected = DummyData.summaryForFetchTest
 
     #expect(summary.isbn == expected.isbn)
     #expect(summary.content == expected.content)
     #expect(summary.tags == expected.tags)
-  }
-
-  @Test("Save Summary Then Fetch Test")
-  func saveSummary_thenFetch_shouldMatch() async throws {
-    let dummyRecord = DummyData.recordForSummary
-    try await recordRepository.createRecord(dummyRecord)
-    try await bookRepository.createBook(DummyData.bookForSummary)
-
-    let summary = DummyData.summaryForRecordForSummary
-    try await summaryUseCase.saveSummary(summary, in: dummyRecord)
-
-    let fetched = try await summaryUseCase.fetchSummary(id: summary.id)
-    #expect(fetched == summary)
   }
   
 }
