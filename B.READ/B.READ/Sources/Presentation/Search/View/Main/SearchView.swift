@@ -34,8 +34,9 @@ struct SearchView: View {
   
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
+      
       if !inputViewModel.isFocused && !inputViewModel.isSubmitted {
-        logoView
+        LogoView()
           .transition(.opacity)
       }
       
