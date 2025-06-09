@@ -42,11 +42,22 @@ extension StringProtocol {
   ///
   /// - Parameter
   ///  - `keyword`: 하이라이트할 String
-  ///  - `highlightColor`: 적용할 하이라이트 색상 (기본값은 `.orange2`)
+  ///  - `highlightColor`: 적용할 하이라이트 색상 (기본값은 `.orange4`)
+  ///  - `regularFont`: 일반 텍스트에 들어갈 폰트 (기본값은 regular, 16)
+  ///  - `highlightFont`: 하이라이트 텍스트에 들어갈 폰트 (기본값은 bold, 16)
   /// - Returns: 키워드에 highlightColor가 적용된 Text
-  func highlightedText(keyword: String, highlightColor: Color = .orange2) -> Text {
+  func highlightedText(
+    keyword: String,
+    highlightColor: Color = .orange4,
+    regularFont: Font = Font(UIFont.pretendard(.regular, size: 16)),
+    highlightFont: Font = Font(UIFont.pretendard(.bold, size: 16))
+  ) -> Text {
     // 1. 키워드가 비어있으면 원본문자열을 반환
-    guard !keyword.isEmpty else { return Text(String(self)) }
+    guard !keyword.isEmpty else {
+      return Text(String(self))
+        .font(regularFont)
+        .foregroundColor(.black)
+    }
     
     // 대소문자 구분하지 않음
     let keyword = keyword.lowercased()
@@ -54,7 +65,11 @@ extension StringProtocol {
     let ranges = self.allRanges(of: keyword)
     
     // 3. 일치하는 부분이 없으면 원본문자열 반환
-    guard !ranges.isEmpty else { return Text(String(self)) }
+    guard !ranges.isEmpty else {
+      return Text(String(self))
+        .font(regularFont)
+        .foregroundColor(.black)
+    }
     
     var result = Text("")
     var currentIndex = self.startIndex
@@ -64,10 +79,14 @@ extension StringProtocol {
       // 4-1. 일반 텍스트
       if currentIndex < range.lowerBound {
         result = result + Text(String(self[currentIndex..<range.lowerBound]))
+          .font(regularFont)
+          .foregroundColor(.black)
       }
       
       // 4-2. 하이라이트 텍스트
-      result = result + Text(String(self[range])).foregroundColor(highlightColor)
+      result = result + Text(String(self[range]))
+        .font(highlightFont)
+        .foregroundColor(highlightColor)
       
       // 4-3. 다음 인덱스로 이동
       currentIndex = range.upperBound
@@ -76,6 +95,8 @@ extension StringProtocol {
     // 5. 남은 텍스트 처리
     if currentIndex < endIndex {
       result = result + Text(String(self[currentIndex..<endIndex]))
+        .font(regularFont)
+        .foregroundColor(.black)
     }
     
     return result
