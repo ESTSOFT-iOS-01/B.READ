@@ -15,7 +15,7 @@ final class SummaryDTO {
   var isbn: String
   var content: String
   
-  @Relationship(deleteRule: .cascade)
+  @Relationship(deleteRule: .cascade, inverse: \TagDTO.summary)
   var tags: [TagDTO]
   
   var createdAt: Date
@@ -42,10 +42,13 @@ final class SummaryDTO {
     self.id = data.id
     self.isbn = data.isbn
     self.content = data.content
-    self.tags = data.tags.map { TagDTO($0) }
     self.createdAt = data.createdAt
     self.record = record
+    self.tags = []
+
+    self.tags = data.tags.map { TagDTO($0, summary: self) }
   }
+
 }
 
 extension SummaryDTO {

@@ -418,7 +418,7 @@ extension DummyData {
     updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
   )
   
-  static let summaryForRecordForSummary = AlanSummary(
+  static let summaryForFetchTest = AlanSummary(
     id: "summary-siddhartha",
     isbn: "9788937460586",
     content: "헤르만 헤세의 '싯다르타'는 주인공이 수많은 스승과 가르침을 거쳐가며, 결국 자신의 삶을 통해 진리를 깨닫는 과정을 그립니다. 싯다르타는 남의 말이 아닌 체험을 통해 지혜를 얻으며, 강을 바라보며 모든 존재가 연결되어 흐른다는 사실을 깨닫습니다. 이를 통해 나 또한 변화와 흐름을 있는 그대로 받아들이고 싶어졌습니다. 싯다르타의 삶은 고통과 실수의 연속이었지만, 그 모든 것이 깨달음으로 나아가는 길이었음을 보여줍니다. 나 역시 내 방황을 긍정하고 싶어졌습니다.",
