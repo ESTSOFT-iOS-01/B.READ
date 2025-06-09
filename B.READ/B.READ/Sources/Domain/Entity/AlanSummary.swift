@@ -17,12 +17,24 @@ struct AlanSummary {
   public let id: String
   let isbn: String
   let content: String
+  let tags: [Tag]
   let createdAt: Date
   
-  init(id: String, isbn: String, content: String, createdAt: Date) {
+  init(id: String, isbn: String, content: String, tags: [Tag], createdAt: Date) {
     self.id = id
     self.isbn = isbn
     self.content = content
+    self.tags = tags
     self.createdAt = createdAt
+  }
+}
+
+struct Tag {
+  public let id: String
+  let content: String
+  
+  init(id: String, content: String) {
+    self.id = id
+    self.content = content
   }
 }
