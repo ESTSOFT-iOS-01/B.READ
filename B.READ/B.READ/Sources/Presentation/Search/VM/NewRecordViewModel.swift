@@ -20,15 +20,15 @@ final class NewRecordViewModel: ObservableObject {
   @Published var endDate: Date
   
   @Published var page: String
-  @Published var isFocused: Bool = false
-  @Published var isTextEditorFocused: Bool = false
   @Published var reviewText: String
   
-  var totalPage: Int
+  @Published var isFocused: Bool = false
+  @Published var isTextEditorFocused: Bool = false
   @Published var isSuccess: Bool = false
   @Published var inValidPageNumber: Bool = false
   
-  var pageNum : Int = 0
+  var totalPage: Int
+  private var pageNum: Int = 0
   
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase

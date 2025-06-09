@@ -74,13 +74,13 @@ struct RecordDetailView: View {
       viewModel.send(.onAppear)
       if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
     } // : onAppear
-    .onChange(of: needRefresh, { oldValue, newValue in
+    .onChange(of: needRefresh) { oldValue, newValue in
       if newValue {
         viewModel.send(.onAppear)
         if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
         needRefresh = false
       }
-    })
+    }
     .overlay {
       ZStack {
 
