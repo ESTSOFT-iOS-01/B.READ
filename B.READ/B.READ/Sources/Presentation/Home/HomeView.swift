@@ -12,18 +12,23 @@ struct HomeView: View {
   @StateObject private var viewModel = HomeViewModel()
   
   var body: some View {
-    ScrollView {
-      BreadGuideView()
-        .padding(.top, 24)
+    VStack(spacing: 0) {
       
-      RecentBookSectionView(viewModel: viewModel)
-        .padding(.top, 24)
+      LogoView()
       
-      if viewModel.bestSellerList.count > 1 {
-        RecommandSectionView(bookList: viewModel.bestSellerList[0])
+      ScrollView(showsIndicators: false) {
+        BreadGuideView()
           .padding(.top, 24)
-
-        RecommandSectionView(bookList: viewModel.bestSellerList[1])
+        
+        RecentBookSectionView(viewModel: viewModel)
+          .padding(.top, 24)
+        
+        if viewModel.bestSellerList.count > 1 {
+          RecommandSectionView(bookList: viewModel.bestSellerList[0])
+            .padding(.top, 24)
+          
+          RecommandSectionView(bookList: viewModel.bestSellerList[1])
+        }
       }
     }
     .frame(maxWidth: .infinity, alignment: .top)
@@ -219,6 +224,8 @@ private struct RecommandSectionView: View {
 
 #Preview {
   PreviewableContainer {
-    HomeView()
+      HomeView()
+      
+
   }
 }

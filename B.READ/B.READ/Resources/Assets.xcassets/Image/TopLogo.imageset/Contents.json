@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "Bread3D1x.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Bread3D2x.png",
+      "filename" : "TopLogo.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Bread3D3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

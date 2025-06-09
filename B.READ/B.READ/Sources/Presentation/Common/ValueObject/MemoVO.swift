@@ -15,6 +15,15 @@ struct MemoGroup: Identifiable {
   var memos: [MemoVO]
 }
 
+extension MemoGroup: Equatable {
+  static func == (lhs: MemoGroup, rhs: MemoGroup) -> Bool {
+    return lhs.id == rhs.id &&
+    lhs.isbn == rhs.isbn &&
+    lhs.bookTitle == rhs.bookTitle &&
+    lhs.memos == rhs.memos
+  }
+}
+
 // MARK: - (S)MemoVO
 struct MemoVO: Identifiable {
   let id: String

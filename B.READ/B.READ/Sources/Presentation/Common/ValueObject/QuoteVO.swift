@@ -15,6 +15,15 @@ struct QuoteGroup: Identifiable {
   var quotes: [QuoteVO]
 }
 
+extension QuoteGroup: Equatable {
+  static func == (lhs: QuoteGroup, rhs: QuoteGroup) -> Bool {
+    return lhs.id == rhs.id &&
+    lhs.isbn == rhs.isbn &&
+    lhs.bookTitle == rhs.bookTitle &&
+    lhs.quotes == rhs.quotes
+  }
+}
+
 // MARK: - (S)QuoteVO
 struct QuoteVO: Identifiable, Hashable {
   let id: String
