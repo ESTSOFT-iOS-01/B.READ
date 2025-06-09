@@ -24,6 +24,22 @@ struct FontStyleModifier: ViewModifier {
   }
 }
 
+struct StyleModifier: ViewModifier {
+  let font: UIFont
+  let lineHeight: CGFloat
+  let letterSpacing: CGFloat
+  
+  func body(content: Content) -> some View {
+    
+    let lineSpacing = font.pointSize * (lineHeight - 1)
+    
+    return content
+      .padding(.vertical, lineSpacing / 2)
+      .lineSpacing(lineSpacing)
+      .tracking(font.pointSize * letterSpacing)
+  }
+}
+
 extension View {
   /// BR 스타일 폰트 적용 (줄간격 및 자간 설정)
   /// - Parameters:
@@ -40,5 +56,23 @@ extension View {
       lineHeight: lineHeight,
       letterSpacing: letterSpacing
     ))
+  }
+  
+  /// BR 스타일 적용 (줄간격 및 자간 설정)
+  /// - Parameters:
+  ///   - font: 사용할 UIFont
+  ///   - lineHeight: 줄간격 배수 (예: 1.4 → 140%)
+  ///   - letterSpacing: 자간 배수 (예: 0.02 → 2%)
+  /// - Note: BR 스타일 폰트에서 폰트 적용만 제외
+  func brStyle(
+    _ font: UIFont,
+    lineHeight: CGFloat,
+    letterSpacing: CGFloat = 0.0
+  ) -> some View {
+    self.modifier(StyleModifier(
+      font: font,
+      lineHeight: lineHeight,
+      letterSpacing: letterSpacing)
+    )
   }
 }
