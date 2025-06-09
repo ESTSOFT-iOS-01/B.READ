@@ -8,6 +8,11 @@
 import Foundation
 
 extension Date {
+  
+  var weekdayInt: Int {
+    Calendar.current.component(.weekday, from: self)
+  }
+  
   enum DateFormatType: String {
     case dotSeparated = "yyyy. MM. dd"
     case dotSeparatedFull = "yyyy. MM. dd. (E)"
