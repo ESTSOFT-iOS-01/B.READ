@@ -26,4 +26,13 @@ extension Date {
     Self.dateFormatter.dateFormat = dateFormatType.rawValue
     return Self.dateFormatter.string(from: self)
   }
+  
+  /// 두 날짜의 연·월·일(달력 컴포넌트)이 같은지 비교합니다.
+  /// - Parameter other: 비교 대상 날짜
+  /// - Returns: 같은 날짜(년·월·일)이면 true
+  func isSameDay(as other: Date) -> Bool {
+    let cal = Calendar.current
+    return cal.dateComponents([.year, .month, .day], from: self)
+        == cal.dateComponents([.year, .month, .day], from: other)
+  }
 }

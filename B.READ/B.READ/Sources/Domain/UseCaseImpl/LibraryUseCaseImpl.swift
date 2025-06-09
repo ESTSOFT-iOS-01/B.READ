@@ -34,6 +34,7 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   func saveRecord(record: Record, book: Book) async throws {
     do {
       try await bookRepository.createBook(book)
+      
     } catch RepositoryError.dataAlreadyExist {
       // 이미 존재하면 무시
       print("이미 존재하는 책입니다.")
