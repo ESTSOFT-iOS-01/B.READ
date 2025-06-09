@@ -19,7 +19,6 @@ struct ScanView: View {
   var body: some View {
     VStack {
       CustomCameraRepresentable(isbnNumber: $viewModel.isbnNumber, noCamera: $viewModel.noCamera)
-      
         .frame(height: 400, alignment: .top)
         .frame(maxWidth: .infinity)
         .padding(.top, 16)
@@ -64,6 +63,9 @@ struct ScanView: View {
       Text("카메라를 사용할 수 없습니다.")
     }
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+    .onAppear {
+      viewModel.isbnNumber = ""
+    }
   }
 }
 
