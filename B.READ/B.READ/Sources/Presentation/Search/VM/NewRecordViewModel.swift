@@ -67,7 +67,7 @@ final class NewRecordViewModel: ObservableObject {
   enum Action {
     case updateRecord(ReadingState)
     case createRecord(ReadingState)
-    case pageSubmit
+    case pageSubmit(ReadingState)
     case releaseEditorFocus
     case focusOnTextField
     case releaseAllFocus
@@ -85,17 +85,21 @@ final class NewRecordViewModel: ObservableObject {
         updateRecord(entity)
       }
 
-    case .pageSubmit:
+    case let .pageSubmit(state):
       isFocused = false
-      if let value = Int(page), value >= 0, value <= totalPage {
-        pageNum = value
-        inValidPageNumber = false
+      if state == .reading {
+        if let value = Int(page), value >= 0, value <= totalPage {
+          pageNum = value
+          inValidPageNumber = false
+        } else {
+          pageNum = 0
+          page = ""
+          inValidPageNumber = true
+        }
       } else {
-        pageNum = 0
-        page = "0"
-        inValidPageNumber = true
+        inValidPageNumber = false
       }
-      
+
     case .releaseEditorFocus:
       DispatchQueue.main.async { [weak self] in
         self?.isTextEditorFocused = false

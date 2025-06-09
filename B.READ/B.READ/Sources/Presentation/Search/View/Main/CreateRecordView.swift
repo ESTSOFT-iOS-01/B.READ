@@ -52,7 +52,7 @@ struct CreateRecordView: View {
             .padding(.top, layoutPadding)
           
           BottomButton(buttonTitle: "저장하기") {
-            viewModel.send(.pageSubmit)
+            viewModel.send(.pageSubmit(selectedState))
             if !viewModel.inValidPageNumber {
               if viewModel.recordVO != nil {
                 viewModel.send(.updateRecord(selectedState))
@@ -115,7 +115,7 @@ struct CreateRecordView: View {
           page: $viewModel.page,
           isFocused: $viewModel.isFocused,
           maxPage: viewModel.totalPage) {
-            viewModel.send(.pageSubmit)
+            viewModel.send(.pageSubmit(selectedState))
           }
           .topLeadingPadding()
       }
