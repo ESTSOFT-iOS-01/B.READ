@@ -9,8 +9,15 @@ import Foundation
 
 extension Date {
   
+  /// 요일을 Int로 반환합니다.
   var weekdayInt: Int {
     Calendar.current.component(.weekday, from: self)
+  }
+  
+  /// Calendar.current의 주(weekOfYear) 기준으로
+  /// 이 날짜가 오늘을 포함한 같은 주(일요일~토요일)에 속하는지 여부
+  var isInCurrentWeek: Bool {
+    Calendar.current.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
   }
   
   enum DateFormatType: String {

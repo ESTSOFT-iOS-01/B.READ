@@ -41,6 +41,8 @@ final class LibraryUseCaseImpl: LibraryUseCase {
     }
     
     try await recordRepository.createRecord(record)
+    
+    
   }
   
   func editRecord(_ record: Record) async throws {
@@ -160,5 +162,17 @@ private extension LibraryUseCaseImpl {
     )
     try await bookRepository.createBook(book)
     return book
+  }
+  
+  func updateStreakIfNeeded() async throws {
+    let today: Date = .now
+    
+    var userInfo = try await userInfoRepository.fetchUserInfo()
+    
+    // 같은 날짜에 이미 업데이트가 이루어졌다면 return
+    guard userInfo.lastStreakUpdatedAt.isSameDay(as: today) else { return }
+    userInfo.streak[today.weekdayInt] = DailyStatus(weekday: today.weekdayInt, isCompleted: true)
+    
+    
   }
 }
