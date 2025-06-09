@@ -10,7 +10,6 @@ import SwiftUI
 enum ColorTone {
   case soft
   case regular
-  case strong
   
   var color: Color {
     switch self {
@@ -18,14 +17,12 @@ enum ColorTone {
         .green1
     case .regular:
         .green2
-    case .strong:
-        .green6
     }
   }
   
   static func tone(isbn: String) -> ColorTone {
     let hash = abs(isbn.hash)
-    let tones: [ColorTone] = [.soft, .regular, .strong]
+    let tones: [ColorTone] = [.soft, .regular]
     return tones[hash % tones.count]
   }
 }
@@ -33,12 +30,20 @@ enum ColorTone {
 struct QuoteCell: View {
   
   let content: String
+  let highlight: String?
   let page: Int
   let colorTone: ColorTone
   let action: (() -> Void)?
   
-  init(content: String, page: Int, colorTone: ColorTone, action: (() -> Void)? = nil) {
+  init(
+    content: String,
+    highlight: String? = nil,
+    page: Int,
+    colorTone: ColorTone,
+    action: (() -> Void)? = nil
+  ) {
     self.content = content
+    self.highlight = highlight
     self.page = page
     self.colorTone = colorTone
     self.action = action
@@ -46,14 +51,22 @@ struct QuoteCell: View {
   
   var body: some View {
     VStack(spacing: 8) {
-      Text(content)
-        .foregroundStyle(colorTone == .strong ? .backgroundDefault : .black)
-        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.3)
-        .frame(maxWidth: .infinity, alignment: .leading)
+      Group {
+        if let keyword = self.highlight, !keyword.isEmpty {
+          content.highlightedText(keyword: keyword)
+        }
+        else {
+          Text(content)
+            .font(Font(UIFont.pretendard(.regular, size: 16)))
+            .foregroundColor(.black)
+        }
+      }
+      .brStyle(.pretendard(.regular, size: 16), lineHeight: 1.3)
+      .frame(maxWidth: .infinity, alignment: .leading)
       
       HStack(spacing: 4) {
         Text("\(page)쪽")
-          .foregroundStyle(colorTone == .strong ? .green1 : .gray7)
+          .foregroundStyle(.gray7)
         if action != nil { menuButton() }
       }
       .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1, letterSpacing: 0.02)
@@ -79,7 +92,7 @@ struct QuoteCell: View {
         .frame(width: 16, height: 16)
         .rotationEffect(.degrees(90))
     }
-    .foregroundStyle(colorTone == .strong ? .green1 : .gray7)
+    .foregroundStyle(.gray7)
   }
 }
 
@@ -87,7 +100,9 @@ struct QuoteCell: View {
   let content = """
 가나다라마문장을 캡쳐해볼게요. 이건 제가 수집한 문장이에요ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 """
-  QuoteCell(content: content, page: 28, colorTone: .strong) {
+  QuoteCell(content: content, page: 28, colorTone: .regular) {
     print("action")
   }
+  QuoteCell(content: content, highlight: "가나다라마", page: 28, colorTone: .regular)
+  QuoteCell(content: content, highlight: "수집한", page: 28, colorTone: .soft)
 }

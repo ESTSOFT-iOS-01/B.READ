@@ -17,12 +17,9 @@ struct RecordQuoteView: View {
       HStack {
         SearchBar(
           text: $viewModel.searchText,
-          onSubmit: {
-            if !viewModel.searchText.isEmpty {
-              viewModel.send(.onSubmit)
-            }
-          },
-          style: .compact)
+          onSubmit: { viewModel.send(.onSubmit) },
+          style: .compact
+        )
         
         SortMenu(
           isOpened: $showSortMenu,
