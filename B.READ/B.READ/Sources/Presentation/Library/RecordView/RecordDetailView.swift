@@ -34,7 +34,18 @@ struct RecordDetailView: View {
           .padding(.top, 8)
         
         TopTabBar(
-          tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
+          tabs: [
+            TabItem(
+              title: "메모",
+              selectedImage: Image(.menuBread),
+              unselectedImage: Image(.menuBread)
+            ),
+            TabItem(
+              title: "문장",
+              selectedImage: Image(.donut),
+              unselectedImage: Image(.donut)
+            )
+          ],
           selectedIndex: $viewModel.selectedTab
         )
         .frame(height: 34)
