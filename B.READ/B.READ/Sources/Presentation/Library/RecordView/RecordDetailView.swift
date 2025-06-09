@@ -124,7 +124,7 @@ struct RecordDetailView: View {
         viewModel.send(.onTapFavorite)
       } label: {
         if let isFavorite = viewModel.record?.isFavorite {
-          Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+          Image(systemName: isFavorite ? SFSymbol.bookMarkFill.name : SFSymbol.bookMark.name)
             .resizable()
             .aspectRatio(contentMode: .fit)
             .frame(width: 22, height: 22)
