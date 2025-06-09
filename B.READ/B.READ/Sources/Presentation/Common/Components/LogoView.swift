@@ -15,7 +15,8 @@ struct LogoView: View {
       .aspectRatio(contentMode: .fit)
       .foregroundColor(.orange3)
       .frame(height: 25)
-      .frame(maxWidth: .infinity)
+      .frame(maxWidth: .infinity, alignment: .leading)
       .padding(.vertical, 8)
+      .padding(.leading, 24)
   }
 }

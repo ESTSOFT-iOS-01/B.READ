@@ -16,14 +16,14 @@ struct MyPageView: View {
     VStack(alignment: .leading) {
       
       LogoView()
-      
-      nicknameButton()
-      
-      MenuListView(coordinator: coordinator, viewModel: viewModel)
-        .padding(.top, 32)
-      
+      VStack {
+        nicknameButton()
+        
+        MenuListView(coordinator: coordinator, viewModel: viewModel)
+          .padding(.top, 32)
+      }
+      .padding(.horizontal, 24)
     }
-    .padding(.horizontal, 24)
     .frame(maxHeight: .infinity, alignment: .top)
     .background(.backgroundDefault)
     .onAppear {
