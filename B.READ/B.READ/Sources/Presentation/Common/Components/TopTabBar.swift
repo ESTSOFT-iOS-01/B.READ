@@ -90,10 +90,10 @@ private struct HeaderView: View {
   // MARK: (F)imageLabel
   @ViewBuilder
   private func imageLabel(index: Int, isSelected: Bool) -> some View {
-    if isSelected {
-      tabs[index].selectedImage
-    } else {
-      tabs[index].unselectedImage
+    if let image = isSelected ? tabs[index].selectedImage : tabs[index].unselectedImage {
+      image
+        .renderingMode(.template) // 반드시 필요함: 색상 적용을 위해
+        .foregroundStyle(isSelected ? .brown7 : .gray2)
     }
   }
 }
