@@ -23,6 +23,7 @@ struct QuoteListView: View {
             ForEach($group.quotes) { $quote in
               QuoteCell(
                 content: quote.content,
+                highlight: viewModel.highlightKeyword,
                 page: quote.page,
                 colorTone: ColorTone.tone(isbn: quote.isbn)
               ) {
@@ -32,11 +33,21 @@ struct QuoteListView: View {
               .padding(.leading, 8)
             }
           } header: {
-            Text(group.bookTitle)
-              .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
-              .frame(maxWidth: .infinity, alignment: .leading)
-              .background(.backgroundDefault)
-              .padding(.top, 16)
+            Group {
+              if let keyword = viewModel.highlightKeyword, !keyword.isEmpty {
+                group.bookTitle.highlightedText(
+                  keyword: keyword,
+                  regularFont: Font(UIFont.pretendard(.semiBold, size: 18)),
+                  highlightFont: Font(UIFont.pretendard(.semiBold, size: 18))
+                )
+              } else {
+                Text(group.bookTitle)
+              }
+            }
+            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(.backgroundDefault)
+            .padding(.top, 16)
           }// : Section
         }
         

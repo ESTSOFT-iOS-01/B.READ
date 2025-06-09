@@ -20,7 +20,7 @@ final class RecordNoteViewModel: ObservableObject {
   private var notes: [NoteVO] = []
   
   // MARK: - Dependency
-//  @Dependency private var noteUseCase: NoteUseCase
+  //  @Dependency private var noteUseCase: NoteUseCase
   
   // MARK: - Action
   enum Action {
@@ -38,7 +38,7 @@ final class RecordNoteViewModel: ObservableObject {
       sortDisplayNotes()
       
     case .onSubmit:
-      print("검색어: \(searchText)")
+      searchNotes()
     }
   }
 }
@@ -47,27 +47,55 @@ private extension RecordNoteViewModel {
   /// 요약노트를 불러와서 뷰에 보여줄 형태로 가공합니다.
   func loadSummarys() {
     Task {
-//      do {
-//        // 1. 요약노트, 독서기록, 책정보를 튜플의 형태로 가져옵니다.
-//        let infos: [(note: AlanSummary, record: Record, book: Book)] = try await noteUseCase.loadSummaryList()
-//        
-//        // 2. NoteVO 형태로 가공합니다. (Entity -> VO)
-//        let allnotes: [NoteVO] = infos.map { NoteVO(record: $0.record, book: $0.book, note: $0.note) }
-//      } catch {
-//        // 패치 중 오류로 정보를 가져오지 못한 상태
-//        self.notes = []
-//      }
+      //      do {
+      //        // 1. 요약노트, 독서기록, 책정보를 튜플의 형태로 가져옵니다.
+      //        let infos: [(note: AlanSummary, record: Record, book: Book)] = try await noteUseCase.loadSummaryList()
+      //
+      //        // 2. NoteVO 형태로 가공합니다. (Entity -> VO)
+      //        let allNotes: [NoteVO] = infos.map { NoteVO(record: $0.record, book: $0.book, note: $0.note) }
+      //      } catch {
+      //        // 패치 중 오류로 정보를 가져오지 못한 상태
+      //        self.notes = []
+      //      }
       
       await MainActor.run {
         setDummy()
-        // 3. 선택된 정렬에 맞게 정렬을 진행
-        sortDisplayNotes()
+        // 3. allNotes를 반영
+        //        self.notes = allNotes
+        // 4. 검색어 필터를 진행
+        searchNotes()
       }
     } // : Task
   }
   
+  /// 보여주고자 하는 Note의 순서를 정렬합니다.
   func sortDisplayNotes() {
-    self.displayNotes = self.notes.sorted(by: self.selectedSort.sort)
+    self.displayNotes = self.displayNotes.sorted(by: self.selectedSort.sort)
+  }
+  
+  ///검색어로 노트를 필터링 합니다.
+  func searchNotes() {
+    // 1. 검색어가 없으면 전체 노트를 보여줌
+    let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty else {
+      self.searchText = ""
+      self.displayNotes = notes
+      self.sortDisplayNotes()
+      return
+    }
+    
+    // 대소문자 구별하지 않음
+    let keyword = searchText.lowercased()
+    
+    // 2. 책 제목으로 필터링을 진행
+    let filteredNotes = notes.filter {
+      $0.bookTitle.lowercased().contains(keyword)
+    }
+    // 3. 필터한 내용을 저장
+    self.displayNotes = filteredNotes
+    
+    // 4. 필터한 내용을 정렬
+    self.sortDisplayNotes()
   }
 }
 
