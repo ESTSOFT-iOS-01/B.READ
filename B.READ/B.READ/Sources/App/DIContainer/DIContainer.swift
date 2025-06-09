@@ -59,6 +59,7 @@ extension DIContainer {
     // Library UseCase
     self.shared.register(
       LibraryUseCaseImpl(
+        userInfoRepository: userInfoRepository,
         bookRepository: bookRepository,
         recordRepository: recordRepository,
         quoteRepository: quoteRepository,
