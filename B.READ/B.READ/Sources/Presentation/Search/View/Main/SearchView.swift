@@ -160,7 +160,7 @@ struct SearchContentView: View {
             .foregroundStyle(.black)
           
           if bestSellerViewModel.bestBookList.isEmpty {
-            BouncingImageLoadingView()
+            LoadingView()
           } else {
             BestSellerView(bookList: bestSellerViewModel.bestBookList) { book in
               coordinator.push(.searchBook(isbn: book.isbn))

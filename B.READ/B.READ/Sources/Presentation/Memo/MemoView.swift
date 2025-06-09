@@ -187,7 +187,7 @@ private struct GuideSectionView: View {
   private func guideText() -> some View {
     switch viewModel.guideStatus {
     case .loading:
-      ProgressView()
+      LoadingView(text: "빵식이에게 가이드 요청중..")
       
     case .empty:
       Image(.happyBread)

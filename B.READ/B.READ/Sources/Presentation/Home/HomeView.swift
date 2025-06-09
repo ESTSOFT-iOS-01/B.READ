@@ -193,7 +193,7 @@ private struct RecommandSectionView: View {
       
       switch bookList.state {
       case .loading:
-        BouncingImageLoadingView()
+        LoadingView()
           .frame(height: 140)
         
       case .failed(let error):

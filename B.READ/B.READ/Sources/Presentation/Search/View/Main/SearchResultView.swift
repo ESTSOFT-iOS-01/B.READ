@@ -56,7 +56,7 @@ struct SearchTabContentView: View {
           switch viewModel.bookLoadState {
           case .loading:
             if viewModel.bookResults.isEmpty {
-              BouncingImageLoadingView()
+              LoadingView()
             } else {
               VStack(spacing: 4) {
                 SearchResultCountView(totalBookCount: viewModel.totalBookCount)
@@ -100,7 +100,7 @@ struct SearchTabContentView: View {
         Group {
           switch viewModel.recordLoadState {
           case .loading:
-            BouncingImageLoadingView()
+            LoadingView()
           case .loaded:
             if viewModel.recordResults.isEmpty {
               FailedView(desp: text)

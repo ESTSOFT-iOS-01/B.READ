@@ -7,8 +7,13 @@
 
 import SwiftUI
 
-struct BouncingImageLoadingView: View {
+struct LoadingView: View {
   @State private var scale: CGFloat = 1.0
+  let text: String?
+  
+  init(text: String? = nil) {
+    self.text = text
+  }
 
   var body: some View {
     VStack {
@@ -22,19 +27,19 @@ struct BouncingImageLoadingView: View {
           scale = 1.2
         }
       
-      Text("데이터 불러오는 중...")
-        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.2)
+      Text(text ?? "데이터 불러오는 중...")
+        .brStyleFont(.pretendard(.regular, size: text == nil ? 16 : 12), lineHeight: 1.2)
         .foregroundColor(.brown7)
         .padding(.top, 16)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-    .background(.backgroundDefault)
+    //.background(.backgroundDefault)
     .ignoresSafeArea()
   }
 }
 
 #Preview {
-  BouncingImageLoadingView()
+  LoadingView()
 }
 
 struct FailedView: View {
