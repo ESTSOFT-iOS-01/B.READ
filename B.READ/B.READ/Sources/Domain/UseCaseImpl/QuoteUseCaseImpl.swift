@@ -5,8 +5,10 @@
 //  Created by 도민준 on 5/22/25.
 //
 
+import Foundation
 
 final class QuoteUseCaseImpl: QuoteUseCase {
+  
   private let quoteRepository: QuoteRepository
   private let bookRepository: BookRepository
   
@@ -19,18 +21,15 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     self.bookRepository = bookRepository
   }
   
-  func addQuote(_ quote: Quote, in record: Record) async throws {
-    // 저장 수행
-    try await quoteRepository.createQuote(quote, in: record)
-  }
-  
-  func updateQuote(_ quote: Quote) async throws {
-    // 업데이트 수행
-    try await quoteRepository.updateQuote(quote)
+  func saveQuote(_ quote: Quote, in record: Record) async throws {
+    do {
+      try await quoteRepository.updateQuote(quote)
+    } catch RepositoryError.dataNotFound {
+      try await quoteRepository.createQuote(quote, in: record)
+    }
   }
   
   func removeQuote(id: String) async throws {
-    // 삭제 수행
     try await quoteRepository.deleteQuote(id: id)
   }
   
@@ -46,7 +45,6 @@ final class QuoteUseCaseImpl: QuoteUseCase {
     return try await quoteRepository.fetchAllQuotes()
   }
 
-  // TODO: - 조회한 도서가 없을 경우 알라딘 검색 후 도서 저장 -> 도서 제목 반환
   func loadBookTitle(_ isbn: String) async throws -> String {
     return try await bookRepository.fetchBook(isbn: isbn).name
   }

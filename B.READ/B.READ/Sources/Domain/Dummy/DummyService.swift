@@ -30,7 +30,7 @@ final class DummyService {
     for quote in DummyData.dummyQuote {
       for record in DummyData.dummyRecords {
         if record.isbn == quote.isbn {
-          try? await quoteUseCase.addQuote(quote, in: record)
+          try? await quoteUseCase.saveQuote(quote, in: record)
           break
         }
       }
