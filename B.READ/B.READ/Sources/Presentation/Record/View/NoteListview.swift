@@ -26,6 +26,7 @@ struct NoteListview: View {
         }
         
       } // : LazyVStack
+      .animation(.easeInOut(duration: 0.5), value: viewModel.displayNotes)
     }// : ScrollView
   }
 }
