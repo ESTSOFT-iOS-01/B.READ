@@ -49,6 +49,8 @@ class NetworkClient {
       throw URLError(.badServerResponse)
     }
     
+    print(String(data: data, encoding: .utf8) ?? "데이터를 문자열로 변환할 수 없습니다.")
+    
     let decoded = try JSONDecoder().decode(T.self, from: data)
     return (decoded, httpResponse)
   }
