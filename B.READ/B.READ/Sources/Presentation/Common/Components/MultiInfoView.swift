@@ -19,9 +19,9 @@ struct MultiInfoView: View {
         .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 1.2, letterSpacing: 0.02)
         .frame(maxWidth: .infinity, alignment: .leading)
       
-      VStack(alignment: .leading, spacing: 8) {
+      VStack(alignment: .leading, spacing: 12) {
         ForEach(content.indices, id: \.self) { index in
-          InnerContentView(content: content[index])
+          InnerContentView(content: "• \(content[index])")
         }
       }
     }
