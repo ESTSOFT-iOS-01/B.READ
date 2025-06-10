@@ -66,17 +66,16 @@ private extension PageInputViewModel {
       
       do {
         try await quoteUseCase.saveQuote(quote, in: record)
+        await MainActor.run {
+          errorMessage = nil
+          didSubmitSuccess = true
+        }
       } catch {
         await MainActor.run {
           errorMessage = error.localizedDescription
           showErrorAlert = true
         }
         return
-      }
-      
-      await MainActor.run {
-        errorMessage = nil
-        didSubmitSuccess = true
       }
     }
   }
