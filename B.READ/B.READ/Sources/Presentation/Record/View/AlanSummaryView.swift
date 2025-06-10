@@ -16,17 +16,30 @@ struct AlanSummaryView: View {
   }
   
   var body: some View {
-    ScrollView {
-      VStack(alignment: .center, spacing: 12) {
-        InfoView(title: "🗓️ 독서 기간", content: "~ 2025. 06. 06")
-        
-        InfoView(title: "🏷️ 감정 태그", content: "")
-        
-        InfoView(title: "📚 요약", content: viewModel.summary.content)
-        
-        MultiInfoView(title: "🍞 문장", content: viewModel.quoteData)
-        
-        MultiInfoView(title: "📝 메모", content: viewModel.memoData)
+    Group {
+      switch viewModel.dataState {
+      case .loading:
+        LoadingView(text: "요약노트 작성 중...")
+      case .loaded:
+        ScrollView {
+          VStack(alignment: .center, spacing: 12) {
+            if let startDate = viewModel.record.period.0,
+               let endDate = viewModel.record.period.1 {
+              InfoView(title: "🗓️ 독서 기간", content: "\(startDate) ~ \(endDate)")
+            }
+            
+            if let summary = viewModel.summary {
+              InfoView(title: "🏷️ 감정 태그", content: "")
+              InfoView(title: "📚 요약", content: summary.content)
+            }
+            
+            MultiInfoView(title: "🍞 문장", content: viewModel.quoteData)
+            
+            MultiInfoView(title: "📝 메모", content: viewModel.memoData)
+          }
+        }
+      case .failed:
+        FailedView(desp: "빵식이가 요약노트를 생성할 수 없습니다.")
       }
     }
     .navigationTitle(viewModel.record.title)

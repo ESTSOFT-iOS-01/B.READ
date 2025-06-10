@@ -14,14 +14,12 @@ enum SummaryState {
 
 final class SummaryViewModel: ObservableObject {
   // MARK: - Internal Variable
-  private let record: RecordDetailVO
+  let record: RecordDetailVO
   private let memos: [MemoVO]
   private let quotes: [QuoteVO]
   
   // MARK: - State
   @Published var dataState: SummaryState = .loading
-  @Published var isSaveComplete: Bool = false
-  
   @Published var summary: SummaryVO?
   @Published var memoData: [String] = []
   @Published var quoteData: [String] = []
@@ -52,32 +50,18 @@ final class SummaryViewModel: ObservableObject {
     memoData = memos.map { $0.content }
     quoteData = quotes.map { $0.content }
     
-  }
-  
-  // MARK: - Action
-  enum Action {
-    case fetchSummary(String)
-    case generateSummary
-    case saveSummary
-  }
-  
-  func send(_ action: Action) {
-    switch action {
-    case let .fetchSummary(id):
-    case .generateSummary:
-    case .saveSummary:
-    }
+    fetchSummary(id)
   }
   
 }
 
-// MARK: - Internal Function
 private extension SummaryViewModel {
   func generateSummary() {
     Task{
       do {
         let recordData = record.toEntity(memos: memos, quotes: quotes)
         let summaryData = try await summaryUseCase.generateSummary(in: recordData)
+        try await summaryUseCase.saveSummary(summaryData, in: recordData)
         
         await MainActor.run {
           summary = SummaryVO(summaryData)
@@ -89,42 +73,24 @@ private extension SummaryViewModel {
           dataState = .failed
         }
       }
-      
     }
   }
   
-  func saveSummary() {
-    Task {
-      if let summaryData = summary {
-        let summaryEntity = AlanSummary(
-          isbn: summaryData.isbn,
-          content: summaryData.content,
-          tags: summaryData.tags.map{ Tag($0.content) },
-        )
-        let recordData = record.toEntity(memos: memos, quotes: quotes)
-        
-        do {
-          try await summaryUseCase.saveSummary(summaryEntity, in: recordData)
-          await MainActor.run {
-            isSaveComplete = true
-          }
-        } catch {
-          await MainActor.run {
-            print(error)
-            isSaveComplete = false
-          }
-        }
-      }
-    }
-  }
-  
-  func fetchSummart(_ id: String) {
+  func fetchSummary(_ id: String) {
     Task {
       do {
         let summaryData = try await summaryUseCase.fetchSummary(id: id)
         
+        await MainActor.run {
+          summary = SummaryVO(summaryData)
+          dataState = .loaded
+        }
+      } catch {
+        print(error)
+        await MainActor.run {
+          dataState = .failed
+        }
       }
     }
   }
-  
 }
