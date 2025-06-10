@@ -11,6 +11,7 @@ import SwiftUI
 struct RecordStatsSection: View {
   @Binding var record: RecordDetailVO?
   
+  private let contentHeaderFontSize: CGFloat = 16
   private let contentFontSize: CGFloat = 14
   private let layoutPadding: CGFloat = 8
   
@@ -22,20 +23,22 @@ struct RecordStatsSection: View {
           Text("기대지수")
           ScoreBoardView(record?.heart ?? 0, type: .heart)
         }
-        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
+        .brStyleFont(.pretendard(.semiBold, size: contentHeaderFontSize), lineHeight: 0.95)
       } else if record?.readingState == .finished {
         VStack(alignment: .leading, spacing: 8) {
           Text("평점")
           ScoreBoardView(record?.star ?? 0, type: .star)
         }
-        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 0.95)
+        .brStyleFont(.pretendard(.semiBold, size: contentHeaderFontSize), lineHeight: 0.95)
+        
+        recordReview()
       }
       
       // 독서 기간
       VStack(alignment: .leading, spacing: layoutPadding) {
         Text("독서 기간")
           .brStyleFont(
-            .pretendard(.semiBold, size: contentFontSize),
+            .pretendard(.semiBold, size: contentHeaderFontSize),
             lineHeight: 0.95
           )
         
@@ -106,15 +109,40 @@ struct RecordStatsSection: View {
     .padding(.vertical, layoutPadding)
     .padding(.horizontal, 16)
   }
+  
+  // MARK: - (F)recordReview
+  private func recordReview() -> some View {
+    VStack(alignment: .leading, spacing: 8) {
+      Text("한줄평")
+        .brStyleFont(.pretendard(.semiBold, size: contentHeaderFontSize), lineHeight: 0.95)
+      
+      ZStack(alignment: .topLeading) {
+        RoundedRectangle(cornerRadius: 8)
+          .fill(.gray0)
+        
+        if let review = record?.review, !review.isEmpty {
+          Text(review)
+            .brStyleFont(.pretendard(.regular, size: contentFontSize), lineHeight: 1.3)
+            .padding(16)
+        } else {
+          Text("짧은 감상평을 남겨보세요")
+            .brStyleFont(.pretendard(.regular, size: contentFontSize), lineHeight: 1.3)
+            .foregroundStyle(.gray5)
+            .padding(16)
+        }
+      } // : ZStack
+    } // : VStack
+  }
 }
 
 #Preview {
   @Previewable @State var record: RecordDetailVO? = RecordDetailVO(
-    record: DummyData.dummyRecords[1],
-    book: DummyData.dummyBooks[1]
+    record: DummyData.dummyRecords[2],
+    book: DummyData.dummyBooks[2]
   )
   
   PreviewableContainer {
     RecordStatsSection(record: $record)
+      .padding(.horizontal, 24)
   }
 }

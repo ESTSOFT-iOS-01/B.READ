@@ -12,6 +12,11 @@ struct PageInputView: View {
   @StateObject var viewModel: PageInputViewModel
   @FocusState private var isFocused: Bool
   
+  // MARK: - Init
+  init(viewModel: @autoclosure @escaping () -> PageInputViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel())
+  }
+  
   var body: some View {
     VStack(spacing: 24) {
       VStack(alignment: .leading, spacing: 8) {
