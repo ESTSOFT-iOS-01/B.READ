@@ -9,11 +9,18 @@ import Foundation
 
 final class MemoUseCaseImpl: MemoUseCase {
   
+  let userInfoRepository: UserInfoRepository
   let bookRepository: BookRepository
   let memoRepository: MemoRepository
   let aiService: AIService
   
-  init(bookRepository: BookRepository, memoRepository: MemoRepository, aiService: AIService) {
+  init(
+    userInfoRepository: UserInfoRepository,
+    bookRepository: BookRepository,
+    memoRepository: MemoRepository,
+    aiService: AIService
+  ) {
+    self.userInfoRepository = userInfoRepository
     self.bookRepository = bookRepository
     self.memoRepository = memoRepository
     self.aiService = aiService
@@ -25,6 +32,8 @@ final class MemoUseCaseImpl: MemoUseCase {
     } catch RepositoryError.dataNotFound {
       try await memoRepository.createMemo(memo, in: record)
     }
+    
+    try await self.updateStreakIfNeeded()
   }
   
   func fetchMemo(id: String) async throws -> Memo {
@@ -81,5 +90,27 @@ final class MemoUseCaseImpl: MemoUseCase {
   
   func loadBookTitle(_ isbn: String) async throws -> String {
     return try await bookRepository.fetchBook(isbn: isbn).name
+  }
+}
+
+private extension MemoUseCaseImpl {
+  func updateStreakIfNeeded() async throws {
+    let currentTime: Date = .now
+    
+    var userInfo = try await userInfoRepository.fetchUserInfo()
+    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) {
+      print("이미 스트릭 업데이트 되었음")
+      return
+    }
+  
+    if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+      userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
+    }
+    
+    userInfo.streak[currentTime.weekdayInt - 1] = DailyStatus(weekday: currentTime.weekdayInt - 1, isCompleted: true)
+    userInfo.lastStreakUpdatedAt = currentTime
+    
+    try await userInfoRepository.updateUserInfo(userInfo)
+    print("스트릭 업데이트 됨")
   }
 }

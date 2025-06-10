@@ -42,7 +42,7 @@ final class LibraryUseCaseImpl: LibraryUseCase {
     
     try await recordRepository.createRecord(record)
     
-    
+    try await self.updateStreakIfNeeded()
   }
   
   func editRecord(_ record: Record) async throws {
@@ -62,6 +62,8 @@ final class LibraryUseCaseImpl: LibraryUseCase {
       // 4. 독서 기록이 없으면 생성
       try await recordRepository.createRecord(record)
     }
+    
+    try await self.updateStreakIfNeeded()
   }
   
   func loadRecord(_ recordID: String) async throws -> (Record, Book) {
@@ -165,14 +167,22 @@ private extension LibraryUseCaseImpl {
   }
   
   func updateStreakIfNeeded() async throws {
-    let today: Date = .now
+    let currentTime: Date = .now
     
     var userInfo = try await userInfoRepository.fetchUserInfo()
+    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) {
+      print("이미 스트릭 업데이트 되었음")
+      return
+    }
+  
+    if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+      userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
+    }
     
-    // 같은 날짜에 이미 업데이트가 이루어졌다면 return
-    guard userInfo.lastStreakUpdatedAt.isSameDay(as: today) else { return }
-    userInfo.streak[today.weekdayInt] = DailyStatus(weekday: today.weekdayInt, isCompleted: true)
+    userInfo.streak[currentTime.weekdayInt - 1] = DailyStatus(weekday: currentTime.weekdayInt - 1, isCompleted: true)
+    userInfo.lastStreakUpdatedAt = currentTime
     
-    
+    try await userInfoRepository.updateUserInfo(userInfo)
+    print("스트릭 업데이트 됨")
   }
 }

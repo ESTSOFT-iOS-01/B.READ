@@ -56,6 +56,7 @@ private extension SettingViewModel {
     Task {
       do {
         let userInfo = try await profileUseCase.fetchUserInfo()
+        print(userInfo.lastStreakUpdatedAt)
         await MainActor.run {
           self.nicknameText = userInfo.nickname
           self.selectedCategories = Set(userInfo.categories.compactMap { CategoryType(rawValue: $0.id) })

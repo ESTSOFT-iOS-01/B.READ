@@ -14,15 +14,18 @@ struct MemoUseCaseTest {
 
   let memoUseCase: MemoUseCase
   let recordRepository: RecordRepository
+  let userInfoRepository: UserInfoRepository
   let bookRepository: BookRepository
   let memoRepository: MemoRepository
   
   init() {
     let storage = SwiftDataTestStorage()
     self.recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
+    self.userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     self.memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
     self.memoUseCase = MemoUseCaseImpl(
+      userInfoRepository: userInfoRepository,
       bookRepository: BookRepositoryImpl(modelContainer: storage.modelContainer),
       memoRepository: memoRepository,
       aiService: AlanService()
