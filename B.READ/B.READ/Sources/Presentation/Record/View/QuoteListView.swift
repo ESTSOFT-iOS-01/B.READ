@@ -52,7 +52,7 @@ struct QuoteListView: View {
         }
         
       } // : LazyVStack
-      .animation(.easeInOut(duration: 0.5), value: viewModel.displayMemoGroups)
+      .animation(.easeInOut(duration: 0.5), value: viewModel.displayQuoteGroups)
     } // : ScrollView
     .background(.backgroundDefault)
     .confirmationDialog(
