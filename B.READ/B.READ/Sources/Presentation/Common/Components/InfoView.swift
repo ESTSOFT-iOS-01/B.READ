@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)InfoView
 struct InfoView: View {
   let layoutPadding : CGFloat = 16
+  let horizontalPadding : CGFloat = 24
   let title : String
   var content: String
   
@@ -21,8 +22,8 @@ struct InfoView: View {
       
       InnerContentView(content: content)
     }
-    .padding(.horizontal, 24)
-    .padding(.vertical, 16)
+    .padding(.horizontal, horizontalPadding)
+    .padding(.vertical, layoutPadding)
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(.white)
   }

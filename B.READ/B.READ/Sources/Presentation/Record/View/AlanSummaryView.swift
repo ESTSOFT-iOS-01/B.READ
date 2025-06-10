@@ -44,4 +44,3 @@ struct AlanSummaryView: View {
   )
   
 }
-

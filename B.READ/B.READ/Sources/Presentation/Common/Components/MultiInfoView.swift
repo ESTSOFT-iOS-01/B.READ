@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)MultiInfoView
 struct MultiInfoView: View {
   let layoutPadding : CGFloat = 16
+  let horizontalPadding : CGFloat = 24
   let title : String
   var content: [String]
   
@@ -25,8 +26,8 @@ struct MultiInfoView: View {
         }
       }
     }
-    .padding(.horizontal, 24)
-    .padding(.vertical, 16)
+    .padding(.horizontal, horizontalPadding)
+    .padding(.vertical, layoutPadding)
     .frame(maxWidth: .infinity, alignment: .leading)
     .background(.white)
   }
