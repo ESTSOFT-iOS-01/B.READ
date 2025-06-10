@@ -46,6 +46,7 @@ final class NewRecordViewModel: ObservableObject {
     self.reviewText = ""
     self.book = book
     self.totalPage = book.totalPages
+//    print("NewRecordViewModel이 생성되었습니다. ")
   }
   
   /// Library에서 Record 수정하는 경우
@@ -61,6 +62,7 @@ final class NewRecordViewModel: ObservableObject {
     self.reviewText = recordVO.review
     self.totalPage = recordVO.totalPage
     self.book = nil
+//    print("NewRecordViewModel이 생성되었습니다. ")
   }
   
   // MARK: - Action

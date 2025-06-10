@@ -18,6 +18,11 @@ final class BestSellerViewModel: ObservableObject {
   // MARK: - Dependency
   @Dependency private var recommandUseCase: RecommandUseCase
   
+  init(
+  ) {
+//    print("BestSellerViewModel이 생성되었습니다. ")
+  }
+  
   enum Action {
     case onAppear
     case cancelTask

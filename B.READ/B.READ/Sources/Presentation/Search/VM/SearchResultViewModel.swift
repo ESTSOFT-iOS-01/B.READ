@@ -36,9 +36,14 @@ final class SearchResultViewModel: ObservableObject {
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
   
+  init() {
+//    print("SearchResultViewModel이 생성되었습니다. ")
+  }
+  
   deinit {
     bookTask?.cancel()
     recordTask?.cancel()
+//    print("SearchResultViewModel이 소멸되었습니다. ")
   }
   
   enum Action {
