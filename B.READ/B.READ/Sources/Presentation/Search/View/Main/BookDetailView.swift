@@ -12,8 +12,8 @@ struct BookDetailView: View {
   @StateObject var viewModel: BookViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  init(viewModel: BookViewModel) {
-    self._viewModel = .init(wrappedValue: viewModel)
+  init(viewModel: @autoclosure @escaping () -> BookViewModel) {
+    self._viewModel = StateObject(wrappedValue: viewModel())
   }
   
   var body: some View {

@@ -21,15 +21,15 @@ struct SearchView: View {
   private let horizontalPadding: CGFloat = 24
   
   init(
-    inputViewModel: SearchInputViewModel,
-    resultViewModel: SearchResultViewModel,
-    recentSearchViewModel: RecentSearchViewModel,
-    bestSellerViewModel: BestSellerViewModel
+    inputViewModel: @autoclosure @escaping () -> SearchInputViewModel,
+    resultViewModel: @autoclosure @escaping () -> SearchResultViewModel,
+    recentSearchViewModel: @autoclosure @escaping () -> RecentSearchViewModel,
+    bestSellerViewModel: @autoclosure @escaping () -> BestSellerViewModel
   ) {
-    self._inputViewModel = .init(wrappedValue: inputViewModel)
-    self._resultViewModel = .init(wrappedValue: resultViewModel)
-    self._recentSearchViewModel = .init(wrappedValue: recentSearchViewModel)
-    self._bestSellerViewModel = .init(wrappedValue: bestSellerViewModel)
+    self._inputViewModel = .init(wrappedValue: inputViewModel())
+    self._resultViewModel = .init(wrappedValue: resultViewModel())
+    self._recentSearchViewModel = .init(wrappedValue: recentSearchViewModel())
+    self._bestSellerViewModel = .init(wrappedValue: bestSellerViewModel())
   }
   
   var body: some View {

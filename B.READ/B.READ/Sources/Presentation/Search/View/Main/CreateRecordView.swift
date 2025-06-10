@@ -17,17 +17,19 @@ struct CreateRecordView: View {
   let onComplete: (_ isEdit: Bool) -> Void
   
   // MARK: - Inits
-  init(state: Binding<ReadingState>, viewModel: NewRecordViewModel) {
-    self.init(state: state, viewModel: viewModel, onComplete: { _ in })
+  init(state: Binding<ReadingState>, viewModel: @autoclosure @escaping () -> NewRecordViewModel) {
+    self._selectedState = state
+    self._viewModel = StateObject(wrappedValue: viewModel())
+    self.onComplete = { _ in }
   }
-
+  
   init(
     state: Binding<ReadingState>,
-    viewModel: NewRecordViewModel,
+    viewModel: @autoclosure @escaping () -> NewRecordViewModel,
     onComplete: @escaping (_ isEdit: Bool) -> Void
   ) {
     self._selectedState = state
-    self._viewModel = .init(wrappedValue: viewModel)
+    self._viewModel = StateObject(wrappedValue: viewModel())
     self.onComplete = onComplete
   }
   
@@ -91,7 +93,7 @@ struct CreateRecordView: View {
     } message: {
       Text("올바른 페이지 번호가 아닙니다.\n1 ~ \(viewModel.totalPage) 사이의 숫자를 입력해주세요")
     } //: alert
-
+    
   }
   
   // MARK: - (F)stateContentView
