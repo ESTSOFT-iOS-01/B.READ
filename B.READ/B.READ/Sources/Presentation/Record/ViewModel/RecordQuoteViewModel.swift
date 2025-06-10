@@ -138,6 +138,7 @@ private extension RecordQuoteViewModel {
     let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else {
       self.searchText = ""
+      self.highlightKeyword = nil
       self.displayQuoteGroups = quoteGroups
       self.sortDisplayQuoteGroups()
       return
