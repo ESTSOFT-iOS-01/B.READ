@@ -12,6 +12,7 @@ final class SummaryViewModel: ObservableObject {
   let record: RecordDetailVO
   let memos: [MemoVO]
   let quotes: [QuoteVO]
+  
   @Published var summary: SummaryVO
   @Published var memoData: [String] = []
   @Published var quoteData: [String] = []
@@ -21,22 +22,10 @@ final class SummaryViewModel: ObservableObject {
     self.memos = memos
     self.quotes = quotes
     
-    memoData = memos.extractContents()
-    quoteData = quotes.extractContents()
+    memoData = memos.map { $0.content }
+    quoteData = quotes.map { $0.content }
     
     summary = SummaryVO(DummyData.summaryForFetchTest)
   }
   
-}
-
-extension Array where Element == MemoVO {
-  func extractContents() -> [String] {
-    self.map { $0.content }
-  }
-}
-
-extension Array where Element == QuoteVO {
-  func extractContents() -> [String] {
-    self.map { $0.content }
-  }
 }

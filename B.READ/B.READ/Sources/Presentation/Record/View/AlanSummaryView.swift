@@ -11,8 +11,8 @@ struct AlanSummaryView: View {
   @StateObject var viewModel: SummaryViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  init(viewModel: SummaryViewModel) {
-    self._viewModel = .init(wrappedValue: viewModel)
+  init(viewModel: @autoclosure @escaping () ->  SummaryViewModel) {
+    self._viewModel = StateObject(wrappedValue: viewModel())
   }
   
   var body: some View {
