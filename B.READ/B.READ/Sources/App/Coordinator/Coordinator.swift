@@ -23,22 +23,22 @@ final class Coordinator<T: Hashable, R: Identifiable>: ObservableObject {
   // MARK: - Navigation Push/Pop
   func push(_ path: T) {
     guard paths.last != path else { return }
-    print("Before push: \(paths)")
+    print("Before push: \(paths)\n\n")
     paths.append(path)
-    print("After push: \(paths)")
+    print("After push: \(paths)\n\n")
   }
 
   func pop() {
     guard !paths.isEmpty else { return }
-    print("Before pop: \(paths)")
+    print("Before pop: \(paths)\n\n")
     paths.removeLast()
-    print("After pop: \(paths)")
+    print("After pop: \(paths)\n\n")
   }
 
   func popToRoot() {
-    print("Before popToRoot: \(paths)")
+    print("Before popToRoot: \(paths)\n\n")
     paths.removeAll()
-    print("After popToRoot: \(paths)")
+    print("After popToRoot: \(paths)\n\n")
   }
   
   func pop(to: T) {
