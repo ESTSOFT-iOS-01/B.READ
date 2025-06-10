@@ -8,6 +8,25 @@
 import Foundation
 
 extension Date {
+  
+  static private let configuredCalendar: Calendar = {
+    var calendar = Calendar.current
+    calendar.locale = .current
+    calendar.timeZone = .current
+    return calendar
+  }()
+  
+  /// 요일을 Int로 반환합니다.
+  var weekdayInt: Int {
+    Self.configuredCalendar.component(.weekday, from: self)
+  }
+  
+  /// Calendar.current의 주(weekOfYear) 기준으로
+  /// 이 날짜가 오늘을 포함한 같은 주(일요일~토요일)에 속하는지 여부
+  var isInCurrentWeek: Bool {
+    Self.configuredCalendar.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
+  }
+  
   enum DateFormatType: String {
     case dotSeparated = "yyyy. MM. dd"
     case dotSeparatedFull = "yyyy. MM. dd. (E)"
@@ -25,5 +44,13 @@ extension Date {
   func string(format dateFormatType: DateFormatType) -> String {
     Self.dateFormatter.dateFormat = dateFormatType.rawValue
     return Self.dateFormatter.string(from: self)
+  }
+  
+  /// 두 날짜의 연·월·일(달력 컴포넌트)이 같은지 비교합니다.
+  /// - Parameter other: 비교 대상 날짜
+  /// - Returns: 같은 날짜(년·월·일)이면 true
+  func isSameDay(as other: Date) -> Bool {
+    return Self.configuredCalendar.dateComponents([.year, .month, .day], from: self)
+        == Self.configuredCalendar.dateComponents([.year, .month, .day], from: other)
   }
 }

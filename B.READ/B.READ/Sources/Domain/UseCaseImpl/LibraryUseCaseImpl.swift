@@ -9,6 +9,7 @@ import Foundation
 
 final class LibraryUseCaseImpl: LibraryUseCase {
   
+  private let userInfoRepository: UserInfoRepository
   private let bookRepository: BookRepository
   private let recordRepository: RecordRepository
   //  private let memoRepository: MemoRepository
@@ -17,11 +18,13 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   private let bookService: BookService
   
   init(
+    userInfoRepository: UserInfoRepository,
     bookRepository: BookRepository,
     recordRepository: RecordRepository,
     quoteRepository: QuoteRepository,
     bookService: BookService
   ) {
+    self.userInfoRepository = userInfoRepository
     self.bookRepository = bookRepository
     self.recordRepository = recordRepository
     self.quoteRepository = quoteRepository
@@ -31,12 +34,15 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   func saveRecord(record: Record, book: Book) async throws {
     do {
       try await bookRepository.createBook(book)
+      
     } catch RepositoryError.dataAlreadyExist {
       // 이미 존재하면 무시
       print("이미 존재하는 책입니다.")
     }
     
     try await recordRepository.createRecord(record)
+    
+    try await self.updateStreakIfNeeded()
   }
   
   func editRecord(_ record: Record) async throws {
@@ -56,6 +62,8 @@ final class LibraryUseCaseImpl: LibraryUseCase {
       // 4. 독서 기록이 없으면 생성
       try await recordRepository.createRecord(record)
     }
+    
+    try await self.updateStreakIfNeeded()
   }
   
   func loadRecord(_ recordID: String) async throws -> (Record, Book) {
@@ -156,5 +164,23 @@ private extension LibraryUseCaseImpl {
     )
     try await bookRepository.createBook(book)
     return book
+  }
+  
+  func updateStreakIfNeeded() async throws {
+    let currentTime: Date = .now
+    
+    var userInfo = try await userInfoRepository.fetchUserInfo()
+    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) {
+      return
+    }
+  
+    if !userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+      userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
+    }
+    
+    userInfo.streak[currentTime.weekdayInt - 1] = DailyStatus(weekday: currentTime.weekdayInt - 1, isCompleted: true)
+    userInfo.lastStreakUpdatedAt = currentTime
+    
+    try await userInfoRepository.updateUserInfo(userInfo)
   }
 }

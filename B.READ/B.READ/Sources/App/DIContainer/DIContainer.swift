@@ -59,6 +59,7 @@ extension DIContainer {
     // Library UseCase
     self.shared.register(
       LibraryUseCaseImpl(
+        userInfoRepository: userInfoRepository,
         bookRepository: bookRepository,
         recordRepository: recordRepository,
         quoteRepository: quoteRepository,
@@ -70,6 +71,7 @@ extension DIContainer {
     // Memo UseCase
     self.shared.register(
       MemoUseCaseImpl(
+        userInfoRepository: userInfoRepository,
         bookRepository: bookRepository,
         memoRepository: memoRepository,
         aiService: AlanService()
@@ -80,6 +82,7 @@ extension DIContainer {
     // Quote UseCase
     self.shared.register(
       QuoteUseCaseImpl(
+        userInfoRepository: userInfoRepository,
         quoteRepository: quoteRepository,
         bookRepository: bookRepository),
       for: QuoteUseCase.self
