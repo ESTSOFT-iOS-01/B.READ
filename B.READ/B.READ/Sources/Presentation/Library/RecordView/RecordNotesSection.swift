@@ -61,7 +61,7 @@ struct RecordNotesSection: View {
     } // : LazyVStcks
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 8)
-    .padding(.bottom, 72)
+    .padding(.bottom, 100)
     .confirmationDialog(
       "메뉴를 선택하세요",
       isPresented: $showMenuActionSheet,
