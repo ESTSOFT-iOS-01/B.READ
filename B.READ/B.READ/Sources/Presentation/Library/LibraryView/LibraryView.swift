@@ -60,11 +60,13 @@ struct LibraryView: View {
         .foregroundStyle(.gray2)
         .padding(.top, layoutPadding)
         
-        // 독서기록 목록 뷰
-        if viewModel.displayRecords.isEmpty {
-          Text("독서 기록이 없습니다.")
-            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        if viewModel.viewState == .loading {
+          LoadingView()
+        } else if viewModel.displayRecords.isEmpty {
+          FailedView(
+            title: "😢 독서 기록을 작성하러 가볼까요?",
+            desp: "카테고리에 일치하는 독서 기록이 없습니다."
+          )
         } else if displayMode == .list {
           LibraryListView(records: $viewModel.displayRecords)
         } else {

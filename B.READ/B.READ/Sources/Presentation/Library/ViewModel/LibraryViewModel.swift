@@ -11,8 +11,12 @@ import SwiftUI
 // MARK: - (C)LibraryViewModel
 final class LibraryViewModel: ObservableObject {
   
+  enum ViewState {
+    case loading
+    case loaded
+  }
+  
   // MARK: - State
-  // 탭바
   @Published var tabs: [TabItem] = [
     TabItem(title: "전체(0)"),
     TabItem(title: "읽은 책(0)"),
@@ -26,7 +30,7 @@ final class LibraryViewModel: ObservableObject {
   @Published var selectedSort: [SortOption] = [.recent, .recent, .recent, .recent, .recent]
   // 뷰로 보여주는 독서 기록
   @Published var displayRecords: [RecordCellVO] = []
-  
+  @Published var viewState: ViewState = .loading
   
   // MARK: - Internal Variable
   // DB에서 가져온 전체 독서기록
@@ -63,6 +67,7 @@ final class LibraryViewModel: ObservableObject {
 private extension LibraryViewModel {
   // 독서 기록을 불러옴
   func loadRecords() {
+    viewState = .loading
     Task {
       await fetchRecords()
       await withTaskGroup(of: Void.self) { group in
@@ -78,7 +83,9 @@ private extension LibraryViewModel {
           await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
         }
       }
-      
+      await MainActor.run {
+        viewState = .loaded
+      }
     }
   }
   
