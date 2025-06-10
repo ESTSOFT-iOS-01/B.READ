@@ -8,17 +8,21 @@
 import Foundation
 
 final class SummaryUseCaseImpl: SummaryUseCase {
+  
+  let userInfoRepository: UserInfoRepository
   let summaryRepository: SummaryRepository
   let bookRepository: BookRepository
   let recordRepository: RecordRepository
   let aiService: AIService
   
   init(
+    userInfoRepository: UserInfoRepository,
     summaryRepository: SummaryRepository,
     bookRepository: BookRepository,
     recordRepository: RecordRepository,
     aiService: AIService
   ) {
+    self.userInfoRepository = userInfoRepository
     self.summaryRepository = summaryRepository
     self.bookRepository = bookRepository
     self.recordRepository = recordRepository
@@ -27,6 +31,7 @@ final class SummaryUseCaseImpl: SummaryUseCase {
   
   func saveSummary(_ summary: AlanSummary, in record: Record) async throws {
     try await summaryRepository.createSummary(summary, in: record)
+    try await self.updateStreakIfNeeded()
   }
   
   func generateSummary(in record: Record) async throws -> AlanSummary {
@@ -109,4 +114,23 @@ private extension SummaryUseCaseImpl {
     let trimmed = Array(memos.prefix(memos.count - retryCount))
     return trimmed.map { $0.content }.joined(separator: " ")
   }
+  
+  func updateStreakIfNeeded() async throws {
+      let currentTime: Date = .now
+      
+      var userInfo = try await userInfoRepository.fetchUserInfo()
+      // 같은 날짜에 이미 업데이트가 이루어졌다면 return
+      if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) { return }
+      
+      // 스트릭이 이번주의 첫 스트릭일 경우 초기화
+      if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+        userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
+      }
+      
+      // 업데이트
+      userInfo.streak[currentTime.weekdayInt - 1] = DailyStatus(weekday: currentTime.weekdayInt - 1, isCompleted: true)
+      userInfo.lastStreakUpdatedAt = currentTime
+      
+      try await userInfoRepository.updateUserInfo(userInfo)
+    }
 }

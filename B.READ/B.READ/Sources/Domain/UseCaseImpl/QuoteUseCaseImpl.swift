@@ -66,10 +66,7 @@ private extension QuoteUseCaseImpl {
     
     var userInfo = try await userInfoRepository.fetchUserInfo()
     // 같은 날짜에 이미 업데이트가 이루어졌다면 return
-    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) {
-      print("이미 스트릭 업데이트 되었음")
-      return
-    }
+    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) { return }
     
     // 스트릭이 이번주의 첫 스트릭일 경우 초기화
     if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
@@ -81,6 +78,5 @@ private extension QuoteUseCaseImpl {
     userInfo.lastStreakUpdatedAt = currentTime
     
     try await userInfoRepository.updateUserInfo(userInfo)
-    print("스트릭 업데이트 됨")
   }
 }

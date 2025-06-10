@@ -171,7 +171,6 @@ private extension LibraryUseCaseImpl {
     
     var userInfo = try await userInfoRepository.fetchUserInfo()
     if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) {
-      print("이미 스트릭 업데이트 되었음")
       return
     }
   
@@ -183,6 +182,5 @@ private extension LibraryUseCaseImpl {
     userInfo.lastStreakUpdatedAt = currentTime
     
     try await userInfoRepository.updateUserInfo(userInfo)
-    print("스트릭 업데이트 됨")
   }
 }

@@ -98,10 +98,7 @@ private extension MemoUseCaseImpl {
     let currentTime: Date = .now
     
     var userInfo = try await userInfoRepository.fetchUserInfo()
-    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) {
-      print("이미 스트릭 업데이트 되었음")
-      return
-    }
+    if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) { return }
   
     if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
       userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
@@ -111,6 +108,5 @@ private extension MemoUseCaseImpl {
     userInfo.lastStreakUpdatedAt = currentTime
     
     try await userInfoRepository.updateUserInfo(userInfo)
-    print("스트릭 업데이트 됨")
   }
 }
