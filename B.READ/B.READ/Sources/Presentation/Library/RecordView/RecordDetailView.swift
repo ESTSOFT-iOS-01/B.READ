@@ -119,18 +119,15 @@ struct RecordDetailView: View {
   
   // MARK: - (F)topBarTrailingButton
   private func topBarTrailingButton() -> some View {
-    HStack(spacing: 0) {
+    HStack(spacing: 4) {
       Button {
         viewModel.send(.onTapFavorite)
       } label: {
         if let isFavorite = viewModel.record?.isFavorite {
-          Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
+          Image(systemName: isFavorite ? SFSymbol.bookMarkFill.name : SFSymbol.bookMark.name)
             .resizable()
-            .frame(width: 12, height: 24)
-        } else {
-          Image(systemName: "bookmark")
-            .resizable()
-            .frame(width: 12, height: 24)
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 22, height: 22)
         }
       }
       Button {

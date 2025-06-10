@@ -33,6 +33,7 @@ struct HomeView: View {
     }
     .frame(maxWidth: .infinity, alignment: .top)
     .background(.backgroundDefault)
+    .scrollIndicators(.hidden)
     .onAppear {
       viewModel.send(.onAppear)
     }
@@ -198,7 +199,7 @@ private struct RecommandSectionView: View {
       
       switch bookList.state {
       case .loading:
-        BouncingImageLoadingView()
+        LoadingView()
           .frame(height: 140)
         
       case .failed(let error):

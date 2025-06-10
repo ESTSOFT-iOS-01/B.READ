@@ -23,8 +23,11 @@ struct LoginView: View {
         .brStyleFont(.pretendard(.light, size: 18), lineHeight: 1.1)
         .padding(.top, 60)
       
-      Text("B. READ")
-        .brStyleFont(.peaceSans(size: 48), lineHeight: 1.1)
+
+      Image(.splashLogo)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(height: 60)
         .padding(.top, 16)
       
       Text("누르면 초기 설정을 시작해요!")
@@ -39,6 +42,7 @@ struct LoginView: View {
     }
     .padding(.horizontal, 56)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(.backgroundDefault)
   }
   
   
