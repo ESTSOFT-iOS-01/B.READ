@@ -17,7 +17,7 @@ final class RecordQuoteViewModel: ObservableObject {
   @Published var highlightKeyword: String? = nil
   
   // MARK: - Internal Variable
-  private var quoteGroups: [QuoteGroup] = []
+  private(set) var quoteGroups: [QuoteGroup] = []
   var selectedQuote: QuoteVO? = nil
   
   // MARK: - Dependency

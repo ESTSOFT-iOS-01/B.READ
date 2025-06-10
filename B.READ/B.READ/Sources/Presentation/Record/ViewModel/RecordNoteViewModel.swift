@@ -17,7 +17,7 @@ final class RecordNoteViewModel: ObservableObject {
   @Published var selectedSort: SortOption = .recent
   
   // MARK: - Internal Variable
-  private var notes: [NoteVO] = []
+  private(set) var notes: [NoteVO] = []
   
   // MARK: - Dependency
   //  @Dependency private var noteUseCase: NoteUseCase
@@ -59,7 +59,7 @@ private extension RecordNoteViewModel {
       //      }
       
       await MainActor.run {
-        setDummy()
+//        setDummy()
         // 3. allNotes를 반영
         //        self.notes = allNotes
         // 4. 검색어 필터를 진행
