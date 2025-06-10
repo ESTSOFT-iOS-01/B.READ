@@ -8,130 +8,110 @@
 import SwiftUI
 
 struct PageInputView: View {
-  let mode: SentenceInputMode
-  let sentence: String
-  
-  @State private var pageText: String = "0"
-  @StateObject private var viewModel: SentenceViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @State private var showInvalidAlert = false
+  @StateObject var viewModel: PageInputViewModel
   @FocusState private var isFocused: Bool
   
-  init(mode: SentenceInputMode, sentence: String) {
-    self.mode = mode
-    self.sentence = sentence
-    _viewModel = StateObject(wrappedValue: SentenceViewModel(mode: mode))
-  }
-  
-  
   var body: some View {
-    let isValidPage: Bool = {
-      guard let limit = viewModel.maxPage else {
-        return false
-      }
-      
-      guard let number = Int(pageText) else {
-        return false
-      }
-      
-      return (1...limit).contains(number)
-    }()
-    
-    VStack(alignment: .leading, spacing: 8) {
-      Text("페이지를 입력해 주세요")
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
-      HStack(spacing: 0) {
-        RoundedTextField(
-          type: .pages,
-          placeholder: "0",
-          text: $pageText,
-          isValid: isValidPage
-        )
-        .focused($isFocused)
+    VStack(spacing: 24) {
+      VStack(alignment: .leading, spacing: 8) {
+        Text("페이지를 입력해 주세요")
+          .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.2)
         
-        Text("쪽")
-          .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
-          .padding(.leading, 16)
+        HStack(spacing: 16) {
+          RoundedTextField(
+            type: .pages,
+            placeholder: "0",
+            text: $viewModel.page,
+            isValid: viewModel.isValid
+          )
+          .focused($isFocused)
+          .onChange(of: viewModel.page) {
+            viewModel.send(.updatePage)
+          }
+          
+          Text("쪽")
+            .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
+        } // : HStack
       }
+      .padding(.horizontal, 24)
+      .padding(.top, 16)
       
       ZStack {
         RoundedRectangle(cornerRadius: 8)
           .fill(.green1)
         
-        ScrollView(.vertical, showsIndicators: true) {
-          Text(sentence)
-            .brStyleFont(.pretendard(.semiBold, size: 14), lineHeight: 1, letterSpacing: -0.025)
+        ScrollView {
+          Text(viewModel.sentence)
+            .brStyleFont(
+              .pretendard(.semiBold, size: 14),
+              lineHeight: 1,
+              letterSpacing: -0.025
+            )
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-      }
+            .padding(16)
+        } // : ScrollView
+        .scrollIndicators(.hidden)
+      } // : ZStack
       .frame(height: 134)
-      .padding(.top, 24)
-    }
+      .padding(.horizontal, 24)
+      
+    } // : VStack
     .frame(maxHeight: .infinity, alignment: .top)
-    .padding(.top, 16)
-    .padding(.horizontal, 24)
-    .onChange(of: pageText, { oldValue, newValue in
-      viewModel.page = Int(newValue)
-    })
+    .background(Color.backgroundDefault)
+    .onTapGesture {
+      self.hideKeyboard()
+    }
+    .task {
+      await Task.yield()
+      isFocused = true
+    } // : task - 페이지입력 텍스트 필드 focus
+    .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button("저장") {
+          viewModel.send(.submit)
+        }
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
+        .foregroundStyle(.green6)
+        .disabled(!viewModel.isValid)
+        .opacity(viewModel.isValid ? 1 : 0)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.isValid)
+      }
+    } // : toolbar
     .onChange(of: viewModel.didSubmitSuccess) {
       if viewModel.didSubmitSuccess {
         coordinator.pop()
         coordinator.pop()
       }
     }
-    .toolbar {
-      ToolbarItem(placement: .topBarTrailing) {
-        Button("저장") {
-          viewModel.content = sentence
-          guard viewModel.page != nil else {
-            showInvalidAlert = true
-            return
-          }
-          guard isValidPage else {
-            showInvalidAlert = true
-            return
-          }
-          viewModel.send(.submit)
-        }
-        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
-        .foregroundStyle(.green6)
-      }
-    }
-    .alert("저장 실패", isPresented: $showInvalidAlert) {
-      Button("확인", role: .cancel) {
-        viewModel.page = nil
-        pageText = ""
-        isFocused = true
-      }
+    .alert("저장 실패", isPresented: $viewModel.showErrorAlert) {
+      Button("확인", role: .cancel) { }
     } message: {
-      Text("올바른 페이지 번호가 아닙니다.")
-    }
-    .animation(.easeInOut(duration: 0.2), value: showInvalidAlert)
-    .background(Color.backgroundDefault)
-    .task {
-      await Task.yield()
-      isFocused = true
-    }
-    .onAppear {
-      if viewModel.content.isEmpty {
-        viewModel.content = sentence
+      if let error = viewModel.errorMessage {
+        Text(error)
       }
-      if pageText.isEmpty {
-        pageText = viewModel.page.map(String.init) ?? ""
-      }
-    }
+    } // : alert
+    .animation(.easeInOut(duration: 0.2), value: viewModel.showErrorAlert)
   }
 }
 
 #Preview {
-  let record = RecordDetailVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1])
+  let record = RecordDetailVO(
+    record: DummyData.dummyRecords[1],
+    book: DummyData.dummyBooks[1]
+  )
+  let quote = QuoteVO(
+    id: "1",
+    isbn: record.isbn,
+    content: "테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트",
+    page: 45, record: record
+  )
+  
   PreviewableContainer {
-    NavigationStack {
-      PageInputView(mode: .create(record: record), sentence: "프리뷰 테스트 문장")
+    CoordinatorContainer {
+      NavigationStack {
+        PageInputView(viewModel: .init(record: record, quote: quote))
+      }
     }
   }
-  
 }

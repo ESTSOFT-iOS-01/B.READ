@@ -25,11 +25,12 @@ extension QuoteGroup: Equatable {
 }
 
 // MARK: - (S)QuoteVO
+/// - NOTE: content와 page는 수정을 통해 변경될 수 있음
 struct QuoteVO: Identifiable, Hashable {
   let id: String
   let isbn: String
-  let content: String
-  let page: Int
+  var content: String
+  var page: Int
   let record: RecordDetailVO
   
   init(id: String, isbn: String, content: String, page: Int, record: RecordDetailVO) {

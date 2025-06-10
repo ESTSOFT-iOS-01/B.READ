@@ -9,193 +9,124 @@ import Foundation
 import Testing
 
 @testable import B_READ
-//
-//struct QuoteUseCaseTest {
-//  
-//  private let quoteRepository: QuoteRepository
-//  private let bookRepository: BookRepository
-//  private let useCase: QuoteUseCase
-//  
-//  init() {
-//    self.quoteRepository = QuoteRepositoryStub()
-//    self.bookRepository  = BookRepositoryStub()
-//    self.useCase = QuoteUseCaseImpl(
-//      quoteRepository: quoteRepository,
-//      bookRepository: bookRepository
-//    )
-//  }
-//  
-//  @Test("Add Quote Success Test")
-//  func addQuoteSuccess() async throws {
-//    // given: register test books
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    
-//    // when
-//    try await useCase.addQuote(DummyData.quote)
-//    
-//    // then
-//    let stored = try await quoteRepository.fetchQuote(id: DummyData.quote.id)
-//    #expect(stored == DummyData.quote)
-//  }
-//  
-//  @Test("Add Quote Empty Content Error Test")
-//  func addQuoteEmptyContentError() async throws {
-//    // given
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    var q = DummyData.quote
-//    q.content = "   "
-//    
-//    // when / then
-//    await #expect(throws: QuoteUseCaseError.emptyContent, performing: {
-//      try await useCase.addQuote(q)
-//    })
-//  }
-//  
-//  @Test("Add Quote Invalid Page Error Test")
-//  func addQuoteInvalidPageError() async throws {
-//    // given
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    var q = DummyData.quote
-//    let max = DummyData.books
-//      .first { $0.isbn == q.isbn }!
-//      .totalPages
-//    q.page = max + 1
-//    
-//    // when / then
-//    await #expect(throws: QuoteUseCaseError.invalidPage(max: max), performing: {
-//      try await useCase.addQuote(q)
-//    })
-//  }
-//  
-//  @Test("Update Quote Success Test")
-//  func updateQuoteSuccess() async throws {
-//    // given: register book and quote
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    try await quoteRepository.createQuote(DummyData.quote)
-//    
-//    var updated = DummyData.quote
-//    updated.page = 5
-//    updated.content = "Updated"
-//    
-//    // when
-//    try await useCase.updateQuote(updated)
-//    
-//    // then
-//    let fetched = try await quoteRepository.fetchQuote(id: updated.id)
-//    #expect(fetched == updated)
-//  }
-//  
-//  @Test("Update Quote Empty Content Error Test")
-//  func updateQuoteEmptyContentError() async throws {
-//    // given
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    var updated = DummyData.quote
-//    updated.content = ""
-//    
-//    // when / then
-//    await #expect(throws: QuoteUseCaseError.emptyContent, performing: {
-//      try await useCase.updateQuote(updated)
-//    })
-//  }
-//  
-//  @Test("Remove Quote Success Test")
-//  func removeQuoteSuccess() async throws {
-//    // given
-//    try await quoteRepository.createQuote(DummyData.quote)
-//    
-//    // when
-//    try await useCase.removeQuote(id: DummyData.quote.id)
-//    
-//    // then
-//    await #expect(throws: RepositoryError.dataNotFound, performing: {
-//      _ = try await quoteRepository.fetchQuote(id: DummyData.quote.id)
-//    })
-//  }
-//  
-//  @Test("Fetch Single Quote Test")
-//  func fetchSingleQuote() async throws {
-//    // given
-//    try await quoteRepository.createQuote(DummyData.quote)
-//    
-//    // when
-//    let fetched = try await useCase.fetchQuote(id: DummyData.quote.id)
-//    
-//    // then
-//    #expect(fetched == DummyData.quote)
-//  }
-//  
-//  @Test("Fetch Quotes by ISBN Test")
-//  func fetchQuotesByISBN() async throws {
-//    // given
-//    let other = Quote(
-//      id: "id-2",
-//      isbn: DummyData.quote.isbn,
-//      content: "Other quote",
-//      page: 1
-//    )
-//    try await quoteRepository.createQuote(DummyData.quote)
-//    try await quoteRepository.createQuote(other)
-//    
-//    // when
-//    let list = try await useCase.fetchQuotes(isbn: DummyData.quote.isbn)
-//    
-//    // then
-//    #expect(list == [DummyData.quote, other])
-//  }
-//  
-//  @Test("Fetch All Quotes Test")
-//  func fetchAllQuotesTest() async throws {
-//    // given
-//    let another = Quote(
-//      id: "id-3",
-//      isbn: "X",
-//      content: "X",
-//      page: 1
-//    )
-//    try await quoteRepository.createQuote(DummyData.quote)
-//    try await quoteRepository.createQuote(another)
-//    
-//    // when
-//    let all = try await useCase.fetchAllQuotes()
-//    
-//    // then
-//    #expect(all.count == 2)
-//  }
-//  
-//  @Test("Validate Page Success Test")
-//  func validatePageSuccess() async throws {
-//    // given
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    
-//    // when
-//    try await useCase.validatePage(5, forISBN: DummyData.quote.isbn)
-//  }
-//  
-//  @Test("Validate Page Invalid Error Test")
-//  func validatePageInvalidError() async throws {
-//    // given
-//    for book in DummyData.books {
-//      try await bookRepository.createBook(book)
-//    }
-//    let max = DummyData.books
-//      .first { $0.isbn == DummyData.quote.isbn }!
-//      .totalPages
-//    
-//    // when / then
-//    await #expect(throws: QuoteUseCaseError.invalidPage(max: max), performing: {
-//      try await useCase.validatePage(max + 1, forISBN: DummyData.quote.isbn)
-//    })
-//  }
-//}
+
+struct QuoteUseCaseTest {
+  
+  private let quoteUseCase: QuoteUseCase
+  private let bookRepository: BookRepository
+  private let recordRepository: RecordRepository
+  private let quoteRepository: QuoteRepository
+  
+  init() {
+    let storage = SwiftDataTestStorage()
+    self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
+    self.recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
+    self.quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
+    
+    self.quoteUseCase = QuoteUseCaseImpl(
+      quoteRepository: quoteRepository,
+      bookRepository: bookRepository
+    )
+  }
+  
+  @Test("Quote Create & Id Fetch Test")
+  func saveQuoteTestCreate() async throws {
+    let dummyRecord = DummyData.dummyRecords[1]
+    let dummyQuote = DummyData.dummyQuote[0]
+    
+    // 1. 레코드와 문장을 각각 생성
+    try await recordRepository.createRecord(dummyRecord)
+    try await quoteUseCase.saveQuote(dummyQuote, in: dummyRecord)
+    
+    // 2. 레코드 패치
+    let fetchedRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
+    
+    // 3. 문장 패치
+    let fetchedQuote = try await quoteUseCase.fetchQuote(id: dummyQuote.id)
+    
+    // 4. 레코드의 문장과 패치한 문장이 같은지 비교
+    #expect(fetchedQuote == fetchedRecord.quotes.first)
+  }
+  
+  @Test("Quote Update Test")
+  func saveQuoteTestUpdate() async throws {
+    let dummyRecord = DummyData.dummyRecords[1]
+    var dummyQuote = DummyData.dummyQuote[0]
+    
+    // 1. 레코드와 문장을 각각 생성
+    try await recordRepository.createRecord(dummyRecord)
+    try await quoteUseCase.saveQuote(dummyQuote, in: dummyRecord)
+    
+    // 2. 생성한 문장을 수정
+    dummyQuote.content = "수정된 문장입니다."
+    dummyQuote.page = 100
+    
+    // 3. 수정한 문장을 업데이트
+    try await quoteUseCase.saveQuote(dummyQuote, in: dummyRecord)
+    
+    // 4. 레코드 패치
+    let fetchedRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
+    
+    // 5. 문장 패치
+    let fetchedQuote = try await quoteUseCase.fetchQuote(id: dummyQuote.id)
+    
+    // 6. 레코드의 문장과 패치한 문장이 같은지 비교
+    #expect(fetchedQuote == fetchedRecord.quotes.first)
+  }
+  
+  @Test("Quote Remove & AllCase Fetch Test")
+  func removeQuoteTest() async throws {
+    let dummyRecord = DummyData.dummyRecords[1]
+    let dummyQuote = DummyData.dummyQuote[0]
+    
+    // 1. 레코드와 문장을 각각 생성
+    try await recordRepository.createRecord(dummyRecord)
+    try await quoteUseCase.saveQuote(dummyQuote, in: dummyRecord)
+    
+    // 2. 문장을 삭제
+    try await quoteUseCase.removeQuote(id: dummyQuote.id)
+    
+    // 3. 정상적인 삭제일 시, id로 패치하면 에러발생 - data not found
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      _ = try await quoteUseCase.fetchQuote(id: dummyQuote.id)
+    })
+    
+    // 4. 정상적인 삭제일 시, all 패치하면 빈배열([])
+    let fetchedQuotes1 = try await quoteUseCase.fetchAllQuotes()
+    #expect(fetchedQuotes1 == [])
+    
+    // 5. 정상적인 삭제일 시, isbn으로 패치하면 빈배열([])
+    let fetchedQuotes2 = try await quoteUseCase.fetchQuotes(isbn: dummyRecord.isbn)
+    #expect(fetchedQuotes2 == [])
+    
+    // 6. 정상적인 삭제일 시, 레코드의 Quote는 빈배열([])
+    let fetchedRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
+    #expect(fetchedRecord.quotes == [])
+  }
+  
+  @Test("Load Book Title Test")
+  func loadBookTitleTest() async throws {
+    
+    let dummyBook = DummyData.dummyBooks[1]
+    let dummyRecord = DummyData.dummyRecords[1]
+    let dummyQuote = DummyData.dummyQuote[0]
+    
+    // 1. 책정보, 레코드, 문장을 각각 생성
+    try await bookRepository.createBook(dummyBook)
+    try await recordRepository.createRecord(dummyRecord)
+    try await quoteUseCase.saveQuote(dummyQuote, in: dummyRecord)
+    
+    // 2. 레코드를 패치한 후 레코드의 책정보 패치
+    let fetchedRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
+    let fetchedBookWithRecord = try await bookRepository.fetchBook(isbn: fetchedRecord.isbn)
+    
+    // 3. 레코드의 문장 정보를 가지고 문장 패치
+    let quoteInRecord = fetchedRecord.quotes[0]
+    let fetchedQuote = try await quoteUseCase.fetchQuote(id: quoteInRecord.id)
+    
+    // 4. 패치 해온 문장으로 책 정보 패치
+    let fetchedBookWithQuote = try await quoteUseCase.loadBookTitle(fetchedQuote.isbn)
+    
+    #expect(fetchedBookWithRecord.name == fetchedBookWithQuote)
+  }
+}
