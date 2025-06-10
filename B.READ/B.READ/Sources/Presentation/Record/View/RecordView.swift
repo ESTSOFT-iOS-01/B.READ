@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)RecordView
 struct RecordView: View {
-
+  
   @State private var selectedTab: Int = 0
   @StateObject private var memoViewModel = RecordMemoViewModel()
   @StateObject private var quoteViewModel = RecordQuoteViewModel()
@@ -28,7 +28,7 @@ struct RecordView: View {
       .frame(height: 34)
       .padding(.top, 16)
       
-      Group {
+      ZStack {
         if selectedTab == 0 {
           RecordMemoView(viewModel: memoViewModel)
         } else if selectedTab == 1 {
@@ -36,7 +36,8 @@ struct RecordView: View {
         } else if selectedTab == 2 {
           RecordNoteView(viewModel: noteViewModel)
         }
-      } // : Group
+      }
+      .animation(.easeInOut(duration: 0.5), value: selectedTab)
       .padding(.top, 8)
       .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
     } // : VStack
