@@ -27,6 +27,16 @@ struct AlanSummary {
     self.tags = tags
     self.createdAt = createdAt
   }
+  
+  init(isbn: String, content: String, tags: [Tag],) {
+    self.init(
+      id: UUID().uuidString,
+      isbn: isbn,
+      content: content,
+      tags: tags,
+      createdAt: .now
+    )
+  }
 }
 
 struct Tag {
