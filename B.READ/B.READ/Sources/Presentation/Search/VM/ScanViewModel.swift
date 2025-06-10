@@ -15,5 +15,10 @@ final class ScanViewModel: ObservableObject {
   init() {
     self.noCamera = false
     self.isbnNumber = ""
+//    print("ScanViewModel이 생성되었습니다. ")
+  }
+  
+  deinit {
+//    print("ScanViewModel이 소멸되었습니다. ")
   }
 }

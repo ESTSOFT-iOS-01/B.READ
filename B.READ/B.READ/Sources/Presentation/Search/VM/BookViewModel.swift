@@ -29,10 +29,12 @@ final class BookViewModel: ObservableObject {
   
   init(isbn: String) {
     self.isbn = isbn
+//    print("BookViewModel이 생성되었습니다. ")
   }
   
   deinit {
     currentTask?.cancel()
+//    print("BookViewModel이 소멸되었습니다. ")
   }
   
   // MARK: - Dependency

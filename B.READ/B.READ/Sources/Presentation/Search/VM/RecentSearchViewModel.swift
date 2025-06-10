@@ -17,8 +17,13 @@ final class RecentSearchViewModel: ObservableObject {
   // MARK: - Dependency
   @Dependency private var profileUseCase: ProfileUseCase
   
+  init() {
+//    print("RecentSearchViewModel이 생성되었습니다. ")
+  }
+  
   deinit {
     currentTask?.cancel()
+//    print("RecentSearchViewModel이 소멸되었습니다. ")
   }
   
   // MARK: - Action

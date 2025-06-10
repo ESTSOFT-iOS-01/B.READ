@@ -12,8 +12,8 @@ struct ScanView: View {
   @StateObject var viewModel: ScanViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  init(viewModel: ScanViewModel) {
-    self._viewModel = .init(wrappedValue: viewModel)
+  init(viewModel: @autoclosure @escaping () -> ScanViewModel) {
+    self._viewModel = StateObject(wrappedValue: viewModel())
   }
 
   var body: some View {
