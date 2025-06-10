@@ -16,6 +16,7 @@ enum MainRoute: Hashable {
   
   // MARK: - Library
   case libraryDetail(id: String)
+  case summaryDetail(record: RecordDetailVO, memos: [MemoVO], quotes: [QuoteVO])
   
   // MARK: - Sentence
   case sentenceInput(mode: SentenceInputMode)
