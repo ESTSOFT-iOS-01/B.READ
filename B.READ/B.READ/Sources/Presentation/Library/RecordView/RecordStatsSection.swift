@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - (S)RecordStatsSection
 struct RecordStatsSection: View {
   @ObservedObject var viewModel: RecordDetailViewModel
+  @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
   
   private let contentHeaderFontSize: CGFloat = 16
   private let contentFontSize: CGFloat = 14
@@ -36,7 +37,25 @@ struct RecordStatsSection: View {
           
           if !viewModel.memos.isEmpty {
             Button {
-              // TODO: - [도로시] 앨런 버튼 눌렀을때 상황에 따라 진행
+              if let summaryData = viewModel.summary {
+                coordinator.push(
+                  .summaryDetail(
+                    id: summaryData.id,
+                    record: viewModel.record!,
+                    memos: viewModel.memos,
+                    quotes: viewModel.quotes
+                  )
+                )
+              } else {
+                coordinator
+                  .push(
+                    .createSummary(
+                      record: viewModel.record!,
+                      memos: viewModel.memos,
+                      quotes: viewModel.quotes
+                    )
+                  )
+              }
             } label: {
               Image(.breadButton)
                 .resizable()
