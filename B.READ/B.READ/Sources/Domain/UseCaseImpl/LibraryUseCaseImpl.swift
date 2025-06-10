@@ -174,7 +174,7 @@ private extension LibraryUseCaseImpl {
       return
     }
   
-    if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+    if !userInfo.lastStreakUpdatedAt.isInCurrentWeek {
       userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
     }
     

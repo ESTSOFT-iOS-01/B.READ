@@ -123,7 +123,7 @@ private extension SummaryUseCaseImpl {
       if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) { return }
       
       // 스트릭이 이번주의 첫 스트릭일 경우 초기화
-      if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+      if !userInfo.lastStreakUpdatedAt.isInCurrentWeek {
         userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
       }
       

@@ -100,7 +100,7 @@ private extension MemoUseCaseImpl {
     var userInfo = try await userInfoRepository.fetchUserInfo()
     if userInfo.lastStreakUpdatedAt.isSameDay(as: currentTime) { return }
   
-    if userInfo.lastStreakUpdatedAt.isInCurrentWeek {
+    if !userInfo.lastStreakUpdatedAt.isInCurrentWeek {
       userInfo.streak = userInfo.streak.map { DailyStatus(weekday: $0.weekday, isCompleted: false) }
     }
     
