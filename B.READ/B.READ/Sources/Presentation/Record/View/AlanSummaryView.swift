@@ -25,7 +25,10 @@ struct AlanSummaryView: View {
           VStack(alignment: .center, spacing: 12) {
             if let startDate = viewModel.record.period.0,
                let endDate = viewModel.record.period.1 {
-              InfoView(title: "🗓️ 독서 기간", content: "\(startDate) ~ \(endDate)")
+              
+              let start = startDate.string(format: .dotSeparated)
+              let end = endDate.string(format: .dotSeparated)
+              InfoView(title: "🗓️ 독서 기간", content: "\(start) ~ \(end)")
             }
             
             if let summary = viewModel.summary {
