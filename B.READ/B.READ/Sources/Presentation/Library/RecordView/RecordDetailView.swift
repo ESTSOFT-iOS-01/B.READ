@@ -30,7 +30,7 @@ struct RecordDetailView: View {
         
         RecordBookSection(record: $viewModel.record)
         
-        RecordStatsSection(record: $viewModel.record)
+        RecordStatsSection(viewModel: viewModel)
           .padding(.top, 8)
         
         TopTabBar(

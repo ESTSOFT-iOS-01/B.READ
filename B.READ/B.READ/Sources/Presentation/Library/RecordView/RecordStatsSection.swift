@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - (S)RecordStatsSection
 struct RecordStatsSection: View {
-  @Binding var record: RecordDetailVO?
+  @ObservedObject var viewModel: RecordDetailViewModel
   
   private let contentHeaderFontSize: CGFloat = 16
   private let contentFontSize: CGFloat = 14
@@ -18,18 +18,36 @@ struct RecordStatsSection: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       // 기대 지수, 평점
-      if record?.readingState == .notStart {
+      if viewModel.record?.readingState == .notStart {
         VStack(alignment: .leading, spacing: 8) {
           Text("기대지수")
-          ScoreBoardView(record?.heart ?? 0, type: .heart)
+          ScoreBoardView(viewModel.record?.heart ?? 0, type: .heart)
         }
         .brStyleFont(.pretendard(.semiBold, size: contentHeaderFontSize), lineHeight: 0.95)
-      } else if record?.readingState == .finished {
-        VStack(alignment: .leading, spacing: 8) {
-          Text("평점")
-          ScoreBoardView(record?.star ?? 0, type: .star)
-        }
-        .brStyleFont(.pretendard(.semiBold, size: contentHeaderFontSize), lineHeight: 0.95)
+      } else if let record = viewModel.record, record.readingState == .finished {
+        HStack {
+          VStack(alignment: .leading, spacing: 8) {
+            Text("평점")
+            ScoreBoardView(record.star, type: .star)
+          } // : VStack
+          .brStyleFont(.pretendard(.semiBold, size: contentHeaderFontSize), lineHeight: 0.95)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          
+          
+          if !viewModel.memos.isEmpty {
+            Button {
+              // TODO: - [도로시] 앨런 버튼 눌렀을때 상황에 따라 진행
+            } label: {
+              Image(.breadButton)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+            }
+            .frame(width: 48, height: 48)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.trailing, 16)
+          }
+        } // : HStack
+        .frame(maxWidth: .infinity)
         
         recordReview()
       }
@@ -49,9 +67,9 @@ struct RecordStatsSection: View {
       } // : VStack
       
       // 독서 진행률 프로그래스바
-      if record?.readingState != .finished,
-         let currentPage = record?.currentPage,
-         let totalPage = record?.totalPage
+      if viewModel.record?.readingState != .finished,
+         let currentPage = viewModel.record?.currentPage,
+         let totalPage = viewModel.record?.totalPage
       {
         PageProgressbar(currentPage: currentPage, totalPage: totalPage)
           .frame(height: 28)
@@ -63,7 +81,7 @@ struct RecordStatsSection: View {
   @ViewBuilder
   private func recordPeriodView() -> some View {
     HStack(spacing: layoutPadding) {
-      if let period = record?.period, let startDate = period.startDate {
+      if let period = viewModel.record?.period, let startDate = period.startDate {
         HStack(spacing: layoutPadding) {
           Text("시작")
             .brStyleFont(
@@ -120,7 +138,7 @@ struct RecordStatsSection: View {
         RoundedRectangle(cornerRadius: 8)
           .fill(.gray0)
         
-        if let review = record?.review, !review.isEmpty {
+        if let review = viewModel.record?.review, !review.isEmpty {
           Text(review)
             .brStyleFont(.pretendard(.regular, size: contentFontSize), lineHeight: 1.3)
             .padding(16)
@@ -136,13 +154,11 @@ struct RecordStatsSection: View {
 }
 
 #Preview {
-  @Previewable @State var record: RecordDetailVO? = RecordDetailVO(
-    record: DummyData.dummyRecords[2],
-    book: DummyData.dummyBooks[2]
-  )
-  
+  let recordID = DummyData.dummyRecords[2].id
   PreviewableContainer {
-    RecordStatsSection(record: $record)
-      .padding(.horizontal, 24)
+    NavigationStack {
+      RecordDetailView(viewModel: .init(recordID: recordID))
+        .environmentObject(Coordinator<MainRoute, SheetRoute>())
+    }
   }
 }

@@ -28,7 +28,7 @@ struct AlanSummary {
     self.createdAt = createdAt
   }
   
-  init(isbn: String, content: String, tags: [Tag],) {
+  init(isbn: String, content: String, tags: [Tag]) {
     self.init(
       id: UUID().uuidString,
       isbn: isbn,
