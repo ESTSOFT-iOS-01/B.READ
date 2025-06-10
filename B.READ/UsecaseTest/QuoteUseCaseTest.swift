@@ -13,17 +13,20 @@ import Testing
 struct QuoteUseCaseTest {
   
   private let quoteUseCase: QuoteUseCase
+  private let userInfoRepository: UserInfoRepository
   private let bookRepository: BookRepository
   private let recordRepository: RecordRepository
   private let quoteRepository: QuoteRepository
   
   init() {
     let storage = SwiftDataTestStorage()
+    self.userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     self.recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
     self.quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
     
     self.quoteUseCase = QuoteUseCaseImpl(
+      userInfoRepository: userInfoRepository,
       quoteRepository: quoteRepository,
       bookRepository: bookRepository
     )

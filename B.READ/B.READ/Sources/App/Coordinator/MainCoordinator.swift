@@ -104,7 +104,6 @@ extension Coordinator where T == MainRoute {
       // MARK: - Sentence
     case .sentenceInput(let mode):
       SentenceInputView(viewModel: .init(mode: mode))
-    
     case .pageInput(let record, let quote):
       PageInputView(viewModel: .init(record: record, quote: quote))
     
