@@ -80,7 +80,15 @@ struct RecordDetailView: View {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
       if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
+      else { UINavigationBar.removeOverlay(duration: 0.0) }
     } // : onAppear
+    .onChange(of: coordinator.paths) {
+      if let id = viewModel.record?.id,
+         coordinator.paths.last == .libraryDetail(id: id)
+      {
+        viewModel.send(.onAppear)
+      }
+    }
     .onChange(of: needRefresh) { oldValue, newValue in
       if newValue {
         viewModel.send(.onAppear)
@@ -177,6 +185,7 @@ private struct AddActionView: View {
           Button {
             guard let record = viewModel.record else { return }
             UINavigationBar.removeOverlay(duration: 0.0)
+            self.showAddMenu = false
             coordinator.push(.memo(record: record))
           } label: {
             Text("메모 작성")
@@ -185,6 +194,7 @@ private struct AddActionView: View {
           Button {
             guard let record = viewModel.record else { return }
             UINavigationBar.removeOverlay(duration: 0.0)
+            self.showAddMenu = false
             coordinator.push(.sentenceInput(mode: .create(record: record)))
           } label: {
             Text("문장 수집")

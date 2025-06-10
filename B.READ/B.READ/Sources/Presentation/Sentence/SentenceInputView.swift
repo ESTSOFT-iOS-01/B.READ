@@ -12,6 +12,11 @@ struct SentenceInputView: View {
   @StateObject var viewModel: SentenceInputViewModel
   @FocusState private var isEditorFocused: Bool
   
+  // MARK: - Init
+  init(viewModel: @autoclosure @escaping () -> SentenceInputViewModel) {
+    _viewModel = StateObject(wrappedValue: viewModel())
+  }
+  
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       Text("기록할 문장을 작성해주세요")
