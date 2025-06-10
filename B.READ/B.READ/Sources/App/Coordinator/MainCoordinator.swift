@@ -98,6 +98,8 @@ extension Coordinator where T == MainRoute {
       // MARK: - Library
     case .libraryDetail(let id):
       RecordDetailView(viewModel: .init(recordID: id))
+    case let .summaryDetail(record, memos, quotes):
+      AlanSummaryView(viewModel: .init(record: record, memos: memos, quotes: quotes))
       
       // MARK: - Sentence
     case .sentenceInput(let mode):
