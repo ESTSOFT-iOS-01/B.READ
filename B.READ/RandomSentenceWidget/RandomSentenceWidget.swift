@@ -32,7 +32,7 @@ struct QuoteProvider: TimelineProvider {
   func getTimeline(in context: Context,
                    completion: @escaping (Timeline<QuoteEntry>) -> Void) {
     
-    let entry      = randomEntry()
+    let entry = randomEntry()
     let nextUpdate = Calendar.current.date(byAdding: .minute, value: 30, to: entry.date)!
     
     completion(Timeline(entries: [entry], policy: .after(nextUpdate)))
