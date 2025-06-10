@@ -31,10 +31,19 @@ struct RecordQuoteView: View {
           viewModel.send(.selectSort)
         }
       } // : HStack
-
-      QuoteListView(viewModel: viewModel)
-      .padding(.top, 8)
-      .scrollIndicators(.never)
+      
+      if viewModel.quoteGroups.isEmpty {
+        FailedView(
+          title: "😢 문장을 작성하러 가볼까요?",
+          desp: "작성하신 문장이 없습니다."
+        )
+      } else if !viewModel.searchText.isEmpty && viewModel.displayQuoteGroups.isEmpty {
+        FailedView(desp: "\"\(viewModel.searchText)\"에 일치하는 검색 결과가 없습니다.")
+      } else {
+        QuoteListView(viewModel: viewModel)
+          .padding(.top, 8)
+          .scrollIndicators(.never)
+      }
     } // : VStack
     .onAppear {
       viewModel.send(.onAppear)
