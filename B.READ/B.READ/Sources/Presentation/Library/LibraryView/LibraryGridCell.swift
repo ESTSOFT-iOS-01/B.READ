@@ -60,7 +60,7 @@ struct LibraryGridCell: View {
         .resizable()
         .aspectRatio(contentMode: .fill)
     } else {
-      Image(.exampleBook)
+      Image(.exampleCover)
         .resizable()
         .aspectRatio(contentMode: .fill)
     }

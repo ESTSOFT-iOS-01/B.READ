@@ -108,7 +108,7 @@ private extension RecordNoteViewModel {
         bookTitle: "싯타르타",
         author: "헤르만헤세",
         createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-        coverImage: Image(.exampleBook),
+        coverImage: Image(.exampleCover),
         content: "테스트테스트테스트테스트테스트테스트",
         recordId: "3"
       ),
@@ -117,7 +117,7 @@ private extension RecordNoteViewModel {
         bookTitle: "타이탄의 도구들",
         author: "팀 페리스",
         createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
-        coverImage: Image(.exampleBook),
+        coverImage: Image(.exampleCover),
         content: "트스테트스테트스테트스테트스테트스테트스테트스테트스테ㅍ",
         recordId: "2"
       )

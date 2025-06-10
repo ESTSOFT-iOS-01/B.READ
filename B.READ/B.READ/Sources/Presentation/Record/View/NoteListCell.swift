@@ -51,7 +51,7 @@ struct NoteListCell: View {
         .resizable()
         .aspectRatio(contentMode: .fill)
     } else {
-      Image(.exampleBook)
+      Image(.exampleCover)
         .resizable()
         .aspectRatio(contentMode: .fill)
     }
@@ -64,7 +64,7 @@ struct NoteListCell: View {
     bookTitle: "싯타르타",
     author: "헤르만헤세",
     createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-    coverImage: Image(.exampleBook),
+    coverImage: Image(.exampleCover),
     content: "테스트테스트테스트테스트테스트테스트",
     recordId: "3"
   )
