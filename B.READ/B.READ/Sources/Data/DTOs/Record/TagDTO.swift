@@ -14,19 +14,15 @@ final class TagDTO {
   var id: String
   var content: String
   
-  @Relationship var summary: SummaryDTO?
-  
-  init(id: String, content: String, summary: SummaryDTO? = nil) {
+  init(id: String, content: String) {
     self.id = id
     self.content = content
-    self.summary = summary
   }
   
-  convenience init(_ data: Tag, summary: SummaryDTO? = nil) {
+  convenience init(_ data: Tag) {
     self.init(
       id: data.id,
-      content: data.content,
-      summary: summary
+      content: data.content
     )
   }
 }
