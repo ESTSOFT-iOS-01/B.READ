@@ -92,12 +92,13 @@ final class LibraryUseCaseImpl: LibraryUseCase {
         // 3. record 기준으로 각각의 책정보 가져오는 걸 자식 태스크로 지정
         group.addTask {
           do {
+            try Task.checkCancellation()
             let book = try await self.bookRepository.fetchBook(isbn: record.isbn)
             return (record, book)
-          } catch {
-            // TODO: - RepositoryError.dataNotFound이면 알라딘에서 책검색, 아니면 nil
-            print(error.localizedDescription)
-            return nil
+            
+          } catch RepositoryError.dataNotFound {
+            let book = try await self.requestBookDetail(isbn: record.isbn)
+            return (record, book)
           }
         }
       }
