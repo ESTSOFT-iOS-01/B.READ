@@ -80,6 +80,17 @@ struct RecordRepositoryTest {
     #expect(fetchedRecord == predictResult)
   }
   
+  @Test("Recent Finished Record without Summary Fetch Test")
+  func fetchRecordAvailableForSummary() async throws {
+    let record = DummyData.dummyRecords.first!
+    
+    try await recordRepository.createRecord(record)
+    
+    let fetchedRecord = try await recordRepository.fetchRecordAvailableForSummary()
+    
+    #expect(fetchedRecord == record)
+  }
+  
   @Test("Record Delete Test")
   func deleteRecord() async throws {
     // 1. 넣어둘 레코드
