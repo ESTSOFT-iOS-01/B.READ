@@ -12,22 +12,17 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   private let userInfoRepository: UserInfoRepository
   private let bookRepository: BookRepository
   private let recordRepository: RecordRepository
-  //  private let memoRepository: MemoRepository
-  private let quoteRepository: QuoteRepository
-  //  private let noteRepository: NoteRepository
   private let bookService: BookService
   
   init(
     userInfoRepository: UserInfoRepository,
     bookRepository: BookRepository,
     recordRepository: RecordRepository,
-    quoteRepository: QuoteRepository,
     bookService: BookService
   ) {
     self.userInfoRepository = userInfoRepository
     self.bookRepository = bookRepository
     self.recordRepository = recordRepository
-    self.quoteRepository = quoteRepository
     self.bookService = bookService
   }
   

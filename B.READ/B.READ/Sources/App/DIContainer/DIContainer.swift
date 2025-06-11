@@ -64,7 +64,6 @@ extension DIContainer {
         userInfoRepository: userInfoRepository,
         bookRepository: bookRepository,
         recordRepository: recordRepository,
-        quoteRepository: quoteRepository,
         bookService: AladinService()
       ),
       for: LibraryUseCase.self
