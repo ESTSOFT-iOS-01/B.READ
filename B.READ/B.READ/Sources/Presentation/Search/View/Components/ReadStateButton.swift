@@ -120,46 +120,71 @@ struct SelectPageView: View {
   @Binding var page: String
   var isFocused: Binding<Bool>? = nil
   var maxPage: Int
+  var placeholder: String = "0"
+  var isValid: Bool? = nil
   var onSubmit: () -> Void = { }
-
+  
   @FocusState private var internalFocus: Bool
   
   var body: some View {
     HStack(alignment: .center, spacing: 16) {
-      RoundedTextField(
-        type: .pages,
-        placeholder: "0",
-        text: $page,
-        isValid: true
-      )
-      .frame(width: 256)
-      .focused($internalFocus)
-      .onChange(of: isFocused?.wrappedValue) { _, new in
-        if let new = new, internalFocus != new {
-          DispatchQueue.main.async {
-            internalFocus = new
-          }
+      ZStack(alignment: .leading) {
+        if page.isEmpty {
+          Text(placeholder)
+            .foregroundColor(.gray2)
         }
+        
+        TextField("", text: $page)
+          .focused($internalFocus)
+          .foregroundColor(.gray9)
+          .frame(maxWidth: .infinity)
+          .onChange(of: isFocused?.wrappedValue ?? internalFocus) { _, new in
+              DispatchQueue.main.async {
+                  internalFocus = new
+                  isFocused?.wrappedValue = new
+              }
+          }
+          .onChange(of: page) { _, newValue in
+              let filtered = newValue.filter { $0.isNumber }
+              if filtered != newValue {
+                  page = filtered
+              }
+          }
+          .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+              Spacer()
+              Button("완료") {
+                internalFocus = false
+                isFocused?.wrappedValue = false
+                onSubmit()
+              }
+            }
+          }
       }
-      .onSubmit {
-        isFocused?.wrappedValue = false
-        onSubmit()
-      }
-//      .toolbar {
-//        ToolbarItemGroup(placement: .keyboard) {
-//          Spacer()
-//          
-//          Button("완료") {
-//            isFocused?.wrappedValue = false
-//            onSubmit()
-//          }
-//        }
-//      }
+      .brStyleFont(.pretendard(.regular, size: 14),
+                   lineHeight: 1.45,
+                   letterSpacing: -0.025)
+      .background(Color.gray0)
+      .overlay(
+        RoundedRectangle(cornerRadius: 8)
+          .stroke(borderColor, lineWidth: 0.8)
+      )
+      .animation(.easeInOut(duration: 0.15), value: borderColor)
+      .frame(width: 256, height: 48)
+      .padding(.horizontal, 16)
+      .roundedBackground()
+      
       
       Text("쪽")
         .brStyleFont(.pretendard(.medium, size: 16), lineHeight: 1.2)
         .foregroundStyle(.black)
     }
+  }
+  
+  private var borderColor: Color {
+    guard !page.isEmpty else { return .clear }
+    guard let isValid = isValid else { return .clear }
+    return isValid ? .brown3 : .red
   }
 }
 
