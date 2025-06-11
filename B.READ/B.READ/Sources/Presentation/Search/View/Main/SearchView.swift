@@ -142,10 +142,9 @@ struct SearchContentView: View {
         SearchResultView(
           viewModel: resultViewModel
         )
-        // FIXME: - [도로시] .clearSelect가 없습니다....
-//        .onDisappear {
-//          resultViewModel.send(.clearSelect)
-//        }
+        .onDisappear {
+          resultViewModel.send(.cancelSelect)
+        }
         
       } else {
         VStack(alignment: .leading, spacing: layoutSize) {
