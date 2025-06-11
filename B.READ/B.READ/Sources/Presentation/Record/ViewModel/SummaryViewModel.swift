@@ -17,6 +17,7 @@ final class SummaryViewModel: ObservableObject {
   let record: RecordDetailVO
   private let memos: [MemoVO]
   private let quotes: [QuoteVO]
+  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - State
   @Published var dataState: SummaryState = .loading
@@ -53,21 +54,47 @@ final class SummaryViewModel: ObservableObject {
     fetchSummary(id)
   }
   
+  deinit {
+    currentTask?.cancel()
+  }
+  
+  enum Action {
+    case cancelTask
+  }
+  
+  func send(_ action: Action) {
+    switch action {
+    case .cancelTask:
+      currentTask?.cancel()
+    }
+  }
+  
 }
 
 private extension SummaryViewModel {
   func generateSummary() {
-    Task{
+    currentTask?.cancel()
+    
+    currentTask = Task{
       do {
         let recordData = record.toEntity(memos: memos, quotes: quotes)
+        try Task.checkCancellation()
         let summaryData = try await summaryUseCase.generateSummary(in: recordData)
-        try await summaryUseCase.saveSummary(summaryData, in: recordData)
+        try Task.checkCancellation()
         
         await MainActor.run {
           summary = SummaryVO(summaryData)
           dataState = .loaded
         }
+        
+        try await summaryUseCase.saveSummary(summaryData, in: recordData)
+        try Task.checkCancellation()
       } catch {
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
+        
         print(error)
         await MainActor.run {
           dataState = .failed
@@ -77,15 +104,24 @@ private extension SummaryViewModel {
   }
   
   func fetchSummary(_ id: String) {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
       do {
+        try Task.checkCancellation()
         let summaryData = try await summaryUseCase.fetchSummary(id: id)
+        try Task.checkCancellation()
         
         await MainActor.run {
           summary = SummaryVO(summaryData)
           dataState = .loaded
         }
       } catch {
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
+        
         print(error)
         await MainActor.run {
           dataState = .failed
