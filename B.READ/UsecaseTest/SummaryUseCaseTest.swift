@@ -25,20 +25,23 @@ final class AIServiceMock: AIService {
   }
 }
 
-
+//
 struct SummaryUseCaseTest {
   let summaryUseCase: SummaryUseCase
   let recordRepository: RecordRepository
   let bookRepository: BookRepository
   let summaryRepositoy: SummaryRepository
+  let userInfoRepository: UserInfoRepository
   
   init() {
     let storage = SwiftDataTestStorage()
     self.recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
     self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     self.summaryRepositoy = SummaryRepositoryImpl(modelContainer: storage.modelContainer)
+    self.userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     
     self.summaryUseCase = SummaryUseCaseImpl(
+      userInfoRepository: userInfoRepository,
       summaryRepository: summaryRepositoy,
       bookRepository: bookRepository,
       recordRepository: recordRepository,
@@ -84,6 +87,30 @@ struct SummaryUseCaseTest {
     #expect(summary.tags == expected.tags)
   }
   
+  @Test("Fetch All Summary Test")
+  func fetchAllSummaryTest() async throws {
+    var dummyInfos = [
+      (DummyData.dummyRecords[0], DummyData.dummyBooks[0]),
+      (DummyData.dummyRecords[1], DummyData.dummyBooks[1]),
+      (DummyData.dummyRecords[2], DummyData.dummyBooks[2]),
+    ]
+    dummyInfos[0].0.summary = DummyData.summary1
+    dummyInfos[2].0.summary = DummyData.summary3
+    
+    dummyInfos = dummyInfos.sorted { $0.0.isbn > $1.0.isbn }
+    
+    for info in dummyInfos {
+      try await recordRepository.createRecord(info.0)
+      try await bookRepository.createBook(info.1)
+    }
+    
+    let fetchedInfos = try await summaryUseCase.fetchAllSummary()
+      .sorted { $0.0.isbn > $1.0.isbn }
+    
+    #expect(fetchedInfos.count == 2)
+    #expect(fetchedInfos[0].0.summary?.content == DummyData.summary1.content)
+    #expect(fetchedInfos[1].0.summary?.content == DummyData.summary3.content)
+  }
 }
 
 extension AlanSummary: Equatable {
