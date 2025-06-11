@@ -11,8 +11,12 @@ import SwiftUI
 // MARK: - (C)LibraryViewModel
 final class LibraryViewModel: ObservableObject {
   
+  enum ViewState {
+    case loading
+    case loaded
+  }
+  
   // MARK: - State
-  // 탭바
   @Published var tabs: [TabItem] = [
     TabItem(title: "전체(0)"),
     TabItem(title: "읽은 책(0)"),
@@ -26,11 +30,12 @@ final class LibraryViewModel: ObservableObject {
   @Published var selectedSort: [SortOption] = [.recent, .recent, .recent, .recent, .recent]
   // 뷰로 보여주는 독서 기록
   @Published var displayRecords: [RecordCellVO] = []
-  
+  @Published var viewState: ViewState = .loading
   
   // MARK: - Internal Variable
   // DB에서 가져온 전체 독서기록
   private var records: [RecordCellVO] = []
+  private var filteredRecords: [RecordCellVO] = []
   
   // MARK: - Dependency
   @Dependency
@@ -63,6 +68,7 @@ final class LibraryViewModel: ObservableObject {
 private extension LibraryViewModel {
   // 독서 기록을 불러옴
   func loadRecords() {
+    viewState = .loading
     Task {
       await fetchRecords()
       await withTaskGroup(of: Void.self) { group in
@@ -78,7 +84,9 @@ private extension LibraryViewModel {
           await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
         }
       }
-      
+      await MainActor.run {
+        viewState = .loaded
+      }
     }
   }
   
@@ -164,14 +172,14 @@ private extension LibraryViewModel {
     
     // 3. 필터 적용한 독서 기록을 뷰에 반영
     await MainActor.run {
-      self.displayRecords = filterRecord
+      self.filteredRecords = filterRecord
     }
   }
   
   /// 정렬 기준에 따라서 displayRecords를 정렬
   func sortDisplayRecords(by: SortOption = .recent) async {
     // 1. 정렬한 결과
-    let sortedRecords: [RecordCellVO] = displayRecords.sorted(by: by.sort)
+    let sortedRecords: [RecordCellVO] = filteredRecords.sorted(by: by.sort)
     
     // 2. 결과를 뷰에 반영
     await MainActor.run {

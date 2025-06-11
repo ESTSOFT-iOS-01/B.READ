@@ -31,13 +31,18 @@ struct LibraryView: View {
     ZStack(alignment: .topTrailing) {
       VStack(alignment: .trailing, spacing: 0) {
         // 상단 탭바
-        ScrollView(.horizontal, showsIndicators: false) {
-          TopTabBar(tabs: viewModel.tabs, selectedIndex: $viewModel.selectedTab)
-            .frame(width: 450, height: 34)
-            .onChange(of: viewModel.selectedTab) {
-              viewModel.send(.selectTab)
-            }
-        } // : ScrollView
+        ScrollViewReader { proxy in
+          ScrollView(.horizontal, showsIndicators: false) {
+            TopTabBar(tabs: viewModel.tabs, selectedIndex: $viewModel.selectedTab)
+              .frame(width: 450, height: 34)
+              .onChange(of: viewModel.selectedTab) { _, newValue in
+                viewModel.send(.selectTab)
+                withAnimation {
+                  proxy.scrollTo(newValue, anchor: newValue == 0 ? .leading : .trailing)
+                }
+              }
+          } // : ScrollView
+        } // : ScrollViewReader
         
         HStack(spacing: 8) {
           // 정렬 버튼
@@ -60,11 +65,13 @@ struct LibraryView: View {
         .foregroundStyle(.gray2)
         .padding(.top, layoutPadding)
         
-        // 독서기록 목록 뷰
-        if viewModel.displayRecords.isEmpty {
-          Text("독서 기록이 없습니다.")
-            .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        if viewModel.viewState == .loading {
+          LoadingView()
+        } else if viewModel.displayRecords.isEmpty {
+          FailedView(
+            title: "😢 독서 기록을 작성하러 가볼까요?",
+            desp: "카테고리에 일치하는 독서 기록이 없습니다."
+          )
         } else if displayMode == .list {
           LibraryListView(records: $viewModel.displayRecords)
         } else {
@@ -73,9 +80,25 @@ struct LibraryView: View {
       } // : VStack - 책빵 화면
       .padding(.top, layoutPadding)
       .padding(.horizontal, 24)
+      .animation(.easeInOut(duration: 0.5), value: displayMode)
       
     } // : ZStack
     .background(.backgroundDefault)
+    .gesture(
+      DragGesture().onEnded { value in
+        let distance: CGFloat = 50 // 얼마나 이동하면 인식할지
+        
+        if value.translation.width < -distance { // 오른쪽 → 왼쪽 (다음 탭)
+          if viewModel.selectedTab < 4 {
+            viewModel.selectedTab += 1
+          }
+        } else if value.translation.width > distance { // 왼쪽 → 오른쪽 (이전 탭)
+          if viewModel.selectedTab > 0 {
+            viewModel.selectedTab -= 1
+          }
+        }
+      }
+    ) // : gesture - 제스처로 탭이동
     .onAppear {
       print("appear 작동")
       viewModel.send(.onAppear)

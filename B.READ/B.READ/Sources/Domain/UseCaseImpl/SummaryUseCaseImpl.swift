@@ -30,12 +30,16 @@ final class SummaryUseCaseImpl: SummaryUseCase {
   }
   
   func saveSummary(_ summary: AlanSummary, in record: Record) async throws {
+    try Task.checkCancellation()
     try await summaryRepository.createSummary(summary, in: record)
+    try Task.checkCancellation()
     try await self.updateStreakIfNeeded()
   }
   
   func generateSummary(in record: Record) async throws -> AlanSummary {
+    try Task.checkCancellation()
     let book = try await bookRepository.fetchBook(isbn: record.isbn)
+    try Task.checkCancellation()
     let prefixPrompt = """
       You are an AI that generates a reading reflection summary based on the following information.
       Book title: \(book.name), Author: \(book.author)
@@ -62,7 +66,9 @@ final class SummaryUseCaseImpl: SummaryUseCase {
     while attempt < 3 {
       let memoContent = trimmedMemoContent(from: record.memos, retryCount: attempt)
       let prompt = prefixPrompt + memoContent
+      try Task.checkCancellation()
       let jsonString = try await aiService.request(prompt: prompt)
+      try Task.checkCancellation()
       let data = Data(jsonString.utf8)
 
       do {
@@ -91,11 +97,19 @@ final class SummaryUseCaseImpl: SummaryUseCase {
 
   
   func fetchSummary(id: String) async throws -> AlanSummary {
-    return try await summaryRepository.fetchSummary(id: id)
+    try Task.checkCancellation()
+    let summary =  try await summaryRepository.fetchSummary(id: id)
+    try Task.checkCancellation()
+    
+    return summary
   }
   
   func fetchAllSummary() async throws -> [AlanSummary] {
-    return try await summaryRepository.fetchAllSummary()
+    try Task.checkCancellation()
+    let summaries = try await summaryRepository.fetchAllSummary()
+    try Task.checkCancellation()
+    
+    return summaries
   }
   
 }
