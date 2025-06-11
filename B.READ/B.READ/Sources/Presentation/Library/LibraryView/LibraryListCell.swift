@@ -27,9 +27,7 @@ struct LibraryListCell: View {
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1)
         
         // 독서 현황
-        // TODO: - [시르] Binding으로 만들어야하면, 제작해서 사용
         RecordPropertyRow(data: record)
-//        RecordStatsView(record: $record)
         
         // 독서 기간
         periodView(record.period)
