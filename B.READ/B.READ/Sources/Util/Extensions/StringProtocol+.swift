@@ -21,16 +21,19 @@ extension StringProtocol {
     
     while start < endIndex {
       // 현재 위치부터 키워드 길이만큼의 범위 설정
-      let end = index(start, offsetBy: keyword.count, limitedBy: endIndex) ?? endIndex
+      guard let end = index(start, offsetBy: keyword.count, limitedBy: endIndex) else {
+        break
+      }
       let candidate = self[start..<end]
       
       // 키워드와 일치하면(대소문자 무시) 결과에 추가
       if candidate.lowercased() == keyword.lowercased() {
         ranges.append(start..<end)
+        start = end
+      } else {
+        // 다음 문자로 이동
+        start = index(after: start)
       }
-      
-      // 다음 문자로 이동
-      start = index(after: start)
     }
     
     return ranges

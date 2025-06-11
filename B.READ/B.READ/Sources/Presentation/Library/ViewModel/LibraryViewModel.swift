@@ -35,6 +35,7 @@ final class LibraryViewModel: ObservableObject {
   // MARK: - Internal Variable
   // DB에서 가져온 전체 독서기록
   private var records: [RecordCellVO] = []
+  private var filteredRecords: [RecordCellVO] = []
   
   // MARK: - Dependency
   @Dependency
@@ -171,14 +172,14 @@ private extension LibraryViewModel {
     
     // 3. 필터 적용한 독서 기록을 뷰에 반영
     await MainActor.run {
-      self.displayRecords = filterRecord
+      self.filteredRecords = filterRecord
     }
   }
   
   /// 정렬 기준에 따라서 displayRecords를 정렬
   func sortDisplayRecords(by: SortOption = .recent) async {
     // 1. 정렬한 결과
-    let sortedRecords: [RecordCellVO] = displayRecords.sorted(by: by.sort)
+    let sortedRecords: [RecordCellVO] = filteredRecords.sorted(by: by.sort)
     
     // 2. 결과를 뷰에 반영
     await MainActor.run {

@@ -230,8 +230,8 @@ private struct AddActionView: View {
           .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
       )
     }
-    .padding(.trailing, 32)
-    .padding(.bottom, 28)
+    .padding(.trailing, 24)
+    .padding(.bottom, 24)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
   }
 }

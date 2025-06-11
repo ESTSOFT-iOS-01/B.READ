@@ -55,6 +55,8 @@ struct MemoListView: View {
         }
         
       } // : LazyVStack
+      .padding(.bottom, 40)
+      .animation(.easeInOut(duration: 0.5), value: viewModel.displayMemoGroups)
     } // : ScrollView
     .background(.backgroundDefault)
     .confirmationDialog(
