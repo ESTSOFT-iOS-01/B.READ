@@ -36,6 +36,7 @@ actor RecordRepositoryStub: RecordRepository {
     
     return record
   }
+  
   func fetchRecentReadingRecord(maxCount count: Int) throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
@@ -43,6 +44,14 @@ actor RecordRepositoryStub: RecordRepository {
       .sorted { $0.updatedAt > $1.updatedAt }
       .prefix(count)
     
+    return Array(records)
+  }
+  
+  func fetchHaveSummaryRecords() async throws -> [Record] {
+    print("Stub: ", #function)
+    let records = storedRecords
+      .filter { $0.summary != nil }
+      
     return Array(records)
   }
 

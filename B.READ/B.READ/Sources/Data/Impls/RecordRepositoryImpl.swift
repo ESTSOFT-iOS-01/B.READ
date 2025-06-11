@@ -64,6 +64,20 @@ actor RecordRepositoryImpl: RecordRepository {
     }
   }
   
+  func fetchHaveSummaryRecords() throws -> [Record] {
+    print("Impl: ", #function)
+    
+    let predicate = #Predicate<RecordDTO> { $0.summary != nil }
+    let descriptor = FetchDescriptor(predicate: predicate)
+    
+    do {
+      let data = try modelContext.fetch(descriptor)
+      return Array(data.map { $0.toEntity() })
+    } catch {
+      throw RepositoryError.fetchError
+    }
+  }
+  
   func deleteRecord(_ id: String) throws {
     print("Impl: ", #function)
     
