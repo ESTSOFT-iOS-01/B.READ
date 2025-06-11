@@ -9,6 +9,8 @@ import Foundation
 
 actor RecordRepositoryStub: RecordRepository {
   
+  
+  
   private var storedRecords: [Record] = []
 //  private var storedRecords: [Record] = DummyData.dummyRecords
   
@@ -36,6 +38,7 @@ actor RecordRepositoryStub: RecordRepository {
     
     return record
   }
+  
   func fetchRecentReadingRecord(maxCount count: Int) throws -> [Record] {
     print("Stub: ", #function)
     let records = storedRecords
@@ -44,6 +47,15 @@ actor RecordRepositoryStub: RecordRepository {
       .prefix(count)
     
     return Array(records)
+  }
+  
+  func fetchRecordAvailableForSummary() async throws -> Record {
+    print("Stub: ", #function)
+    guard let record = storedRecords.first(where: { $0.state == .completed && $0.summary == nil }) else {
+      throw RepositoryError.dataNotFound
+    }
+    
+    return record
   }
 
   func updateRecord(_ record: Record) throws {

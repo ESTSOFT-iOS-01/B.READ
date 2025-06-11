@@ -7,12 +7,12 @@
 
 import SwiftUI
 
+enum Tab {
+  case home, search, library, record, mypage
+}
+
 struct MainTabView: View {
   @State private var selectedTab: Tab = .home
-  
-  enum Tab {
-    case home, search, library, record, mypage
-  }
   
   init() {
     let appearance = UITabBarAppearance()
@@ -26,7 +26,7 @@ struct MainTabView: View {
   var body: some View {
     CoordinatorContainer {
       TabView(selection: $selectedTab) {
-        HomeView()
+        HomeView(selectedTab: $selectedTab)
           .tabItem {
             Image(systemName: SFSymbol.house.name)
             Text("홈")
@@ -71,5 +71,7 @@ struct MainTabView: View {
 }
 
 #Preview {
-  MainTabView()
+  PreviewableContainer {
+    MainTabView()
+  }
 }

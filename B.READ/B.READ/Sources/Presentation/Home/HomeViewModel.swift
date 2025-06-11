@@ -10,6 +10,7 @@ import Foundation
 final class HomeViewModel: ObservableObject {
   
   // MARK: - State
+  @Published var availableSummaryRecordId: String? = nil
   @Published var recentRecords: [RecordCellVO] = []
   @Published var bestSellerList: [BestSellerListVO] = []
   
@@ -31,6 +32,7 @@ final class HomeViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
+      fetchAvailableSummaryRecord()
       fetchRecentRecords()
       fetchCategories()
     case .cancelTask:
@@ -41,6 +43,17 @@ final class HomeViewModel: ObservableObject {
 
 // MARK: - Internal Function
 private extension HomeViewModel {
+  func fetchAvailableSummaryRecord() {
+    Task {
+      do {
+        let record = try await libraryUseCase.loadRecentRecordAvailableForSummary()
+        await MainActor.run { self.availableSummaryRecordId = record.id }
+      } catch RepositoryError.dataNotFound {
+        await MainActor.run { self.availableSummaryRecordId = nil }
+      }
+    }
+  }
+  
   func fetchRecentRecords() {
     Task {
       let records = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
@@ -76,7 +89,7 @@ private extension HomeViewModel {
       }
     }
   }
-
+  
   func fetchBestSellers(for categories: [CategoryType]) async {
     let results: [BestSellerListVO?] = await withTaskGroup(of: BestSellerListVO?.self) { group in
       for category in categories {
@@ -97,10 +110,10 @@ private extension HomeViewModel {
           }
         }
       }
-
+      
       return await group.reduce(into: [BestSellerListVO?]()) { $0.append($1) }
     }
-
+    
     await MainActor.run {
       self.bestSellerList = results.compactMap { $0 }
     }
