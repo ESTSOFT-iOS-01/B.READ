@@ -19,6 +19,7 @@ final class RecordMemoViewModel: ObservableObject {
   // MARK: - Internal Variable
   private(set) var memoGroups: [MemoGroup] = []
   var selectedMemo: MemoVO? = nil
+  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var memoUseCase: MemoUseCase
@@ -52,7 +53,11 @@ final class RecordMemoViewModel: ObservableObject {
 private extension RecordMemoViewModel {
   /// 메모를 불러와서 뷰에 보여줄 형태로 가공합니다.
   func loadMemoGroups() {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
+      try? Task.checkCancellation()
+      
       do {
         // 1. 전체 독서 기록을 받아옴
         let allRecords = try await libraryUseCase.loadRecordList()
