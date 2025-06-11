@@ -73,6 +73,7 @@ private extension RecentSearchViewModel {
     try Task.checkCancellation()
     let result = try await profileUseCase.fetchRecentKeywords()
     try Task.checkCancellation()
+    
     await MainActor.run {
       keywords = result
     }

@@ -93,6 +93,9 @@ struct CreateRecordView: View {
     } message: {
       Text("올바른 페이지 번호가 아닙니다.\n1 ~ \(viewModel.totalPage) 사이의 숫자를 입력해주세요")
     } //: alert
+    .onDisappear {
+      viewModel.send(.cancelTask)
+    }
     
   }
   

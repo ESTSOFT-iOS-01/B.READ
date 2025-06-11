@@ -35,7 +35,7 @@ struct SummaryVO: Identifiable {
 }
 
 // MARK: - (S)TagVO
-struct TagVO: Identifiable {
+struct TagVO: Identifiable, Hashable {
   let id: String
   let content: String
   
@@ -49,5 +49,14 @@ struct TagVO: Identifiable {
       id: tag.id,
       content: tag.content
     )
+  }
+  
+  func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+  
+  static func == (lhs: TagVO, rhs: TagVO) -> Bool {
+    return lhs.id == rhs.id &&
+    lhs.content == rhs.content
   }
 }
