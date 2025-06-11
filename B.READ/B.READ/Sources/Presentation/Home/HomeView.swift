@@ -17,7 +17,7 @@ struct HomeView: View {
       LogoView()
       
       ScrollView(showsIndicators: false) {
-        BreadGuideView()
+        BreadGuideView(viewModel: viewModel)
           .padding(.top, 24)
         
         RecentBookSectionView(viewModel: viewModel)
@@ -45,6 +45,9 @@ struct HomeView: View {
 
 // MARK: - (S)BreadGuideView
 private struct BreadGuideView: View {
+  
+  let viewModel: HomeViewModel
+  
   var body: some View {
     HStack(alignment: .top, spacing: 16.5) {
       

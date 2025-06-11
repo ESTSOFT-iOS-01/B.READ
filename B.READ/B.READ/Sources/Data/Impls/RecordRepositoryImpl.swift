@@ -64,6 +64,25 @@ actor RecordRepositoryImpl: RecordRepository {
     }
   }
   
+  func fetchRecordAvailableForSummary() throws -> Record {
+    print("Impl: ", #function)
+    
+    let predicate = #Predicate<RecordDTO> { $0.state == 2 && $0.summary == nil }
+    let sort = SortDescriptor(\RecordDTO.updatedAt, order: .reverse)
+    var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
+    descriptor.fetchLimit = 1
+    
+    do {
+      guard let data = try modelContext.fetch(descriptor).first else {
+        throw RepositoryError.dataNotFound
+      }
+      return data.toEntity()
+    } catch {
+      throw RepositoryError.fetchError
+    }
+  }
+  
+  
   func deleteRecord(_ id: String) throws {
     print("Impl: ", #function)
     
