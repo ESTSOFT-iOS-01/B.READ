@@ -25,6 +25,7 @@ final class RecordDetailViewModel: ObservableObject {
   var selectedQuote: QuoteVO? = nil
   var selectedMemo: MemoVO? = nil
   var summary: SummaryVO? = nil
+  private var currentTask: Task<Void, Never>? = nil
   
   init(recordID: String) {
     self.recordID = recordID
@@ -74,10 +75,11 @@ private extension RecordDetailViewModel {
   
   /// 독서 기록 조회에서 필요한 정보를 불러옴
   func loadInfo(id: String) {
-    Task { [weak self] in
-      guard let self = self else { return }
+    currentTask?.cancel()
+    
+    currentTask = Task {
+      try? Task.checkCancellation()
       
-      // TODO: - [시르] VO 생성은 전부 비동기 그룹처리
       do {
         // 1. 독서 기록 정보를 불러옴
         let info: (record: Record, book: Book) = try await libraryUseCase.loadRecord(id)
@@ -118,9 +120,7 @@ private extension RecordDetailViewModel {
   
   /// 즐겨 찾기 정보를 업데이트
   func toggleIsFavorite() {
-    Task { [weak self] in
-      guard let self = self else { return }
-      
+    Task {
       // 1. 즐겨 찾기 정보를 토글
       await MainActor.run {
         self.record?.isFavorite.toggle()
@@ -146,9 +146,7 @@ private extension RecordDetailViewModel {
   
   /// 독서 기록을 삭제
   func deleteRecord() {
-    Task { [weak self] in
-      guard let self = self else { return }
-      
+    Task {
       // 1. 현재 레코드 정보 확인
       guard let record = self.record else {
         print("ViewModel Error: Record Not Found")
@@ -195,9 +193,7 @@ private extension RecordDetailViewModel {
   
   /// 문장 정렬
   func sortQuotes() async {
-    Task { [weak self] in
-      guard let self = self else { return }
-      
+    Task {
       let by = self.selectedSort[1]
       // 1. 정렬한 결과
       let sortQuotes: [QuoteVO] = quotes.sorted(by: by.sort)
