@@ -8,7 +8,6 @@
 import SwiftUI
 
 // MARK: - (S)LibraryGridView
-// TODO: - [시르] 그리드 뷰 구현
 struct LibraryGridView: View {
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   @Binding var records: [RecordCellVO]
@@ -25,7 +24,6 @@ struct LibraryGridView: View {
         ForEach($records) { $record in
           LibraryGridCell(record: $record)
             .onTapGesture {
-              // TODO: - [시르] 머지 후, 뷰 연결 수정
               coordinator.push(.libraryDetail(id: record.id))
             }
         }

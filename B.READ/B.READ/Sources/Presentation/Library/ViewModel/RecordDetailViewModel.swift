@@ -138,7 +138,6 @@ private extension RecordDetailViewModel {
         // 4. 생선한 Entity로 업데이트
         try await libraryUseCase.editRecord(recordEntity)
       } catch {
-        // TODO: - [시르] 수정 실패 에러 메시지 추가
         print(error.localizedDescription)
       }
     }
@@ -158,8 +157,7 @@ private extension RecordDetailViewModel {
         let recordEntity = record.toEntity(memos: memos, quotes: quotes)
         // 3. 독서 기록을 삭제
         try await libraryUseCase.deleteRecord(recordEntity)
-      } catch {
-        // TODO: - [시르] 삭제 실패에 따른 에러 처리
+      } catch  {
         print(error.localizedDescription)
       }
     }

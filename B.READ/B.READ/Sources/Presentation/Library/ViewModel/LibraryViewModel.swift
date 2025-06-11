@@ -132,7 +132,7 @@ private extension LibraryViewModel {
       // 2. Entity -> VO
       self.records = infos.map { RecordCellVO(record: $0.record, book: $0.book) }
     } catch {
-      // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환하고, 에러 메시지를 띄움
+      // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환
       print(error.localizedDescription)
       self.records = []
     }

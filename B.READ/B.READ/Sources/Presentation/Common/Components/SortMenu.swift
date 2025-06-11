@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 
-// TODO: - [시르] 메뉴 등장 및 사라질때 애니메이션 추가하기
 // MARK: - (S)SortMenuButton
 struct SortMenu: View {
   @Binding var isOpened: Bool
