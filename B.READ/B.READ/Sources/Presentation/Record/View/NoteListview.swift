@@ -33,7 +33,6 @@ struct NoteListview: View {
         
       } // : LazyVStack
       .padding(.bottom, 40)
-      .animation(nil, value: viewModel.displayNotes)
     }// : ScrollView
   }
 }
