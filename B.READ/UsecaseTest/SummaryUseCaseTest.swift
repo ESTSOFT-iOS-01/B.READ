@@ -28,17 +28,20 @@ final class AIServiceMock: AIService {
 
 struct SummaryUseCaseTest {
   let summaryUseCase: SummaryUseCase
+  let userInfoRepository: UserInfoRepository
   let recordRepository: RecordRepository
   let bookRepository: BookRepository
   let summaryRepositoy: SummaryRepository
   
   init() {
     let storage = SwiftDataTestStorage()
+    self.userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     self.recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
     self.bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     self.summaryRepositoy = SummaryRepositoryImpl(modelContainer: storage.modelContainer)
     
     self.summaryUseCase = SummaryUseCaseImpl(
+      userInfoRepository: userInfoRepository,
       summaryRepository: summaryRepositoy,
       bookRepository: bookRepository,
       recordRepository: recordRepository,
