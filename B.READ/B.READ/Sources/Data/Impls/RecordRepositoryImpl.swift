@@ -67,7 +67,7 @@ actor RecordRepositoryImpl: RecordRepository {
   func fetchRecordAvailableForSummary() throws -> Record {
     print("Impl: ", #function)
     
-    let predicate = #Predicate<RecordDTO> { $0.state == 2 && $0.summary == nil }
+    let predicate = #Predicate<RecordDTO> { $0.state == 2 && $0.summary == nil && !$0.memos.isEmpty }
     let sort = SortDescriptor(\RecordDTO.updatedAt, order: .reverse)
     var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
     descriptor.fetchLimit = 1
