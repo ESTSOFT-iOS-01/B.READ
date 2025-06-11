@@ -118,7 +118,12 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   }
   
   func deleteRecord(_ record: Record) async throws {
-    try await recordRepository.deleteRecord(record.id)
+    do {
+      try await recordRepository.deleteRecord(record.id)
+    } catch RepositoryError.dataNotFound {
+      // 삭제에서 이미 존재하지 않으면 무시
+      print("이미 삭제된 독서 기록입니다.")
+    }
   }
   
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {
