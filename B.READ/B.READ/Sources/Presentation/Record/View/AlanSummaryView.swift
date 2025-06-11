@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - (S)AlanSummaryView
 struct AlanSummaryView: View {
   @StateObject var viewModel: SummaryViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
@@ -32,7 +33,7 @@ struct AlanSummaryView: View {
             }
             
             if let summary = viewModel.summary {
-              InfoView(title: "🏷️ 감정 태그", content: "")
+              tagList(title: "🏷️ 감정 태그", tags: summary.tags)
               InfoView(title: "📚 요약", content: summary.content)
             }
             
@@ -47,6 +48,37 @@ struct AlanSummaryView: View {
     }
     .navigationTitle(viewModel.record.title)
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
+  }
+  
+  // MARK: (F)tagList
+  @ViewBuilder
+  private func tagList(title: String, tags: [TagVO]) -> some View {
+    let layoutPadding : CGFloat = 16
+    let horizontalPadding : CGFloat = 24
+    
+    VStack(alignment: .leading, spacing: layoutPadding) {
+      Text(title)
+        .brStyleFont(.pretendard(.semiBold, size: 16), lineHeight: 1.2, letterSpacing: 0.02)
+        .frame(maxWidth: .infinity, alignment: .leading)
+      
+      ScrollView(.horizontal) {
+        HStack(spacing: 12) {
+          ForEach(tags, id: \.self) {
+            Text($0.content)
+              .foregroundStyle(.gray7)
+              .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1.0, letterSpacing: -0.025)
+              .padding(.horizontal, layoutPadding)
+              .padding(.vertical, horizontalPadding/2)
+              .background(.gray2.opacity(0.2))
+              .clipShape(Capsule())
+          }
+        }
+      }
+    }
+    .padding(.horizontal, horizontalPadding)
+    .padding(.vertical, layoutPadding)
+    .frame(maxWidth: .infinity, alignment: .leading)
+    .background(.white)
   }
 }
 
