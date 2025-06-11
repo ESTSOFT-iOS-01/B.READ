@@ -7,12 +7,12 @@
 
 import SwiftUI
 
+enum Tab {
+  case home, search, library, record, mypage
+}
+
 struct MainTabView: View {
   @State private var selectedTab: Tab = .home
-  
-  enum Tab {
-    case home, search, library, record, mypage
-  }
   
   init() {
     let appearance = UITabBarAppearance()
@@ -26,19 +26,14 @@ struct MainTabView: View {
   var body: some View {
     CoordinatorContainer {
       TabView(selection: $selectedTab) {
-        HomeView()
+        HomeView(selectedTab: $selectedTab)
           .tabItem {
             Image(systemName: SFSymbol.house.name)
             Text("홈")
           }
           .tag(Tab.home)
           
-        SearchView(
-          inputViewModel: SearchInputViewModel(),
-          resultViewModel: SearchResultViewModel(),
-          recentSearchViewModel: RecentSearchViewModel(),
-          bestSellerViewModel: BestSellerViewModel()
-        )
+        SearchView()
           .tabItem {
             Image(systemName: SFSymbol.magnify.name)
             Text("검색")
@@ -71,5 +66,7 @@ struct MainTabView: View {
 }
 
 #Preview {
-  MainTabView()
+  PreviewableContainer {
+    MainTabView()
+  }
 }

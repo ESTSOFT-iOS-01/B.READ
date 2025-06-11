@@ -79,7 +79,7 @@ struct RecordRepositoryTest {
     
     #expect(fetchedRecord == predictResult)
   }
-  
+
   @Test("Summary Have Record Fetch Test")
   func fetchHaveSummaryRecordTest() async throws {
     var record = DummyData.dummyRecords[0]
@@ -90,6 +90,24 @@ struct RecordRepositoryTest {
     
     #expect(fetchRecord.count == 1)
     #expect(fetchRecord.first == record)
+  }
+
+  @Test("Recent Finished Record without Summary Fetch Test")
+  func fetchRecordAvailableForSummary() async throws {
+    let record = DummyData.dummyRecords[2]
+    
+    try await recordRepository.createRecord(record)
+    
+    let fetchedRecord = try await recordRepository.fetchRecordAvailableForSummary()
+    
+    #expect(fetchedRecord == record)
+  }
+  
+  @Test("Recent Finished Record without Summary Fetch Test - Data Not Found")
+  func fetchRecordAvailableForSummaryDataNotFound() async throws {
+    await #expect(throws: RepositoryError.dataNotFound, performing: {
+      try await recordRepository.fetchRecordAvailableForSummary()
+    })
   }
   
   @Test("Record Delete Test")

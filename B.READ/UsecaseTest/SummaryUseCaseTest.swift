@@ -1,10 +1,15 @@
+////
+////  SummaryUseCaseTest.swift
+////  UsecaseTest
+////
+////  Created by 김도연 on 6/9/25.
+////
 //
-//  SummaryUseCaseTest.swift
-//  UsecaseTest
+//import Foundation
+//import Testing
 //
-//  Created by 김도연 on 6/9/25.
+//@testable import B_READ
 //
-
 import Foundation
 import Testing
 
@@ -25,7 +30,7 @@ final class AIServiceMock: AIService {
   }
 }
 
-//
+
 struct SummaryUseCaseTest {
   let summaryUseCase: SummaryUseCase
   let recordRepository: RecordRepository

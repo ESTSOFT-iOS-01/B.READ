@@ -155,6 +155,10 @@ final class LibraryUseCaseImpl: LibraryUseCase {
     // 5. 최종적으로 (Record, Book) 쌍을 반환
     return pairsItems
   }
+  
+  func loadRecentRecordAvailableForSummary() async throws -> Record {
+    return try await recordRepository.fetchRecordAvailableForSummary()
+  }
 }
 
 private extension LibraryUseCaseImpl {
