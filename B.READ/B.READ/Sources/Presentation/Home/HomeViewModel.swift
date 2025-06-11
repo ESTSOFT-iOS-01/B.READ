@@ -10,6 +10,7 @@ import Foundation
 final class HomeViewModel: ObservableObject {
   
   // MARK: - State
+  @Published var availableSummaryRecordId: String? = nil
   @Published var recentRecords: [RecordCellVO] = []
   @Published var bestSellerList: [BestSellerListVO] = []
   
@@ -31,6 +32,7 @@ final class HomeViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
+      fetchAvailableSummaryRecord()
       fetchRecentRecords()
       fetchCategories()
     case .cancelTask:
@@ -41,6 +43,15 @@ final class HomeViewModel: ObservableObject {
 
 // MARK: - Internal Function
 private extension HomeViewModel {
+  func fetchAvailableSummaryRecord() {
+    Task {
+      let record = try await libraryUseCase.loadRecentRecordAvailableForSummary()
+      await MainActor.run {
+        self.availableSummaryRecordId = record.id
+      }
+    }
+  }
+  
   func fetchRecentRecords() {
     Task {
       let records = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
