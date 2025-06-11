@@ -61,7 +61,7 @@ private struct BreadGuideView: View {
   var body: some View {
     HStack(alignment: .top, spacing: 16.5) {
       
-      Image(.happyBread)
+      Image(hasAvailableSummaryRecord ? .happyBread : .sadBread)
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 100, height: 109)

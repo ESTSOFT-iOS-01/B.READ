@@ -179,6 +179,8 @@ private struct MenuListView: View {
 
 
 #Preview {
-  MyPageView()
-    .environmentObject(Coordinator<MainRoute, SheetRoute>())
+  PreviewableContainer {
+    MyPageView()
+      .environmentObject(Coordinator<MainRoute, SheetRoute>())
+  }
 }
