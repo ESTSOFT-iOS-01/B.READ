@@ -33,36 +33,44 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   
   func saveRecord(record: Record, book: Book) async throws {
     do {
+      try Task.checkCancellation()
       try await bookRepository.createBook(book)
+      try Task.checkCancellation()
       
     } catch RepositoryError.dataAlreadyExist {
       // 이미 존재하면 무시
       print("이미 존재하는 책입니다.")
     }
-    
+    try Task.checkCancellation()
     try await recordRepository.createRecord(record)
-    
+    try Task.checkCancellation()
     try await self.updateStreakIfNeeded()
   }
   
   func editRecord(_ record: Record) async throws {
     do {
       // 1. 책이 있는지 부터 확인
+      try Task.checkCancellation()
       let _ = try await bookRepository.fetchBook(isbn: record.isbn)
+      try Task.checkCancellation()
     } catch RepositoryError.dataNotFound{
       // 2. 책이 없으면 책 생성
+      try Task.checkCancellation()
       let requestBook = try await requestBookDetail(isbn: record.isbn)
+      try Task.checkCancellation()
       try await bookRepository.createBook(requestBook)
     }
     
     do {
       // 3. 독서 기록을 수정
+      try Task.checkCancellation()
       try await recordRepository.updateRecord(record)
     } catch RepositoryError.dataNotFound{
       // 4. 독서 기록이 없으면 생성
+      try Task.checkCancellation()
       try await recordRepository.createRecord(record)
     }
-    
+    try Task.checkCancellation()
     try await self.updateStreakIfNeeded()
   }
   
