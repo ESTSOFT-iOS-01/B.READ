@@ -13,7 +13,7 @@ struct BestSellerView: View {
   var onTap: (BestSellerVO) -> Void
   
   var body: some View {
-    ScrollView {
+    ScrollView(showsIndicators: false) {
       VStack(alignment: .leading, spacing: 8) {
         ForEach(Array(bookList.enumerated()), id: \.element.id) { index, book in
           BestSellerButton(rank: index + 1, name: book.title) {

@@ -93,21 +93,6 @@ struct SearchView: View {
       }
     }
   }
-  
-  // MARK: - (S)bestSellerSection
-  private var bestSellerSection: some View {
-    VStack(alignment: .leading, spacing: layoutSize) {
-      Text("인기 도서")
-        .brStyleFont(.pretendard(.semiBold, size: 18),
-                     lineHeight: 1,
-                     letterSpacing: -0.025)
-        .foregroundStyle(.black)
-      
-      BestSellerView(bookList: bestSellerViewModel.bestBookList) { book in
-        coordinator.push(.searchBook(isbn: book.isbn))
-      }
-    } // : vstack - best seller
-  }
 }
 
 //#Preview {
@@ -158,6 +143,7 @@ struct SearchContentView: View {
             BestSellerView(bookList: bestSellerViewModel.bestBookList) { book in
               coordinator.push(.searchBook(isbn: book.isbn))
             }
+            .padding(.bottom, layoutSize)
           }
         }
         .padding(.horizontal, horizontalPadding)
