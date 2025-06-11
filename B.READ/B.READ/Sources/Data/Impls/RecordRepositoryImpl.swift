@@ -72,14 +72,11 @@ actor RecordRepositoryImpl: RecordRepository {
     var descriptor = FetchDescriptor(predicate: predicate, sortBy: [sort])
     descriptor.fetchLimit = 1
     
-    do {
-      guard let data = try modelContext.fetch(descriptor).first else {
-        throw RepositoryError.dataNotFound
-      }
-      return data.toEntity()
-    } catch {
-      throw RepositoryError.fetchError
+    guard let data = try? modelContext.fetch(descriptor).first else {
+      throw RepositoryError.dataNotFound
     }
+    
+    return data.toEntity()
   }
   
   
