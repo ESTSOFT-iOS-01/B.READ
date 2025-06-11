@@ -32,9 +32,18 @@ struct RecordNoteView: View {
         }
       } // : HStack
       
-      NoteListview(viewModel: viewModel)
-        .padding(.top, 8)
-        .scrollIndicators(.never)
+      if viewModel.notes.isEmpty {
+        FailedView(
+          title: "😢 완독 후, 다시 빵식이를 불러주세요.",
+          desp: "요약을 진행한 독서 기록이 업습니다."
+        )
+      } else if !viewModel.searchText.isEmpty && viewModel.displayNotes.isEmpty {
+        FailedView(desp: "\"\(viewModel.searchText)\"에 일치하는 검색 결과가 없습니다.")
+      } else {
+        NoteListview(viewModel: viewModel)
+          .padding(.top, 8)
+          .scrollIndicators(.never)
+      }
     } // : VStack
     .onAppear {
       viewModel.send(.onAppear)

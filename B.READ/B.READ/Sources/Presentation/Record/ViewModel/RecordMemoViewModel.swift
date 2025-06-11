@@ -17,7 +17,7 @@ final class RecordMemoViewModel: ObservableObject {
   @Published var highlightKeyword: String? = nil
   
   // MARK: - Internal Variable
-  private var memoGroups: [MemoGroup] = []
+  private(set) var memoGroups: [MemoGroup] = []
   var selectedMemo: MemoVO? = nil
   
   // MARK: - Dependency

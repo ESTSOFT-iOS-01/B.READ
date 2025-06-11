@@ -43,12 +43,13 @@ struct LoadingView: View {
 }
 
 struct FailedView: View {
+  var title: String = "😢 정보를 불러오는 데 실패했어요."
   var error: Error? = nil
   var desp: String? = nil
   
   var body: some View {
     VStack(spacing: 16) {
-      Text("😢 정보를 불러오는 데 실패했어요.")
+      Text(title)
         .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1, letterSpacing: -0.02)
         .foregroundStyle(.brown9)
       

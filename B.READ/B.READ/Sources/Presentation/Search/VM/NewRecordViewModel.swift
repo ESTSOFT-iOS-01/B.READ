@@ -29,6 +29,7 @@ final class NewRecordViewModel: ObservableObject {
   
   var totalPage: Int
   private var pageNum: Int = 0
+  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase
@@ -65,6 +66,10 @@ final class NewRecordViewModel: ObservableObject {
 //    print("NewRecordViewModel이 생성되었습니다. ")
   }
   
+  deinit {
+    currentTask?.cancel()
+  }
+  
   // MARK: - Action
   enum Action {
     case updateRecord(ReadingState)
@@ -73,6 +78,7 @@ final class NewRecordViewModel: ObservableObject {
     case releaseEditorFocus
     case focusOnTextField
     case releaseAllFocus
+    case cancelTask
   }
   
   func send(_ action: Action) {
@@ -117,6 +123,9 @@ final class NewRecordViewModel: ObservableObject {
         self?.isFocused = false
         self?.isTextEditorFocused = false
       }
+      
+    case .cancelTask:
+      currentTask?.cancel()
     }
   }
   
@@ -236,23 +245,41 @@ private extension NewRecordViewModel {
   
   func saveNewRecord(_ record: Record) {
     guard let book = self.book else { return }
-
-    Task {
+    
+    currentTask?.cancel()
+    
+    currentTask = Task {
       do {
+        try Task.checkCancellation()
         try await libraryUseCase.saveRecord(record: record, book: book)
+        try Task.checkCancellation()
         await MainActor.run { isSuccess = true }
       } catch {
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
+        
         print(error)
       }
     }
   }
   
   func updateRecord(_ record: Record) {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
       do {
+        try Task.checkCancellation()
         try await libraryUseCase.editRecord(record)
+        try Task.checkCancellation()
         await MainActor.run { isSuccess = true }
       } catch {
+        if Task.isCancelled {
+          print("\(#function) is cancelled")
+          return
+        }
+        
         print(error)
       }
     }

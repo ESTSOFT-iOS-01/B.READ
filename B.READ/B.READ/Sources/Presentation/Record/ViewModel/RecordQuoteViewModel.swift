@@ -17,7 +17,7 @@ final class RecordQuoteViewModel: ObservableObject {
   @Published var highlightKeyword: String? = nil
   
   // MARK: - Internal Variable
-  private var quoteGroups: [QuoteGroup] = []
+  private(set) var quoteGroups: [QuoteGroup] = []
   var selectedQuote: QuoteVO? = nil
   
   // MARK: - Dependency
@@ -138,6 +138,7 @@ private extension RecordQuoteViewModel {
     let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else {
       self.searchText = ""
+      self.highlightKeyword = nil
       self.displayQuoteGroups = quoteGroups
       self.sortDisplayQuoteGroups()
       return
