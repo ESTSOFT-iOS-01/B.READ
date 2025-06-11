@@ -60,6 +60,7 @@
 				Sources/Data/DTOs/Record/QuoteDTO.swift,
 				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/Record/SummaryDTO.swift,
+				Sources/Data/DTOs/Record/TagDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
@@ -97,6 +98,7 @@
 				Sources/Data/DTOs/Record/QuoteDTO.swift,
 				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/Record/SummaryDTO.swift,
+				Sources/Data/DTOs/Record/TagDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
@@ -150,6 +152,7 @@
 				Sources/Network/NetworkClient/NetworkClient.swift,
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				"Sources/Util/Extensions/Bundle+.swift",
+				"Sources/Util/Extensions/Date+.swift",
 			);
 			target = 16BE931F2DED713E006FFD00 /* ServiceTest */;
 		};
@@ -164,6 +167,7 @@
 				Sources/Data/DTOs/Record/QuoteDTO.swift,
 				Sources/Data/DTOs/Record/RecordDTO.swift,
 				Sources/Data/DTOs/Record/SummaryDTO.swift,
+				Sources/Data/DTOs/Record/TagDTO.swift,
 				Sources/Data/DTOs/UserInfo/CategoryDTO.swift,
 				Sources/Data/DTOs/UserInfo/DailyStatusDTO.swift,
 				Sources/Data/DTOs/UserInfo/KeywordDTO.swift,
@@ -217,6 +221,7 @@
 				Sources/Network/NetworkClient/NetworkClient.swift,
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				"Sources/Util/Extensions/Bundle+.swift",
+				"Sources/Util/Extensions/Date+.swift",
 			);
 			target = 16BE95272DED72FB006FFD00 /* UsecaseTest */;
 		};
