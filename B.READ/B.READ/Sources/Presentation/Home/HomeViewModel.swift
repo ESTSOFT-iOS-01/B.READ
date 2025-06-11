@@ -45,9 +45,11 @@ final class HomeViewModel: ObservableObject {
 private extension HomeViewModel {
   func fetchAvailableSummaryRecord() {
     Task {
-      let record = try await libraryUseCase.loadRecentRecordAvailableForSummary()
-      await MainActor.run {
-        self.availableSummaryRecordId = record.id
+      do {
+        let record = try await libraryUseCase.loadRecentRecordAvailableForSummary()
+        await MainActor.run { self.availableSummaryRecordId = record.id }
+      } catch RepositoryError.dataNotFound {
+        await MainActor.run { self.availableSummaryRecordId = nil }
       }
     }
   }
@@ -87,7 +89,7 @@ private extension HomeViewModel {
       }
     }
   }
-
+  
   func fetchBestSellers(for categories: [CategoryType]) async {
     let results: [BestSellerListVO?] = await withTaskGroup(of: BestSellerListVO?.self) { group in
       for category in categories {
@@ -108,10 +110,10 @@ private extension HomeViewModel {
           }
         }
       }
-
+      
       return await group.reduce(into: [BestSellerListVO?]()) { $0.append($1) }
     }
-
+    
     await MainActor.run {
       self.bestSellerList = results.compactMap { $0 }
     }
