@@ -32,9 +32,18 @@ struct RecordMemoView: View {
         }
       } // : HStack
       
-      MemoListView(viewModel: viewModel)
-        .padding(.top, 8)
-        .scrollIndicators(.never)
+      if viewModel.memoGroups.isEmpty {
+        FailedView(
+          title: "😢 메모를 작성하러 가볼까요?",
+          desp: "작성하신 메모가 없습니다."
+        )
+      } else if !viewModel.searchText.isEmpty && viewModel.displayMemoGroups.isEmpty {
+        FailedView(desp: "\"\(viewModel.searchText)\"에 일치하는 검색 결과가 없습니다.")
+      } else {
+        MemoListView(viewModel: viewModel)
+          .padding(.top, 8)
+          .scrollIndicators(.never)
+      }
     } // : VStack
     .onAppear {
       viewModel.send(.onAppear)
