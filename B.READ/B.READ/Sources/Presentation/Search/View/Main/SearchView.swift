@@ -142,7 +142,7 @@ struct SearchContentView: View {
           viewModel: resultViewModel
         )
         .onDisappear {
-          resultViewModel.send(.clearSelect)
+//          resultViewModel.send(.cancelSelect)
         }
 
       } else {
