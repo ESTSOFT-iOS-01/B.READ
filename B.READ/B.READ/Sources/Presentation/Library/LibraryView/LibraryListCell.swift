@@ -75,7 +75,7 @@ struct LibraryListCell: View {
         .resizable()
         .aspectRatio(contentMode: .fill)
     } else {
-      Image(.exampleCover)
+      Image(.exampleBook)
         .resizable()
         .aspectRatio(contentMode: .fill)
     }

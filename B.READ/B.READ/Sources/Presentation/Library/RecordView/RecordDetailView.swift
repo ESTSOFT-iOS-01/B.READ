@@ -30,14 +30,11 @@ struct RecordDetailView: View {
         
         RecordBookSection(record: $viewModel.record)
         
-        RecordStatsSection(viewModel: viewModel)
+        RecordStatsSection(record: $viewModel.record)
           .padding(.top, 8)
         
         TopTabBar(
-          tabs: [
-            TabItem(title: "메모", image: Image(.menuBread)),
-            TabItem(title: "문장", image: Image(.donut))
-          ],
+          tabs: [TabItem(title: "메모"), TabItem(title: "문장")],
           selectedIndex: $viewModel.selectedTab
         )
         .frame(height: 34)
@@ -80,15 +77,7 @@ struct RecordDetailView: View {
       print("DetailView OnAppear")
       viewModel.send(.onAppear)
       if showAddMenu { UINavigationBar.showOverlay(duration: 0.0) }
-      else { UINavigationBar.removeOverlay(duration: 0.0) }
     } // : onAppear
-    .onChange(of: coordinator.paths) {
-      if let id = viewModel.record?.id,
-         coordinator.paths.last == .libraryDetail(id: id)
-      {
-        viewModel.send(.onAppear)
-      }
-    }
     .onChange(of: needRefresh) { oldValue, newValue in
       if newValue {
         viewModel.send(.onAppear)
@@ -127,15 +116,18 @@ struct RecordDetailView: View {
   
   // MARK: - (F)topBarTrailingButton
   private func topBarTrailingButton() -> some View {
-    HStack(spacing: 4) {
+    HStack(spacing: 0) {
       Button {
         viewModel.send(.onTapFavorite)
       } label: {
         if let isFavorite = viewModel.record?.isFavorite {
-          Image(systemName: isFavorite ? SFSymbol.bookMarkFill.name : SFSymbol.bookMark.name)
+          Image(systemName: isFavorite ? "bookmark.fill" : "bookmark")
             .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 22, height: 22)
+            .frame(width: 12, height: 24)
+        } else {
+          Image(systemName: "bookmark")
+            .resizable()
+            .frame(width: 12, height: 24)
         }
       }
       Button {
@@ -185,7 +177,6 @@ private struct AddActionView: View {
           Button {
             guard let record = viewModel.record else { return }
             UINavigationBar.removeOverlay(duration: 0.0)
-            self.showAddMenu = false
             coordinator.push(.memo(record: record))
           } label: {
             Text("메모 작성")
@@ -194,7 +185,6 @@ private struct AddActionView: View {
           Button {
             guard let record = viewModel.record else { return }
             UINavigationBar.removeOverlay(duration: 0.0)
-            self.showAddMenu = false
             coordinator.push(.sentenceInput(mode: .create(record: record)))
           } label: {
             Text("문장 수집")
@@ -230,8 +220,8 @@ private struct AddActionView: View {
           .shadow(color: .black.opacity(0.25), radius: 4, y: 4)
       )
     }
-    .padding(.trailing, 24)
-    .padding(.bottom, 24)
+    .padding(.trailing, 32)
+    .padding(.bottom, 28)
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
   }
 }

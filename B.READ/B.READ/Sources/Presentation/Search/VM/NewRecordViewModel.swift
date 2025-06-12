@@ -29,7 +29,6 @@ final class NewRecordViewModel: ObservableObject {
   
   var totalPage: Int
   private var pageNum: Int = 0
-  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var libraryUseCase: LibraryUseCase
@@ -47,7 +46,6 @@ final class NewRecordViewModel: ObservableObject {
     self.reviewText = ""
     self.book = book
     self.totalPage = book.totalPages
-//    print("NewRecordViewModel이 생성되었습니다. ")
   }
   
   /// Library에서 Record 수정하는 경우
@@ -63,22 +61,16 @@ final class NewRecordViewModel: ObservableObject {
     self.reviewText = recordVO.review
     self.totalPage = recordVO.totalPage
     self.book = nil
-//    print("NewRecordViewModel이 생성되었습니다. ")
-  }
-  
-  deinit {
-    currentTask?.cancel()
   }
   
   // MARK: - Action
   enum Action {
     case updateRecord(ReadingState)
     case createRecord(ReadingState)
-    case pageSubmit(ReadingState)
+    case pageSubmit
     case releaseEditorFocus
     case focusOnTextField
     case releaseAllFocus
-    case cancelTask
   }
   
   func send(_ action: Action) {
@@ -93,21 +85,17 @@ final class NewRecordViewModel: ObservableObject {
         updateRecord(entity)
       }
 
-    case let .pageSubmit(state):
+    case .pageSubmit:
       isFocused = false
-      if state == .reading {
-        if let value = Int(page), value >= 0, value <= totalPage {
-          pageNum = value
-          inValidPageNumber = false
-        } else {
-          pageNum = 0
-          page = ""
-          inValidPageNumber = true
-        }
-      } else {
+      if let value = Int(page), value >= 0, value <= totalPage {
+        pageNum = value
         inValidPageNumber = false
+      } else {
+        pageNum = 0
+        page = "0"
+        inValidPageNumber = true
       }
-
+      
     case .releaseEditorFocus:
       DispatchQueue.main.async { [weak self] in
         self?.isTextEditorFocused = false
@@ -123,9 +111,6 @@ final class NewRecordViewModel: ObservableObject {
         self?.isFocused = false
         self?.isTextEditorFocused = false
       }
-      
-    case .cancelTask:
-      currentTask?.cancel()
     }
   }
   
@@ -245,41 +230,23 @@ private extension NewRecordViewModel {
   
   func saveNewRecord(_ record: Record) {
     guard let book = self.book else { return }
-    
-    currentTask?.cancel()
-    
-    currentTask = Task {
+
+    Task {
       do {
-        try Task.checkCancellation()
         try await libraryUseCase.saveRecord(record: record, book: book)
-        try Task.checkCancellation()
         await MainActor.run { isSuccess = true }
       } catch {
-        if Task.isCancelled {
-          print("\(#function) is cancelled")
-          return
-        }
-        
         print(error)
       }
     }
   }
   
   func updateRecord(_ record: Record) {
-    currentTask?.cancel()
-    
-    currentTask = Task {
+    Task {
       do {
-        try Task.checkCancellation()
         try await libraryUseCase.editRecord(record)
-        try Task.checkCancellation()
         await MainActor.run { isSuccess = true }
       } catch {
-        if Task.isCancelled {
-          print("\(#function) is cancelled")
-          return
-        }
-        
         print(error)
       }
     }

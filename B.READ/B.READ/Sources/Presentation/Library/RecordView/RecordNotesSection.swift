@@ -59,12 +59,9 @@ struct RecordNotesSection: View {
         } // : ForEach
       }
     } // : LazyVStcks
-    .animation(.easeInOut(duration: 0.5), value: viewModel.memos)
-    .animation(.easeInOut(duration: 0.5), value: viewModel.quotes)
-    .animation(.easeInOut(duration: 0.3), value: viewModel.selectedTab)
     .frame(maxWidth: .infinity)
     .padding(.horizontal, 8)
-    .padding(.bottom, 100)
+    .padding(.bottom, 72)
     .confirmationDialog(
       "메뉴를 선택하세요",
       isPresented: $showMenuActionSheet,

@@ -120,7 +120,7 @@ extension ProfileUseCaseImpl {
       categories: [],
       recentKeywords: [],
       generateCount: 0,
-      lastStreakUpdatedAt: Date().addingTimeInterval(-24 * 60 * 60),
+      lastStreakUpdatedAt: .now,
       streak: (0...6).map { DailyStatus(weekday: $0, isCompleted: false) }
     )
     

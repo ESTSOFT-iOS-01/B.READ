@@ -12,15 +12,15 @@ struct BookDetailView: View {
   @StateObject var viewModel: BookViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  init(viewModel: @autoclosure @escaping () -> BookViewModel) {
-    self._viewModel = StateObject(wrappedValue: viewModel())
+  init(viewModel: BookViewModel) {
+    self._viewModel = .init(wrappedValue: viewModel)
   }
   
   var body: some View {
     Group {
       switch viewModel.bookState {
       case .loading:
-        LoadingView()
+        BouncingImageLoadingView()
       case .loaded(let bookDetailVO):
         loadedView(bookDetailVO)
       case .failed(let error):
@@ -34,19 +34,10 @@ struct BookDetailView: View {
         .presentationDragIndicator(.hidden)
     })
     .background(.backgroundDefault, ignoresSafeAreaEdges: .all)
-    .alert("저장 성공", isPresented: $viewModel.isSuccess) {
-      Button("확인", role: .cancel) {
-        DispatchQueue.main.async {
-          viewModel.isSuccess = false
-        }
-      }
-    } message: {
-      Text("내 책빵에 저장되었습니다.")
-    } // : alert
-    .onAppear { // onAppear
+    .onAppear {
       viewModel.send(.onAppear)
     }
-    .onDisappear { // onDisappear
+    .onDisappear {
       viewModel.send(.cancelTask)
     }
   }
@@ -96,14 +87,7 @@ struct BookDetailView: View {
             coordinator.presentSheet(
               .createRecord(
                 state: $viewModel.selectedState,
-                book: book,
-                onComplete: { isSuccess in
-                  if isSuccess {
-                    DispatchQueue.main.async {
-                      viewModel.isSuccess = true
-                    }
-                  }
-                }
+                book: book
               )
             )
           } else {

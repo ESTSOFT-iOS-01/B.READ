@@ -9,31 +9,27 @@ import SwiftUI
 
 // MARK: - (S)CreateRecordView
 struct CreateRecordView: View {
+  private let layoutPadding: CGFloat = 24
+  let onComplete: (_ isEdit: Bool) -> Void
+  
   @Binding var selectedState: ReadingState
   @StateObject var viewModel: NewRecordViewModel
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
-  private let layoutPadding: CGFloat = 24
-  let onComplete: (_ isEdit: Bool) -> Void
-  
-  // MARK: - Inits
-  init(state: Binding<ReadingState>, viewModel: @autoclosure @escaping () -> NewRecordViewModel) {
-    self._selectedState = state
-    self._viewModel = StateObject(wrappedValue: viewModel())
-    self.onComplete = { _ in }
+  init(state: Binding<ReadingState>, viewModel: NewRecordViewModel) {
+    self.init(state: state, viewModel: viewModel, onComplete: { _ in })
   }
-  
+
   init(
     state: Binding<ReadingState>,
-    viewModel: @autoclosure @escaping () -> NewRecordViewModel,
+    viewModel: NewRecordViewModel,
     onComplete: @escaping (_ isEdit: Bool) -> Void
   ) {
     self._selectedState = state
-    self._viewModel = StateObject(wrappedValue: viewModel())
+    self._viewModel = .init(wrappedValue: viewModel)
     self.onComplete = onComplete
   }
-  
-  // MARK: - body
+
   var body: some View {
     Group {
       ZStack(alignment: .topTrailing) {
@@ -51,13 +47,12 @@ struct CreateRecordView: View {
             .onChange(of: selectedState) { _, _ in
               viewModel.send(.releaseAllFocus)
             }
-          
+
           stateContentView()
             .padding(.top, layoutPadding)
           
           BottomButton(buttonTitle: "저장하기") {
-            viewModel.send(.pageSubmit(selectedState))
-            
+            viewModel.send(.pageSubmit)
             if !viewModel.inValidPageNumber {
               if viewModel.recordVO != nil {
                 viewModel.send(.updateRecord(selectedState))
@@ -77,13 +72,16 @@ struct CreateRecordView: View {
       .clipShape(
         RoundedCorner(radius: 16, corners: [.topLeft, .topRight])
       )
+      
     }
     .ignoresSafeArea()
     .onChange(of: viewModel.isSuccess) { _, newValue in
-      DispatchQueue.main.async {
-        let isEdit = newValue
-        onComplete(isEdit)
-        coordinator.dismissSheet()
+      if newValue {
+        DispatchQueue.main.async {
+          let isEdit = viewModel.recordVO != nil
+          onComplete(isEdit)
+          coordinator.dismissSheet()
+        }
       }
     }
     .alert("저장 실패", isPresented: $viewModel.inValidPageNumber) {
@@ -92,11 +90,8 @@ struct CreateRecordView: View {
       }
     } message: {
       Text("올바른 페이지 번호가 아닙니다.\n1 ~ \(viewModel.totalPage) 사이의 숫자를 입력해주세요")
-    } //: alert
-    .onDisappear {
-      viewModel.send(.cancelTask)
     }
-    
+
   }
   
   // MARK: - (F)stateContentView
@@ -120,7 +115,7 @@ struct CreateRecordView: View {
           page: $viewModel.page,
           isFocused: $viewModel.isFocused,
           maxPage: viewModel.totalPage) {
-            viewModel.send(.pageSubmit(selectedState))
+            viewModel.send(.pageSubmit)
           }
           .topLeadingPadding()
       }

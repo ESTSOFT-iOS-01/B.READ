@@ -15,22 +15,12 @@ struct QuoteGroup: Identifiable {
   var quotes: [QuoteVO]
 }
 
-extension QuoteGroup: Equatable {
-  static func == (lhs: QuoteGroup, rhs: QuoteGroup) -> Bool {
-    return lhs.id == rhs.id &&
-    lhs.isbn == rhs.isbn &&
-    lhs.bookTitle == rhs.bookTitle &&
-    lhs.quotes == rhs.quotes
-  }
-}
-
 // MARK: - (S)QuoteVO
-/// - NOTE: content와 page는 수정을 통해 변경될 수 있음
 struct QuoteVO: Identifiable, Hashable {
   let id: String
   let isbn: String
-  var content: String
-  var page: Int
+  let content: String
+  let page: Int
   let record: RecordDetailVO
   
   init(id: String, isbn: String, content: String, page: Int, record: RecordDetailVO) {

@@ -176,8 +176,8 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
     cameraPreviewLayer?.frame = CGRect(
       x: 0,
       y: 0,
-      width: view.frame.width+1,
-      height: view.frame.width+1
+      width: view.frame.width,
+      height: view.frame.width
     )
     
     if let previewLayer = cameraPreviewLayer {
@@ -192,10 +192,7 @@ class CustomCameraController: UIViewController, AVCaptureMetadataOutputObjectsDe
   ) {
     guard let object = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
           let value = object.stringValue,
-          currentDetected != value else {
-      currentDetected = ""
-      return
-    }
+          currentDetected != value else { return }
     
     // 중복 방지용 내부 상태 갱신
     currentDetected = value

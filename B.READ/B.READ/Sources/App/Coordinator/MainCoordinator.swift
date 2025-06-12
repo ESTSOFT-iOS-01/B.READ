@@ -16,15 +16,13 @@ enum MainRoute: Hashable {
   
   // MARK: - Library
   case libraryDetail(id: String)
-  case createSummary(record: RecordDetailVO, memos: [MemoVO], quotes: [QuoteVO])
-  case summaryDetail(id: String, record: RecordDetailVO, memos: [MemoVO], quotes: [QuoteVO])
   
   // MARK: - Sentence
   case sentenceInput(mode: SentenceInputMode)
-  case pageInput(record: RecordDetailVO, quote: QuoteVO)
+  case pageInput(mode: SentenceInputMode, sentence: String)
   
   // MARK: - Memo
-  //  case memo(id: String? = nil, record: Record, totalPage: Int)
+//  case memo(id: String? = nil, record: Record, totalPage: Int)
   case memo(id: String? = nil, record: RecordDetailVO)
   
   // MARK: - MyPage
@@ -35,8 +33,7 @@ enum MainRoute: Hashable {
 enum SheetRoute: Identifiable {
   case createRecord(
     state: Binding<ReadingState>,
-    book: Book,
-    onComplete: (_ isEdit: Bool) -> Void
+    book: Book
   )
   
   case updateRecord(
@@ -53,20 +50,17 @@ enum SheetRoute: Identifiable {
 extension Coordinator where R == SheetRoute {
   @ViewBuilder
   func buildView(for route: R) -> some View {
-    let factory = ViewModelFactory.shared
-    
     switch route {
-    case let .createRecord(state, book, onComplete):
+    case let .createRecord(state, book):
       CreateRecordView(
         state: state,
-        viewModel: factory.createNewRecord(book: book),
-        onComplete: onComplete
+        viewModel: NewRecordViewModel(book: book)
       )
       
     case let .updateRecord(state, record, onComplete):
       CreateRecordView(
         state: state,
-        viewModel: factory.createUpdateRecord(record: record),
+        viewModel: NewRecordViewModel(recordVO: record),
         onComplete: onComplete
       )
     }
@@ -77,15 +71,13 @@ extension Coordinator where T == MainRoute {
   
   @ViewBuilder
   func buildView(for route: T) -> some View {
-    let factory = ViewModelFactory.shared
-    
     switch route {
       
       // MARK: - Search Flow
     case .barcode:
-      ScanView(viewModel: factory.createScan())
+      ScanView(viewModel: ScanViewModel())
     case .searchBook(let isbn):
-      BookDetailView(viewModel: factory.createBook(isbn: isbn))
+      BookDetailView(viewModel: BookViewModel(isbn: isbn))
     case .goToWebView(let url):
       WebView(url: url)
         .navigationBarBackButtonHidden()
@@ -102,37 +94,18 @@ extension Coordinator where T == MainRoute {
       
       // MARK: - Library
     case .libraryDetail(let id):
-      RecordDetailView(viewModel: factory.createRecordDetail(id: id))
-    case let .createSummary(record, memos, quotes):
-      AlanSummaryView(
-        viewModel: factory.createSummary(
-          record: record,
-          memos: memos,
-          quotes: quotes
-        )
-      )
-    case let .summaryDetail(id, record, memos, quotes):
-      AlanSummaryView(
-        viewModel: factory.createSummaryDetail(
-          id: id,
-          record: record,
-          memos: memos,
-          quotes: quotes
-        )
-      )
+      RecordDetailView(viewModel: .init(recordID: id))
       
       // MARK: - Sentence
     case .sentenceInput(let mode):
-      SentenceInputView(viewModel: factory.createSentenceInput(mode: mode))
-    case .pageInput(let record, let quote):
-      PageInputView(viewModel: factory.createPageInput(record: record, quote: quote))
-      
+        SentenceInputView(mode: mode)
+
+    case .pageInput(let mode, let sentence):
+        PageInputView(mode: mode, sentence: sentence)
+    
       // MARK: - Memo
     case .memo(let id, let record):
-      MemoView(
-        viewModel: factory.createMemo(id: id, record: record),
-        totalPage: record.totalPage
-      )
+      MemoView(viewModel: MemoViewModel(id: id, record: record), totalPage: record.totalPage)
       
       // MARK: - MyPage Flow
     case .insertNickname:

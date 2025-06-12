@@ -84,9 +84,7 @@ final class RecordDTO {
       updatedAt: data.updatedAt
     )
     
-    if let summaryData = data.summary {
-      self.summary = SummaryDTO(summaryData, record: self)
-    }
+    self.summary = data.summary.map { SummaryDTO($0, record: self) }
     self.memos = data.memos.map{ MemoDTO($0, record: self) }
     self.quotes = data.quotes.map { QuoteDTO($0, record: self) }
   }

@@ -10,28 +10,38 @@ import Foundation
 
 // MARK: - (S)SearchView
 struct SearchView: View {
-  @StateObject private var inputViewModel = SearchInputViewModel()
-  @StateObject private var resultViewModel = SearchResultViewModel()
-  @StateObject private var recentSearchViewModel = RecentSearchViewModel()
-  @StateObject private var bestSellerViewModel = BestSellerViewModel()
+  @StateObject private var inputViewModel: SearchInputViewModel
+  @StateObject private var resultViewModel: SearchResultViewModel
+  @StateObject private var recentSearchViewModel: RecentSearchViewModel
+  @StateObject private var bestSellerViewModel: BestSellerViewModel
   
   @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
   
   private let layoutSize: CGFloat = 16
   private let horizontalPadding: CGFloat = 24
   
+  init(
+    inputViewModel: SearchInputViewModel,
+    resultViewModel: SearchResultViewModel,
+    recentSearchViewModel: RecentSearchViewModel,
+    bestSellerViewModel: BestSellerViewModel
+  ) {
+    self._inputViewModel = .init(wrappedValue: inputViewModel)
+    self._resultViewModel = .init(wrappedValue: resultViewModel)
+    self._recentSearchViewModel = .init(wrappedValue: recentSearchViewModel)
+    self._bestSellerViewModel = .init(wrappedValue: bestSellerViewModel)
+  }
+  
   var body: some View {
     VStack(alignment: .center, spacing: layoutSize) {
-      
       if !inputViewModel.isFocused && !inputViewModel.isSubmitted {
-        LogoView()
+        logoView
           .transition(.opacity)
       }
       
       // 검색창은 한 개만 존재해야함
       searchBarSection
         .padding(.top, inputViewModel.isFocused || inputViewModel.isSubmitted ? layoutSize : 0)
-        .padding(.horizontal, horizontalPadding)
       
       SearchContentView(
         inputViewModel: inputViewModel,
@@ -141,9 +151,6 @@ struct SearchContentView: View {
         SearchResultView(
           viewModel: resultViewModel
         )
-        .onDisappear {
-          resultViewModel.send(.clearSelect)
-        }
 
       } else {
         VStack(alignment: .leading, spacing: layoutSize) {
@@ -152,7 +159,7 @@ struct SearchContentView: View {
             .foregroundStyle(.black)
           
           if bestSellerViewModel.bestBookList.isEmpty {
-            LoadingView()
+            BouncingImageLoadingView()
           } else {
             BestSellerView(bookList: bestSellerViewModel.bestBookList) { book in
               coordinator.push(.searchBook(isbn: book.isbn))

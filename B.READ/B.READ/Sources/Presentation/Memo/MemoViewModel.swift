@@ -72,7 +72,8 @@ final class MemoViewModel: ObservableObject {
 // MARK: - Internal Function
 private extension MemoViewModel {
   func fetchMemo(id: String) {
-    Task {
+    Task { [weak self] in
+      guard let self else { return }
       do {
         let memo = try await memoUseCase.fetchMemo(id: id)
         self.memo = memo
@@ -91,7 +92,8 @@ private extension MemoViewModel {
   }
   
   func saveMemo() {
-    Task {
+    Task { [weak self] in
+      guard let self else { return }
       memo?.content = self.content
       memo?.pages = (Int(self.startPage)!, Int(self.endPage)!)
       memo?.guides = self.guides.map { Guide(date: .now, content: $0) }
@@ -106,7 +108,9 @@ private extension MemoViewModel {
   }
   
   func generateGuides() {
-    Task {
+    Task { [weak self] in
+      guard let self else { return }
+      
       await MainActor.run { self.guideStatus = .loading }
       
       do {

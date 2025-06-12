@@ -24,7 +24,6 @@ final class RecordDetailViewModel: ObservableObject {
   private let recordID: String
   var selectedQuote: QuoteVO? = nil
   var selectedMemo: MemoVO? = nil
-  var summary: SummaryVO? = nil
   
   init(recordID: String) {
     self.recordID = recordID
@@ -90,10 +89,7 @@ private extension RecordDetailViewModel {
           // 4. 문장 VO 생성
           self.quotes = info.record.quotes
             .map { QuoteVO($0, record: RecordDetailVO(record: info.record, book: info.book)) }
-          
-          if let summaryData = info.record.summary {
-            self.summary = SummaryVO(summaryData)
-          }
+          // TODO: - [시르] 서머리 VO 정의 후 생성 해야함
         }
         
         await withTaskGroup(of: Void.self) { group in

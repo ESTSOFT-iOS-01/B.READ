@@ -24,10 +24,10 @@ final class SearchResultViewModel: ObservableObject {
   @Published var bookLoadState: DataState = .loading
   @Published var recordLoadState: DataState = .loading
   @Published var searchKeyword: String = ""
-  @Published var totalBookCount: Int = .max
   
   // MARK: - Internal Property
   private var curIndex: Int = 1
+  private var totalBookCount: Int = .max
   
   // MARK: - Task Controller
   private var bookTask: Task<Void, Never>?
@@ -36,14 +36,9 @@ final class SearchResultViewModel: ObservableObject {
   // MARK: - Dependency
   @Dependency private var searchUseCase: SearchUseCase
   
-  init() {
-//    print("SearchResultViewModel이 생성되었습니다. ")
-  }
-  
   deinit {
     bookTask?.cancel()
     recordTask?.cancel()
-//    print("SearchResultViewModel이 소멸되었습니다. ")
   }
   
   enum Action {

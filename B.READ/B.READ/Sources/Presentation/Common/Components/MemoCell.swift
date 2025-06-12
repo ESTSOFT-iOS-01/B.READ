@@ -10,7 +10,6 @@ import SwiftUI
 struct MemoCell: View {
   
   let content: String
-  let highlight: String?
   let date: Date
   let startPage: Int
   let endPage: Int
@@ -18,14 +17,12 @@ struct MemoCell: View {
   
   init(
     content: String,
-    highlight: String? = nil,
     date: Date,
     startPage: Int,
     endPage: Int,
     action: (() -> Void)? = nil
   ) {
     self.content = content
-    self.highlight = highlight
     self.date = date
     self.startPage = startPage
     self.endPage = endPage
@@ -34,18 +31,11 @@ struct MemoCell: View {
   
   var body: some View {
     VStack(spacing: 8) {
-      Group {
-        if let keyword = self.highlight, !keyword.isEmpty {
-          content.highlightedText(keyword: keyword)
-        }
-        else {
-          Text(content)
-            .font(Font(UIFont.pretendard(.regular, size: 16)))
-            .foregroundColor(.black)
-        }
-      }
-      .brStyle(.pretendard(.regular, size: 16), lineHeight: 1.3)
-      .frame(maxWidth: .infinity, alignment: .leading)
+      Text(content)
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.3)
+        .foregroundStyle(.black)
+        .frame(maxWidth: .infinity, alignment: .leading)
+      
       
       HStack(spacing: 4) {
         
@@ -62,7 +52,7 @@ struct MemoCell: View {
       .frame(maxWidth: .infinity)
     }
     .padding(16)
-    .background(.brown2.opacity(0.3))
+    .background(.brown4.opacity(0.3))
     .clipShape(
       RoundedRectangle(cornerRadius: 16)
     )
@@ -91,5 +81,4 @@ Lorem ipsum dolor sit amet con sect etur. Aug ue po tenti au ctor faci lisi ult 
   MemoCell(content: content, date: Date(), startPage: 2, endPage: 4) {
     print("hello")
   }
-  MemoCell(content: content, highlight: "Lorem", date: .now, startPage: 2, endPage: 4)
 }

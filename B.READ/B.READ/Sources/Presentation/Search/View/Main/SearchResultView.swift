@@ -49,47 +49,38 @@ struct SearchTabContentView: View {
   
   var body: some View {
     Group {
-      let text = "\"\(viewModel.searchKeyword)\"에 일치하는 검색 결과가 없습니다."
-      
       if viewModel.selectedTabIndex == 0 {
         Group {
           switch viewModel.bookLoadState {
           case .loading:
             if viewModel.bookResults.isEmpty {
-              LoadingView()
+              BouncingImageLoadingView()
             } else {
-              VStack(spacing: 4) {
-                SearchResultCountView(totalBookCount: viewModel.totalBookCount)
-                
-                SearchListView(
-                  items: viewModel.bookResults,
-                  layoutPadding: 24,
-                  listPadding: 16,
-                  onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
-                  onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
-                  content: { book in
-                    BookSearchCell(data: book)
-                  }
-                )
-              }
+              SearchListView(
+                items: viewModel.bookResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
+                onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
+                content: { book in
+                  BookSearchCell(data: book)
+                }
+              )
             }
           case .loaded:
             if viewModel.bookResults.isEmpty {
-              FailedView(desp: text)
+              FailedView(desp: "일치하는 검색 결과가 없습니다.")
             } else {
-              VStack(spacing: 4) {
-                SearchResultCountView(totalBookCount: viewModel.totalBookCount)
-                SearchListView(
-                  items: viewModel.bookResults,
-                  layoutPadding: 24,
-                  listPadding: 16,
-                  onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
-                  onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
-                  content: { book in
-                    BookSearchCell(data: book)
-                  }
-                )
-              }
+              SearchListView(
+                items: viewModel.bookResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.searchBook(isbn: $0.isbn)) },
+                onAppearNearBottom: { viewModel.send(.fetchMoreBooks($0)) },
+                content: { book in
+                  BookSearchCell(data: book)
+                }
+              )
             }
           case .failed(let error):
             FailedView(error: error)
@@ -100,24 +91,21 @@ struct SearchTabContentView: View {
         Group {
           switch viewModel.recordLoadState {
           case .loading:
-            LoadingView()
+            BouncingImageLoadingView()
           case .loaded:
             if viewModel.recordResults.isEmpty {
-              FailedView(desp: text)
+              FailedView(desp: "일치하는 검색 결과가 없습니다.")
             } else {
-              VStack(spacing: 4) {
-                SearchResultCountView(totalBookCount: viewModel.recordResults.count)
-                SearchListView(
-                  items: viewModel.recordResults,
-                  layoutPadding: 24,
-                  listPadding: 16,
-                  onTap: { coordinator.push(.libraryDetail(id: $0.id)) },
-                  onAppearNearBottom: nil,
-                  content: { record in
-                    RecordSearchCell(data: record)
-                  }
-                )
-              }
+              SearchListView(
+                items: viewModel.recordResults,
+                layoutPadding: 24,
+                listPadding: 16,
+                onTap: { coordinator.push(.libraryDetail(id: $0.id)) },
+                onAppearNearBottom: nil,
+                content: { record in
+                  RecordSearchCell(data: record)
+                }
+              )
             }
           case .failed(let error):
             FailedView(error: error)
@@ -163,30 +151,4 @@ struct SearchListView<Data: Identifiable, Content: View>: View {
       .padding(.bottom, listPadding)
     }
   }
-}
-
-struct SearchResultCountView: View {
-  let totalBookCount: Int
-  
-  var body: some View {
-    HStack(spacing: 4) {
-      Text("총")
-        .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1.2)
-        .foregroundStyle(.gray5)
-      
-      Text("\(totalBookCount)")
-        .brStyleFont(.pretendard(.regular, size: 14), lineHeight: 1.2)
-        .foregroundStyle(.brown9)
-      
-      Text("개의 검색결과")
-        .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1.2)
-        .foregroundStyle(.gray5)
-    }
-    .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.horizontal, 24)
-  }
-}
-
-#Preview {
-  SearchResultCountView(totalBookCount: 123)
 }

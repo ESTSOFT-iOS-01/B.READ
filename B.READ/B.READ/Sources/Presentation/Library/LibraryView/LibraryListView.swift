@@ -23,8 +23,7 @@ struct LibraryListView: View {
               coordinator.push(.libraryDetail(id: record.id))
             }
         }
-      } // : LazyVStack
-      .animation(.easeInOut(duration: 0.5), value: records)
+      }
     } // : ScrollView
     .scrollIndicators(.hidden)
     .padding(.top, 8)

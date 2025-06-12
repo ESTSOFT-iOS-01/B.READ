@@ -8,13 +8,22 @@
 import SwiftUI
 
 struct SentenceInputView: View {
-  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @StateObject var viewModel: SentenceInputViewModel
-  @FocusState private var isEditorFocused: Bool
+  let mode: SentenceInputMode
   
-  // MARK: - Init
-  init(viewModel: @autoclosure @escaping () -> SentenceInputViewModel) {
-    _viewModel = StateObject(wrappedValue: viewModel())
+  @EnvironmentObject var coordinator: Coordinator<MainRoute, SheetRoute>
+  @StateObject var viewModel: SentenceViewModel
+  @FocusState private var isEditorFocused: Bool
+  @State private var showPageAlert = false
+  
+  private var trimmedContent: String {
+    viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines)
+  }
+  
+  init(mode: SentenceInputMode) {
+    self.mode = mode
+    _viewModel = StateObject(
+      wrappedValue: SentenceViewModel(mode: mode)
+    )
   }
   
   var body: some View {
@@ -42,53 +51,56 @@ struct SentenceInputView: View {
             .padding(.vertical, 12)
             .allowsHitTesting(false)
         }
-      } // : ZStack
-    } // : VStack
+      }
+    }
     .frame(maxHeight: .infinity, alignment: .top)
     .padding(.top, 16)
     .padding(.horizontal, 24)
+    .toolbar {
+      ToolbarItem(placement: .topBarTrailing) {
+        Button("다음") {
+          guard viewModel.maxPage != nil else {
+            showPageAlert = true
+            return
+          }
+          coordinator.push(
+            .pageInput(mode: mode,
+                       sentence: trimmedContent)
+          )
+        }
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
+        .foregroundStyle(.green6)
+        .disabled(trimmedContent.isEmpty)
+        .opacity(trimmedContent.isEmpty ? 0 : 1)
+      }
+    }
+    .alert("페이지 정보를 불러오는 중입니다",
+           isPresented: $showPageAlert) {
+      Button("확인", role: .cancel) { }
+    } message: {
+      Text("잠시 후 다시 시도해 주세요.")
+    }
     .background(Color.backgroundDefault)
     .onTapGesture {
       self.hideKeyboard()
     }
-    .task {
-      await Task.yield()
-      isEditorFocused = true
-    } // : task - 페이지입력 텍스트 필드 focus
-    .toolbar {
-      ToolbarItem(placement: .topBarTrailing) {
-        Button("다음") {
-          viewModel.send(.submit)
-          coordinator.push(.pageInput(record: viewModel.record, quote: viewModel.quote))
-        }
-        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.1)
-        .foregroundStyle(.green6)
-        .disabled(viewModel.trimmedContent.isEmpty)
-        .opacity(viewModel.trimmedContent.isEmpty ? 0 : 1)
-        .animation(.easeInOut(duration: 0.2), value: viewModel.trimmedContent.isEmpty)
-      } // : ToolbarItem
-    } // : toolbar
+  }
+}
+
+extension View {
+  func hideKeyboard() {
+    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                    to: nil, from: nil, for: nil)
   }
 }
 
 #Preview {
-  let record = RecordDetailVO(
-    record: DummyData.dummyRecords[1],
-    book: DummyData.dummyBooks[1]
-  )
-  let quote = QuoteVO(
-    id: "1",
-    isbn: record.isbn,
-    content: "테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트 테스트",
-    page: 45, record: record
-  )
-  
   PreviewableContainer {
-    CoordinatorContainer {
-      NavigationStack {
-//        SentenceInputView(viewModel: .init(mode: .create(record: record)))
-        SentenceInputView(viewModel: .init(mode: .edit(record: record, quote: quote)))
-      }
+    let dummy = Coordinator<MainRoute, SheetRoute>()
+    let record = RecordDetailVO(record: DummyData.dummyRecords[1], book: DummyData.dummyBooks[1])
+    NavigationStack {
+      SentenceInputView(mode: .create(record: record))
     }
+    .environmentObject(dummy)
   }
 }

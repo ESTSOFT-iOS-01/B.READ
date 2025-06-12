@@ -27,67 +27,56 @@ struct MemoView: View {
   }
   
   var body: some View {
-    ScrollViewReader { proxy in
-      ScrollView {
-        VStack(alignment: .leading, spacing: 24) {
-          
-          GuideSectionView(viewModel: viewModel, showGuideAlert: $showGuideAlert)
-          
-          pageSection()
-          
-          memoSection()
-          
-        }
-        .id("bottom")
-        .navigationTitle(viewModel.createAt.string(format: .dotSeparatedFull))
-        .frame(maxHeight: .infinity, alignment: .top)
-        .padding(.horizontal, 24)
-        .animation(.easeOut(duration: 0.25), value: viewModel.guideStatus)
-        .onChange(of: viewModel.isSaveComplete) {
-          coordinator.pop()
-        }
-        .onChange(of: textEditorFocused) {
-          if textEditorFocused {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-              withAnimation {
-                proxy.scrollTo("bottom", anchor: .bottom)
-              }
+    ScrollView {
+      VStack(alignment: .leading, spacing: 24) {
+        
+        GuideSectionView(viewModel: viewModel, showGuideAlert: $showGuideAlert)
+        
+        pageSection()
+        
+        memoSection()
+        
+      }
+      .id("bottom")
+      .navigationTitle(viewModel.createAt.string(format: .dotSeparatedFull))
+      .frame(maxHeight: .infinity, alignment: .top)
+      .padding(.horizontal, 24)
+      .animation(.easeOut(duration: 0.25), value: viewModel.guideStatus)
+      .onChange(of: viewModel.isSaveComplete) {
+        coordinator.pop()
+      }
+      .toolbar {
+        ToolbarItem(placement: .topBarTrailing) {
+          Button {
+            if let start = Int(viewModel.startPage),
+               let end = Int(viewModel.endPage), start <= end, end <= totalPage {
+              viewModel.send(.saveMemo)
+            } else {
+              showErrorAlert = true
             }
+          } label: {
+            Text("저장")
+              .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.0)
+              .foregroundStyle(.green6)
+              .opacity(isButtonEnabled ? 1 : 0)
+              .disabled(!isButtonEnabled)
+              .animation(.easeInOut(duration: 0.2), value: isButtonEnabled)
           }
-        }
-        .toolbar {
-          ToolbarItem(placement: .topBarTrailing) {
-            Button {
-              if let start = Int(viewModel.startPage),
-                 let end = Int(viewModel.endPage), start <= end, end <= totalPage {
-                viewModel.send(.saveMemo)
-              } else {
-                showErrorAlert = true
-              }
-            } label: {
-              Text("저장")
-                .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.0)
-                .foregroundStyle(.green6)
-                .opacity(isButtonEnabled ? 1 : 0)
-                .disabled(!isButtonEnabled)
-                .animation(.easeInOut(duration: 0.2), value: isButtonEnabled)
-            }
-          }
-        }
-        .alert("가이드를 삭제하시겠습니까?", isPresented: $showGuideAlert) {
-          Button("취소", role: .cancel) { }
-          Button("삭제", role: .destructive) { viewModel.send(.deleteGuides) }
-        } message: {
-          Text("빵식이의 가이드를 삭제하시겠습니까?\n(다시 생성되지 않습니다)")
-        }
-        .alert("저장 실패", isPresented: $showErrorAlert){
-          Button("확인", role: .cancel) { }
-        } message: {
-          Text("올바른 페이지 번호가 아닙니다.")
         }
       }
-      .background(.backgroundDefault)
+      .alert("가이드를 삭제하시겠습니까?", isPresented: $showGuideAlert) {
+        Button("취소", role: .cancel) { }
+        Button("삭제", role: .destructive) { viewModel.send(.deleteGuides) }
+      } message: {
+        Text("빵식이의 가이드를 삭제하시겠습니까?\n(다시 생성되지 않습니다)")
+      }
+      .alert("저장 실패", isPresented: $showErrorAlert){
+        Button("확인", role: .destructive) { }
+      } message: {
+        Text("올바른 페이지 번호가 아닙니다.")
+      }
     }
+    .background(.backgroundDefault)
   }
   // 숫자 외에 텍스트 필터링 및 0 못오게
   private func formatDigits(_ input: String) -> String {
@@ -198,7 +187,7 @@ private struct GuideSectionView: View {
   private func guideText() -> some View {
     switch viewModel.guideStatus {
     case .loading:
-      LoadingView(text: "빵식이에게 가이드 요청중..")
+      ProgressView()
       
     case .empty:
       Image(.happyBread)

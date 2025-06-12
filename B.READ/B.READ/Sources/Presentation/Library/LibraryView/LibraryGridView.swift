@@ -30,7 +30,6 @@ struct LibraryGridView: View {
             }
         }
       } // : LazyVGrid
-      .animation(.easeInOut(duration: 0.5), value: records)
     } // : ScrollView
     .scrollIndicators(.hidden)
     .padding(.top, 8)

@@ -14,7 +14,6 @@ struct LibraryUseCaseTest {
   
   private let libraryUseCase: LibraryUseCase
   
-  private let userInfoRepository: UserInfoRepository
   private let recordRepository: RecordRepository
   private let bookRepository: BookRepository
   private let quoteRepository: QuoteRepository
@@ -23,15 +22,13 @@ struct LibraryUseCaseTest {
   init() {
     let storage = SwiftDataTestStorage()
     
-    userInfoRepository = UserInfoRepositoryImpl(modelContainer: storage.modelContainer)
     recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
     bookRepository = BookRepositoryImpl(modelContainer: storage.modelContainer)
     quoteRepository = QuoteRepositoryImpl(modelContainer: storage.modelContainer)
     bookService = AladinService(client: MockNetworkClient(nextMockFileName: "SearchList"))
     
     libraryUseCase = LibraryUseCaseImpl(
-      userInfoRepository: userInfoRepository,
-      bookRepository: bookRepository,
+      bookRepository: bookRepository ,
       recordRepository: recordRepository,
       quoteRepository: quoteRepository,
       bookService: bookService

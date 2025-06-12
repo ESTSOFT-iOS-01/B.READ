@@ -57,13 +57,6 @@ protocol LibraryUseCase {
   /// - Returns: [(Record Entity, Book Entity)]
   /// - Throws:
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  /// - Note: Todo. 몽피
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)]
-  
-  /// 최근 업데이트한 `읽기 완료` 상태이면서 요약을 생성하지 않은 독서 기록을 조회합니다.
-  ///
-  /// - Returns: Record Entity
-  /// - Throws:
-  ///   - `RepositoryError.dataNotFound`: 조회할 독서 기록이 존재하지 않는 경우
-  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
-  func loadRecentRecordAvailableForSummary() async throws -> Record
 }

@@ -22,13 +22,13 @@ struct SortMenu: View {
       HStack(spacing: 4) {
         Text(isOpened ? "정렬 기준" : selectedOption.rawValue)
           .frame(maxWidth: .infinity, alignment: .center)
-          .animation(.easeInOut(duration: 0.3), value: isOpened)
-        
-        Image(systemName: SFSymbol.chevronCompactDown.name)
-          .resizable()
-          .frame(width: 10 , height: 5, alignment: .trailing)
-          .rotationEffect(.degrees(isOpened ? -180 : 0)) // 위/아래 전환
-          .animation(.easeInOut(duration: 0.3), value: isOpened)
+        Image(
+          systemName: isOpened
+          ? SFSymbol.chevronCompactUp.name
+          : SFSymbol.chevronCompactDown.name
+        )
+        .resizable()
+        .frame(width: 10 , height: 5, alignment: .trailing)
       } // : HStack
       .brStyleFont(.pretendard(.medium, size: 12), lineHeight: 1, letterSpacing: -0.02)
       .foregroundStyle(.gray2)
@@ -69,6 +69,5 @@ struct SortMenu: View {
     .background(.white)
     .clipShape(RoundedRectangle(cornerRadius: 6))
     .shadow(color: .gray2.opacity(0.3), radius: 30, x: 0, y: 2)
-    .transition(.scale.combined(with: .opacity))
   }
 }

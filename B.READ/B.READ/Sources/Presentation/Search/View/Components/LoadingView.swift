@@ -7,13 +7,8 @@
 
 import SwiftUI
 
-struct LoadingView: View {
+struct BouncingImageLoadingView: View {
   @State private var scale: CGFloat = 1.0
-  let text: String?
-  
-  init(text: String? = nil) {
-    self.text = text
-  }
 
   var body: some View {
     VStack {
@@ -27,30 +22,29 @@ struct LoadingView: View {
           scale = 1.2
         }
       
-      Text(text ?? "데이터 불러오는 중...")
-        .brStyleFont(.pretendard(.regular, size: text == nil ? 16 : 12), lineHeight: 1.2)
+      Text("데이터 불러오는 중...")
+        .brStyleFont(.pretendard(.regular, size: 16), lineHeight: 1.2)
         .foregroundColor(.brown7)
         .padding(.top, 16)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-    //.background(.backgroundDefault)
+    .background(.backgroundDefault)
     .ignoresSafeArea()
   }
 }
 
 #Preview {
-  LoadingView()
+  BouncingImageLoadingView()
 }
 
 struct FailedView: View {
-  var title: String = "😢 정보를 불러오는 데 실패했어요."
   var error: Error? = nil
   var desp: String? = nil
   
   var body: some View {
     VStack(spacing: 16) {
-      Text(title)
-        .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1, letterSpacing: -0.02)
+      Text("😢 정보를 불러오는 데 실패했어요.")
+        .font(.headline)
         .foregroundStyle(.brown9)
       
       Group {
@@ -61,7 +55,7 @@ struct FailedView: View {
           Text(desp)
         }
       }
-      .brStyleFont(.pretendard(.light, size: 14), lineHeight: 1, letterSpacing: -0.02)
+      .font(.caption)
       .foregroundColor(.gray7)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)

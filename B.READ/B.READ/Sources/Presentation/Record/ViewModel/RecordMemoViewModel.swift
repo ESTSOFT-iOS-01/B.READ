@@ -14,10 +14,9 @@ final class RecordMemoViewModel: ObservableObject {
   @Published var displayMemoGroups: [MemoGroup] = []
   @Published var searchText: String = ""
   @Published var selectedSort: SortOption = .pageAscending
-  @Published var highlightKeyword: String? = nil
   
   // MARK: - Internal Variable
-  private(set) var memoGroups: [MemoGroup] = []
+  private var memoGroups: [MemoGroup] = []
   var selectedMemo: MemoVO? = nil
   
   // MARK: - Dependency
@@ -41,7 +40,7 @@ final class RecordMemoViewModel: ObservableObject {
       sortDisplayMemoGroups()
       
     case .onSubmit:
-      searchMemos()
+      print("검색어: \(searchText)")
       
     case .deleteMemo(let id):
       deleteMemo(id: id)
@@ -97,8 +96,8 @@ private extension RecordMemoViewModel {
         await MainActor.run {
           // 5. 만들어진 MemoGroup을 반영
           self.memoGroups = memoGroups
-          // 6. 검색어 필터를 진행
-          searchMemos()
+          // 6. MemoGroup 정렬을 진행
+          sortDisplayMemoGroups()
         }
       } catch {
         print("메모 로드 중 문제 발생")
@@ -108,7 +107,7 @@ private extension RecordMemoViewModel {
   
   /// 보여주고자 하는 Memo의 순서를 정렬합니다.
   func sortDisplayMemoGroups() {
-    let sortedGroup = self.displayMemoGroups
+    let sortedGroup = memoGroups
     // 1. 그룹 내부의 메모를 정렬
       .map { group in
         var sortedGroup = group
@@ -130,52 +129,5 @@ private extension RecordMemoViewModel {
       // 2. 데이터 일관성을 위해서 새로 데이터를 받아옴
       loadMemoGroups()
     }
-  }
-  
-  /// 검색어로 메모를 필터링 합니다.
-  func searchMemos() {
-    // 1. 검색어가 없으면 전체 메모를 보여줌(화이트스페이스, 줄바꿈 제거)
-    let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty else {
-      self.searchText = ""
-      self.highlightKeyword = nil
-      self.displayMemoGroups = memoGroups
-      self.sortDisplayMemoGroups()
-      return
-    }
-    
-    // 대소문자 구별하지 않음
-    let keyword = trimmed.lowercased()
-    
-    // 2. 메모에서 검색어가 포함된 것을 필터링
-    let filteredGroups = memoGroups.compactMap { group -> MemoGroup? in
-      // 2-1. 책 제목을 필터링
-      let bookTitleMatched = group.bookTitle.lowercased().contains(keyword)
-      
-      // 2-2. 메모 내용을 필터링
-      let matchedMemos = group.memos.filter {
-        $0.content.lowercased().contains(keyword)
-      }
-      
-      // 2-3. 책 제목에 포함되면 전부, 내용만 포함되면 필터된 내용만
-      if bookTitleMatched || !matchedMemos.isEmpty {
-        return MemoGroup(
-          isbn: group.isbn,
-          bookTitle: group.bookTitle,
-          memos: bookTitleMatched ? group.memos : matchedMemos
-        )
-      } else {
-        return nil
-      }
-    }
-    
-    // 3. 필터한 내용을 저장
-    self.displayMemoGroups = filteredGroups
-    
-    // 4. 필터한 내용을 정렬
-    self.sortDisplayMemoGroups()
-    
-    // 5. 하이라이트 키워드 반영
-    self.highlightKeyword = trimmed
   }
 }

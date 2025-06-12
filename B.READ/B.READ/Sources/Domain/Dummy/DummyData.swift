@@ -143,38 +143,11 @@ extension DummyData {
     ),
     currentPage: 252,
     review: "",
-    memos: [
-      Memo(
-        id: "1",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "싯다르타는 수많은 스승과 가르침을 거쳤지만, 결국 삶을 살아가는 과정에서 스스로 진리를 깨닫는다. 남의 말이 아닌, 체험이 지혜로 이어진다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-      Memo(
-        id: "2",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "강을 바라보며 싯다르타는 모든 존재가 연결되어 흐르고 있다는 사실을 깨닫는다. 나 또한 변화와 흐름을 있는 그대로 받아들이고 싶어졌다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-      Memo(
-        id: "3",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "싯다르타의 삶은 고통과 실수의 연속이었지만, 그 모든 것이 깨달음으로 나아가는 길이었다. 나 역시 내 방황을 긍정하고 싶어졌다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-    ],
+    memos: [],
     quotes: [],
     createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
     updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
   )
-  
-  
 //    Record( // 아주 작은 습관들
 //      id: UUID().uuidString,
 //      isbn: "9791162540640",
@@ -362,102 +335,8 @@ extension DummyData {
     Quote(id: "5", isbn: "9788937460586", content: "수집된 문장 문장 수집된 문장 수집된 문장 수집된 문장", page: 72),
   ]
 }
-
-// MARK: - AI Note
-extension DummyData {
-  static let bookForSummary = Book(
-    isbn: "9788937460586",
-    name: "싯다르타",
-    author: "헤르만헤세",
-    publisher: "민음사",
-    publishedAt: Calendar.current.date(from: DateComponents(year: 2002, month: 1, day: 20))!,
-    totalPages: 252
-  )
-  
-  static let recordForSummary = Record( // 싯다르타
-    id: "3",
-    isbn: "9788937460586",
-    state: .completed,
-    heartCount: 0,
-    starCount: 4,
-    isFavorite: false,
-    period: (
-      Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 20)),
-      Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))
-    ),
-    currentPage: 252,
-    review: "",
-    memos: [
-      Memo(
-        id: "1",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "싯다르타는 수많은 스승과 가르침을 거쳤지만, 결국 삶을 살아가는 과정에서 스스로 진리를 깨닫는다. 남의 말이 아닌, 체험이 지혜로 이어진다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-      Memo(
-        id: "2",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "강을 바라보며 싯다르타는 모든 존재가 연결되어 흐르고 있다는 사실을 깨닫는다. 나 또한 변화와 흐름을 있는 그대로 받아들이고 싶어졌다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-      Memo(
-        id: "3",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "싯다르타의 삶은 고통과 실수의 연속이었지만, 그 모든 것이 깨달음으로 나아가는 길이었다. 나 역시 내 방황을 긍정하고 싶어졌다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-    ],
-    quotes: [],
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-    updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
-  )
-  
-  static let summaryForFetchTest = AlanSummary(
-    id: "summary-siddhartha",
-    isbn: "9788937460586",
-    content: "헤르만 헤세의 '싯다르타'는 주인공이 수많은 스승과 가르침을 거쳐가며, 결국 자신의 삶을 통해 진리를 깨닫는 과정을 그립니다. 싯다르타는 남의 말이 아닌 체험을 통해 지혜를 얻으며, 강을 바라보며 모든 존재가 연결되어 흐른다는 사실을 깨닫습니다. 이를 통해 나 또한 변화와 흐름을 있는 그대로 받아들이고 싶어졌습니다. 싯다르타의 삶은 고통과 실수의 연속이었지만, 그 모든 것이 깨달음으로 나아가는 길이었음을 보여줍니다. 나 역시 내 방황을 긍정하고 싶어졌습니다.",
-    tags: [
-      Tag(id: "f1", content: "깨달음"),
-      Tag(id: "f2", content: "연결"),
-      Tag(id: "f3", content: "변화"),
-      Tag(id: "f4", content: "고통"),
-      Tag(id: "f5", content: "긍정")
-    ],
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
-  )
-  
-  static let summary1 = AlanSummary(
-    id: "summary-1",
-    isbn: "9791194368137",
-    content: "워런 버핏의 투자 철학 요약입니다.",
-    tags: [Tag(id: "t1", content: "투자"), Tag(id: "t2", content: "버핏")],
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 18))!
-  )
-  
-  static let summary2 = AlanSummary(
-    id: "summary-2",
-    isbn: "9791158510619",
-    content: "타이탄의 도구들 핵심 내용을 정리했습니다.",
-    tags: [Tag(id: "t3", content: "자기계발"), Tag(id: "t4", content: "성공")],
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 12))!
-  )
-  
-  static let summary3 = AlanSummary(
-    id: "summary-3",
-    isbn: "9788937460586",
-    content: "싯다르타의 삶과 깨달음 요약본.",
-    tags: [Tag(id: "t5", content: "철학"), Tag(id: "t6", content: "삶")],
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!
-  )
-  
-  static var dummySummaries: [AlanSummary] {
-    [summary1, summary2, summary3]
-  }
-}
-
+//
+//// MARK: - AI Note
+//extension DummyData {
+//  
+//}

@@ -32,10 +32,4 @@ extension String {
     formatter.dateFormat = format
     return formatter.date(from: self)
   }
-  
-  /// 문자열을 Int로 변환합니다.
-  /// - Returns: 변환된 Int 값 (nil 반환 가능)
-  func toInt() -> Int? {
-    return Int(self)
-  }
 }

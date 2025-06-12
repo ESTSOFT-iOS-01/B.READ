@@ -11,12 +11,8 @@ import SwiftUI
 // MARK: - (C)LibraryViewModel
 final class LibraryViewModel: ObservableObject {
   
-  enum ViewState {
-    case loading
-    case loaded
-  }
-  
   // MARK: - State
+  // 탭바
   @Published var tabs: [TabItem] = [
     TabItem(title: "전체(0)"),
     TabItem(title: "읽은 책(0)"),
@@ -30,12 +26,11 @@ final class LibraryViewModel: ObservableObject {
   @Published var selectedSort: [SortOption] = [.recent, .recent, .recent, .recent, .recent]
   // 뷰로 보여주는 독서 기록
   @Published var displayRecords: [RecordCellVO] = []
-  @Published var viewState: ViewState = .loading
+  
   
   // MARK: - Internal Variable
   // DB에서 가져온 전체 독서기록
   private var records: [RecordCellVO] = []
-  private var filteredRecords: [RecordCellVO] = []
   
   // MARK: - Dependency
   @Dependency
@@ -52,75 +47,58 @@ final class LibraryViewModel: ObservableObject {
   func send(_ action: Action) {
     switch action {
     case .onAppear:
-      self.loadRecords()
+      Task { [weak self] in
+        guard let self = self else { return }
+        //1. 전체 독서 기록을 불러옴
+        await self.loadRecords()
+        await withTaskGroup(of: Void.self) { group in
+          group.addTask {
+            // 2. 불러온 독서 기록의 상태별 개수 확인
+            await self.loadTabs()
+          }
+          
+          group.addTask {
+            // 3. 선택된 탭을 기준으로 필터 적용
+            await self.filterRecords()
+            // 4. 필터 적용된 독서 기록에 정렬 적용
+            await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
+          }
+        }
+      }
       
     case .selectTab:
-      self.selectTab()
+      Task { [weak self] in
+        guard let self = self else { return }
+        // 1. 선택된 탭을 기준으로 필터 적용
+        await self.filterRecords()
+        // 2. 필터 적용된 독서 기록에 정렬 적용
+        await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
+      }
       
     case .selectSort:
-      self.selectSort()
+      Task { [weak self] in
+        guard let self = self else { return }
+        // 1. 현재 독서 기록에 정렬 적용
+        await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
+      }
     }
   }
 }
 
 
-// MARK: - (F)LibraryViewModel - 액션 함수
+// MARK: - (F)LibraryViewModel
 private extension LibraryViewModel {
-  // 독서 기록을 불러옴
-  func loadRecords() {
-    viewState = .loading
-    Task {
-      await fetchRecords()
-      await withTaskGroup(of: Void.self) { group in
-        group.addTask {
-          // 2. 불러온 독서 기록의 상태별 개수 확인
-          await self.loadTabs()
-        }
-        
-        group.addTask {
-          // 3. 선택된 탭을 기준으로 필터 적용
-          await self.filterRecords()
-          // 4. 필터 적용된 독서 기록에 정렬 적용
-          await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
-        }
-      }
-      await MainActor.run {
-        viewState = .loaded
-      }
-    }
-  }
   
-  // 상단 탭바를 선택
-  func selectTab() {
-    Task {
-      // 1. 선택된 탭을 기준으로 필터 적용
-      await self.filterRecords()
-      // 2. 필터 적용된 독서 기록에 정렬 적용
-      await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
-    }
-  }
- 
-  // 정렬을 선택
-  func selectSort() {
-    Task {
-      await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
-    }
-  }
-}
-
-
-// MARK: - (F)LibraryViewModel - 내부 함수(async)
-private extension LibraryViewModel {
   /// 독서 기록 정보를 불러옴
-  func fetchRecords() async {
+  func loadRecords() async {
     do {
       // 1. 독서 기록 패치
       let infos: [(record: Record, book: Book)] = try await libraryUseCase.loadRecordList()
       // 2. Entity -> VO
       self.records = infos.map { RecordCellVO(record: $0.record, book: $0.book) }
     } catch {
+      // TODO: - [시르] 에러 메시지를 띄우는 코드 추가
       // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환하고, 에러 메시지를 띄움
-      print(error.localizedDescription)
       self.records = []
     }
   }
@@ -172,14 +150,14 @@ private extension LibraryViewModel {
     
     // 3. 필터 적용한 독서 기록을 뷰에 반영
     await MainActor.run {
-      self.filteredRecords = filterRecord
+      self.displayRecords = filterRecord
     }
   }
   
   /// 정렬 기준에 따라서 displayRecords를 정렬
   func sortDisplayRecords(by: SortOption = .recent) async {
     // 1. 정렬한 결과
-    let sortedRecords: [RecordCellVO] = filteredRecords.sorted(by: by.sort)
+    let sortedRecords: [RecordCellVO] = displayRecords.sorted(by: by.sort)
     
     // 2. 결과를 뷰에 반영
     await MainActor.run {

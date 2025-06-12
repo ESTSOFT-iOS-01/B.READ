@@ -8,37 +8,26 @@
 import SwiftUI
 
 struct HomeView: View {
-  @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
+  
   @StateObject private var viewModel = HomeViewModel()
-  @Binding var selectedTab: Tab
   
   var body: some View {
-    VStack(spacing: 0) {
+    ScrollView(showsIndicators: false) {
+      BreadGuideView()
+        .padding(.top, 24)
       
-      LogoView()
+      RecentBookSectionView(viewModel: viewModel)
+        .padding(.top, 24)
       
-      ScrollView(showsIndicators: false) {
-        BreadGuideView(
-          coordinator: coordinator,
-          selectedTab: $selectedTab,
-          viewModel: viewModel
-        )
+      if viewModel.bestSellerList.count > 1 {
+        RecommandSectionView(bookList: viewModel.bestSellerList[0])
           .padding(.top, 24)
-        
-        RecentBookSectionView(viewModel: viewModel)
-          .padding(.top, 24)
-        
-        if viewModel.bestSellerList.count > 1 {
-          RecommandSectionView(bookList: viewModel.bestSellerList[0])
-            .padding(.top, 24)
-          
-          RecommandSectionView(bookList: viewModel.bestSellerList[1])
-        }
+
+        RecommandSectionView(bookList: viewModel.bestSellerList[1])
       }
     }
     .frame(maxWidth: .infinity, alignment: .top)
     .background(.backgroundDefault)
-    .scrollIndicators(.hidden)
     .onAppear {
       viewModel.send(.onAppear)
     }
@@ -50,31 +39,25 @@ struct HomeView: View {
 
 // MARK: - (S)BreadGuideView
 private struct BreadGuideView: View {
-  
-  @ObservedObject var coordinator: Coordinator<MainRoute, SheetRoute>
-  @Binding var selectedTab: Tab
-  let viewModel: HomeViewModel
-  var hasAvailableSummaryRecord: Bool {
-    viewModel.availableSummaryRecordId != nil
-  }
-  
   var body: some View {
     HStack(alignment: .top, spacing: 16.5) {
       
-      Image(hasAvailableSummaryRecord ? .happyBread : .sadBread)
+      Image(.happyBread)
         .resizable()
         .aspectRatio(contentMode: .fit)
         .frame(width: 100, height: 109)
       
-      talkBubble()
-        .onTapGesture {
-          if let recordId = viewModel.availableSummaryRecordId {
-            selectedTab = .library
-            coordinator.push(.libraryDetail(id: recordId))
-          } else {
-            selectedTab = .library
-          }
-        }
+      VStack(alignment: .trailing, spacing: 5) {
+        Text("빵식이가 요약할 수 있는 책이 있어요!")
+          .foregroundStyle(.gray9)
+          .brStyleFont(.pretendard(.semiBold, size: 13), lineHeight: 1.3, letterSpacing: 0.02)
+        
+        talkBubble()
+      }
+      .padding(.vertical, 8)
+      .padding(.horizontal, 16)
+      .background(.brown4.opacity(0.4))
+      .clipShape(RoundedCorner(radius: 16, corners: [.topLeft, .topRight, .bottomRight]))
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding(.leading, 24)
@@ -83,27 +66,14 @@ private struct BreadGuideView: View {
   // MARK: (F)talkBubble
   @ViewBuilder
   private func talkBubble() -> some View {
-    VStack(alignment: .trailing, spacing: 5) {
-      Text(
-        hasAvailableSummaryRecord ? "빵식이가 요약할 수 있는 책이 있어요!"
-                                  : "셰프님의 독서 기록을 기다리고 있어요"
-      )
-      .foregroundStyle(.gray9)
-      .brStyleFont(.pretendard(.semiBold, size: 13), lineHeight: 1.3, letterSpacing: 0.02)
-      
-      HStack(spacing: 3) {
-        Text("자세히 보기")
-          .brStyleFont(.pretendard(.regular, size: 10), lineHeight: 1.3, letterSpacing: 0.02)
-        Image(systemName: SFSymbol.chevronRight.name)
-          .resizable()
-          .aspectRatio(contentMode: .fit)
-          .frame(width: 7, height: 7)
-      }.foregroundStyle(.gray5)
-    }
-    .padding(.vertical, 8)
-    .padding(.horizontal, 16)
-    .background(.brown4.opacity(0.4))
-    .clipShape(RoundedCorner(radius: 16, corners: [.topLeft, .topRight, .bottomRight]))
+    HStack(spacing: 3) {
+      Text("자세히 보기")
+        .brStyleFont(.pretendard(.regular, size: 10), lineHeight: 1.3, letterSpacing: 0.02)
+      Image(systemName: SFSymbol.chevronRight.name)
+        .resizable()
+        .aspectRatio(contentMode: .fit)
+        .frame(width: 7, height: 7)
+    }.foregroundStyle(.gray5)
   }
 }
 
@@ -223,7 +193,7 @@ private struct RecommandSectionView: View {
       
       switch bookList.state {
       case .loading:
-        LoadingView()
+        BouncingImageLoadingView()
           .frame(height: 140)
         
       case .failed(let error):
@@ -248,7 +218,6 @@ private struct RecommandSectionView: View {
 
 #Preview {
   PreviewableContainer {
-    HomeView(selectedTab: .constant(.home))
-      .environmentObject(Coordinator<MainRoute, SheetRoute>())
+    HomeView()
   }
 }

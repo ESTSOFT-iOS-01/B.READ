@@ -27,8 +27,8 @@ enum SearchBarStyle {
   
   var frameSize: CGSize {
     switch self {
-    case .default: return CGSize(width: 0, height: 48)
-    case .compact: return CGSize(width: 0, height: 36)
+    case .default: return CGSize(width: 282, height: 48)
+    case .compact: return CGSize(width: 275, height: 36)
     }
   }
 }
@@ -81,8 +81,7 @@ struct SearchBar: View {
       .background(.clear)
       .padding(.trailing, layoutPadding)
     }
-    .frame(maxWidth: .infinity)
-    .frame(height: style.frameSize.height)
+    .frame(width: style.frameSize.width, height: style.frameSize.height)
     .roundedBackground()
   }
 }
