@@ -1,9 +1,10 @@
 <div align=center>
 
 # B.READ
-### **야외 운동 시 위치 기반으로 경로를 기록하고, 그 순간을 이미지로 남기는 러닝 기록 서비스**
+### **내 생각을 메모로 남기고, 책에서 발견한 나만의 문장을 수집하는 독서 기록 서비스**
 
-사용자의 야외 운동 데이터를 기반으로 거리, 걸음 수를 측정하고 경로를 시각적으로 표현해줍니다. 나아가, 이 기록을 바탕으로 무빙트랙 영상을 확인하고 트랙 이미지를 자동 생성해 누구나 쉽게 공유하고 재미를 느낄 수 있는 서비스입니다.
+독서에 관심 있는 사람들이 책을 읽는 과정 속에서 책의 내용과 자신의 생각을 간편하게 기록하고,  
+다양한 추천과 동기부여를 통해 꾸준히 독서를 이어나갈 수 있도록 돕는 기록 및 공유 서비스입니다.
 
 [📑 RunLog FigJam 📑]()
 
@@ -14,7 +15,7 @@
 |:-----:|:-----:|:-----:|:-----:|
 |[신승재](https://github.com/Monfi98) | [김도연](https://github.com/doyeonk429) | [도민준](https://github.com/aado97) | [심근웅](https://github.com/GeunwoongSim) |
 |팀장 👑|팀원 👨🏻‍💻|팀원 👨🏻‍💻|팀원 👨🏻‍💻|
-|`온보딩`</br>`홈`</br>`메모`</br>`마이페이지` | `검색` </br> `추천` | `문장 수집` </br> | `책빵` </br> |
+|`온보딩`</br>`홈`</br>`메모`</br>`마이페이지` | `검색` </br> `추천` </br> `앨런 요약` | `문장 수집` </br> `위젯`| `책빵` </br> `기록` |
 </div>
 <br/>
 
@@ -22,7 +23,6 @@
 <table>
   <tr>
     <td align="center">온보딩</td>
-    <td align="center">홈</td>
     <td align="center">검색</td>
     <td align="center">책빵</td>
     <td align="center">기록</td>
@@ -30,16 +30,19 @@
   </tr>
   <tr>
     <td>
-      <img src="https://github.com/user-attachments/assets/5595f660-f1fd-4a3d-a8d6-d2daf4f32fb7" width="200">
+      <img src="https://github.com/user-attachments/assets/fa151026-1264-418b-8405-3f7d62580dc4" width="200">
     </td>
     <td>
-      <img src="https://github.com/user-attachments/assets/f6ad80b8-7ebf-419c-a204-a95dfdd3dc56" width="240">
+      <img src="https://github.com/user-attachments/assets/8b82e334-fe62-4450-be0b-0a05b79186a0" width="240">
     </td>
     <td>
-      <img src="https://github.com/user-attachments/assets/01aa60b9-a5b8-49ae-bffa-b9d52cce129e" width="240">
+      <img src="https://github.com/user-attachments/assets/8b70b6c6-80ed-4812-a915-2abb00c67b29" width="240">
     </td>
     <td>
-      <img src="https://github.com/user-attachments/assets/26e4ce1e-9913-4db9-8a35-bfffabea2573" width="240">
+     <img src="https://github.com/user-attachments/assets/b04684ea-0c44-446b-8ff0-432df235ad82" width="240">
+    </td>
+    <td>
+     <img src="https://github.com/user-attachments/assets/c2799442-dc5d-466b-9537-221e12dc8435" width="240">
     </td>
   </tr>
 </table>
@@ -58,7 +61,7 @@
 
 
 ## ✏️ Project Design ✏️
-![프로젝트 아키텍쳐](https://github.com/user-attachments/assets/56edce6a-8ff1-4fdf-83f5-5cb8029031f5)
+![프로젝트 아키텍쳐](https://github.com/user-attachments/assets/a7734b49-3c83-4839-9f38-1894b3ac9c4d)
 
 ## 💻 Convention 💻
 
