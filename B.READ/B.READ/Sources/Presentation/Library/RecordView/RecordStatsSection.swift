@@ -11,6 +11,7 @@ import SwiftUI
 struct RecordStatsSection: View {
   @ObservedObject var viewModel: RecordDetailViewModel
   @EnvironmentObject private var coordinator: Coordinator<MainRoute, SheetRoute>
+  @State private var showSummaryAlert: Bool = false
   
   private let contentHeaderFontSize: CGFloat = 16
   private let contentFontSize: CGFloat = 14
@@ -47,14 +48,7 @@ struct RecordStatsSection: View {
                   )
                 )
               } else {
-                coordinator
-                  .push(
-                    .createSummary(
-                      record: viewModel.record!,
-                      memos: viewModel.memos,
-                      quotes: viewModel.quotes
-                    )
-                  )
+                showSummaryAlert = true
               }
             } label: {
               Image(.breadButton)
@@ -94,6 +88,20 @@ struct RecordStatsSection: View {
           .frame(height: 28)
       }
     } // : VStack
+    .alert("요약 노트 생성", isPresented: $showSummaryAlert) {
+      Button("취소", role: .cancel) { }
+      Button("생성") {
+        coordinator.push(
+          .createSummary(
+            record: viewModel.record!,
+            memos: viewModel.memos,
+            quotes: viewModel.quotes
+          )
+        )
+      }
+    } message: {
+      Text("빵식이의 요약노트를 생성할까요?")
+    } // : alert
   }
   
   // MARK: - (F)recordPeriodView

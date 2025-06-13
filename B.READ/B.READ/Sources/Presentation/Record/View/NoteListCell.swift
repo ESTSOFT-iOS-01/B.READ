@@ -12,12 +12,14 @@ struct NoteListCell: View {
   
   var body: some View {
     HStack(alignment: .top, spacing: 24) {
-      coverImage()
+      note.coverImage
+        .resizable()
+        .aspectRatio(contentMode: .fill)
         .frame(width: 57, height: 88)
         .cornerRadius(6)
       
       VStack(alignment: .leading, spacing: 8) {
-        Text(note.bookTitle)
+        Text(note.record.title)
           .foregroundStyle(.gray9)
           .brStyleFont(.pretendard(.semiBold, size: 18), lineHeight: 1.0)
           .lineLimit(1)
@@ -42,31 +44,14 @@ struct NoteListCell: View {
     .padding(.vertical, 16)
     .background(.backgroundDefault)
   }
-  
-  // MARK: - (F)coverImage
-  @ViewBuilder
-  private func coverImage() -> some View {
-    if let coverImage = note.coverImage {
-      coverImage
-        .resizable()
-        .aspectRatio(contentMode: .fill)
-    } else {
-      Image(.exampleCover)
-        .resizable()
-        .aspectRatio(contentMode: .fill)
-    }
-  }
 }
+
 
 #Preview {
   @Previewable @State var note = NoteVO(
-    id: "1",
-    bookTitle: "싯타르타",
-    author: "헤르만헤세",
-    createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-    coverImage: Image(.exampleCover),
-    content: "테스트테스트테스트테스트테스트테스트",
-    recordId: "3"
+    note: DummyData.summary1,
+    record: DummyData.dummyRecords[0],
+    book: DummyData.dummyBooks[0]
   )
   PreviewableContainer {
     NoteListCell(note: $note)

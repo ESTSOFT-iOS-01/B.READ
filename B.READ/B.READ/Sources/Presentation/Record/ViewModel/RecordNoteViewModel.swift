@@ -20,7 +20,7 @@ final class RecordNoteViewModel: ObservableObject {
   private(set) var notes: [NoteVO] = []
   
   // MARK: - Dependency
-  //  @Dependency private var noteUseCase: NoteUseCase
+  @Dependency private var summaryUseCase: SummaryUseCase
   
   // MARK: - Action
   enum Action {
@@ -47,23 +47,25 @@ private extension RecordNoteViewModel {
   /// 요약노트를 불러와서 뷰에 보여줄 형태로 가공합니다.
   func loadSummarys() {
     Task {
-      //      do {
-      //        // 1. 요약노트, 독서기록, 책정보를 튜플의 형태로 가져옵니다.
-      //        let infos: [(note: AlanSummary, record: Record, book: Book)] = try await noteUseCase.loadSummaryList()
-      //
-      //        // 2. NoteVO 형태로 가공합니다. (Entity -> VO)
-      //        let allNotes: [NoteVO] = infos.map { NoteVO(record: $0.record, book: $0.book, note: $0.note) }
-      //      } catch {
-      //        // 패치 중 오류로 정보를 가져오지 못한 상태
-      //        self.notes = []
-      //      }
-      
-      await MainActor.run {
-//        setDummy()
-        // 3. allNotes를 반영
-        //        self.notes = allNotes
-        // 4. 검색어 필터를 진행
-        searchNotes()
+      do {
+        // 1. 요약노트 정보를 가진 독서기록, 책정보를 튜플의 형태로 가져옵니다.
+        let infos: [(record: Record, book: Book)] = try await summaryUseCase.fetchAllSummary()
+        
+        // 2. NoteVO 형태로 가공합니다. (Entity -> VO)
+        let allNotes: [NoteVO] = infos.compactMap { info -> NoteVO? in
+          guard let note = info.record.summary else { return nil }
+          return NoteVO(note: note, record: info.record, book: info.book)
+        }
+        
+        await MainActor.run {
+          // 3. allNotes를 반영
+          self.notes = allNotes
+          // 4. 검색어 필터를 진행
+          searchNotes()
+        }
+      } catch {
+        // 패치 중 오류로 정보를 가져오지 못한 상태
+        self.notes = []
       }
     } // : Task
   }
@@ -96,31 +98,5 @@ private extension RecordNoteViewModel {
     
     // 4. 필터한 내용을 정렬
     self.sortDisplayNotes()
-  }
-}
-
-// TODO: - [시르] NoteUseCase 추가하면 삭제
-private extension RecordNoteViewModel {
-  func setDummy() {
-    self.notes = [
-      NoteVO(
-        id: "1",
-        bookTitle: "싯타르타",
-        author: "헤르만헤세",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
-        coverImage: Image(.exampleCover),
-        content: "테스트테스트테스트테스트테스트테스트",
-        recordId: "3"
-      ),
-      NoteVO(
-        id: "2",
-        bookTitle: "타이탄의 도구들",
-        author: "팀 페리스",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 11))!,
-        coverImage: Image(.exampleCover),
-        content: "트스테트스테트스테트스테트스테트스테트스테트스테트스테ㅍ",
-        recordId: "2"
-      )
-    ]
   }
 }

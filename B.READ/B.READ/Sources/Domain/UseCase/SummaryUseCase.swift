@@ -36,9 +36,11 @@ protocol SummaryUseCase {
   
   /// 전체 요약 목록을 조회합니다.
   ///
-  /// - Returns: 저장된 모든 요약 리스트
+  /// - Returns:
+  ///   - `Record Entity`: 메모,문장,요약노트를 가진 독서 기록
+  ///   - `Book`: 요약노트의 책 정보
   /// - Throws: 조회 실패 시 오류를 발생시킵니다.
-  func fetchAllSummary() async throws -> [AlanSummary]
+  func fetchAllSummary() async throws -> [(Record, Book)]
 }
 
 /// 요약 생성 및 조회 과정에서 발생할 수 있는 오류 타입입니다.

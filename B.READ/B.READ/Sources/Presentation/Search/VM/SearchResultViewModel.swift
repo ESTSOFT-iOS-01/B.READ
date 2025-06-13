@@ -53,6 +53,7 @@ final class SearchResultViewModel: ObservableObject {
     case searchRecord(String)
     case fetchMoreBooks(BookVO)
     case cancelTask
+    case cancelSelect
   }
   
   func send(_ action: Action) {
@@ -75,6 +76,9 @@ final class SearchResultViewModel: ObservableObject {
     case .cancelTask:
       bookTask?.cancel()
       recordTask?.cancel()
+      
+    case .cancelSelect:
+      selectedTabIndex = 0
     }
   }
   

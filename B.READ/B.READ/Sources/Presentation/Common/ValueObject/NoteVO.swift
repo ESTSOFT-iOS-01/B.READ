@@ -13,41 +13,28 @@ struct NoteVO: Identifiable {
   let id: String
   let bookTitle: String
   let author: String
-  let createdAt:Date
-  let coverImage: Image?
-  let content: String
-  let recordId: String
+  let createdAt: Date
+  let coverImage: Image
   
-  init(
-    id: String,
-    bookTitle: String,
-    author: String,
-    createdAt: Date,
-    coverImage: Image?,
-    content: String,
-    recordId: String
-  ) {
-    self.id = id
-    self.bookTitle = bookTitle
-    self.author = author
-    self.createdAt = createdAt
-    self.coverImage = coverImage
-    self.content = content
-    self.recordId = recordId
-  }
+  let record: RecordDetailVO
+  let memos: [MemoVO]
+  let quotes: [QuoteVO]
   
-  init(record: Record, book: Book, note: AlanSummary) {
+  init(note: AlanSummary, record: Record, book: Book) {
     self.id = note.id
     self.bookTitle = book.name
     self.author = book.author
     self.createdAt = note.createdAt
-    if let data = book.coverImage, let uiImage = UIImage(data: data) {
-      self.coverImage = Image(uiImage: uiImage)
+    if let imageData = book.coverImage, let image = UIImage(data: imageData) {
+      self.coverImage = Image(uiImage: image)
     } else {
-      self.coverImage = nil
+      self.coverImage = Image(.exampleCover)
     }
-    self.content = note.content
-    self.recordId = record.id
+    
+    let recordDetailVO = RecordDetailVO(record: record, book: book)
+    self.record = recordDetailVO
+    self.memos = record.memos.map { MemoVO($0, record: recordDetailVO) }
+    self.quotes = record.quotes.map { QuoteVO($0, record: recordDetailVO) }
   }
 }
 
@@ -57,8 +44,6 @@ extension NoteVO: Equatable {
     lhs.bookTitle == rhs.bookTitle &&
     lhs.author == rhs.author &&
     lhs.createdAt == rhs.createdAt &&
-    lhs.coverImage == rhs.coverImage &&
-    lhs.content == rhs.content &&
-    lhs.recordId == rhs.recordId
+    lhs.coverImage == rhs.coverImage
   }
 }
