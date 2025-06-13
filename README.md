@@ -53,9 +53,18 @@
 
 ## 🥞 Stacks 🥞
 ### Tech Stack
-<img src="https://github.com/user-attachments/assets/d69d6c63-662a-4781-8f79-c25b6b3a1844" width="50"> <img src="https://github.com/user-attachments/assets/d7d1746b-b996-44e0-95e7-dad3d4eb10b3" width="50"> <img src="https://github.com/user-attachments/assets/b939216b-81c6-4fb2-98c4-55835898a116" width="50"> <img src="https://github.com/user-attachments/assets/36967f6a-4960-4919-8bcf-11a59f117641" width="50"> <img src="https://github.com/user-attachments/assets/ff75aee9-c30c-4fc0-967d-b20d38b73a2e" width="50"> <img src="https://github.com/user-attachments/assets/1015396c-3bb4-4709-b718-d2a228b0b51a" width="50"> <img src="https://github.com/user-attachments/assets/689a08fc-91cd-4586-8a4d-dba8f830662c" width="50"> <img src="https://github.com/user-attachments/assets/622d907e-a121-40f3-894f-06f98b980c07" width="50">
+<img src="https://github.com/user-attachments/assets/9995b1bd-ad70-413e-9c87-1abf404755a0" width="75"> 
+<img src="https://github.com/user-attachments/assets/b5b560a9-4743-45b3-87c4-3ca5cd3944c4" width="75">
+<img src="https://github.com/user-attachments/assets/1ff59d3d-8181-466b-9d9a-d560215f638b" width="75">
+<img src="https://github.com/user-attachments/assets/54bde008-22d4-4936-bed4-161973109056" width="75">
+<img src="https://github.com/user-attachments/assets/b7adc9b1-0efd-4b67-984d-00fe143bc831" width="75">
+<img src="https://github.com/user-attachments/assets/bb788a3e-a56c-46c8-bc87-ad0f6c86f366" width="75">
+<img src="https://github.com/user-attachments/assets/822569eb-ec41-4598-9421-bb49ae32b46f" width="75"> 
+
 ### Library & API
-<img src="https://github.com/user-attachments/assets/d377643f-3a73-4316-b84c-78a61c8d762d" width="50"> <img src="https://github.com/user-attachments/assets/da6785ff-6bba-4913-8fd4-7a984aaa5da1" width="50"> <img src="https://github.com/user-attachments/assets/30f4eabb-a01a-4284-b158-03e339c9fff3" width="50"> <img src="https://github.com/user-attachments/assets/fececa85-34ff-460b-961e-9e42931c45fd" width="50"> <img src="https://github.com/user-attachments/assets/8a1f2364-ff23-4e94-bba5-3f92a155f1e5" width="50">
+<img src="https://github.com/user-attachments/assets/a9ce613e-9d12-492e-b76d-5ea0b80dd730" width="75">
+<img src="https://github.com/user-attachments/assets/f102bb5b-0594-47d1-a67a-687cd5cc1a58" width="75"> 
+
 ### Tools
 <img src="https://img.shields.io/badge/-Github-181717?style=flat&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/-figma-5856D6?style=flat&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/-Notion-000000?style=flat&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/Discord-5865F2?style=flat&logo=Discord&logoColor=white">
 
