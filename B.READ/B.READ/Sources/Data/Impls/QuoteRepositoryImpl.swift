@@ -12,6 +12,7 @@ import SwiftData
 actor QuoteRepositoryImpl: QuoteRepository {
   func createQuote(_ quote: Quote, in record: Record) throws {
     print("Impl: \(#function)")
+    
     if let _ = try findQuote(id: quote.id) {
       throw RepositoryError.dataAlreadyExist
     }
@@ -24,6 +25,7 @@ actor QuoteRepositoryImpl: QuoteRepository {
   
   func updateQuote(_ quote: Quote) throws {
     print("Impl: \(#function)")
+    
     guard let dto = try findQuote(id: quote.id) else {
       throw RepositoryError.dataNotFound
     }
@@ -36,6 +38,7 @@ actor QuoteRepositoryImpl: QuoteRepository {
   
   func deleteQuote(id: String) throws {
     print("Impl: \(#function)")
+    
     guard let dto = try findQuote(id: id) else {
       throw RepositoryError.dataNotFound
     }
@@ -46,20 +49,18 @@ actor QuoteRepositoryImpl: QuoteRepository {
   
   func fetchQuotes(isbn: String) throws -> [Quote] {
     print("Impl: \(#function)")
-    do {
-      let descriptor = FetchDescriptor<QuoteDTO>(
-        predicate: #Predicate { $0.isbn == isbn },
-        sortBy: [.init(\.page, order: .forward)]
-      )
-      let dtos = try modelContext.fetch(descriptor)
-      return dtos.map { $0.toEntity() }
-    } catch {
-      throw RepositoryError.fetchError
-    }
+    
+    let descriptor = FetchDescriptor<QuoteDTO>(
+      predicate: #Predicate { $0.isbn == isbn },
+      sortBy: [.init(\.page, order: .forward)]
+    )
+    let dtos = try modelContext.fetch(descriptor)
+    return dtos.map { $0.toEntity() }
   }
   
   func fetchQuote(id: String) throws -> Quote {
     print("Impl: \(#function)")
+    
     guard let dto = try findQuote(id: id) else {
       throw RepositoryError.dataNotFound
     }
@@ -68,15 +69,12 @@ actor QuoteRepositoryImpl: QuoteRepository {
   
   func fetchAllQuotes() throws -> [Quote] {
     print("Impl: \(#function)")
-    do {
-      let descriptor = FetchDescriptor<QuoteDTO>(
-        sortBy: [.init(\.page, order: .forward)]
-      )
-      let dtos = try modelContext.fetch(descriptor)
-      return dtos.map { $0.toEntity() }
-    } catch {
-      throw RepositoryError.fetchError
-    }
+    
+    let descriptor = FetchDescriptor<QuoteDTO>(
+      sortBy: [.init(\.page, order: .forward)]
+    )
+    let dtos = try modelContext.fetch(descriptor)
+    return dtos.map { $0.toEntity() }
   }
 }
 
@@ -89,8 +87,10 @@ extension QuoteRepositoryImpl {
   /// - Returns:
   ///   - `QuoteDTO?`: 조회된 첫 번째 문장 정보 DTO, 없으면 `nil`
   private func findQuote(id: String) throws -> QuoteDTO? {
+    let predicate = #Predicate<QuoteDTO> { $0.id == id }
+    let descriptor = FetchDescriptor(predicate: predicate)
+    
     do {
-      let descriptor = FetchDescriptor<QuoteDTO>(predicate: #Predicate { $0.id == id })
       return try modelContext.fetch(descriptor).first
     } catch {
       throw RepositoryError.fetchError
