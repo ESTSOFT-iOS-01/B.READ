@@ -34,8 +34,6 @@ struct RootViewSwitcher: View {
         LaunchScreen()
           .task {
             await DIContainer.config()
-            // TODO: - [더미]초기값 적용이라 마지막에 제거하기
-//            await DummyService.shared.setDummy()
             try? await Task.sleep(for: .seconds(2))
             await MainActor.run { self.isReady = true }
           }

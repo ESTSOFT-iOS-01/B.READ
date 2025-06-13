@@ -36,6 +36,7 @@ final class LibraryViewModel: ObservableObject {
   // DB에서 가져온 전체 독서기록
   private var records: [RecordCellVO] = []
   private var filteredRecords: [RecordCellVO] = []
+  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency
@@ -69,8 +70,13 @@ private extension LibraryViewModel {
   // 독서 기록을 불러옴
   func loadRecords() {
     viewState = .loading
-    Task {
+    
+    currentTask?.cancel()
+    
+    currentTask = Task {
+      try? Task.checkCancellation()
       await fetchRecords()
+      
       await withTaskGroup(of: Void.self) { group in
         group.addTask {
           // 2. 불러온 독서 기록의 상태별 개수 확인
@@ -84,6 +90,7 @@ private extension LibraryViewModel {
           await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
         }
       }
+      
       await MainActor.run {
         viewState = .loaded
       }
@@ -92,17 +99,23 @@ private extension LibraryViewModel {
   
   // 상단 탭바를 선택
   func selectTab() {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
+      try? Task.checkCancellation()
       // 1. 선택된 탭을 기준으로 필터 적용
       await self.filterRecords()
       // 2. 필터 적용된 독서 기록에 정렬 적용
       await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
     }
   }
- 
+  
   // 정렬을 선택
   func selectSort() {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
+      try? Task.checkCancellation()
       await self.sortDisplayRecords(by: self.selectedSort[self.selectedTab])
     }
   }
@@ -119,7 +132,7 @@ private extension LibraryViewModel {
       // 2. Entity -> VO
       self.records = infos.map { RecordCellVO(record: $0.record, book: $0.book) }
     } catch {
-      // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환하고, 에러 메시지를 띄움
+      // 3. 패치하던중 오류 발생 시 배열은 빈 배열을 반환
       print(error.localizedDescription)
       self.records = []
     }

@@ -13,17 +13,20 @@ final class MemoUseCaseImpl: MemoUseCase {
   let bookRepository: BookRepository
   let memoRepository: MemoRepository
   let aiService: AIService
+  private let bookService: BookService
   
   init(
     userInfoRepository: UserInfoRepository,
     bookRepository: BookRepository,
     memoRepository: MemoRepository,
-    aiService: AIService
+    aiService: AIService,
+    bookService: BookService
   ) {
     self.userInfoRepository = userInfoRepository
     self.bookRepository = bookRepository
     self.memoRepository = memoRepository
     self.aiService = aiService
+    self.bookService = bookService
   }
   
   func saveMemo(_ memo: Memo, in record: Record) async throws {
@@ -89,7 +92,35 @@ final class MemoUseCaseImpl: MemoUseCase {
   }
   
   func loadBookTitle(_ isbn: String) async throws -> String {
-    return try await bookRepository.fetchBook(isbn: isbn).name
+    do {
+      return try await bookRepository.fetchBook(isbn: isbn).name
+    } catch {
+      // 도서 정보가 없다면 알라딘에서 검색 후 정보 생성하고 도서제목을 반환
+      // 1. 알라딘에서 정보를 패치
+      let bookDetail = try await bookService.fetchBookDetail(isbn: isbn)
+      
+      // 2. 패치한 정보로 엔티티 생성
+      var book = Book(
+        isbn: bookDetail.isbn,
+        coverImage: nil,
+        name: bookDetail.title,
+        author: bookDetail.author,
+        publisher: bookDetail.publisher,
+        publishedAt: bookDetail.publishedDate.toDate() ?? .now,
+        totalPages: bookDetail.pageCount
+      )
+      
+      // 3. 표지정보 업데이트
+      if let url = URL(string: bookDetail.coverURL) {
+        let data = try? Data(contentsOf: url)
+        book.coverImage = data
+      }
+      
+      // 4. 책정보 생성
+      try? await bookRepository.createBook(book)
+      // 5. 책 생성에 실패하든 성공하든 새로운 책제목을 반환
+      return book.name
+    }
   }
 }
 

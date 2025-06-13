@@ -64,7 +64,6 @@ extension DIContainer {
         userInfoRepository: userInfoRepository,
         bookRepository: bookRepository,
         recordRepository: recordRepository,
-        quoteRepository: quoteRepository,
         bookService: AladinService()
       ),
       for: LibraryUseCase.self
@@ -76,7 +75,8 @@ extension DIContainer {
         userInfoRepository: userInfoRepository,
         bookRepository: bookRepository,
         memoRepository: memoRepository,
-        aiService: AlanService()
+        aiService: AlanService(),
+        bookService: AladinService()
       ),
       for: MemoUseCase.self
     )
@@ -86,7 +86,9 @@ extension DIContainer {
       QuoteUseCaseImpl(
         userInfoRepository: userInfoRepository,
         quoteRepository: quoteRepository,
-        bookRepository: bookRepository),
+        bookRepository: bookRepository,
+        bookService: AladinService()
+      ),
       for: QuoteUseCase.self
     )
     

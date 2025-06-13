@@ -19,6 +19,7 @@ final class RecordQuoteViewModel: ObservableObject {
   // MARK: - Internal Variable
   private(set) var quoteGroups: [QuoteGroup] = []
   var selectedQuote: QuoteVO? = nil
+  private var currentTask: Task<Void, Never>? = nil
   
   // MARK: - Dependency
   @Dependency private var quoteUseCase: QuoteUseCase
@@ -53,7 +54,11 @@ final class RecordQuoteViewModel: ObservableObject {
 private extension RecordQuoteViewModel {
   /// 문장을 불러와서 뷰에 보여줄 형태로 가공합니다.
   func loadQuoteGroups() {
-    Task {
+    currentTask?.cancel()
+    
+    currentTask = Task {
+      try? Task.checkCancellation()
+      
       do {
         // 1. 전체 독서 기록을 받아옴
         let allRecords = try await libraryUseCase.loadRecordList()

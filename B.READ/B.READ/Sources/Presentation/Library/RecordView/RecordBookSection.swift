@@ -19,7 +19,6 @@ struct RecordBookSection: View {
             .resizable()
             .aspectRatio(contentMode: .fill)
         } else {
-          // TODO: - [시르] 사진이 없을때, 들어갈 이미지 or 도형 추가
           Image(.exampleCover)
             .resizable()
             .aspectRatio(contentMode: .fill)

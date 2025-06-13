@@ -12,22 +12,17 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   private let userInfoRepository: UserInfoRepository
   private let bookRepository: BookRepository
   private let recordRepository: RecordRepository
-  //  private let memoRepository: MemoRepository
-  private let quoteRepository: QuoteRepository
-  //  private let noteRepository: NoteRepository
   private let bookService: BookService
   
   init(
     userInfoRepository: UserInfoRepository,
     bookRepository: BookRepository,
     recordRepository: RecordRepository,
-    quoteRepository: QuoteRepository,
     bookService: BookService
   ) {
     self.userInfoRepository = userInfoRepository
     self.bookRepository = bookRepository
     self.recordRepository = recordRepository
-    self.quoteRepository = quoteRepository
     self.bookService = bookService
   }
   
@@ -97,12 +92,13 @@ final class LibraryUseCaseImpl: LibraryUseCase {
         // 3. record 기준으로 각각의 책정보 가져오는 걸 자식 태스크로 지정
         group.addTask {
           do {
+            try Task.checkCancellation()
             let book = try await self.bookRepository.fetchBook(isbn: record.isbn)
             return (record, book)
-          } catch {
-            // TODO: - RepositoryError.dataNotFound이면 알라딘에서 책검색, 아니면 nil
-            print(error.localizedDescription)
-            return nil
+            
+          } catch RepositoryError.dataNotFound {
+            let book = try await self.requestBookDetail(isbn: record.isbn)
+            return (record, book)
           }
         }
       }
@@ -122,7 +118,12 @@ final class LibraryUseCaseImpl: LibraryUseCase {
   }
   
   func deleteRecord(_ record: Record) async throws {
-    try await recordRepository.deleteRecord(record.id)
+    do {
+      try await recordRepository.deleteRecord(record.id)
+    } catch RepositoryError.dataNotFound {
+      // 삭제에서 이미 존재하지 않으면 무시
+      print("이미 삭제된 독서 기록입니다.")
+    }
   }
   
   func loadRecentUpdatedReadingRecord(maxCount: Int) async throws -> [(Record, Book)] {

@@ -109,7 +109,6 @@ extension RecordDetailVO: Hashable {
 }
 
 extension RecordDetailVO {
-  // TODO: - [시르] 아이디어 필요! VO에 메모, 문장을 넣는방법도 있음
   func toEntity(memos: [MemoVO] = [], quotes: [QuoteVO] = []) -> Record {
     Record(
       id: self.id,
