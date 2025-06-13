@@ -86,6 +86,7 @@
 				Sources/Domain/Repository/Inerface/RecordRepository.swift,
 				Sources/Domain/Repository/Inerface/SummaryRepository.swift,
 				Sources/Domain/Repository/Inerface/UserInfoRepository.swift,
+				"Sources/Util/Extensions/String+.swift",
 			);
 			target = 16BE8C682DED50C0006FFD00 /* RepositoryTest */;
 		};
@@ -159,6 +160,7 @@
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				"Sources/Util/Extensions/Bundle+.swift",
 				"Sources/Util/Extensions/Date+.swift",
+				"Sources/Util/Extensions/String+.swift",
 			);
 			target = 16BE931F2DED713E006FFD00 /* ServiceTest */;
 		};
@@ -232,6 +234,7 @@
 				Sources/Network/NetworkClient/RequestConvertible.swift,
 				"Sources/Util/Extensions/Bundle+.swift",
 				"Sources/Util/Extensions/Date+.swift",
+				"Sources/Util/Extensions/String+.swift",
 			);
 			target = 16BE95272DED72FB006FFD00 /* UsecaseTest */;
 		};
