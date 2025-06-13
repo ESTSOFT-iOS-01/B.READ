@@ -81,7 +81,7 @@
 
 
 ## 🧑‍💻 Code Convention 🧑‍💻
-- 자체 Coding Convention
+[📑 자체 Coding Convention 📑](/Code%20Convention.md)
 
 **네이밍 규칙**
 
