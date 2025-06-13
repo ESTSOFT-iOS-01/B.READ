@@ -13,10 +13,13 @@ import Testing
 struct RecordRepositoryTest {
 
   private let recordRepository: RecordRepository
+  private let memoRepository: MemoRepository
+  
   init() {
 //    recordRepository = RecordRepositoryStub()
     let storage = SwiftDataTestStorage()
     recordRepository = RecordRepositoryImpl(modelContainer: storage.modelContainer)
+    memoRepository = MemoRepositoryImpl(modelContainer: storage.modelContainer)
   }
   
   @Test("Record Create Test")
@@ -94,13 +97,24 @@ struct RecordRepositoryTest {
 
   @Test("Recent Finished Record without Summary Fetch Test")
   func fetchRecordAvailableForSummary() async throws {
-    let record = DummyData.dummyRecords[2]
+    // 1. 생성할 레코드와 메모
+    let dummyRecord = DummyData.dummyRecords[2]
+    let dummyMemo = DummyData.dummyMemos[0]
     
-    try await recordRepository.createRecord(record)
+    // 2. 레코드를 생성
+    try await recordRepository.createRecord(dummyRecord)
+    var fetchedRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
     
-    let fetchedRecord = try await recordRepository.fetchRecordAvailableForSummary()
+    // 3. 메모를 생성
+    try await memoRepository.createMemo(dummyMemo, in: fetchedRecord)
     
-    #expect(fetchedRecord == record)
+    // 4. 메모가 생성된 레코드를 패치
+    fetchedRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
+    
+    // 5. 요약가능한 독서기록을 패치
+    let availableRecord = try await recordRepository.fetchRecordAvailableForSummary()
+    
+    #expect(availableRecord == fetchedRecord)
   }
   
   @Test("Recent Finished Record without Summary Fetch Test - Data Not Found")
