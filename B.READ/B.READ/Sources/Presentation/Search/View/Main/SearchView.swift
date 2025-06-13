@@ -73,7 +73,7 @@ struct SearchView: View {
         isFocused: $inputViewModel.isFocused,
         onSubmit: {
           inputViewModel.send(.onSubmitSearch)
-
+          
           if !inputViewModel.searchText.isEmpty {
             resultViewModel.send(.clearResult)
             recentSearchViewModel.send(.addKeyword(inputViewModel.searchText))
@@ -93,7 +93,7 @@ struct SearchView: View {
       }
     }
   }
-
+  
   // MARK: - (S)bestSellerSection
   private var bestSellerSection: some View {
     VStack(alignment: .leading, spacing: layoutSize) {
@@ -127,24 +127,25 @@ struct SearchContentView: View {
   
   var layoutSize: CGFloat
   var horizontalPadding: CGFloat
-
+  
   var body: some View {
     Group {
       if inputViewModel.isFocused {
         RecentSearchView(
           viewModel: recentSearchViewModel,
           inputViewModel: inputViewModel,
-          resultViewModel: resultViewModel)
-          .padding(.horizontal, horizontalPadding)
-
+          resultViewModel: resultViewModel
+        )
+        .padding(.horizontal, horizontalPadding)
+        
       } else if inputViewModel.isSubmitted {
         SearchResultView(
           viewModel: resultViewModel
         )
         .onDisappear {
-          resultViewModel.send(.clearSelect)
+          resultViewModel.send(.cancelSelect)
         }
-
+        
       } else {
         VStack(alignment: .leading, spacing: layoutSize) {
           Text("인기 도서")

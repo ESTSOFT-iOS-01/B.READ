@@ -98,20 +98,50 @@ final class SummaryUseCaseImpl: SummaryUseCase {
   
   func fetchSummary(id: String) async throws -> AlanSummary {
     try Task.checkCancellation()
-    let summary =  try await summaryRepository.fetchSummary(id: id)
+    let summary = try await summaryRepository.fetchSummary(id: id)
     try Task.checkCancellation()
     
     return summary
   }
   
-  func fetchAllSummary() async throws -> [AlanSummary] {
-    try Task.checkCancellation()
-    let summaries = try await summaryRepository.fetchAllSummary()
-    try Task.checkCancellation()
+  func fetchAllSummary() async throws -> [(Record, Book)] {
+    let noteInfos: [(Record, Book)]
     
-    return summaries
-  }
+    // 1. 요약노트가 있는 독서 기록 정보 패치
+    let records = try await recordRepository.fetchHaveSummaryRecords()
+    
+    // 2. 태스크 그룹으로 정보를 가져옴
+    noteInfos = try await withThrowingTaskGroup(of: (Record, Book)?.self) {
+      [weak self] group in
+      guard let self = self else { return [] }
+      
+      for record in records {
+        // 3. record 기준으로 각각의 책정보 가져오는 걸 자식 태스크로 지정
+        group.addTask {
+          do {
+            let book = try await self.bookRepository.fetchBook(isbn: record.isbn)
+            return (record, book)
+          } catch {
+            // TODO: - RepositoryError.dataNotFound이면 알라딘에서 책검색, 아니면 nil
+            print(error.localizedDescription)
+            return nil
+          }
+        }
+      }
+      
+      var results: [(Record, Book)] = []
+      // 4. 태스크 그룹의 결과를 results에 저장
+      for try await result in group {
+        if let info = result {
+          results.append(info)
+        }
+      }
+      
+      return results
+    }
   
+    return noteInfos
+  }
 }
 
 private extension SummaryUseCaseImpl {

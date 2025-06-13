@@ -41,6 +41,13 @@ protocol RecordRepository {
   ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
   func fetchRecentReadingRecord(maxCount: Int) async throws -> [Record]
   
+  /// `요약 노트를 가지고 있는` 독서 기록을 조회합니다.
+  ///
+  /// - Returns: Record Entity 배열
+  /// - Throws:
+  ///   - `RepositoryError.fetchError`: 데이터 조회 중 에러가 발생한 경우
+  func fetchHaveSummaryRecords() async throws -> [Record]
+
   /// 요약 생성을 위해 사용 가능한 `완독` 상태의 독서 기록을 최신순으로 조회합니다.
   ///
   /// - Returns: 요약이 아직 작성되지 않은 가장 최근의 `완독` 상태의 독서 기록 하나

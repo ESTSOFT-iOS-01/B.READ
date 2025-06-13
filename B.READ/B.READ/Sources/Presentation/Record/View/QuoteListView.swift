@@ -50,10 +50,8 @@ struct QuoteListView: View {
             .padding(.top, 16)
           }// : Section
         }
-        
       } // : LazyVStack
       .padding(.bottom, 40)
-      .animation(.easeInOut(duration: 0.5), value: viewModel.displayQuoteGroups)
     } // : ScrollView
     .background(.backgroundDefault)
     .confirmationDialog(

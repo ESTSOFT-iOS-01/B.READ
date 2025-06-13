@@ -17,8 +17,14 @@ struct NoteListview: View {
         ForEach($viewModel.displayNotes) { $note in
           NoteListCell(note: $note)
             .onTapGesture {
-              // TODO: - [시르] 상세 페이지가 아닌 요약노트 확인 페이지로 이동해야함
-              coordinator.push(.libraryDetail(id: note.recordId))
+              coordinator.push(
+                .summaryDetail(
+                  id: note.id,
+                  record: note.record,
+                  memos: note.memos,
+                  quotes: note.quotes
+                )
+              )
             }
           Divider()
             .frame(height: 0.8)
@@ -27,7 +33,6 @@ struct NoteListview: View {
         
       } // : LazyVStack
       .padding(.bottom, 40)
-      .animation(.easeInOut(duration: 0.5), value: viewModel.displayNotes)
     }// : ScrollView
   }
 }

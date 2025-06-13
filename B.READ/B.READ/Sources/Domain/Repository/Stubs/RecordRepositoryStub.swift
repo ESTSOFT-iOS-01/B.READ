@@ -49,6 +49,15 @@ actor RecordRepositoryStub: RecordRepository {
     return Array(records)
   }
   
+
+  func fetchHaveSummaryRecords() async throws -> [Record] {
+    print("Stub: ", #function)
+    let records = storedRecords
+      .filter { $0.summary != nil }
+      
+    return Array(records)
+  }
+
   func fetchRecordAvailableForSummary() async throws -> Record {
     print("Stub: ", #function)
     guard let record = storedRecords.first(where: { $0.state == .completed && $0.summary == nil }) else {
