@@ -173,7 +173,62 @@
 ---
 ## 📁 Foldering Convention 📁
 ```markdown
-
+B.READ
+├── App
+│   ├── Coordinator
+│   ├── DIContainer
+│   └── PreviewableContainer
+├── Data
+│   ├── DTOs
+│   │   ├── Record
+│   │   └── UserInfo
+│   ├── Impls
+│   └── Storage
+├── DesignSystem
+│   ├── Font
+│   └── Icon
+├── Domain
+│   ├── Dummy
+│   ├── Entity
+│   ├── Repository
+│   │   ├── Error
+│   │   ├── Inerface
+│   │   └── Stubs
+│   ├── Service
+│   │   ├── Interface
+│   │   └── Stub
+│   ├── UseCase
+│   └── UseCaseImpl
+├── Network
+│   ├── Aladin
+│   ├── Alan
+│   └── NetworkClient
+├── Presentation
+│   ├── Common
+│   │   ├── Components
+│   │   └── ValueObject
+│   ├── Home
+│   ├── Library
+│   │   ├── LibraryView
+│   │   ├── RecordView
+│   │   └── ViewModel
+│   ├── Login
+│   ├── Memo
+│   ├── MyPage
+│   ├── OnBoarding
+│   ├── Record
+│   │   ├── View
+│   │   └── ViewModel
+│   ├── Search
+│   │   ├── VM
+│   │   └── View
+│   │       ├── Components
+│   │       └── Main
+│   ├── Sentence
+│   └── Setting
+└── Util
+    ├── Constants
+    └── Extensions
 ```
 
 ## 🔥 Trouble Shooting 🔥
