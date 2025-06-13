@@ -6,9 +6,10 @@
 독서에 관심 있는 사람들이 책을 읽는 과정 속에서 책의 내용과 자신의 생각을 간편하게 기록하고,  
 다양한 추천과 동기부여를 통해 꾸준히 독서를 이어나갈 수 있도록 돕는 기록 및 공유 서비스입니다.
 
-[📑 RunLog FigJam 📑]()
+[📑 B.READ FigJam 📑](https://www.figma.com/board/xoHwKGXKtQb1SDYaGbLA20/3%EC%B0%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0-1&t=og8iFOj4m78PkMG0-1)
 
-[📑 RunLog 발표자료 📑]()
+[📑 B.READ 발표자료 📑](https://github.com/user-attachments/files/20720472/_._compressed.1.pdf)
+
 
 ## 🍎 Developers
 <img width="160px" src="https://avatars.githubusercontent.com/u/68256612?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/80318425?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/132960058?v=4"/> | <img width="160px" src="https://avatars.githubusercontent.com/u/55975937?v=4"/> |
@@ -76,17 +77,17 @@
 
 ## 🌲 Branch Convention 🌲
 1. **기본 브랜치 설정**
-- main : 배포 가능한 안정적인 코드가 유지되는 브랜치
 - develop: 기본 브랜치로, 기능을 개발하는 브랜치
 
 2. **작업 순서**
    1. 작업할 이슈 작성
-   2. 적합한 Assignees, Label, Project, Milestone 할당
+   2. 적합한 Project, Milestone 할당(Assignees, Label 자동 할당)
    3. **자동 생성 브랜치에서 작업 수행**
    4. **원격 저장소에 작업 브랜치 푸시**
    5. **Pull Request 생성**
    - `develop` 브랜치 대상으로 Pull Request 생성
    - 리뷰어의 리뷰를 받은 후 PR을 승인 받고 `develop` 브랜치에 자동 병합
+   - Swift Build Check 성공 시에만 병합 가능
 
 
 ## 🧑‍💻 Code Convention 🧑‍💻
