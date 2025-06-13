@@ -108,7 +108,7 @@ let monfi: [String: String] = ["승재": "근웅"]
 
 ```swift
  func initializeDay(
-        locationName: String,
+	locationName: String,
         weather: Int,
         temperature: Double
     ) async throws {
