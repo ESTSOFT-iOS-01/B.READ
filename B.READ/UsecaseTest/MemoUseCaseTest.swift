@@ -28,13 +28,17 @@ struct MemoUseCaseTest {
       userInfoRepository: userInfoRepository,
       bookRepository: BookRepositoryImpl(modelContainer: storage.modelContainer),
       memoRepository: memoRepository,
-      aiService: AlanService()
+      aiService: AlanService(),
+      bookService: AladinService()
     )
   }
   
   
   @Test("Memo Create & Fetch Test")
   func saveMemoTestCreate() async throws {
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     let dummyRecord = DummyData.dummyRecords.first!
     try await recordRepository.createRecord(dummyRecord)
     let targetRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
@@ -48,6 +52,9 @@ struct MemoUseCaseTest {
   
   @Test("Memo Update Test")
   func saveMemoTestUpdate() async throws {
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     let dummyRecord = DummyData.dummyRecords.first!
     try await recordRepository.createRecord(dummyRecord)
     let targetRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
@@ -65,6 +72,9 @@ struct MemoUseCaseTest {
   
   @Test("Memo delete Test")
   func deleteMemoTestUpdate() async throws {
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     let dummyRecord = DummyData.dummyRecords.first!
     try await recordRepository.createRecord(dummyRecord)
     let targetRecord = try await recordRepository.fetchRecord(id: dummyRecord.id)
