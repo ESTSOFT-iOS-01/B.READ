@@ -63,7 +63,7 @@
 <img src="https://github.com/user-attachments/assets/822569eb-ec41-4598-9421-bb49ae32b46f" width="75"> 
 
 ### Library & API
-<img src="https://github.com/user-attachments/assets/a9ce613e-9d12-492e-b76d-5ea0b80dd730" width="75">
+<a href="https://alan.est.ai/"><img src="https://github.com/user-attachments/assets/a9ce613e-9d12-492e-b76d-5ea0b80dd730" width="75"></a>
 <img src="https://github.com/user-attachments/assets/f102bb5b-0594-47d1-a67a-687cd5cc1a58" width="75"> 
 
 ### Tools
