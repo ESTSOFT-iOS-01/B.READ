@@ -143,11 +143,7 @@ struct SearchContentView: View {
           viewModel: resultViewModel
         )
         .onDisappear {
-<<<<<<< feature/#189
-//          resultViewModel.send(.cancelSelect)
-=======
           resultViewModel.send(.cancelSelect)
->>>>>>> develop
         }
         
       } else {
