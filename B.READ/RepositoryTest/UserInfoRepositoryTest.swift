@@ -78,7 +78,12 @@ struct UserInfoRepositoryTest {
 
     try await userInfoRepository.updateUserInfo(updatedUserInfo)
 
-    let fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
+    var fetchedUserInfo = try await userInfoRepository.fetchUserInfo()
+    
+    // 카테고리 순서 정렬
+    updatedUserInfo.categories = updatedUserInfo.categories.sorted { $0.id < $1.id }
+    fetchedUserInfo.categories = fetchedUserInfo.categories.sorted { $0.id < $1.id }
+    
     #expect(fetchedUserInfo == updatedUserInfo)
   }
   
