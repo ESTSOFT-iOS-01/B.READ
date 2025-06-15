@@ -19,7 +19,7 @@ final class MemoDTO {
   var startPage: Int
   var endPage: Int
   
-  @Relationship(deleteRule: .cascade)
+  @Relationship(deleteRule: .cascade, inverse: \GuideDTO.memo)
   var guides: [GuideDTO]
   
   var record: RecordDTO?

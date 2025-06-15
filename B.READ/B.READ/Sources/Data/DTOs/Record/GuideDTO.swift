@@ -13,6 +13,8 @@ final class GuideDTO {
   var date: Date
   var content: String
   
+  var memo: MemoDTO?
+  
   init(date: Date, content: String) {
     self.date = date
     self.content = content
