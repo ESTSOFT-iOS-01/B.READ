@@ -144,110 +144,35 @@ extension DummyData {
     currentPage: 252,
     review: "",
     memos: [
-      Memo(
-        id: "1",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "싯다르타는 수많은 스승과 가르침을 거쳤지만, 결국 삶을 살아가는 과정에서 스스로 진리를 깨닫는다. 남의 말이 아닌, 체험이 지혜로 이어진다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-      Memo(
-        id: "2",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "강을 바라보며 싯다르타는 모든 존재가 연결되어 흐르고 있다는 사실을 깨닫는다. 나 또한 변화와 흐름을 있는 그대로 받아들이고 싶어졌다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
-      Memo(
-        id: "3",
-        isbn: "9788937460586",
-        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
-        content: "싯다르타의 삶은 고통과 실수의 연속이었지만, 그 모든 것이 깨달음으로 나아가는 길이었다. 나 역시 내 방황을 긍정하고 싶어졌다.",
-        pages: (100, 132),
-        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
-      ),
+//      Memo(
+//        id: "1",
+//        isbn: "9788937460586",
+//        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
+//        content: "싯다르타는 수많은 스승과 가르침을 거쳤지만, 결국 삶을 살아가는 과정에서 스스로 진리를 깨닫는다. 남의 말이 아닌, 체험이 지혜로 이어진다.",
+//        pages: (100, 132),
+//        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
+//      ),
+//      Memo(
+//        id: "2",
+//        isbn: "9788937460586",
+//        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
+//        content: "강을 바라보며 싯다르타는 모든 존재가 연결되어 흐르고 있다는 사실을 깨닫는다. 나 또한 변화와 흐름을 있는 그대로 받아들이고 싶어졌다.",
+//        pages: (100, 132),
+//        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
+//      ),
+//      Memo(
+//        id: "3",
+//        isbn: "9788937460586",
+//        createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 4))!,
+//        content: "싯다르타의 삶은 고통과 실수의 연속이었지만, 그 모든 것이 깨달음으로 나아가는 길이었다. 나 역시 내 방황을 긍정하고 싶어졌다.",
+//        pages: (100, 132),
+//        guides: [Guide(date: fixedDate, content: "exmaple1"), Guide(date: fixedDate, content: "exmaple1")]
+//      ),
     ],
     quotes: [],
     createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 4, day: 19))!,
     updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!
   )
-  
-  
-//    Record( // 아주 작은 습관들
-//      id: UUID().uuidString,
-//      isbn: "9791162540640",
-//      state: .reading,
-//      heartCount: 3,
-//      starCount: 0,
-//      isFavorite: true,
-//      period: (Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 27)), nil),
-//      currentPage: 321,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!
-//          ),
-//    Record( // 위버멘쉬
-//      id: UUID().uuidString,
-//      isbn: "9791192372730",
-//      state: .completed,
-//      heartCount: 3,
-//      starCount: 5,
-//      isFavorite: false,
-//      period: (
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1)),
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 5))
-//      ),
-//      currentPage: 260,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1))!
-//          ),
-//    Record( // 이기적 유전자
-//      id: UUID().uuidString,
-//      isbn: "9788932473901",
-//      state: .completed,
-//      heartCount: 3,
-//      starCount: 2,
-//      isFavorite: false,
-//      period: (
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1)),
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 5))
-//      ),
-//      currentPage: 632,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 30))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 30))!
-//          ),
-//    Record( // 듀얼 브레인
-//      id: UUID().uuidString,
-//      isbn: "9791194368175",
-//      state: .completed,
-//      heartCount: 3,
-//      starCount: 4,
-//      isFavorite: false,
-//      period: (
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 1, day: 1)),
-//        Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 5))
-//      ),
-//      currentPage: 308,
-//      review: "",
-//      summaryID: nil,
-//      memoIDs: [],
-//      quoteIDs: [],
-//      createdAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!,
-//      updatedAt: Calendar.current.date(from: DateComponents(year: 2024, month: 12, day: 25))!
-//          )
 ]
   
   static var records: [Record] = [

@@ -92,31 +92,4 @@ struct BookServiceTest {
     }
   }
 
-//  @Test("Error: Missing Query")
-//  func testMissingQueryErrorDecoding() async throws {
-//    let mockClient = MockNetworkClient(
-//      nextMockFileName: "MissingQuery",
-//      shouldReturnError: false
-//    )
-//    let aladinService = AladinService(client: mockClient)
-//
-//    do {
-//      _ = try await aladinService.fetchBookList(for: "", index: 1)
-//      #expect(false)
-//    } catch let error as AladinError {
-//      switch error {
-//      case .serverError(let code, let message):
-//        #expect(code == 3)
-//        #expect(message == "검색어를 입력해주세요.")
-//        print("✅ Correctly decoded Aladin error: [\(code)] \(message)")
-//      default:
-//        print("Expected serverError, but got \(error)")
-//        #expect(false)
-//      }
-//    } catch {
-//      print("Unexpected error type: \(error)")
-//      #expect(false)
-//    }
-//  }
-
 }

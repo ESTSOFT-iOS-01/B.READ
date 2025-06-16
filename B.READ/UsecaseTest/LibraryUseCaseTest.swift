@@ -37,19 +37,24 @@ struct LibraryUseCaseTest {
   
   @Test("Save/Load Record Test")
   func loadRecordTest() async throws {
-    // 1. 레코드, 책 정보
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
+    // 2. 레코드, 책 정보
     let book = DummyData.dummyBooks[0]
     let record = DummyData.dummyRecords[0]
     
-    // 2. 레코드, 책 생성
+    // 3. 레코드, 책 생성
     try await libraryUseCase.saveRecord(record: record, book: book)
     
-    // 3. 레코드 책 패치
+    // 4. 레코드 책 패치
     let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
     
     #expect(fetchedInfo.0.id == record.id)
     #expect(fetchedInfo.0.createdAt == record.createdAt)
   }
+  
   
   @Test("Save/Load Record Tests", arguments: [
     (DummyData.dummyBooks[0], DummyData.dummyRecords[0]),
@@ -57,6 +62,10 @@ struct LibraryUseCaseTest {
     (DummyData.dummyBooks[2], DummyData.dummyRecords[2])
   ])
   func loadRecordTest(book: Book, record: Record) async throws {
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     // 2. 레코드, 책 생성
     try await libraryUseCase.saveRecord(record: record, book: book)
     
@@ -69,7 +78,11 @@ struct LibraryUseCaseTest {
   
   @Test("Load Record List Test")
   func loadRecordListTest() async throws {
-    // 1. 레코드들 생성
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
+    // 2. 레코드들 생성
     let infos: [(Record, Book)] = [
       (DummyData.dummyRecords[0], DummyData.dummyBooks[0]),
       (DummyData.dummyRecords[1], DummyData.dummyBooks[1]),
@@ -79,7 +92,7 @@ struct LibraryUseCaseTest {
       try await libraryUseCase.saveRecord(record: info.0, book: info.1)
     }
     
-    // 2. 레코드들 패치
+    // 3. 레코드들 패치
     let fetchedInfos = try await libraryUseCase.loadRecordList()
       .sorted { $0.0.createdAt > $1.0.createdAt }
     for (info, fetchedInfo) in zip(infos, fetchedInfos) {
@@ -91,17 +104,21 @@ struct LibraryUseCaseTest {
   
   @Test("Delete Record Test")
   func deleteRecordTest() async throws {
-    // 1. 레코드 정보
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
+    // 2. 레코드 정보
     let book = DummyData.dummyBooks[0]
     let record = DummyData.dummyRecords[0]
     
-    // 2. 레코드, 책 생성
+    // 3. 레코드, 책 생성
     try await libraryUseCase.saveRecord(record: record, book: book)
     
-    // 3. 레코드 삭제
+    // 4. 레코드 삭제
     try await libraryUseCase.deleteRecord(record)
     
-    // 4. 레코드 패치
+    // 5. 레코드 패치
     await #expect(throws: RepositoryError.dataNotFound, performing: {
       let _ = try await libraryUseCase.loadRecord(record.id)
     })
@@ -109,22 +126,26 @@ struct LibraryUseCaseTest {
   
   @Test("Edit Record Test")
   func editRecordTest() async throws {
-    // 1. 레코드 정보
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
+    // 2. 레코드 정보
     let book = DummyData.dummyBooks[0]
     var record = DummyData.dummyRecords[0]
     
-    // 2. 레코드, 책 생성
+    // 3. 레코드, 책 생성
     try await libraryUseCase.saveRecord(record: record, book: book)
     
-    // 3. 레코드 정보 수정
+    // 4. 레코드 정보 수정
     record.isFavorite = true
     record.state = .completed
     record.starCount = 5
     
-    // 4. 수정한 레코드 업데이트
+    // 5. 수정한 레코드 업데이트
     try await libraryUseCase.editRecord(record)
     
-    // 5. 레코드, 책 패치
+    // 6. 레코드, 책 패치
     let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
     
     #expect(fetchedInfo.0.id == record.id)
@@ -135,22 +156,27 @@ struct LibraryUseCaseTest {
   
   @Test("Edit Record Test - Record Data Not Found")
   func editRecordDataNotFoundTest() async throws {
-    // 1. 레코드 정보
+    
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
+    // 2. 레코드 정보
     let book = DummyData.dummyBooks[0]
     var record = DummyData.dummyRecords[0]
     
-    // 2. 도서만 생성
+    // 3. 도서만 생성
     try await bookRepository.createBook(book)
     
-    // 3. 레코드 정보 수정
+    // 4. 레코드 정보 수정
     record.isFavorite = true
     record.state = .completed
     record.starCount = 5
     
-    // 4. 수정한 레코드 업데이트
+    // 5. 수정한 레코드 업데이트
     try await libraryUseCase.editRecord(record)
     
-    // 5. 레코드, 책 패치
+    // 6. 레코드, 책 패치
     let fetchedInfo = try await libraryUseCase.loadRecord(record.id)
     
     #expect(fetchedInfo.0.id == record.id)
@@ -161,7 +187,12 @@ struct LibraryUseCaseTest {
   
   @Test("loadRecentUpdatedReadingRecord Test")
   func loadRecentUpdatedReadingRecordTest() async throws {
-    // 1. 레코드들 생성
+    
+    // 1. 유저 정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
+    // 2. 레코드들 생성
     let infos: [(Record, Book)] = [
       (DummyData.dummyRecords[0], DummyData.dummyBooks[0]),
       (DummyData.dummyRecords[1], DummyData.dummyBooks[1]),
@@ -171,10 +202,10 @@ struct LibraryUseCaseTest {
       try await libraryUseCase.saveRecord(record: info.0, book: info.1)
     }
     
-    // 2. 최근 업데이트한 읽는 중 상태의 독서 기록 패치
+    // 3. 최근 업데이트한 읽는 중 상태의 독서 기록 패치
     let fetchedList = try await libraryUseCase.loadRecentUpdatedReadingRecord(maxCount: 3)
     
-    // 3. 기대되는 결과
+    // 4. 기대되는 결과
     let predictList = Array(infos
       .filter { $0.0.state == .reading }
       .sorted { $0.0.updatedAt > $1.0.updatedAt }

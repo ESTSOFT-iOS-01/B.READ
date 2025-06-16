@@ -28,12 +28,17 @@ struct QuoteUseCaseTest {
     self.quoteUseCase = QuoteUseCaseImpl(
       userInfoRepository: userInfoRepository,
       quoteRepository: quoteRepository,
-      bookRepository: bookRepository
+      bookRepository: bookRepository,
+      bookService: AladinService()
     )
   }
   
   @Test("Quote Create & Id Fetch Test")
   func saveQuoteTestCreate() async throws {
+    // 0. 유저정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     let dummyRecord = DummyData.dummyRecords[1]
     let dummyQuote = DummyData.dummyQuote[0]
     
@@ -53,6 +58,10 @@ struct QuoteUseCaseTest {
   
   @Test("Quote Update Test")
   func saveQuoteTestUpdate() async throws {
+    // 0. 유저정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     let dummyRecord = DummyData.dummyRecords[1]
     var dummyQuote = DummyData.dummyQuote[0]
     
@@ -79,6 +88,10 @@ struct QuoteUseCaseTest {
   
   @Test("Quote Remove & AllCase Fetch Test")
   func removeQuoteTest() async throws {
+    // 0. 유저정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     let dummyRecord = DummyData.dummyRecords[1]
     let dummyQuote = DummyData.dummyQuote[0]
     
@@ -109,6 +122,10 @@ struct QuoteUseCaseTest {
   
   @Test("Load Book Title Test")
   func loadBookTitleTest() async throws {
+    // 0. 유저정보 생성
+    let userInfo = DummyData.userInfo
+    try await userInfoRepository.createUserInfo(userInfo)
+    
     
     let dummyBook = DummyData.dummyBooks[1]
     let dummyRecord = DummyData.dummyRecords[1]
