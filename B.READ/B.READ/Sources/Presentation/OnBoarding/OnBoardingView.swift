@@ -35,6 +35,7 @@ struct OnBoardingView: View {
             coordinator.push(.login)
           }
         }
+        .dynamicPadding(.bottom, 16)
         .padding(.horizontal, 30)
         .animation(.easeInOut(duration: 0.2), value: currentStep)
         

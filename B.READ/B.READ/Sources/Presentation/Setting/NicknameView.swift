@@ -43,7 +43,7 @@ struct NicknameView: View {
       }
       .disabled(!isButtonEnabled)
       .padding(.horizontal, 4)
-      .padding(.bottom, 20)
+      .dynamicPadding(.bottom, 16)
       .frame(maxHeight: .infinity, alignment: .bottom)
     }
     .padding(.horizontal, 26)

@@ -34,6 +34,7 @@ struct CategorySelectionView: View {
         viewModel.send(.saveCatetories)
       }
       .disabled(!isButtonEnabled)
+      .dynamicPadding(.bottom, 16)
       .animation(.easeInOut(duration: 0.25), value: isButtonEnabled)
       .padding(.horizontal, 6)
       .padding(.top, 12)
